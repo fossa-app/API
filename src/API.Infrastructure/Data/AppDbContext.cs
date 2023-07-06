@@ -41,7 +41,7 @@ public class AppDbContext : DbContext
         .Where(e => e.DomainEvents.Any())
         .ToArray();
 
-    await _dispatcher.DispatchAndClearEvents(entitiesWithEvents);
+    await _dispatcher.DispatchAndClearEventsAsync(entitiesWithEvents);
 
     return result;
   }

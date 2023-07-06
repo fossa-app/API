@@ -41,12 +41,7 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
 
       try
       {
-        // Can also skip creating the items
-        //if (!db.ToDoItems.Any())
-        //{
-        // Seed the database with test data.
         SeedData.PopulateTestData(db);
-        //}
       }
       catch (Exception ex)
       {

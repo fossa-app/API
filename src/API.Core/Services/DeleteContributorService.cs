@@ -18,7 +18,7 @@ public class DeleteContributorService : IDeleteContributorService
     _mediator = mediator;
   }
 
-  public async Task<Result> DeleteContributor(int contributorId)
+  public async Task<Result> DeleteContributorAsync(int contributorId)
   {
     var aggregateToDelete = await _repository.GetByIdAsync(contributorId);
     if (aggregateToDelete == null) return Result.NotFound();

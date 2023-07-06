@@ -25,7 +25,7 @@ public class Delete : Endpoint<DeleteContributorRequest>
     DeleteContributorRequest request,
     CancellationToken cancellationToken)
   {
-    var result = await _deleteContributorService.DeleteContributor(request.ContributorId);
+    var result = await _deleteContributorService.DeleteContributorAsync(request.ContributorId);
 
     if (result.Status == ResultStatus.NotFound)
     {

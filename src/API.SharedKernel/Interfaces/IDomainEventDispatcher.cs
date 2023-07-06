@@ -4,5 +4,5 @@ namespace Fossa.API.SharedKernel.Interfaces;
 
 public interface IDomainEventDispatcher
 {
-  Task DispatchAndClearEvents(IEnumerable<EntityBase> entitiesWithEvents);
+  Task DispatchAndClearEventsAsync(IEnumerable<EntityBase> entitiesWithEvents);
 }

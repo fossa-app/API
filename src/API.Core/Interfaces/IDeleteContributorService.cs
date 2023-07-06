@@ -1,8 +1,8 @@
-using Ardalis.Result;
+﻿using Ardalis.Result;
 
 namespace Fossa.API.Core.Interfaces;
 
 public interface IDeleteContributorService
 {
-  public Task<Result> DeleteContributor(int contributorId);
+  public Task<Result> DeleteContributorAsync(int contributorId);
 }
