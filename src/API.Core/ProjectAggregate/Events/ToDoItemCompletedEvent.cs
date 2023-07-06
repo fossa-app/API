@@ -1,6 +1,7 @@
-﻿using API.SharedKernel;
+﻿using Fossa.API.Core.ProjectAggregate;
+using Fossa.API.SharedKernel;
 
-namespace API.Core.ProjectAggregate.Events;
+namespace Fossa.API.Core.ProjectAggregate.Events;
 
 public class ToDoItemCompletedEvent : DomainEventBase
 {

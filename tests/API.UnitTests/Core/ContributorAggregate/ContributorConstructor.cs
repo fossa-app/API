@@ -1,7 +1,7 @@
-﻿using API.Core.ContributorAggregate;
+﻿using Fossa.API.Core.ContributorAggregate;
 using Xunit;
 
-namespace API.UnitTests.Core.ContributorAggregate;
+namespace Fossa.API.UnitTests.Core.ContributorAggregate;
 
 public class ContributorConstructor
 {

@@ -1,5 +1,5 @@
-﻿using API.Infrastructure.Data;
-using API.Web;
+﻿using Fossa.API.Infrastructure.Data;
+using Fossa.API.Web;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace API.FunctionalTests;
+namespace Fossa.API.FunctionalTests;
 
 public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram> where TProgram : class
 {
@@ -74,7 +74,7 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
           }
 
           // This should be set for each individual test run
-          string inMemoryCollectionName = Guid.NewGuid().ToString();
+          var inMemoryCollectionName = Guid.NewGuid().ToString();
 
           // Add ApplicationDbContext using an in-memory database for testing.
           services.AddDbContext<AppDbContext>(options =>

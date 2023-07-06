@@ -1,4 +1,4 @@
-﻿namespace API.Core.Interfaces;
+﻿namespace Fossa.API.Core.Interfaces;
 
 public interface IEmailSender
 {

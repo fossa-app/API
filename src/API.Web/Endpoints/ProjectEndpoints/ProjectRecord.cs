@@ -1,3 +1,3 @@
-﻿namespace API.Web.Endpoints.ProjectEndpoints;
+﻿namespace Fossa.API.Web.Endpoints.ProjectEndpoints;
 
 public record ProjectRecord(int Id, string Name);

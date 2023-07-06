@@ -1,8 +1,8 @@
 ﻿using Ardalis.GuardClauses;
-using API.SharedKernel;
-using API.SharedKernel.Interfaces;
+using Fossa.API.SharedKernel.Interfaces;
+using Fossa.API.SharedKernel;
 
-namespace API.Core.ContributorAggregate;
+namespace Fossa.API.Core.ContributorAggregate;
 
 public class Contributor : EntityBase, IAggregateRoot
 {

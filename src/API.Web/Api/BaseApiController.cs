@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace API.Web.Api;
+namespace Fossa.API.Web.Api;
 
 /// <summary>
 /// If your API controllers will use a consistent route convention and the [ApiController] attribute (they should)

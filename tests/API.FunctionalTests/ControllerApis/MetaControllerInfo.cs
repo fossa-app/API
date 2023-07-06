@@ -1,7 +1,7 @@
-﻿using API.Web;
+﻿using Fossa.API.Web;
 using Xunit;
 
-namespace API.FunctionalTests.ControllerApis;
+namespace Fossa.API.FunctionalTests.ControllerApis;
 
 [Collection("Sequential")]
 public class MetaControllerInfo : IClassFixture<CustomWebApplicationFactory<Program>>

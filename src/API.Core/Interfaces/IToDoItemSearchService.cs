@@ -1,7 +1,7 @@
 ﻿using Ardalis.Result;
-using API.Core.ProjectAggregate;
+using Fossa.API.Core.ProjectAggregate;
 
-namespace API.Core.Interfaces;
+namespace Fossa.API.Core.Interfaces;
 
 public interface IToDoItemSearchService
 {

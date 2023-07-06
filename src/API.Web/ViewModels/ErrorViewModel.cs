@@ -1,4 +1,4 @@
-﻿namespace API.Web.ViewModels;
+﻿namespace Fossa.API.Web.ViewModels;
 
 public class ErrorViewModel
 {

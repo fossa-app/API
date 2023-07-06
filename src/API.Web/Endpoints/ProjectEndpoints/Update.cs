@@ -1,10 +1,10 @@
 ﻿using Ardalis.ApiEndpoints;
-using API.Core.ProjectAggregate;
-using API.SharedKernel.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using Fossa.API.Core.ProjectAggregate;
+using Fossa.API.SharedKernel.Interfaces;
 
-namespace API.Web.Endpoints.ProjectEndpoints;
+namespace Fossa.API.Web.Endpoints.ProjectEndpoints;
 
 public class Update : EndpointBaseAsync
     .WithRequest<UpdateProjectRequest>
@@ -26,7 +26,7 @@ public class Update : EndpointBaseAsync
   ]
   public override async Task<ActionResult<UpdateProjectResponse>> HandleAsync(
     UpdateProjectRequest request,
-      CancellationToken cancellationToken = new ())
+      CancellationToken cancellationToken = new())
   {
     if (request.Name == null)
     {

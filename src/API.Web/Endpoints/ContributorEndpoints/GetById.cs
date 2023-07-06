@@ -1,9 +1,9 @@
-﻿using API.Core.ContributorAggregate;
-using API.Core.ProjectAggregate.Specifications;
-using API.SharedKernel.Interfaces;
+﻿using Fossa.API.Core.ProjectAggregate.Specifications;
 using FastEndpoints;
+using Fossa.API.Core.ContributorAggregate;
+using Fossa.API.SharedKernel.Interfaces;
 
-namespace API.Web.Endpoints.ContributorEndpoints;
+namespace Fossa.API.Web.Endpoints.ContributorEndpoints;
 
 public class GetById : Endpoint<GetContributorByIdRequest, ContributorRecord>
 {
@@ -21,7 +21,7 @@ public class GetById : Endpoint<GetContributorByIdRequest, ContributorRecord>
     Options(x => x
       .WithTags("ContributorEndpoints"));
   }
-  public override async Task HandleAsync(GetContributorByIdRequest request, 
+  public override async Task HandleAsync(GetContributorByIdRequest request,
     CancellationToken cancellationToken)
   {
     var spec = new ContributorByIdSpec(request.ContributorId);

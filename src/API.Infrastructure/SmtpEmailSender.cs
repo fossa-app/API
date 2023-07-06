@@ -1,8 +1,8 @@
 ﻿using System.Net.Mail;
-using API.Core.Interfaces;
+using Fossa.API.Core.Interfaces;
 using Microsoft.Extensions.Logging;
 
-namespace API.Infrastructure;
+namespace Fossa.API.Infrastructure;
 
 public class SmtpEmailSender : IEmailSender
 {

@@ -1,15 +1,15 @@
 ﻿using System.Reflection;
 using Autofac;
-using API.Core.Interfaces;
-using API.Core.ProjectAggregate;
-using API.Infrastructure.Data;
-using API.SharedKernel;
-using API.SharedKernel.Interfaces;
 using MediatR;
 using MediatR.Pipeline;
 using Module = Autofac.Module;
+using Fossa.API.Core.ProjectAggregate;
+using Fossa.API.Core.Interfaces;
+using Fossa.API.SharedKernel.Interfaces;
+using Fossa.API.SharedKernel;
+using Fossa.API.Infrastructure.Data;
 
-namespace API.Infrastructure;
+namespace Fossa.API.Infrastructure;
 
 public class DefaultInfrastructureModule : Module
 {
@@ -78,8 +78,8 @@ public class DefaultInfrastructureModule : Module
 
     var mediatrOpenTypes = new[]
     {
-      typeof(IRequestHandler<,>), 
-      typeof(IRequestExceptionHandler<,,>), 
+      typeof(IRequestHandler<,>),
+      typeof(IRequestExceptionHandler<,,>),
       typeof(IRequestExceptionAction<,>),
       typeof(INotificationHandler<>),
     };

@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace API.SharedKernel;
+namespace Fossa.API.SharedKernel;
 
 public abstract class DomainEventBase : INotification
 {

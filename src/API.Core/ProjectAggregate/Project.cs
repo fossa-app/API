@@ -1,9 +1,9 @@
 ﻿using Ardalis.GuardClauses;
-using API.Core.ProjectAggregate.Events;
-using API.SharedKernel;
-using API.SharedKernel.Interfaces;
+using Fossa.API.Core.ProjectAggregate.Events;
+using Fossa.API.SharedKernel.Interfaces;
+using Fossa.API.SharedKernel;
 
-namespace API.Core.ProjectAggregate;
+namespace Fossa.API.Core.ProjectAggregate;
 
 public class Project : EntityBase, IAggregateRoot
 {
@@ -17,21 +17,21 @@ public class Project : EntityBase, IAggregateRoot
 
   public Project(string name, PriorityStatus priority)
   {
-    Name = Guard.Against.NullOrEmpty(name, nameof(name));
+    Name = Guard.Against.NullOrEmpty(name);
     Priority = priority;
   }
 
   public void AddItem(ToDoItem newItem)
   {
-    Guard.Against.Null(newItem, nameof(newItem));
+    Guard.Against.Null(newItem);
     _items.Add(newItem);
 
     var newItemAddedEvent = new NewItemAddedEvent(this, newItem);
-    base.RegisterDomainEvent(newItemAddedEvent);
+    RegisterDomainEvent(newItemAddedEvent);
   }
 
   public void UpdateName(string newName)
   {
-    Name = Guard.Against.NullOrEmpty(newName, nameof(newName));
+    Name = Guard.Against.NullOrEmpty(newName);
   }
 }

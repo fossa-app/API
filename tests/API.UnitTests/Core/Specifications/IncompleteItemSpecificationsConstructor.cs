@@ -1,8 +1,8 @@
-﻿using API.Core.ProjectAggregate;
-using API.Core.ProjectAggregate.Specifications;
+﻿using Fossa.API.Core.ProjectAggregate.Specifications;
+using Fossa.API.Core.ProjectAggregate;
 using Xunit;
 
-namespace API.UnitTests.Core.Specifications;
+namespace Fossa.API.UnitTests.Core.Specifications;
 
 public class IncompleteItemsSpecificationConstructor
 {

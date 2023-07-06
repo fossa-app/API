@@ -1,9 +1,11 @@
 ﻿using Ardalis.HttpClientTestExtensions;
-using API.Web;
-using API.Web.Endpoints.ContributorEndpoints;
 using Xunit;
+using Fossa.API.Web.Endpoints.ContributorEndpoints;
+using Fossa.API.Web;
+using Ardalis.Result;
+using System.Net;
 
-namespace API.FunctionalTests.ApiEndpoints;
+namespace Fossa.API.FunctionalTests.ApiEndpoints;
 
 [Collection("Sequential")]
 public class ContributorGetById : IClassFixture<CustomWebApplicationFactory<Program>>
@@ -27,7 +29,9 @@ public class ContributorGetById : IClassFixture<CustomWebApplicationFactory<Prog
   [Fact]
   public async Task ReturnsNotFoundGivenId0()
   {
-    string route = GetContributorByIdRequest.BuildRoute(0);
-    _ = await _client.GetAndEnsureNotFoundAsync(route);
+    var route = GetContributorByIdRequest.BuildRoute(0);
+    var result = await _client.GetAndEnsureNotFoundAsync(route);
+
+    Assert.Equal(HttpStatusCode.NotFound, result.StatusCode);
   }
 }

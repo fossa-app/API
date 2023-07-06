@@ -1,4 +1,4 @@
-﻿namespace API.SharedKernel;
+﻿namespace Fossa.API.SharedKernel;
 
 /// <summary>
 /// See: https://enterprisecraftsmanship.com/posts/value-object-better-implementation/

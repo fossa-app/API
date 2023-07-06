@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
-namespace API.Web.Api;
+namespace Fossa.API.Web.Api;
 
 public class MetaController : BaseApiController
 {

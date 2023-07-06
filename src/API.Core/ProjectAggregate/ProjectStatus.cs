@@ -1,4 +1,4 @@
-﻿namespace API.Core.ProjectAggregate;
+﻿namespace Fossa.API.Core.ProjectAggregate;
 
 public enum ProjectStatus
 {

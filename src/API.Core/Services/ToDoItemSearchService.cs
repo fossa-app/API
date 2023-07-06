@@ -1,10 +1,10 @@
 ﻿using Ardalis.Result;
-using API.Core.Interfaces;
-using API.Core.ProjectAggregate;
-using API.Core.ProjectAggregate.Specifications;
-using API.SharedKernel.Interfaces;
+using Fossa.API.Core.ProjectAggregate.Specifications;
+using Fossa.API.Core.ProjectAggregate;
+using Fossa.API.SharedKernel.Interfaces;
+using Fossa.API.Core.Interfaces;
 
-namespace API.Core.Services;
+namespace Fossa.API.Core.Services;
 
 public class ToDoItemSearchService : IToDoItemSearchService
 {
@@ -30,7 +30,6 @@ public class ToDoItemSearchService : IToDoItemSearchService
     var projectSpec = new ProjectByIdWithItemsSpec(projectId);
     var project = await _repository.FirstOrDefaultAsync(projectSpec);
 
-    // TODO: Optionally use Ardalis.GuardClauses Guard.Against.NotFound and catch
     if (project == null)
     {
       return Result<List<ToDoItem>>.NotFound();
@@ -45,8 +44,7 @@ public class ToDoItemSearchService : IToDoItemSearchService
     }
     catch (Exception ex)
     {
-      // TODO: Log details here
-      return Result<List<ToDoItem>>.Error(new[] { ex.Message });
+      return Result<List<ToDoItem>>.Error(ex.Message);
     }
   }
 

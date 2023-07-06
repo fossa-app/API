@@ -1,7 +1,7 @@
-﻿using API.SharedKernel.Interfaces;
+﻿using Fossa.API.SharedKernel.Interfaces;
 using MediatR;
 
-namespace API.SharedKernel;
+namespace Fossa.API.SharedKernel;
 
 public class DomainEventDispatcher : IDomainEventDispatcher
 {

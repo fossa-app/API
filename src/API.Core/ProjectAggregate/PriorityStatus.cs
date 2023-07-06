@@ -1,6 +1,6 @@
 ﻿using Ardalis.SmartEnum;
 
-namespace API.Core.ProjectAggregate;
+namespace Fossa.API.Core.ProjectAggregate;
 
 public class PriorityStatus : SmartEnum<PriorityStatus>
 {

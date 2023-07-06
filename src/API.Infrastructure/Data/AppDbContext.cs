@@ -1,11 +1,11 @@
 ﻿using System.Reflection;
-using API.Core.ContributorAggregate;
-using API.Core.ProjectAggregate;
-using API.SharedKernel;
-using API.SharedKernel.Interfaces;
+using Fossa.API.Core.ContributorAggregate;
+using Fossa.API.Core.ProjectAggregate;
+using Fossa.API.SharedKernel;
+using Fossa.API.SharedKernel.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Infrastructure.Data;
+namespace Fossa.API.Infrastructure.Data;
 
 public class AppDbContext : DbContext
 {
@@ -20,7 +20,7 @@ public class AppDbContext : DbContext
 
   public DbSet<ToDoItem> ToDoItems => Set<ToDoItem>();
   public DbSet<Project> Projects => Set<Project>();
-  public DbSet<Contributor> Contributors => Set<Contributor>(); 
+  public DbSet<Contributor> Contributors => Set<Contributor>();
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
@@ -30,7 +30,7 @@ public class AppDbContext : DbContext
 
   public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
   {
-    int result = await base.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
+    var result = await base.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
     // ignore events if no dispatcher provided
     if (_dispatcher == null) return result;

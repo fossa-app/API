@@ -1,11 +1,11 @@
-using Ardalis.Result;
-using API.Core.ContributorAggregate;
-using API.Core.ContributorAggregate.Events;
-using API.Core.Interfaces;
-using API.SharedKernel.Interfaces;
+﻿using Ardalis.Result;
+using Fossa.API.Core.ContributorAggregate.Events;
 using MediatR;
+using Fossa.API.SharedKernel.Interfaces;
+using Fossa.API.Core.ContributorAggregate;
+using Fossa.API.Core.Interfaces;
 
-namespace API.Core.Services;
+namespace Fossa.API.Core.Services;
 
 public class DeleteContributorService : IDeleteContributorService
 {

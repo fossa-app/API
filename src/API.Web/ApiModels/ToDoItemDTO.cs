@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using API.Core.ProjectAggregate;
+using Fossa.API.Core.ProjectAggregate;
 
-namespace API.Web.ApiModels;
+namespace Fossa.API.Web.ApiModels;
 
 // ApiModel DTOs are used by ApiController classes and are typically kept in a side-by-side folder
 public class ToDoItemDTO

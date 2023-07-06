@@ -1,8 +1,8 @@
-﻿using API.Core.ProjectAggregate;
+﻿using Fossa.API.Core.ProjectAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace API.Infrastructure.Data.Config;
+namespace Fossa.API.Infrastructure.Data.Config;
 
 public class ToDoConfiguration : IEntityTypeConfiguration<ToDoItem>
 {

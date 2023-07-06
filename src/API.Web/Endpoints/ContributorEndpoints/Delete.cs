@@ -1,8 +1,8 @@
 ﻿using FastEndpoints;
 using Ardalis.Result;
-using API.Core.Interfaces;
+using Fossa.API.Core.Interfaces;
 
-namespace API.Web.Endpoints.ContributorEndpoints;
+namespace Fossa.API.Web.Endpoints.ContributorEndpoints;
 
 public class Delete : Endpoint<DeleteContributorRequest>
 {

@@ -1,10 +1,10 @@
 ﻿using Ardalis.ApiEndpoints;
-using API.Core.ProjectAggregate;
-using API.SharedKernel.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using Fossa.API.Core.ProjectAggregate;
+using Fossa.API.SharedKernel.Interfaces;
 
-namespace API.Web.Endpoints.ProjectEndpoints;
+namespace Fossa.API.Web.Endpoints.ProjectEndpoints;
 
 public class Delete : EndpointBaseAsync
     .WithRequest<DeleteProjectRequest>

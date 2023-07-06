@@ -1,9 +1,9 @@
 ﻿using Ardalis.GuardClauses;
-using API.Core.Interfaces;
-using API.Core.ProjectAggregate.Events;
 using MediatR;
+using Fossa.API.Core.Interfaces;
+using Fossa.API.Core.ProjectAggregate.Events;
 
-namespace API.Core.ProjectAggregate.Handlers;
+namespace Fossa.API.Core.ProjectAggregate.Handlers;
 
 public class ItemCompletedEmailNotificationHandler : INotificationHandler<ToDoItemCompletedEvent>
 {

@@ -1,14 +1,14 @@
-﻿using API.Core.ContributorAggregate;
-using API.Core.ProjectAggregate;
-using API.Infrastructure.Data;
+﻿using Fossa.API.Core.ContributorAggregate;
+using Fossa.API.Core.ProjectAggregate;
+using Fossa.API.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Web;
+namespace Fossa.API.Web;
 
 public static class SeedData
 {
-  public static readonly Contributor Contributor1 = new ("Ardalis");
-  public static readonly Contributor Contributor2 = new ("Snowfrog");
+  public static readonly Contributor Contributor1 = new("Ardalis");
+  public static readonly Contributor Contributor2 = new("Snowfrog");
   public static readonly Project TestProject1 = new Project("Test Project", PriorityStatus.Backlog);
   public static readonly ToDoItem ToDoItem1 = new ToDoItem
   {

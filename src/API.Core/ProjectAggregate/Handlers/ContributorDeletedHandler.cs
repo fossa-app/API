@@ -1,9 +1,9 @@
-﻿using API.Core.ContributorAggregate.Events;
-using API.SharedKernel.Interfaces;
-using API.Core.ProjectAggregate.Specifications;
-using MediatR;
+﻿using MediatR;
+using Fossa.API.SharedKernel.Interfaces;
+using Fossa.API.Core.ContributorAggregate.Events;
+using Fossa.API.Core.ProjectAggregate.Specifications;
 
-namespace API.Core.ProjectAggregate.Handlers;
+namespace Fossa.API.Core.ProjectAggregate.Handlers;
 
 public class ContributorDeletedHandler : INotificationHandler<ContributorDeletedEvent>
 {

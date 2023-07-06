@@ -1,8 +1,8 @@
-﻿using API.Core.ContributorAggregate;
+﻿using Fossa.API.Core.ContributorAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace API.Infrastructure.Data.Config;
+namespace Fossa.API.Infrastructure.Data.Config;
 
 public class ContributorConfiguration : IEntityTypeConfiguration<Contributor>
 {

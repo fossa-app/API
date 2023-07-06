@@ -1,7 +1,7 @@
-﻿using API.Core.ProjectAggregate;
+﻿using Fossa.API.Core.ProjectAggregate;
 using Xunit;
 
-namespace API.UnitTests.Core.ProjectAggregate;
+namespace Fossa.API.UnitTests.Core.ProjectAggregate;
 
 public class ProjectConstructor
 {

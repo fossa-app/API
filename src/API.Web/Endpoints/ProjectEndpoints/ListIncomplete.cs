@@ -1,9 +1,9 @@
 ﻿using Ardalis.ApiEndpoints;
-using API.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using Fossa.API.Core.Interfaces;
 
-namespace API.Web.Endpoints.ProjectEndpoints;
+namespace Fossa.API.Web.Endpoints.ProjectEndpoints;
 
 public class ListIncomplete : EndpointBaseAsync
   .WithRequest<ListIncompleteRequest>

@@ -1,8 +1,8 @@
-﻿using API.Infrastructure.Data;
+﻿using Fossa.API.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace API.Infrastructure;
+namespace Fossa.API.Infrastructure;
 
 public static class StartupSetup
 {

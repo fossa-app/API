@@ -1,16 +1,16 @@
-﻿using API.Core.Interfaces;
-using API.Core.ProjectAggregate;
-using API.Core.ProjectAggregate.Events;
-using API.Core.ProjectAggregate.Handlers;
+﻿using Fossa.API.Core.ProjectAggregate;
+using Fossa.API.Core.ProjectAggregate.Events;
+using Fossa.API.Core.Interfaces;
+using Fossa.API.Core.ProjectAggregate.Handlers;
 using Moq;
 using Xunit;
 
-namespace API.UnitTests.Core.Handlers;
+namespace Fossa.API.UnitTests.Core.Handlers;
 
 public class ItemCompletedEmailNotificationHandlerHandle
 {
-  private ItemCompletedEmailNotificationHandler _handler;
-  private Mock<IEmailSender> _emailSenderMock;
+  private readonly ItemCompletedEmailNotificationHandler _handler;
+  private readonly Mock<IEmailSender> _emailSenderMock;
 
   public ItemCompletedEmailNotificationHandlerHandle()
   {
@@ -22,7 +22,7 @@ public class ItemCompletedEmailNotificationHandlerHandle
   public async Task ThrowsExceptionGivenNullEventArgument()
   {
 #nullable disable
-    Exception ex = await Assert.ThrowsAsync<ArgumentNullException>(() => _handler.Handle(null, CancellationToken.None));
+    _ = await Assert.ThrowsAsync<ArgumentNullException>(() => _handler.Handle(null, CancellationToken.None));
 #nullable enable
   }
 

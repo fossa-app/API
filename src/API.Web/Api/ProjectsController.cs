@@ -1,10 +1,10 @@
-﻿using API.Core.ProjectAggregate;
-using API.Core.ProjectAggregate.Specifications;
-using API.SharedKernel.Interfaces;
-using API.Web.ApiModels;
+﻿using Fossa.API.Core.ProjectAggregate.Specifications;
+using Fossa.API.Core.ProjectAggregate;
+using Fossa.API.SharedKernel.Interfaces;
+using Fossa.API.Web.ApiModels;
 using Microsoft.AspNetCore.Mvc;
 
-namespace API.Web.Api;
+namespace Fossa.API.Web.Api;
 
 /// <summary>
 /// A sample API Controller. Consider using API Endpoints (see Endpoints folder) for a more SOLID approach to building APIs

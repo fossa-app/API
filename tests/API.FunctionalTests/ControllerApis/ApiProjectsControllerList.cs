@@ -1,9 +1,9 @@
 ﻿using Ardalis.HttpClientTestExtensions;
-using API.Web;
-using API.Web.ApiModels;
 using Xunit;
+using Fossa.API.Web.ApiModels;
+using Fossa.API.Web;
 
-namespace API.FunctionalTests.ControllerApis;
+namespace Fossa.API.FunctionalTests.ControllerApis;
 
 [Collection("Sequential")]
 public class ProjectCreate : IClassFixture<CustomWebApplicationFactory<Program>>

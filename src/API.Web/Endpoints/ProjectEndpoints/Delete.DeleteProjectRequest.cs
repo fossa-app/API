@@ -1,4 +1,4 @@
-﻿namespace API.Web.Endpoints.ProjectEndpoints;
+﻿namespace Fossa.API.Web.Endpoints.ProjectEndpoints;
 
 public class DeleteProjectRequest
 {

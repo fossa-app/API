@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 
-namespace API.Web.Filters;
+namespace Fossa.API.Web.Filters;
 
 /// <summary>
 /// This filter is no longer needed since [ApiController] provides this automatically for APIs.

@@ -1,6 +1,6 @@
-﻿using API.Core.ProjectAggregate;
+﻿using Fossa.API.Core.ProjectAggregate;
 
-namespace API.UnitTests;
+namespace Fossa.API.UnitTests;
 
 // Learn more about test builders:
 // https://ardalis.com/improve-tests-with-the-builder-pattern-for-test-data

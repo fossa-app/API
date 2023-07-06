@@ -1,8 +1,8 @@
-﻿using API.Core.ContributorAggregate;
-using API.SharedKernel.Interfaces;
-using FastEndpoints;
+﻿using FastEndpoints;
+using Fossa.API.Core.ContributorAggregate;
+using Fossa.API.SharedKernel.Interfaces;
 
-namespace API.Web.Endpoints.ContributorEndpoints;
+namespace Fossa.API.Web.Endpoints.ContributorEndpoints;
 
 public class List : EndpointWithoutRequest<ContributorListResponse>
 {

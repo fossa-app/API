@@ -1,8 +1,8 @@
-﻿using API.Core.ProjectAggregate;
+﻿using Fossa.API.Core.ProjectAggregate;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
-namespace API.IntegrationTests.Data;
+namespace Fossa.API.IntegrationTests.Data;
 
 public class EfRepositoryUpdate : BaseEfRepoTestFixture
 {

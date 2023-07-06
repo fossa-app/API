@@ -1,7 +1,7 @@
 ﻿using Ardalis.Specification.EntityFrameworkCore;
-using API.SharedKernel.Interfaces;
+using Fossa.API.SharedKernel.Interfaces;
 
-namespace API.Infrastructure.Data;
+namespace Fossa.API.Infrastructure.Data;
 
 // inherit from Ardalis.Specification type
 public class EfRepository<T> : RepositoryBase<T>, IReadRepository<T>, IRepository<T> where T : class, IAggregateRoot

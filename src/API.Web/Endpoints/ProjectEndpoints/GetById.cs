@@ -1,11 +1,11 @@
 ﻿using Ardalis.ApiEndpoints;
-using API.Core.ProjectAggregate;
-using API.Core.ProjectAggregate.Specifications;
-using API.SharedKernel.Interfaces;
+using Fossa.API.Core.ProjectAggregate.Specifications;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using Fossa.API.Core.ProjectAggregate;
+using Fossa.API.SharedKernel.Interfaces;
 
-namespace API.Web.Endpoints.ProjectEndpoints;
+namespace Fossa.API.Web.Endpoints.ProjectEndpoints;
 
 public class GetById : EndpointBaseAsync
   .WithRequest<GetProjectByIdRequest>

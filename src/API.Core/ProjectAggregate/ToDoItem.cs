@@ -1,8 +1,8 @@
 ﻿using Ardalis.GuardClauses;
-using API.Core.ProjectAggregate.Events;
-using API.SharedKernel;
+using Fossa.API.Core.ProjectAggregate.Events;
+using Fossa.API.SharedKernel;
 
-namespace API.Core.ProjectAggregate;
+namespace Fossa.API.Core.ProjectAggregate;
 
 public class ToDoItem : EntityBase
 {
@@ -23,11 +23,11 @@ public class ToDoItem : EntityBase
 
   public void AddContributor(int contributorId)
   {
-    Guard.Against.Null(contributorId, nameof(contributorId));
+    Guard.Against.Null(contributorId);
     ContributorId = contributorId;
 
     var contributorAddedToItem = new ContributorAddedToItemEvent(this, contributorId);
-    base.RegisterDomainEvent(contributorAddedToItem);
+    RegisterDomainEvent(contributorAddedToItem);
   }
 
   public void RemoveContributor()
@@ -37,7 +37,7 @@ public class ToDoItem : EntityBase
 
   public override string ToString()
   {
-    string status = IsDone ? "Done!" : "Not done.";
+    var status = IsDone ? "Done!" : "Not done.";
     return $"{Id}: Status: {status} - {Title} - {Description}";
   }
 }

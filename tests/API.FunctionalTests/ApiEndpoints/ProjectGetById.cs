@@ -1,9 +1,9 @@
 ﻿using Ardalis.HttpClientTestExtensions;
-using API.Web;
-using API.Web.Endpoints.ProjectEndpoints;
 using Xunit;
+using Fossa.API.Web.Endpoints.ProjectEndpoints;
+using Fossa.API.Web;
 
-namespace API.FunctionalTests.ApiEndpoints;
+namespace Fossa.API.FunctionalTests.ApiEndpoints;
 
 [Collection("Sequential")]
 public class ProjectGetById : IClassFixture<CustomWebApplicationFactory<Program>>
@@ -28,7 +28,7 @@ public class ProjectGetById : IClassFixture<CustomWebApplicationFactory<Program>
   [Fact]
   public async Task ReturnsNotFoundGivenId0()
   {
-    string route = GetProjectByIdRequest.BuildRoute(0);
+    var route = GetProjectByIdRequest.BuildRoute(0);
     _ = await _client.GetAndEnsureNotFoundAsync(route);
   }
 }

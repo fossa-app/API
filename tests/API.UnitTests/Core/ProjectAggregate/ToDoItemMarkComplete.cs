@@ -1,7 +1,7 @@
-﻿using API.Core.ProjectAggregate.Events;
+﻿using Fossa.API.Core.ProjectAggregate.Events;
 using Xunit;
 
-namespace API.UnitTests.Core.ProjectAggregate;
+namespace Fossa.API.UnitTests.Core.ProjectAggregate;
 
 public class ToDoItemMarkComplete
 {

@@ -1,7 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 using MediatR;
 
-namespace API.UnitTests;
+namespace Fossa.API.UnitTests;
 
 public class NoOpMediator : IMediator
 {

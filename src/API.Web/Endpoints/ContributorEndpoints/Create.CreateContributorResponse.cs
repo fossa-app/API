@@ -1,4 +1,4 @@
-namespace API.Web.Endpoints.ContributorEndpoints;
+namespace Fossa.API.Web.Endpoints.ContributorEndpoints;
 
 public class CreateContributorResponse
 {

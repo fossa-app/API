@@ -1,11 +1,11 @@
-﻿using API.Core.ProjectAggregate;
-using API.Infrastructure.Data;
-using API.SharedKernel.Interfaces;
+﻿using Fossa.API.Core.ProjectAggregate;
+using Fossa.API.Infrastructure.Data;
+using Fossa.API.SharedKernel.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 
-namespace API.IntegrationTests.Data;
+namespace Fossa.API.IntegrationTests.Data;
 
 public abstract class BaseEfRepoTestFixture
 {

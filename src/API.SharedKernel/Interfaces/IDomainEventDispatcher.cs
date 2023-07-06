@@ -1,5 +1,6 @@
-﻿
-namespace API.SharedKernel.Interfaces;
+﻿using Fossa.API.SharedKernel;
+
+namespace Fossa.API.SharedKernel.Interfaces;
 
 public interface IDomainEventDispatcher
 {

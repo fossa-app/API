@@ -1,7 +1,7 @@
 ﻿using Ardalis.Specification;
-using API.Core.ContributorAggregate;
+using Fossa.API.Core.ContributorAggregate;
 
-namespace API.Core.ProjectAggregate.Specifications;
+namespace Fossa.API.Core.ProjectAggregate.Specifications;
 
 public class ContributorByIdSpec : Specification<Contributor>, ISingleResultSpecification
 {

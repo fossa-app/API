@@ -1,9 +1,9 @@
 ﻿using Ardalis.HttpClientTestExtensions;
-using API.Web;
-using API.Web.Endpoints.ContributorEndpoints;
 using Xunit;
+using Fossa.API.Web.Endpoints.ContributorEndpoints;
+using Fossa.API.Web;
 
-namespace API.FunctionalTests.ApiEndpoints;
+namespace Fossa.API.FunctionalTests.ApiEndpoints;
 
 [Collection("Sequential")]
 public class ContributorList : IClassFixture<CustomWebApplicationFactory<Program>>

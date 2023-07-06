@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Ardalis.Specification;
-using API.Core.ProjectAggregate;
-using API.Core.Services;
+using Fossa.API.Core.ProjectAggregate;
+using Fossa.API.Core.Services;
 using API.SharedKernel.Interfaces;
 using Moq;
 using Xunit;

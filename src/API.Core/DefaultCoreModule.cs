@@ -1,8 +1,8 @@
 ﻿using Autofac;
-using API.Core.Interfaces;
-using API.Core.Services;
+using Fossa.API.Core.Interfaces;
+using Fossa.API.Core.Services;
 
-namespace API.Core;
+namespace Fossa.API.Core;
 
 public class DefaultCoreModule : Module
 {

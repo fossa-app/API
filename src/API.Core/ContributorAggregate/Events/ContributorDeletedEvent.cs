@@ -1,6 +1,6 @@
-﻿using API.SharedKernel;
+﻿using Fossa.API.SharedKernel;
 
-namespace API.Core.ContributorAggregate.Events;
+namespace Fossa.API.Core.ContributorAggregate.Events;
 
 public class ContributorDeletedEvent : DomainEventBase
 {

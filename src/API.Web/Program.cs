@@ -1,15 +1,15 @@
 ﻿using Ardalis.ListStartupServices;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using API.Core;
-using API.Infrastructure;
-using API.Infrastructure.Data;
-using API.Web;
+using Fossa.API.Core;
+using Fossa.API.Infrastructure;
 using FastEndpoints;
 using FastEndpoints.Swagger.Swashbuckle;
 using FastEndpoints.ApiExplorer;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using Fossa.API.Infrastructure.Data;
+using Fossa.API.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +23,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
   options.MinimumSameSitePolicy = SameSiteMode.None;
 });
 
-string? connectionString = builder.Configuration.GetConnectionString("SqliteConnection");  //Configuration.GetConnectionString("DefaultConnection");
+string? connectionString = builder.Configuration.GetConnectionString("SqliteConnection");
 
 builder.Services.AddDbContext(connectionString!);
 
@@ -92,7 +92,6 @@ using (var scope = app.Services.CreateScope())
   try
   {
     var context = services.GetRequiredService<AppDbContext>();
-    //                    context.Database.Migrate();
     context.Database.EnsureCreated();
     SeedData.Initialize(services);
   }
@@ -108,4 +107,5 @@ app.Run();
 // Make the implicit Program.cs class public, so integration tests can reference the correct assembly for host building
 public partial class Program
 {
+  protected Program() { }
 }

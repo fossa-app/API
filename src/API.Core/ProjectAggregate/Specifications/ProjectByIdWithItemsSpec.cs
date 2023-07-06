@@ -1,6 +1,6 @@
 ﻿using Ardalis.Specification;
 
-namespace API.Core.ProjectAggregate.Specifications;
+namespace Fossa.API.Core.ProjectAggregate.Specifications;
 
 public class ProjectByIdWithItemsSpec : Specification<Project>, ISingleResultSpecification
 {

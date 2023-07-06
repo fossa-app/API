@@ -1,6 +1,7 @@
 ﻿using Ardalis.Specification;
+using Fossa.API.Core.ProjectAggregate;
 
-namespace API.Core.ProjectAggregate.Specifications;
+namespace Fossa.API.Core.ProjectAggregate.Specifications;
 
 public class IncompleteItemsSearchSpec : Specification<ToDoItem>
 {
