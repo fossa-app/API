@@ -1,4 +1,6 @@
-﻿using System.Reflection;
+﻿// Ignore Spelling: App
+
+using System.Reflection;
 using Fossa.API.Core.ContributorAggregate;
 using Fossa.API.Core.ProjectAggregate;
 using Fossa.API.SharedKernel;
@@ -48,6 +50,6 @@ public class AppDbContext : DbContext
 
   public override int SaveChanges()
   {
-    return SaveChangesAsync().GetAwaiter().GetResult();
+    throw new NotSupportedException("Synchronous method is not supported.");
   }
 }

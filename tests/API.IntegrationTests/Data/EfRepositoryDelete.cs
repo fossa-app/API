@@ -1,4 +1,6 @@
-﻿using Fossa.API.Core.ProjectAggregate;
+﻿// Ignore Spelling: Ef
+
+using Fossa.API.Core.ProjectAggregate;
 using Xunit;
 
 namespace Fossa.API.IntegrationTests.Data;
@@ -6,7 +8,7 @@ namespace Fossa.API.IntegrationTests.Data;
 public class EfRepositoryDelete : BaseEfRepoTestFixture
 {
   [Fact]
-  public async Task DeletesItemAfterAddingIt()
+  public async Task DeletesItemAfterAddingItAsync()
   {
     // add a project
     var repository = GetRepository();

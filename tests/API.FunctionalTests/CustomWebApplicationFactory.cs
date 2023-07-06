@@ -41,7 +41,9 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
 
       try
       {
-        SeedData.PopulateTestData(db);
+#pragma warning disable VSTHRD002 // Avoid problematic synchronous waits
+        SeedData.PopulateTestDataAsync(db).GetAwaiter().GetResult();
+#pragma warning restore VSTHRD002 // Avoid problematic synchronous waits
       }
       catch (Exception ex)
       {

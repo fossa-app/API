@@ -16,7 +16,7 @@ public class ProjectItemMarkComplete : IClassFixture<CustomWebApplicationFactory
   }
 
   [Fact]
-  public async Task MarksIncompleteItemComplete()
+  public async Task MarksIncompleteItemCompleteAsync()
   {
     var projectId = 1;
     var itemId = 1;

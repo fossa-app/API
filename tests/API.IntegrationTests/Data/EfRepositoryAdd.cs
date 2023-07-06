@@ -1,4 +1,6 @@
-﻿using Fossa.API.Core.ProjectAggregate;
+﻿// Ignore Spelling: Ef
+
+using Fossa.API.Core.ProjectAggregate;
 using Xunit;
 
 namespace Fossa.API.IntegrationTests.Data;
@@ -6,7 +8,7 @@ namespace Fossa.API.IntegrationTests.Data;
 public class EfRepositoryAdd : BaseEfRepoTestFixture
 {
   [Fact]
-  public async Task AddsProjectAndSetsId()
+  public async Task AddsProjectAndSetsIdAsync()
   {
     var testProjectName = "testProject";
     var testProjectStatus = PriorityStatus.Backlog;

@@ -14,7 +14,7 @@ public class MetaControllerInfo : IClassFixture<CustomWebApplicationFactory<Prog
   }
 
   [Fact]
-  public async Task ReturnsVersionAndLastUpdateDate()
+  public async Task ReturnsVersionAndLastUpdateDateAsync()
   {
     var response = await _client.GetAsync("/info");
     response.EnsureSuccessStatusCode();

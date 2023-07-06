@@ -93,7 +93,7 @@ using (var scope = app.Services.CreateScope())
   {
     var context = services.GetRequiredService<AppDbContext>();
     context.Database.EnsureCreated();
-    SeedData.Initialize(services);
+    await SeedData.InitializeAsync(services);
   }
   catch (Exception ex)
   {

@@ -17,7 +17,7 @@ public class ProjectList : IClassFixture<CustomWebApplicationFactory<Program>>
   }
 
   [Fact]
-  public async Task ReturnsOneProject()
+  public async Task ReturnsOneProjectAsync()
   {
     var result = await _client.GetAndDeserializeAsync<ProjectListResponse>("/Projects");
 

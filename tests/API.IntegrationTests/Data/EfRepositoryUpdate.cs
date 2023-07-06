@@ -1,4 +1,6 @@
-﻿using Fossa.API.Core.ProjectAggregate;
+﻿// Ignore Spelling: Ef
+
+using Fossa.API.Core.ProjectAggregate;
 using Microsoft.EntityFrameworkCore;
 using Xunit;
 
@@ -7,7 +9,7 @@ namespace Fossa.API.IntegrationTests.Data;
 public class EfRepositoryUpdate : BaseEfRepoTestFixture
 {
   [Fact]
-  public async Task UpdatesItemAfterAddingIt()
+  public async Task UpdatesItemAfterAddingItAsync()
   {
     // add a project
     var repository = GetRepository();

@@ -18,7 +18,7 @@ public class ContributorGetById : IClassFixture<CustomWebApplicationFactory<Prog
   }
 
   [Fact]
-  public async Task ReturnsSeedContributorGivenId1()
+  public async Task ReturnsSeedContributorGivenId1Async()
   {
     var result = await _client.GetAndDeserializeAsync<ContributorRecord>(GetContributorByIdRequest.BuildRoute(1));
 
@@ -27,7 +27,7 @@ public class ContributorGetById : IClassFixture<CustomWebApplicationFactory<Prog
   }
 
   [Fact]
-  public async Task ReturnsNotFoundGivenId0()
+  public async Task ReturnsNotFoundGivenId0Async()
   {
     var route = GetContributorByIdRequest.BuildRoute(0);
     var result = await _client.GetAndEnsureNotFoundAsync(route);

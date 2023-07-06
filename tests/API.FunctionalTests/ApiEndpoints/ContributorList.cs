@@ -16,7 +16,7 @@ public class ContributorList : IClassFixture<CustomWebApplicationFactory<Program
   }
 
   [Fact]
-  public async Task ReturnsTwoContributors()
+  public async Task ReturnsTwoContributorsAsync()
   {
     var result = await _client.GetAndDeserializeAsync<ContributorListResponse>("/Contributors");
 
