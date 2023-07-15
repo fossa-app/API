@@ -12,6 +12,7 @@
     <PackageReference Include="Ardalis.SmartEnum" />
     <PackageReference Include="Ardalis.Specification" />
     <PackageReference Include="Autofac" />
+    <PackageReference Include="IdGen" />
     <PackageReference Include="MediatR" />
     <PackageReference Include="TIKSN-Framework" />
   </ItemGroup>
