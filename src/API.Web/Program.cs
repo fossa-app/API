@@ -21,6 +21,7 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 builder.Host.UseSerilog((_, config) => config.ReadFrom.Configuration(builder.Configuration));
 
 builder.Services.AddIdGen(builder.Configuration, initialReleaseDate);
+builder.Services.AddSingleton<IdGenSetupLogger>();
 
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {
@@ -105,6 +106,8 @@ using (var scope = app.Services.CreateScope())
     logger.LogError(ex, "An error occurred seeding the DB. {exceptionMessage}", ex.Message);
   }
 }
+
+app.Services.GetRequiredService<IdGenSetupLogger>().LogIdGenSetup();
 
 await app.RunAsync();
 
