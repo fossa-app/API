@@ -17,6 +17,7 @@
     <PackageReference Include="FastEndpoints" />
     <PackageReference Include="FastEndpoints.ApiExplorer" />
     <PackageReference Include="FastEndpoints.Swagger.Swashbuckle" />
+    <PackageReference Include="IdGen.DependencyInjection" />
     <PackageReference Include="MediatR" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" PrivateAssets="all" />
