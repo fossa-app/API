@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Fossa.API.Core.Identity;
 using Fossa.API.Core.Interfaces;
 using Fossa.API.Core.Services;
 
@@ -13,5 +14,10 @@ public class DefaultCoreModule : Module
 
     builder.RegisterType<DeleteContributorService>()
         .As<IDeleteContributorService>().InstancePerLifetimeScope();
+
+    builder
+      .RegisterType<IdGenIdentityGenerator>()
+      .As<IIdentityGenerator<long>>()
+      .SingleInstance();
   }
 }
