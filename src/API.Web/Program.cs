@@ -1,21 +1,26 @@
 ﻿using Ardalis.ListStartupServices;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using FastEndpoints;
+using FastEndpoints.ApiExplorer;
+using FastEndpoints.Swagger.Swashbuckle;
 using Fossa.API.Core;
 using Fossa.API.Infrastructure;
-using FastEndpoints;
-using FastEndpoints.Swagger.Swashbuckle;
-using FastEndpoints.ApiExplorer;
-using Microsoft.OpenApi.Models;
-using Serilog;
 using Fossa.API.Infrastructure.Data;
 using Fossa.API.Web;
+using Fossa.API.Web.DependencyInjection;
+using Microsoft.OpenApi.Models;
+using Serilog;
+
+var initialReleaseDate = new DateOnly(2023, 07, 15);
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 builder.Host.UseSerilog((_, config) => config.ReadFrom.Configuration(builder.Configuration));
+
+builder.Services.AddIdGen(builder.Configuration, initialReleaseDate);
 
 builder.Services.Configure<CookiePolicyOptions>(options =>
 {
@@ -46,7 +51,6 @@ builder.Services.Configure<ServiceConfig>(config =>
   // optional - default path to view services is /listallservices - recommended to choose your own path
   config.Path = "/listservices";
 });
-
 
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
@@ -102,10 +106,11 @@ using (var scope = app.Services.CreateScope())
   }
 }
 
-app.Run();
+await app.RunAsync();
 
 // Make the implicit Program.cs class public, so integration tests can reference the correct assembly for host building
 public partial class Program
 {
-  protected Program() { }
+  protected Program()
+  { }
 }
