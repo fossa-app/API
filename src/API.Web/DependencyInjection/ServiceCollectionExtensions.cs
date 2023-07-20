@@ -10,7 +10,7 @@ public static class ServiceCollectionExtensions
     IConfiguration configuration,
     DateOnly initialReleaseDate)
   {
-    var epoch = initialReleaseDate.ToDateTime(TimeOnly.MinValue, DateTimeKind.Utc);
+    var epoch = new DateTimeOffset(initialReleaseDate.ToDateTime(TimeOnly.MinValue, DateTimeKind.Utc));
     var idGeneratorOptions = new IdGeneratorOptions(timeSource: new DefaultTimeSource(epoch));
 
     var generatorId = GetGeneratorId(configuration);

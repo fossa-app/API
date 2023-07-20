@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿// Ignore Spelling: Api
+
+using Microsoft.AspNetCore.Mvc;
 
 namespace Fossa.API.Web.Api;
 

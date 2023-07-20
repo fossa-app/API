@@ -21,7 +21,6 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
     <PackageReference Include="Newtonsoft.Json" />
-    <PackageReference Include="Ardalis.HttpClientTestExtensions" />
   </ItemGroup>
 
   <ItemGroup>
