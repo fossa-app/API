@@ -1,12 +1,7 @@
-﻿using Ardalis.ListStartupServices;
-using Autofac;
+﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using FastEndpoints;
-using FastEndpoints.ApiExplorer;
-using FastEndpoints.Swagger.Swashbuckle;
 using Fossa.API.Core;
 using Fossa.API.Infrastructure;
-using Fossa.API.Infrastructure.Data;
 using Fossa.API.Web;
 using Fossa.API.Web.DependencyInjection;
 using Microsoft.OpenApi.Models;
@@ -29,34 +24,18 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
   options.MinimumSameSitePolicy = SameSiteMode.None;
 });
 
-string? connectionString = builder.Configuration.GetConnectionString("SqliteConnection");
-
-builder.Services.AddDbContext(connectionString!);
-
 builder.Services.AddControllersWithViews().AddNewtonsoftJson();
 builder.Services.AddRazorPages();
-builder.Services.AddFastEndpoints();
-builder.Services.AddFastEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-  c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+  c.SwaggerDoc("v1", new OpenApiInfo { Title = "FossaApp API", Version = "v1" });
   c.EnableAnnotations();
-  c.OperationFilter<FastEndpointsOperationFilter>();
-});
-
-// add list services for diagnostic purposes - see https://github.com/ardalis/AspNetCoreStartupServices
-builder.Services.Configure<ServiceConfig>(config =>
-{
-  config.Services = new List<ServiceDescriptor>(builder.Services);
-
-  // optional - default path to view services is /listallservices - recommended to choose your own path
-  config.Path = "/listservices";
 });
 
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
   containerBuilder.RegisterModule(new DefaultCoreModule());
-  containerBuilder.RegisterModule(new DefaultInfrastructureModule(builder.Environment.EnvironmentName == "Development"));
+  containerBuilder.RegisterModule(new DefaultInfrastructureModule(string.Equals(builder.Environment.EnvironmentName, "Development", StringComparison.OrdinalIgnoreCase)));
 });
 
 //builder.Logging.AddAzureWebAppDiagnostics(); add this if deploying to Azure
@@ -66,7 +45,6 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
   app.UseDeveloperExceptionPage();
-  app.UseShowAllServicesMiddleware();
 }
 else
 {
@@ -74,7 +52,6 @@ else
   app.UseHsts();
 }
 app.UseRouting();
-app.UseFastEndpoints();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
@@ -89,27 +66,9 @@ app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1")
 app.MapDefaultControllerRoute();
 app.MapRazorPages();
 
-// Seed Database
-using (var scope = app.Services.CreateScope())
-{
-  var services = scope.ServiceProvider;
-
-  try
-  {
-    var context = services.GetRequiredService<AppDbContext>();
-    context.Database.EnsureCreated();
-    await SeedData.InitializeAsync(services);
-  }
-  catch (Exception ex)
-  {
-    var logger = services.GetRequiredService<ILogger<Program>>();
-    logger.LogError(ex, "An error occurred seeding the DB. {exceptionMessage}", ex.Message);
-  }
-}
-
 app.Services.GetRequiredService<IdGenSetupLogger>().LogIdGenSetup();
 
-await app.RunAsync();
+await app.RunAsync().ConfigureAwait(false);
 
 // Make the implicit Program.cs class public, so integration tests can reference the correct assembly for host building
 public partial class Program

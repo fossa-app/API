@@ -5,6 +5,20 @@ namespace Fossa.API.UnitTests;
 
 public class NoOpMediator : IMediator
 {
+  public async IAsyncEnumerable<TResponse> CreateStream<TResponse>(IStreamRequest<TResponse> request,
+    [EnumeratorCancellation] CancellationToken cancellationToken = default)
+  {
+    await Task.CompletedTask.ConfigureAwait(false);
+    yield break;
+  }
+
+  public async IAsyncEnumerable<object?> CreateStream(object request,
+    [EnumeratorCancellation] CancellationToken cancellationToken = default)
+  {
+    await Task.CompletedTask.ConfigureAwait(false);
+    yield break;
+  }
+
   public Task Publish(object notification, CancellationToken cancellationToken = default)
   {
     return Task.CompletedTask;
@@ -23,20 +37,6 @@ public class NoOpMediator : IMediator
   public Task<object?> Send(object request, CancellationToken cancellationToken = default)
   {
     return Task.FromResult<object?>(default);
-  }
-
-  public async IAsyncEnumerable<TResponse> CreateStream<TResponse>(IStreamRequest<TResponse> request,
-    [EnumeratorCancellation] CancellationToken cancellationToken = default)
-  {
-    await Task.CompletedTask;
-    yield break;
-  }
-
-  public async IAsyncEnumerable<object?> CreateStream(object request,
-    [EnumeratorCancellation] CancellationToken cancellationToken = default)
-  {
-    await Task.CompletedTask;
-    yield break;
   }
 
   public Task Send<TRequest>(TRequest request, CancellationToken cancellationToken = default) where TRequest : IRequest
