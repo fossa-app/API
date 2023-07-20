@@ -4,6 +4,7 @@ using Fossa.API.Core;
 using Fossa.API.Infrastructure;
 using Fossa.API.Web;
 using Fossa.API.Web.DependencyInjection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
@@ -22,6 +23,16 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 {
   options.CheckConsentNeeded = context => true;
   options.MinimumSameSitePolicy = SameSiteMode.None;
+});
+
+builder.Services.AddAuthentication(options =>
+{
+  options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+  options.Authority = "http://localhost:9011/";
+  options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
+  options.Audience = "";
 });
 
 builder.Services.AddControllersWithViews().AddNewtonsoftJson();
@@ -57,11 +68,14 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseCookiePolicy();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 // Enable middleware to serve generated Swagger as a JSON endpoint.
 app.UseSwagger();
 
 // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
-app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1"));
+app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FossaApp API V1"));
 
 app.MapDefaultControllerRoute();
 app.MapRazorPages();
