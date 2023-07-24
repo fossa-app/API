@@ -1,11 +1,13 @@
 ﻿using System.Security.Claims;
+using Fossa.API.Core.Tenant;
 using Fossa.API.Core.User;
 using LanguageExt;
+using Microsoft.Identity.Web;
 using static LanguageExt.Prelude;
 
 namespace Fossa.API.Web.Claims;
 
-public class ClaimsProvider : IUserIdProvider<Guid>
+public class ClaimsProvider : IUserIdProvider<Guid>, ITenantIdProvider<Guid>
 {
   private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -14,9 +16,19 @@ public class ClaimsProvider : IUserIdProvider<Guid>
     _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
   }
 
+  public Option<Guid> FindTenantId()
+  {
+    return FindFirstClaimValue(ClaimConstants.TenantId, Guid.Parse);
+  }
+
   public Option<Guid> FindUserId()
   {
     return FindFirstClaimValue(ClaimTypes.NameIdentifier, Guid.Parse);
+  }
+
+  public Guid GetTenantId()
+  {
+    return FindTenantId().IfNone(() => throw new ClaimNotFoundException());
   }
 
   public Guid GetUserId()
