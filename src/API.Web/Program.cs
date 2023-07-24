@@ -35,6 +35,7 @@ builder.Services.AddAuthentication(options =>
   options.Audience = "";
 });
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllersWithViews().AddNewtonsoftJson();
 builder.Services.AddRazorPages();
 builder.Services.AddSwaggerGen(c =>
@@ -47,6 +48,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
   containerBuilder.RegisterModule(new DefaultCoreModule());
   containerBuilder.RegisterModule(new DefaultInfrastructureModule(string.Equals(builder.Environment.EnvironmentName, "Development", StringComparison.OrdinalIgnoreCase)));
+  containerBuilder.RegisterModule<DefaultWebModule>();
 });
 
 //builder.Logging.AddAzureWebAppDiagnostics(); add this if deploying to Azure
