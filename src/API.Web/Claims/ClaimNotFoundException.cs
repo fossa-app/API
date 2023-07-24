@@ -3,7 +3,7 @@
 [Serializable]
 public class ClaimNotFoundException : Exception
 {
-  public ClaimNotFoundException() : base("Claim Not Found")
+  public ClaimNotFoundException() : base("Claim not found")
   {
   }
 
