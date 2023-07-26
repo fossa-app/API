@@ -9,6 +9,7 @@ namespace Fossa.API.Web.Claims;
 
 public class ClaimsProvider :
   IUserIdProvider<Guid>,
+  IUserIdProvider<int>,
   ITenantIdProvider<Guid>
 {
   private readonly IHttpContextAccessor _httpContextAccessor;
@@ -28,6 +29,11 @@ public class ClaimsProvider :
     return FindFirstClaimValue(ClaimTypes.NameIdentifier, Guid.Parse);
   }
 
+  Option<int> IUserIdProvider<int>.FindUserId()
+  {
+    return FindFirstClaimValue(ClaimTypes.NameIdentifier, int.Parse);
+  }
+
   Guid ITenantIdProvider<Guid>.GetTenantId()
   {
     ITenantIdProvider<Guid> tenantIdProvider = this;
@@ -40,8 +46,14 @@ public class ClaimsProvider :
     return GetFound(userIdProvider.FindUserId());
   }
 
+  int IUserIdProvider<int>.GetUserId()
+  {
+    IUserIdProvider<int> userIdProvider = this;
+    return GetFound(userIdProvider.FindUserId());
+  }
+
   private Option<T> FindFirstClaimValue<T>(
-    string type,
+      string type,
     Func<string, T> parser)
   {
     if (parser is null)
