@@ -64,6 +64,11 @@ public class ClaimsProvider :
     return GetFound(userIdProvider.FindUserId());
   }
 
+  private static T GetFound<T>(Option<T> found)
+  {
+    return found.IfNone(() => throw new ClaimNotFoundException());
+  }
+
   private Option<T> FindFirstClaimValue<T>(
     string type,
     Func<string, T> parser)
@@ -83,10 +88,5 @@ public class ClaimsProvider :
     var claim = _httpContextAccessor.HttpContext?.User?.FindFirst(type);
 
     return Optional(claim).Map(x => x.Value);
-  }
-
-  private T GetFound<T>(Option<T> found)
-  {
-    return found.IfNone(() => throw new ClaimNotFoundException());
   }
 }
