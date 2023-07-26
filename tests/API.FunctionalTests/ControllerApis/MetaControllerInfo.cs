@@ -20,7 +20,7 @@ public class MetaControllerInfo : IClassFixture<CustomWebApplicationFactory<Prog
     response.EnsureSuccessStatusCode();
     var stringResponse = await response.Content.ReadAsStringAsync();
 
-    Assert.Contains("Version", stringResponse);
-    Assert.Contains("Last Updated", stringResponse);
+    Assert.Contains("Version", stringResponse, StringComparison.Ordinal);
+    Assert.Contains("Last Updated", stringResponse, StringComparison.Ordinal);
   }
 }
