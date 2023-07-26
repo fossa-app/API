@@ -7,7 +7,9 @@ using static LanguageExt.Prelude;
 
 namespace Fossa.API.Web.Claims;
 
-public class ClaimsProvider : IUserIdProvider<Guid>, ITenantIdProvider<Guid>
+public class ClaimsProvider :
+  IUserIdProvider<Guid>,
+  ITenantIdProvider<Guid>
 {
   private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -16,24 +18,26 @@ public class ClaimsProvider : IUserIdProvider<Guid>, ITenantIdProvider<Guid>
     _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
   }
 
-  public Option<Guid> FindTenantId()
+  Option<Guid> ITenantIdProvider<Guid>.FindTenantId()
   {
     return FindFirstClaimValue(ClaimConstants.TenantId, Guid.Parse);
   }
 
-  public Option<Guid> FindUserId()
+  Option<Guid> IUserIdProvider<Guid>.FindUserId()
   {
     return FindFirstClaimValue(ClaimTypes.NameIdentifier, Guid.Parse);
   }
 
-  public Guid GetTenantId()
+  Guid ITenantIdProvider<Guid>.GetTenantId()
   {
-    return GetFound(FindTenantId());
+    ITenantIdProvider<Guid> tenantIdProvider = this;
+    return GetFound(tenantIdProvider.FindTenantId());
   }
 
-  public Guid GetUserId()
+  Guid IUserIdProvider<Guid>.GetUserId()
   {
-    return GetFound(FindUserId());
+    IUserIdProvider<Guid> userIdProvider = this;
+    return GetFound(userIdProvider.FindUserId());
   }
 
   private Option<T> FindFirstClaimValue<T>(
