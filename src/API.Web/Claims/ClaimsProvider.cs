@@ -28,12 +28,12 @@ public class ClaimsProvider : IUserIdProvider<Guid>, ITenantIdProvider<Guid>
 
   public Guid GetTenantId()
   {
-    return FindTenantId().IfNone(() => throw new ClaimNotFoundException());
+    return GetFound(FindTenantId());
   }
 
   public Guid GetUserId()
   {
-    return FindUserId().IfNone(() => throw new ClaimNotFoundException());
+    return GetFound(FindUserId());
   }
 
   private Option<T> FindFirstClaimValue<T>(
@@ -55,5 +55,10 @@ public class ClaimsProvider : IUserIdProvider<Guid>, ITenantIdProvider<Guid>
     var claim = _httpContextAccessor.HttpContext?.User?.FindFirst(type);
 
     return Optional(claim).Map(x => x.Value);
+  }
+
+  private T GetFound<T>(Option<T> found)
+  {
+    return found.IfNone(() => throw new ClaimNotFoundException());
   }
 }
