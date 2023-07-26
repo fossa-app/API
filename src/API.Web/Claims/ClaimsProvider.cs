@@ -7,7 +7,11 @@ using static LanguageExt.Prelude;
 
 namespace Fossa.API.Web.Claims;
 
-public class ClaimsProvider : IUserIdProvider<Guid>, ITenantIdProvider<Guid>
+public class ClaimsProvider :
+  IUserIdProvider<Guid>,
+  IUserIdProvider<int>,
+  ITenantIdProvider<Guid>,
+  ITenantIdProvider<int>
 {
   private readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -16,24 +20,53 @@ public class ClaimsProvider : IUserIdProvider<Guid>, ITenantIdProvider<Guid>
     _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
   }
 
-  public Option<Guid> FindTenantId()
+  Option<Guid> ITenantIdProvider<Guid>.FindTenantId()
   {
     return FindFirstClaimValue(ClaimConstants.TenantId, Guid.Parse);
   }
 
-  public Option<Guid> FindUserId()
+  Option<int> ITenantIdProvider<int>.FindTenantId()
+  {
+    return FindFirstClaimValue(ClaimConstants.TenantId, int.Parse);
+  }
+
+  Option<Guid> IUserIdProvider<Guid>.FindUserId()
   {
     return FindFirstClaimValue(ClaimTypes.NameIdentifier, Guid.Parse);
   }
 
-  public Guid GetTenantId()
+  Option<int> IUserIdProvider<int>.FindUserId()
   {
-    return FindTenantId().IfNone(() => throw new ClaimNotFoundException());
+    return FindFirstClaimValue(ClaimTypes.NameIdentifier, int.Parse);
   }
 
-  public Guid GetUserId()
+  Guid ITenantIdProvider<Guid>.GetTenantId()
   {
-    return FindUserId().IfNone(() => throw new ClaimNotFoundException());
+    ITenantIdProvider<Guid> tenantIdProvider = this;
+    return GetFound(tenantIdProvider.FindTenantId());
+  }
+
+  int ITenantIdProvider<int>.GetTenantId()
+  {
+    ITenantIdProvider<int> tenantIdProvider = this;
+    return GetFound(tenantIdProvider.FindTenantId());
+  }
+
+  Guid IUserIdProvider<Guid>.GetUserId()
+  {
+    IUserIdProvider<Guid> userIdProvider = this;
+    return GetFound(userIdProvider.FindUserId());
+  }
+
+  int IUserIdProvider<int>.GetUserId()
+  {
+    IUserIdProvider<int> userIdProvider = this;
+    return GetFound(userIdProvider.FindUserId());
+  }
+
+  private static T GetFound<T>(Option<T> found)
+  {
+    return found.IfNone(() => throw new ClaimNotFoundException());
   }
 
   private Option<T> FindFirstClaimValue<T>(
