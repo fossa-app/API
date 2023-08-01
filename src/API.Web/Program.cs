@@ -8,6 +8,7 @@ using Fossa.API.Web.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using TIKSN.Mapping;
 
 var initialReleaseDate = new DateOnly(2023, 07, 15);
 
@@ -44,6 +45,11 @@ builder.Services.AddSwaggerGen(c =>
   c.SwaggerDoc("v1", new OpenApiInfo { Title = "FossaApp API", Version = "v1" });
   c.EnableAnnotations();
 });
+
+builder.Services.Scan(scan => scan
+    .FromApplicationDependencies()
+        .AddClasses(classes => classes.AssignableTo(typeof(IMapper<,>)))
+            .AsImplementedInterfaces());
 
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
