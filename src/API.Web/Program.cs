@@ -2,6 +2,7 @@
 using Autofac.Extensions.DependencyInjection;
 using Fossa.API.Core;
 using Fossa.API.Infrastructure;
+using Fossa.API.Persistence;
 using Fossa.API.Web;
 using Fossa.API.Web.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -48,6 +49,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
   containerBuilder.RegisterModule(new DefaultCoreModule());
   containerBuilder.RegisterModule(new DefaultInfrastructureModule(string.Equals(builder.Environment.EnvironmentName, "Development", StringComparison.OrdinalIgnoreCase)));
+  containerBuilder.RegisterModule<DefaultPersistenceModule>();
   containerBuilder.RegisterModule<DefaultWebModule>();
 });
 
