@@ -11,6 +11,11 @@ public class DefaultPersistenceModule : Module
   protected override void Load(ContainerBuilder builder)
   {
     builder
+      .RegisterType<MongoDatabaseProvider>()
+      .As<IMongoDatabaseProvider>()
+      .SingleInstance();
+
+    builder
       .RegisterType<CompanyMongoRepository>()
       .As<ICompanyMongoRepository>()
       .InstancePerLifetimeScope();
