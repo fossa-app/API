@@ -2,11 +2,13 @@
 using Autofac.Extensions.DependencyInjection;
 using Fossa.API.Core;
 using Fossa.API.Infrastructure;
+using Fossa.API.Persistence;
 using Fossa.API.Web;
 using Fossa.API.Web.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using TIKSN.Mapping;
 
 var initialReleaseDate = new DateOnly(2023, 07, 15);
 
@@ -44,10 +46,16 @@ builder.Services.AddSwaggerGen(c =>
   c.EnableAnnotations();
 });
 
+builder.Services.Scan(scan => scan
+    .FromApplicationDependencies()
+        .AddClasses(classes => classes.AssignableTo(typeof(IMapper<,>)))
+            .AsImplementedInterfaces());
+
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
   containerBuilder.RegisterModule(new DefaultCoreModule());
   containerBuilder.RegisterModule(new DefaultInfrastructureModule(string.Equals(builder.Environment.EnvironmentName, "Development", StringComparison.OrdinalIgnoreCase)));
+  containerBuilder.RegisterModule<DefaultPersistenceModule>();
   containerBuilder.RegisterModule<DefaultWebModule>();
 });
 
