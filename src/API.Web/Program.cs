@@ -1,6 +1,8 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using FluentValidation;
 using Fossa.API.Core;
+using Fossa.API.Core.Validators;
 using Fossa.API.Infrastructure;
 using Fossa.API.Persistence;
 using Fossa.API.Web;
@@ -51,16 +53,21 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddFrameworkPlatform();
 
-builder.Services.AddMediatR(cfg =>
-{
-  cfg.RegisterServicesFromAssemblies(Seq(
+var assemblies = Seq(
     typeof(DefaultCoreModule),
     typeof(DefaultInfrastructureModule),
     typeof(DefaultPersistenceModule),
     typeof(DefaultWebModule))
     .Map(x => x.Assembly)
-    .ToArray());
+    .ToArray();
+
+builder.Services.AddMediatR(cfg =>
+{
+  cfg.RegisterServicesFromAssemblies(assemblies);
+  cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
 });
+
+builder.Services.AddValidatorsFromAssemblies(assemblies);
 
 builder.Services.Scan(scan => scan
     .FromApplicationDependencies()
