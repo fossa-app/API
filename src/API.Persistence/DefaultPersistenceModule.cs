@@ -16,6 +16,11 @@ public class DefaultPersistenceModule : Module
       .SingleInstance();
 
     builder
+      .RegisterType<MongoClientProvider>()
+      .As<IMongoClientProvider>()
+      .SingleInstance();
+
+    builder
       .RegisterType<CompanyMongoRepository>()
       .As<ICompanyMongoRepository>()
       .InstancePerLifetimeScope();
