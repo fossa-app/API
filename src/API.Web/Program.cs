@@ -5,10 +5,13 @@ using Fossa.API.Infrastructure;
 using Fossa.API.Persistence;
 using Fossa.API.Web;
 using Fossa.API.Web.DependencyInjection;
+using LanguageExt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using Serilog;
+using TIKSN.DependencyInjection;
 using TIKSN.Mapping;
+using static LanguageExt.Prelude;
 
 var initialReleaseDate = new DateOnly(2023, 07, 15);
 
@@ -46,6 +49,19 @@ builder.Services.AddSwaggerGen(c =>
   c.EnableAnnotations();
 });
 
+builder.Services.AddFrameworkPlatform();
+
+builder.Services.AddMediatR(cfg =>
+{
+  cfg.RegisterServicesFromAssemblies(Seq(
+    typeof(DefaultCoreModule),
+    typeof(DefaultInfrastructureModule),
+    typeof(DefaultPersistenceModule),
+    typeof(DefaultWebModule))
+    .Map(x => x.Assembly)
+    .ToArray());
+});
+
 builder.Services.Scan(scan => scan
     .FromApplicationDependencies()
         .AddClasses(classes => classes.AssignableTo(typeof(IMapper<,>)))
@@ -53,6 +69,8 @@ builder.Services.Scan(scan => scan
 
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
+  containerBuilder.RegisterModule<CoreModule>();
+  containerBuilder.RegisterModule<PlatformModule>();
   containerBuilder.RegisterModule(new DefaultCoreModule());
   containerBuilder.RegisterModule(new DefaultInfrastructureModule(string.Equals(builder.Environment.EnvironmentName, "Development", StringComparison.OrdinalIgnoreCase)));
   containerBuilder.RegisterModule<DefaultPersistenceModule>();
