@@ -2,6 +2,7 @@
 using Autofac.Extensions.DependencyInjection;
 using FluentValidation;
 using Fossa.API.Core;
+using Fossa.API.Core.Messages;
 using Fossa.API.Core.Validators;
 using Fossa.API.Infrastructure;
 using Fossa.API.Persistence;
@@ -63,7 +64,9 @@ var assemblies = Seq(
 
 builder.Services.AddMediatR(cfg =>
 {
+  cfg.Lifetime = ServiceLifetime.Scoped;
   cfg.RegisterServicesFromAssemblies(assemblies);
+  cfg.AddOpenBehavior(typeof(TenantRequestBehavior<,>));
   cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
 });
 
