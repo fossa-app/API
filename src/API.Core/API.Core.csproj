@@ -9,7 +9,6 @@
   <ItemGroup>
     <PackageReference Include="Autofac" />
     <PackageReference Include="FluentValidation" />
-    <PackageReference Include="IdGen" />
     <PackageReference Include="MediatR" />
     <PackageReference Include="TIKSN-Framework" />
   </ItemGroup>
