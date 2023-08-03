@@ -3,7 +3,6 @@ using Autofac.Extensions.DependencyInjection;
 using FluentValidation;
 using Fossa.API.Core;
 using Fossa.API.Core.Messages;
-using Fossa.API.Core.Validators;
 using Fossa.API.Infrastructure;
 using Fossa.API.Persistence;
 using Fossa.API.Web;
