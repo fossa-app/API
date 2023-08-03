@@ -5,7 +5,9 @@ using MediatR;
 
 namespace Fossa.API.Core.Messages;
 
-public class TenantRequestBehavior<TRequest, TResponse> : TenantRequestBehavior<long, Guid, TRequest, TResponse> where TRequest : IRequest<TResponse>
+public class TenantRequestBehavior<TRequest, TResponse>
+  : TenantRequestBehavior<long, Guid, TRequest, TResponse>
+  where TRequest : notnull
 {
   public TenantRequestBehavior(ITenantIdProvider<Guid> tenantIdProvider) : base(tenantIdProvider)
   {
@@ -14,7 +16,7 @@ public class TenantRequestBehavior<TRequest, TResponse> : TenantRequestBehavior<
 
 public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, TResponse>
   : IPipelineBehavior<TRequest, TResponse>
-  where TRequest : IRequest<TResponse>
+  where TRequest : notnull
   where TEntityIdentity : IEquatable<TEntityIdentity>
   where TTenantIdentity : IEquatable<TTenantIdentity>
 {
