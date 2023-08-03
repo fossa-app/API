@@ -1,6 +1,7 @@
 ﻿using Fossa.API.Core.Entities;
 using Fossa.API.Core.Messages.Commands;
 using Fossa.API.Core.Messages.Queries;
+using Fossa.API.Core.Tenant;
 using Fossa.API.Web.ApiModels;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -11,16 +12,20 @@ namespace Fossa.API.Web.Api;
 [ApiController]
 public class CompanyController : BaseApiController
 {
+  private readonly ITenantIdProvider<Guid> _tenantIdProvider;
+
   public CompanyController(
+    ITenantIdProvider<Guid> tenantIdProvider,
     ISender sender,
     IPublisher publisher) : base(sender, publisher)
   {
+    _tenantIdProvider = tenantIdProvider ?? throw new ArgumentNullException(nameof(tenantIdProvider));
   }
 
   [HttpDelete("{id}")]
   public async Task DeleteAsync(long id, CancellationToken cancellationToken)
   {
-    var tenantId = Guid.NewGuid();
+    var tenantId = _tenantIdProvider.GetTenantId();
     await _sender.Send(
       new CompanyDeletionCommand(id, tenantId),
       cancellationToken);
@@ -30,9 +35,9 @@ public class CompanyController : BaseApiController
   public async Task<CompanyEntity> GetAsync(
     CancellationToken cancellationToken)
   {
-    var tid = Guid.NewGuid();
+    var tenantId = _tenantIdProvider.GetTenantId();
     return await _sender.Send(
-      new CompanyRetrievalQuery(tid),
+      new CompanyRetrievalQuery(tenantId),
       cancellationToken);
   }
 
@@ -41,7 +46,7 @@ public class CompanyController : BaseApiController
     [FromBody] CompanyModel model,
     CancellationToken cancellationToken)
   {
-    var tenantId = Guid.NewGuid();
+    var tenantId = _tenantIdProvider.GetTenantId();
     await _sender.Send(
       new CompanyCreationCommand(tenantId, model.Name),
       cancellationToken);
@@ -53,7 +58,7 @@ public class CompanyController : BaseApiController
     [FromBody] CompanyModel model,
     CancellationToken cancellationToken)
   {
-    var tenantId = Guid.NewGuid();
+    var tenantId = _tenantIdProvider.GetTenantId();
     await _sender.Send(
       new CompanyModificationCommand(id, tenantId, model.Name),
       cancellationToken);
