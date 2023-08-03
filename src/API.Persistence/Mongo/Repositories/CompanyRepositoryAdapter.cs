@@ -2,6 +2,7 @@
 using Fossa.API.Core.Entities;
 using Fossa.API.Core.Repositories;
 using Fossa.API.Persistence.Mongo.Entities;
+using LanguageExt;
 using TIKSN.Data.Mongo;
 using TIKSN.Mapping;
 
@@ -24,6 +25,14 @@ public class CompanyRepositoryAdapter
       dataRepository)
   {
     _dataRepository = dataRepository ?? throw new ArgumentNullException(nameof(dataRepository));
+  }
+
+  public async Task<Option<CompanyEntity>> FindByTenantIdAsync(Guid tenantId, CancellationToken cancellationToken)
+  {
+    var entity = await _dataRepository.FindByTenantIdAsync(
+      tenantId, cancellationToken).ConfigureAwait(false);
+
+    return entity.Map(Map);
   }
 
   public async Task<CompanyEntity> GetByTenantIdAsync(Guid tenantId, CancellationToken cancellationToken)
