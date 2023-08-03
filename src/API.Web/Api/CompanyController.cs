@@ -4,10 +4,12 @@ using Fossa.API.Core.Messages.Queries;
 using Fossa.API.Core.Tenant;
 using Fossa.API.Web.ApiModels;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fossa.API.Web.Api;
 
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class CompanyController : BaseApiController
