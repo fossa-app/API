@@ -1,7 +1,9 @@
 ﻿namespace Fossa.API.Core.Messages.Queries;
 
-public interface ITenantUserQuery<out TUserIdentity, out TTenantIdentity, out TResult>
-  : ITenantQuery<TTenantIdentity, TResult>
+public interface ITenantUserQuery<TEntityIdentity, out TUserIdentity, out TTenantIdentity, out TResult>
+  : ITenantQuery<TEntityIdentity, TTenantIdentity, TResult>
+  where TEntityIdentity : IEquatable<TEntityIdentity>
+  where TTenantIdentity : IEquatable<TTenantIdentity>
 {
   TUserIdentity UserID { get; }
 }
