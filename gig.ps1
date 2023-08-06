@@ -11,8 +11,10 @@ Function gig {
 
 gig -list visualstudio, visualstudiocode, rider, powershell, fsharp
 
-Add-Content -Path .\.gitignore -Value '# Repository Specific' -Encoding utf8
-Add-Content -Path .\.gitignore -Value 'src/API.Web/database.sqlite' -Encoding utf8
-Add-Content -Path .\.gitignore -Value 'src/API.Web/database.sqlite-shm' -Encoding utf8
-Add-Content -Path .\.gitignore -Value 'src/API.Web/database.sqlite-wal' -Encoding utf8
-Add-Content -Path .\.gitignore -Value 'src/API.Web/log*.txt' -Encoding utf8
+Add-Content -Path .\.gitignore -Value '# Repository Specific' -Encoding ascii
+Add-Content -Path .\.gitignore -Value '*.received.*' -Encoding ascii
+Add-Content -Path .\.gitignore -Value '*.received/' -Encoding ascii
+Add-Content -Path .\.gitignore -Value 'src/API.Web/database.sqlite' -Encoding ascii
+Add-Content -Path .\.gitignore -Value 'src/API.Web/database.sqlite-shm' -Encoding ascii
+Add-Content -Path .\.gitignore -Value 'src/API.Web/database.sqlite-wal' -Encoding ascii
+Add-Content -Path .\.gitignore -Value 'src/API.Web/log*.txt' -Encoding ascii

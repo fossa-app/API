@@ -515,6 +515,8 @@ FodyWeavers.xsd
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,visualstudiocode,rider,powershell,fsharp
 
 # Repository Specific
+*.received.*
+*.received/
 src/API.Web/database.sqlite
 src/API.Web/database.sqlite-shm
 src/API.Web/database.sqlite-wal
