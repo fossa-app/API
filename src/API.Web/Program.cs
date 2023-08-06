@@ -7,6 +7,8 @@ using Fossa.API.Infrastructure;
 using Fossa.API.Persistence;
 using Fossa.API.Web;
 using Fossa.API.Web.DependencyInjection;
+using Hellang.Middleware.ProblemDetails;
+using Hellang.Middleware.ProblemDetails.Mvc;
 using LanguageExt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
@@ -35,7 +37,8 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 builder.Services.AddAuthentication(options =>
 {
   options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
+})
+  .AddJwtBearer(options =>
 {
   options.Authority = "http://localhost:9011/";
   options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
@@ -43,8 +46,9 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddControllersWithViews().AddNewtonsoftJson();
-builder.Services.AddRazorPages();
+builder.Services.AddProblemDetails(ProblemDetailsHelper.ConfigureProblemDetails);
+builder.Services.AddControllers()
+                .AddProblemDetailsConventions();
 builder.Services.AddSwaggerGen(c =>
 {
   c.SwaggerDoc("v1", new OpenApiInfo { Title = "FossaApp API", Version = "v1" });
@@ -90,15 +94,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-  app.UseDeveloperExceptionPage();
-}
-else
-{
-  app.UseExceptionHandler("/Home/Error");
-  app.UseHsts();
-}
+app.UseProblemDetails();
 app.UseRouting();
 
 app.UseHttpsRedirection();
@@ -115,7 +111,6 @@ app.UseSwagger();
 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FossaApp API V1"));
 
 app.MapDefaultControllerRoute();
-app.MapRazorPages();
 
 app.Services.GetRequiredService<IdGenSetupLogger>().LogIdGenSetup();
 
