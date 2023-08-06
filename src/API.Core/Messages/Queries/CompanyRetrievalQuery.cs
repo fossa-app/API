@@ -4,4 +4,8 @@ namespace Fossa.API.Core.Messages.Queries;
 
 public record CompanyRetrievalQuery(
   Guid TenantID)
-  : ITenantQuery<Guid, CompanyEntity>;
+  : EntityTenantQuery<CompanyEntity, long, Guid, CompanyEntity>(TenantID)
+{
+  public override IEnumerable<long> AffectingTenantEntitiesIdentities
+    => Enumerable.Empty<long>();
+}
