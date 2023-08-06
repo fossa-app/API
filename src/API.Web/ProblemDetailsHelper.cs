@@ -7,6 +7,7 @@ internal static class ProblemDetailsHelper
   internal static void ConfigureProblemDetails(ProblemDetailsOptions options)
   {
     options.MapFluentValidationException();
+    options.MapKnownExceptions();
 
     options.Rethrow<NotSupportedException>();
 
