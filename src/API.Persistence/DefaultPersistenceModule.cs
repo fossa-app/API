@@ -1,7 +1,5 @@
 ﻿using Autofac;
-using Fossa.API.Core.Repositories;
 using Fossa.API.Persistence.Mongo.Repositories;
-using TIKSN.Data;
 using TIKSN.Data.Mongo;
 
 namespace Fossa.API.Persistence;
@@ -12,28 +10,27 @@ public class DefaultPersistenceModule : Module
   {
     builder
       .RegisterType<MongoDatabaseProvider>()
-      .As<IMongoDatabaseProvider>()
+      .AsImplementedInterfaces()
       .SingleInstance();
 
     builder
       .RegisterType<MongoClientProvider>()
-      .As<IMongoClientProvider>()
+      .AsImplementedInterfaces()
       .SingleInstance();
 
     builder
       .RegisterType<CompanyMongoRepository>()
-      .As<ICompanyMongoRepository>()
+      .AsImplementedInterfaces()
       .InstancePerLifetimeScope();
 
     builder
       .RegisterType<CompanyRepositoryAdapter>()
-      .As<ICompanyRepository>()
-      .As<ICompanyQueryRepository>()
+      .AsImplementedInterfaces()
       .InstancePerLifetimeScope();
 
     builder
       .RegisterType<MongoUnitOfWorkFactory>()
-      .As<IUnitOfWorkFactory>()
+      .AsImplementedInterfaces()
       .InstancePerLifetimeScope();
   }
 }
