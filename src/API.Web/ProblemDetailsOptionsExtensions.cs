@@ -1,4 +1,6 @@
 ﻿using FluentValidation;
+using Fossa.API.Core;
+using Fossa.API.Core.Messages;
 using Hellang.Middleware.ProblemDetails;
 using ProblemDetailsOptions = Hellang.Middleware.ProblemDetails.ProblemDetailsOptions;
 
@@ -20,4 +22,13 @@ public static class ProblemDetailsOptionsExtensions
 
         return factory.CreateValidationProblemDetails(ctx, errors);
       });
+
+  public static void MapKnownExceptions(
+      this ProblemDetailsOptions options)
+  {
+    options.MapToStatusCode<EntityNotFoundException>(StatusCodes.Status404NotFound);
+    options.MapToStatusCode<CrossTenantInboundUnauthorizedAccessException>(StatusCodes.Status401Unauthorized);
+    options.MapToStatusCode<CrossTenantOutboundUnauthorizedAccessException>(StatusCodes.Status401Unauthorized);
+    options.MapToStatusCode<CrossTenantUnauthorizedAccessException>(StatusCodes.Status401Unauthorized);
+  }
 }
