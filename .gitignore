@@ -517,6 +517,7 @@ FodyWeavers.xsd
 # Repository Specific
 *.received.*
 *.received/
+.idea/
 src/API.Web/database.sqlite
 src/API.Web/database.sqlite-shm
 src/API.Web/database.sqlite-wal
