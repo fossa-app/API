@@ -14,6 +14,7 @@ gig -list visualstudio, visualstudiocode, rider, powershell, fsharp
 Add-Content -Path .\.gitignore -Value '# Repository Specific' -Encoding ascii
 Add-Content -Path .\.gitignore -Value '*.received.*' -Encoding ascii
 Add-Content -Path .\.gitignore -Value '*.received/' -Encoding ascii
+Add-Content -Path .\.gitignore -Value '.idea/' -Encoding ascii
 Add-Content -Path .\.gitignore -Value 'src/API.Web/database.sqlite' -Encoding ascii
 Add-Content -Path .\.gitignore -Value 'src/API.Web/database.sqlite-shm' -Encoding ascii
 Add-Content -Path .\.gitignore -Value 'src/API.Web/database.sqlite-wal' -Encoding ascii
