@@ -14,7 +14,7 @@
     <PackageVersion Include="Microsoft.Identity.Web" Version="2.13.2" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.7.0" />
     <PackageVersion Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.8" />
-    <PackageVersion Include="Moq" Version="4.20.0" />
+    <PackageVersion Include="Moq" Version="4.20.1" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="PublicApiGenerator" Version="11.0.0" />
     <PackageVersion Include="ReportGenerator" Version="5.1.23" />
