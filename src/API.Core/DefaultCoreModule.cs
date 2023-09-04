@@ -12,5 +12,10 @@ public class DefaultCoreModule : Module
       .RegisterType<TenantBareEntityResolver<CompanyEntity, long, Guid>>()
       .AsImplementedInterfaces()
       .InstancePerLifetimeScope();
+
+    builder
+      .RegisterType<SystemPropertiesInitializer>()
+      .AsImplementedInterfaces()
+      .InstancePerLifetimeScope();
   }
 }
