@@ -3,6 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 using FluentValidation;
 using Fossa.API.Core;
 using Fossa.API.Core.Messages;
+using Fossa.API.Core.Services;
 using Fossa.API.Infrastructure;
 using Fossa.API.Persistence;
 using Fossa.API.Web;
@@ -113,6 +114,10 @@ app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FossaApp AP
 app.MapDefaultControllerRoute();
 
 app.Services.GetRequiredService<IdGenSetupLogger>().LogIdGenSetup();
+
+await app.Services.GetRequiredService<ISystemPropertiesInitializer>()
+  .InitializeAsync(default)
+  .ConfigureAwait(false);
 
 await app.RunAsync().ConfigureAwait(false);
 

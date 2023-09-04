@@ -19,6 +19,11 @@ public class DefaultPersistenceModule : Module
       .SingleInstance();
 
     builder
+      .RegisterType<MongoUnitOfWorkFactory>()
+      .AsImplementedInterfaces()
+      .InstancePerLifetimeScope();
+
+    builder
       .RegisterType<CompanyMongoRepository>()
       .AsImplementedInterfaces()
       .InstancePerLifetimeScope();
@@ -29,7 +34,12 @@ public class DefaultPersistenceModule : Module
       .InstancePerLifetimeScope();
 
     builder
-      .RegisterType<MongoUnitOfWorkFactory>()
+      .RegisterType<SystemPropertiesMongoRepository>()
+      .AsImplementedInterfaces()
+      .InstancePerLifetimeScope();
+
+    builder
+      .RegisterType<SystemPropertiesRepositoryAdapter>()
       .AsImplementedInterfaces()
       .InstancePerLifetimeScope();
   }
