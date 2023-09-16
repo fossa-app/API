@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using Fossa.API.Core;
 using Fossa.API.Core.Messages;
 using Hellang.Middleware.ProblemDetails;
+using TIKSN.Data;
 using ProblemDetailsOptions = Hellang.Middleware.ProblemDetails.ProblemDetailsOptions;
 
 namespace Fossa.API.Web;
