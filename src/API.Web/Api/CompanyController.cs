@@ -35,19 +35,21 @@ public class CompanyController : BaseApiController
   }
 
   [HttpGet]
-  public async Task<CompanyEntity> GetAsync(
+  public async Task<CompanyRetrievalModel> GetAsync(
     CancellationToken cancellationToken)
   {
     var tenantId = _tenantIdProvider.GetTenantId();
-    return await _sender.Send(
+    var entity = await _sender.Send(
       new CompanyRetrievalQuery(tenantId),
       cancellationToken);
+
+    return new CompanyRetrievalModel(entity.ID, entity.Name);
   }
   
   [HttpPost]
   [Authorize(Roles = "administrator")]
   public async Task PostAsync(
-    [FromBody] CompanyModel model,
+    [FromBody] CompanyModificationModel model,
     CancellationToken cancellationToken)
   {
     var tenantId = _tenantIdProvider.GetTenantId();
@@ -60,7 +62,7 @@ public class CompanyController : BaseApiController
   [Authorize(Roles = "administrator")]
   public async Task PutAsync(
     long id,
-    [FromBody] CompanyModel model,
+    [FromBody] CompanyModificationModel model,
     CancellationToken cancellationToken)
   {
     var tenantId = _tenantIdProvider.GetTenantId();
