@@ -29,21 +29,17 @@ builder.Host.UseSerilog((_, config) => config.ReadFrom.Configuration(builder.Con
 builder.Services.AddIdGen(builder.Configuration, initialReleaseDate);
 builder.Services.AddSingleton<IdGenSetupLogger>();
 
-builder.Services.Configure<CookiePolicyOptions>(options =>
-{
-  options.CheckConsentNeeded = context => true;
-  options.MinimumSameSitePolicy = SameSiteMode.None;
-});
-
 builder.Services.AddAuthentication(options =>
 {
   options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 })
-  .AddJwtBearer(options =>
+.AddJwtBearer(options =>
 {
-  options.Authority = "http://localhost:9011/";
+  var identitySection = builder.Configuration.GetSection("Identity");
+  options.Authority = identitySection.GetValue<string>("RootAddress");
   options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
-  options.Audience = "";
+  options.Audience = identitySection.GetValue<string>("Audience");
+  options.TokenValidationParameters.ValidateAudience = !builder.Environment.IsDevelopment();
 });
 
 builder.Services.AddHttpContextAccessor();
