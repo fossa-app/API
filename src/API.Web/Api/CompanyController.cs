@@ -25,6 +25,7 @@ public class CompanyController : BaseApiController
   }
 
   [HttpDelete("{id}")]
+  [Authorize(Roles = "administrator")]
   public async Task DeleteAsync(long id, CancellationToken cancellationToken)
   {
     var tenantId = _tenantIdProvider.GetTenantId();
@@ -42,8 +43,9 @@ public class CompanyController : BaseApiController
       new CompanyRetrievalQuery(tenantId),
       cancellationToken);
   }
-
+  
   [HttpPost]
+  [Authorize(Roles = "administrator")]
   public async Task PostAsync(
     [FromBody] CompanyModel model,
     CancellationToken cancellationToken)
@@ -53,8 +55,9 @@ public class CompanyController : BaseApiController
       new CompanyCreationCommand(tenantId, model.Name),
       cancellationToken);
   }
-
+  
   [HttpPut("{id}")]
+  [Authorize(Roles = "administrator")]
   public async Task PutAsync(
     long id,
     [FromBody] CompanyModel model,

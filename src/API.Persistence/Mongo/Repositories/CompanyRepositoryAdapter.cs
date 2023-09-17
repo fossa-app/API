@@ -1,8 +1,8 @@
-﻿using Fossa.API.Core;
-using Fossa.API.Core.Entities;
+﻿using Fossa.API.Core.Entities;
 using Fossa.API.Core.Repositories;
 using Fossa.API.Persistence.Mongo.Entities;
 using LanguageExt;
+using TIKSN.Data;
 using TIKSN.Data.Mongo;
 using TIKSN.Mapping;
 
@@ -40,6 +40,6 @@ public class CompanyRepositoryAdapter
     var entity = await _dataRepository.GetByTenantIdAsync(
       tenantId, cancellationToken).ConfigureAwait(false);
 
-    return entity == null ? throw new EntityNotFoundException() : Map(entity);
+    return entity is null ? throw new EntityNotFoundException() : Map(entity);
   }
 }
