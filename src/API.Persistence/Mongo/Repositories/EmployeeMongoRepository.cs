@@ -1,4 +1,5 @@
-﻿using Fossa.API.Persistence.Mongo.Entities;
+﻿using Fossa.API.Core.Repositories;
+using Fossa.API.Persistence.Mongo.Entities;
 using LanguageExt;
 using MongoDB.Driver;
 using TIKSN.Data;
@@ -41,5 +42,15 @@ public class EmployeeMongoRepository
     var entity = await SingleOrDefaultAsync(filter, cancellationToken).ConfigureAwait(false);
 
     return entity ?? throw new EntityNotFoundException();
+  }
+
+  public Task<PageResult<EmployeeMongoEntity>> PageAsync(
+    TenantEmployeePageQuery pageQuery,
+    CancellationToken cancellationToken)
+  {
+    var filter =
+      Builders<EmployeeMongoEntity>.Filter.Eq(item => item.TenantID, pageQuery.TenantId);
+
+    return this.PageAsync(filter, pageQuery, cancellationToken);
   }
 }
