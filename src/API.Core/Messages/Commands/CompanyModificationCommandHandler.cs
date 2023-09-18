@@ -21,7 +21,7 @@ public class CompanyModificationCommandHandler : IRequestHandler<CompanyModifica
     CompanyModificationCommand request,
     CancellationToken cancellationToken)
   {
-    CompanyEntity entity = await _companyQueryRepository.GetOrDefaultAsync(request.ID, cancellationToken).ConfigureAwait(false);
+    var entity = await _companyQueryRepository.GetAsync(request.ID, cancellationToken).ConfigureAwait(false);
     entity = entity with { Name = request.Name };
     await _companyRepository.UpdateAsync(entity, cancellationToken).ConfigureAwait(false);
   }
