@@ -1,5 +1,7 @@
-﻿using Fossa.API.Persistence.Mongo.Entities;
+﻿using Fossa.API.Core.Repositories;
+using Fossa.API.Persistence.Mongo.Entities;
 using LanguageExt;
+using TIKSN.Data;
 using TIKSN.Data.Mongo;
 
 namespace Fossa.API.Persistence.Mongo.Repositories;
@@ -12,5 +14,9 @@ public interface IEmployeeMongoRepository : IMongoRepository<EmployeeMongoEntity
 
   Task<EmployeeMongoEntity> GetByUserIdAsync(
     Guid userId,
+    CancellationToken cancellationToken);
+  
+  Task<PageResult<EmployeeMongoEntity>> PageAsync(
+    TenantEmployeePageQuery pageQuery,
     CancellationToken cancellationToken);
 }
