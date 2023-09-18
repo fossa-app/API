@@ -13,4 +13,8 @@ public interface IEmployeeQueryRepository : IQueryRepository<EmployeeEntity, lon
   Task<EmployeeEntity> GetByUserIdAsync(
     Guid userId,
     CancellationToken cancellationToken);
+  
+  Task<PageResult<EmployeeEntity>> PageAsync(
+    TenantEmployeePageQuery pageQuery,
+    CancellationToken cancellationToken);
 }
