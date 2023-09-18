@@ -10,7 +10,7 @@ namespace Fossa.API.Persistence.Mongo.Repositories;
 
 public class EmployeeRepositoryAdapter
   : MongoRepositoryAdapter<EmployeeEntity, long, EmployeeMongoEntity, long>
-  , IEmployeeRepository, IEmployeeQueryRepository
+    , IEmployeeRepository, IEmployeeQueryRepository
 {
   private readonly IEmployeeMongoRepository _dataRepository;
 
@@ -45,5 +45,17 @@ public class EmployeeRepositoryAdapter
       tenantId, cancellationToken).ConfigureAwait(false);
 
     return entity is null ? throw new EntityNotFoundException() : Map(entity);
+  }
+
+  public async Task<PageResult<EmployeeEntity>> PageAsync(
+    TenantEmployeePageQuery pageQuery,
+    CancellationToken cancellationToken)
+  {
+    var pageResult = await _dataRepository.PageAsync(pageQuery, cancellationToken).ConfigureAwait(false);
+
+    return new PageResult<EmployeeEntity>(
+      pageResult.Page,
+      pageResult.Items.Select(Map).ToArray(),
+      pageResult.TotalItems);
   }
 }
