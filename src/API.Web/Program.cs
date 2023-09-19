@@ -26,6 +26,7 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 builder.Host.UseSerilog((_, config) => config.ReadFrom.Configuration(builder.Configuration));
 
+builder.Services.Configure<PagingQueryOptions>(builder.Configuration.GetSection("Paging"));
 builder.Services.AddIdGen(builder.Configuration, initialReleaseDate);
 builder.Services.AddSingleton<IdGenSetupLogger>();
 
@@ -67,6 +68,7 @@ builder.Services.AddMediatR(cfg =>
   cfg.Lifetime = ServiceLifetime.Scoped;
   cfg.RegisterServicesFromAssemblies(assemblies);
   cfg.AddOpenBehavior(typeof(TenantRequestBehavior<,>));
+  cfg.AddOpenBehavior(typeof(PagingQueryBehavior<,>));
   cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
 });
 
