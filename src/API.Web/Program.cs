@@ -10,7 +10,6 @@ using Fossa.API.Web;
 using Fossa.API.Web.DependencyInjection;
 using Hellang.Middleware.ProblemDetails;
 using Hellang.Middleware.ProblemDetails.Mvc;
-using LanguageExt;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using Serilog;
@@ -113,7 +112,7 @@ app.MapDefaultControllerRoute();
 
 app.Services.GetRequiredService<IdGenSetupLogger>().LogIdGenSetup();
 
-await app.Services.GetRequiredService<ISystemPropertiesInitializer>()
+await app.Services.GetRequiredService<ISystemInitializer>()
   .InitializeAsync(default)
   .ConfigureAwait(false);
 

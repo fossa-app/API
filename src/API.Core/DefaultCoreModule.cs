@@ -14,6 +14,11 @@ public class DefaultCoreModule : Module
       .InstancePerLifetimeScope();
 
     builder
+      .RegisterType<SystemInitializer>()
+      .AsImplementedInterfaces()
+      .InstancePerLifetimeScope();
+    
+    builder
       .RegisterType<SystemPropertiesInitializer>()
       .AsImplementedInterfaces()
       .InstancePerLifetimeScope();
