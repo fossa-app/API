@@ -8,7 +8,7 @@ public record EmployeePagingQuery(
     Guid UserID,
     Page Page)
   : EntityTenantQuery<EmployeeEntity, long, Guid, PageResult<EmployeeEntity>>(TenantID)
-  , IPagingQuery<EmployeeEntity, long>
+  , IPagingQuery<EmployeeEntity>
 {
   public override IEnumerable<long> AffectingTenantEntitiesIdentities
     => Enumerable.Empty<long>();
