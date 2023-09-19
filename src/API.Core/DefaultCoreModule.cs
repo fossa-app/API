@@ -22,5 +22,10 @@ public class DefaultCoreModule : Module
       .RegisterType<SystemPropertiesInitializer>()
       .AsImplementedInterfaces()
       .InstancePerLifetimeScope();
+    
+    builder
+      .RegisterType<SystemLicenseInitializer>()
+      .AsImplementedInterfaces()
+      .InstancePerLifetimeScope();
   }
 }
