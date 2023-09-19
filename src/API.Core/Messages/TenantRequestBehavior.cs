@@ -1,10 +1,12 @@
-﻿using Fossa.API.Core.Entities;
+﻿using System.Diagnostics.CodeAnalysis;
+using Fossa.API.Core.Entities;
 using Fossa.API.Core.Messages.Commands;
 using Fossa.API.Core.Messages.Queries;
 using Fossa.API.Core.Services;
 using Fossa.API.Core.Tenant;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using TIKSN.Data;
 
 namespace Fossa.API.Core.Messages;
 
@@ -15,8 +17,8 @@ public class TenantRequestBehavior<TRequest, TResponse>
   public TenantRequestBehavior(
     ITenantIdProvider<Guid> tenantIdProvider,
     IServiceProvider serviceProvider) : base(
-      tenantIdProvider,
-      serviceProvider)
+    tenantIdProvider,
+    serviceProvider)
   {
   }
 }
@@ -62,13 +64,13 @@ public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, T
     CancellationToken cancellationToken)
   {
     var bareEntityResolvers = affectingEntities
-          .Select(x => x.EntityType)
-          .Distinct()
-          .ToDictionary(k => k, v => _entityAwareBareEntityResolverType
-            .MakeGenericType(
-              v,
-              typeof(TenantEntity<TEntityIdentity, TTenantIdentity>),
-              typeof(TEntityIdentity)));
+      .Select(x => x.EntityType)
+      .Distinct()
+      .ToDictionary(k => k, v => _entityAwareBareEntityResolverType
+        .MakeGenericType(
+          v,
+          typeof(TenantEntity<TEntityIdentity, TTenantIdentity>),
+          typeof(TEntityIdentity)));
 
     foreach (var affectingTenantEntity in affectingEntities)
     {
@@ -76,7 +78,8 @@ public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, T
         (IBareEntityResolver<TenantEntity<TEntityIdentity, TTenantIdentity>, TEntityIdentity>)
         _serviceProvider.GetRequiredService(bareEntityResolvers[affectingTenantEntity.EntityType]);
 
-      var bareTenantEntity = await bareEntityResolver.ResolveAsync(affectingTenantEntity.EntityID, cancellationToken).ConfigureAwait(false);
+      var bareTenantEntity = await bareEntityResolver.ResolveAsync(affectingTenantEntity.EntityID, cancellationToken)
+        .ConfigureAwait(false);
       if (bareTenantEntity.TenantID == null || !bareTenantEntity.TenantID.Equals(tenantId))
       {
         throw new CrossTenantInboundUnauthorizedAccessException();
@@ -85,7 +88,7 @@ public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, T
   }
 
   private Task InspectRequestAsync(
-      TRequest request,
+    TRequest request,
     CancellationToken cancellationToken)
   {
     if (request is ITenantCommand<TEntityIdentity, TTenantIdentity> tenantCommand)
@@ -116,6 +119,13 @@ public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, T
       else if (response is IEnumerable<ITenantEntity<TEntityIdentity, TTenantIdentity>> tenantEntities)
       {
         foreach (var currentTenantEntity in tenantEntities)
+        {
+          await InspectTenantEntityAsync(tenantId, currentTenantEntity, cancellationToken).ConfigureAwait(false);
+        }
+      }
+      else if (response is IPageResult<ITenantEntity<TEntityIdentity, TTenantIdentity>> tenantEntitiesPageResult)
+      {
+        foreach (var currentTenantEntity in tenantEntitiesPageResult.Items)
         {
           await InspectTenantEntityAsync(tenantId, currentTenantEntity, cancellationToken).ConfigureAwait(false);
         }
