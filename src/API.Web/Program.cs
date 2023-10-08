@@ -52,7 +52,7 @@ builder.Services.AddSwaggerGen(c =>
   c.EnableAnnotations();
 });
 
-builder.Services.AddFrameworkPlatform();
+builder.Services.AddFrameworkCore();
 
 var assemblies = Seq(
     typeof(DefaultCoreModule),
@@ -81,7 +81,6 @@ builder.Services.Scan(scan => scan
 builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
   containerBuilder.RegisterModule<CoreModule>();
-  containerBuilder.RegisterModule<PlatformModule>();
   containerBuilder.RegisterModule(new DefaultCoreModule());
   containerBuilder.RegisterModule(new DefaultInfrastructureModule(string.Equals(builder.Environment.EnvironmentName, "Development", StringComparison.OrdinalIgnoreCase)));
   containerBuilder.RegisterModule<DefaultPersistenceModule>();
