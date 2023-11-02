@@ -3,7 +3,7 @@
 namespace Fossa.API.Core.Entities;
 
 public record CompanyEntity(
-  long ID,
-  Guid TenantID,
-  string Name)
-  : ITenantEntity<long, Guid>;
+    CompanyId ID,
+    Guid TenantID,
+    string Name)
+  : ITenantEntity<CompanyId, Guid>;
