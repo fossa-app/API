@@ -8,8 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="IdGen.DependencyInjection" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="PublicApiGenerator" />
+    <PackageReference Include="Scrutor" />
     <PackageReference Include="TIKSN-Framework" />
     <PackageReference Include="Verify.Xunit" />
     <PackageReference Include="xunit.runner.visualstudio">
