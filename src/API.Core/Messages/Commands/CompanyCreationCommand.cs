@@ -5,8 +5,8 @@ namespace Fossa.API.Core.Messages.Commands;
 public record CompanyCreationCommand(
   Guid TenantID,
   string Name)
-  : EntityTenantCommand<CompanyEntity, long, Guid>(TenantID)
+  : EntityTenantCommand<CompanyEntity, CompanyId, Guid>(TenantID)
 {
-  public override IEnumerable<long> AffectingTenantEntitiesIdentities
-    => Enumerable.Empty<long>();
+  public override IEnumerable<CompanyId> AffectingTenantEntitiesIdentities
+    => Enumerable.Empty<CompanyId>();
 }
