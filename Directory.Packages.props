@@ -25,7 +25,7 @@
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageVersion Include="Swashbuckle.AspNetCore.Annotations" Version="6.5.0" />
     <PackageVersion Include="Verify.Xunit" Version="22.1.4" />
-    <PackageVersion Include="xunit" Version="2.6.0" />
+    <PackageVersion Include="xunit" Version="2.6.1" />
     <PackageVersion Include="TIKSN-Framework" Version="4.5.0-alpha.20" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="2.5.3" />
   </ItemGroup>
