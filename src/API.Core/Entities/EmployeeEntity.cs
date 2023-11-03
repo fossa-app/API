@@ -7,7 +7,7 @@ public record EmployeeEntity(
     long ID,
     Guid TenantID,
     Guid UserID,
-    long CompanyId,
+    CompanyId CompanyId,
     string FirstName,
     string LastName,
     string FullName)
