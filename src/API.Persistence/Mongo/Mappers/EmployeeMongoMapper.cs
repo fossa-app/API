@@ -4,7 +4,8 @@ using TIKSN.Mapping;
 
 namespace Fossa.API.Persistence.Mongo.Mappers;
 
-public class EmployeeMongoMapper : IMapper<EmployeeMongoEntity, EmployeeEntity>, IMapper<EmployeeEntity, EmployeeMongoEntity>
+public class EmployeeMongoMapper : IMapper<EmployeeMongoEntity, EmployeeEntity>,
+  IMapper<EmployeeEntity, EmployeeMongoEntity>
 {
   private readonly IMapper<EmployeeId, long> _domainIdentityToDataIdentityMapper;
   private readonly IMapper<long, EmployeeId> _dataIdentityToDomainIdentityMapper;
@@ -17,15 +18,22 @@ public class EmployeeMongoMapper : IMapper<EmployeeMongoEntity, EmployeeEntity>,
     IMapper<CompanyId, long> companyDomainIdentityToDataIdentityMapper,
     IMapper<long, CompanyId> companyDataIdentityToDomainIdentityMapper)
   {
-    _domainIdentityToDataIdentityMapper = domainIdentityToDataIdentityMapper ?? throw new ArgumentNullException(nameof(domainIdentityToDataIdentityMapper));
-    _dataIdentityToDomainIdentityMapper = dataIdentityToDomainIdentityMapper ?? throw new ArgumentNullException(nameof(dataIdentityToDomainIdentityMapper));
-    _companyDomainIdentityToDataIdentityMapper = companyDomainIdentityToDataIdentityMapper ?? throw new ArgumentNullException(nameof(companyDomainIdentityToDataIdentityMapper));
-    _companyDataIdentityToDomainIdentityMapper = companyDataIdentityToDomainIdentityMapper ?? throw new ArgumentNullException(nameof(companyDataIdentityToDomainIdentityMapper));
+    _domainIdentityToDataIdentityMapper = domainIdentityToDataIdentityMapper ??
+                                          throw new ArgumentNullException(nameof(domainIdentityToDataIdentityMapper));
+    _dataIdentityToDomainIdentityMapper = dataIdentityToDomainIdentityMapper ??
+                                          throw new ArgumentNullException(nameof(dataIdentityToDomainIdentityMapper));
+    _companyDomainIdentityToDataIdentityMapper = companyDomainIdentityToDataIdentityMapper ??
+                                                 throw new ArgumentNullException(
+                                                   nameof(companyDomainIdentityToDataIdentityMapper));
+    _companyDataIdentityToDomainIdentityMapper = companyDataIdentityToDomainIdentityMapper ??
+                                                 throw new ArgumentNullException(
+                                                   nameof(companyDataIdentityToDomainIdentityMapper));
   }
+
   public EmployeeEntity Map(EmployeeMongoEntity source)
   {
     return new EmployeeEntity(
-      source.ID,
+      _dataIdentityToDomainIdentityMapper.Map(source.ID),
       source.TenantID,
       source.UserID,
       _companyDataIdentityToDomainIdentityMapper.Map(source.CompanyId),
@@ -38,7 +46,7 @@ public class EmployeeMongoMapper : IMapper<EmployeeMongoEntity, EmployeeEntity>,
   {
     return new EmployeeMongoEntity
     {
-      ID = source.ID,
+      ID = _domainIdentityToDataIdentityMapper.Map(source.ID),
       TenantID = source.TenantID,
       UserID = source.UserID,
       CompanyId = _companyDomainIdentityToDataIdentityMapper.Map(source.CompanyId),
