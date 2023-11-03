@@ -9,10 +9,10 @@ public class CompanyCreationCommandHandler : IRequestHandler<CompanyCreationComm
 {
   private readonly ICompanyQueryRepository _companyQueryRepository;
   private readonly ICompanyRepository _companyRepository;
-  private readonly IIdentityGenerator<long> _identityGenerator;
+  private readonly IIdentityGenerator<CompanyId> _identityGenerator;
 
   public CompanyCreationCommandHandler(
-    IIdentityGenerator<long> identityGenerator,
+    IIdentityGenerator<CompanyId> identityGenerator,
     ICompanyQueryRepository companyQueryRepository,
     ICompanyRepository companyRepository)
   {
@@ -25,11 +25,13 @@ public class CompanyCreationCommandHandler : IRequestHandler<CompanyCreationComm
     CompanyCreationCommand request,
     CancellationToken cancellationToken)
   {
-    var oldEntity = await _companyQueryRepository.FindByTenantIdAsync(request.TenantID, cancellationToken).ConfigureAwait(false);
+    var oldEntity = await _companyQueryRepository.FindByTenantIdAsync(request.TenantID, cancellationToken)
+      .ConfigureAwait(false);
     if (oldEntity.IsSome)
     {
       throw new InvalidOperationException("A company for this tenant has already been created.");
     }
+
     var id = _identityGenerator.Generate();
     CompanyEntity entity = new(id, request.TenantID, request.Name);
     await _companyRepository.AddAsync(entity, cancellationToken).ConfigureAwait(false);
