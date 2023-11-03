@@ -10,7 +10,7 @@ public record EmployeeModificationCommand(
     string FirstName,
     string LastName,
     string FullName)
-  : EntityTenantCommand<CompanyEntity, long, Guid>(TenantID)
+  : EntityTenantCommand<EmployeeEntity, long, Guid>(TenantID)
 {
   public override IEnumerable<long> AffectingTenantEntitiesIdentities
     => Prelude.Seq1(ID);
