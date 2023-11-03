@@ -7,7 +7,7 @@ using TIKSN.Mapping;
 namespace Fossa.API.Persistence.Mongo.Repositories;
 
 public class SystemPropertiesRepositoryAdapter
-  : MongoRepositoryAdapter<SystemPropertiesEntity, long, SystemPropertiesMongoEntity, long>
+  : MongoRepositoryAdapter<SystemPropertiesEntity, SystemPropertiesId, SystemPropertiesMongoEntity, long>
     , ISystemPropertiesRepository, ISystemPropertiesQueryRepository
 {
   private readonly ISystemPropertiesMongoRepository _dataRepository;
@@ -15,11 +15,13 @@ public class SystemPropertiesRepositoryAdapter
   public SystemPropertiesRepositoryAdapter(
     IMapper<SystemPropertiesEntity, SystemPropertiesMongoEntity> domainEntityToDataEntityMapper,
     IMapper<SystemPropertiesMongoEntity, SystemPropertiesEntity> dataEntityToDomainEntityMapper,
+    IMapper<SystemPropertiesId, long> domainIdentityToDataIdentityMapper,
+    IMapper<long, SystemPropertiesId> dataIdentityToDomainIdentityMapper,
     ISystemPropertiesMongoRepository dataRepository) : base(
     domainEntityToDataEntityMapper,
     dataEntityToDomainEntityMapper,
-    IdentityMapper<long>.Instance,
-    IdentityMapper<long>.Instance,
+    domainIdentityToDataIdentityMapper,
+    dataIdentityToDomainIdentityMapper,
     dataRepository)
   {
     _dataRepository = dataRepository ?? throw new ArgumentNullException(nameof(dataRepository));
