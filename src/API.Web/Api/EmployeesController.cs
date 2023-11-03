@@ -71,7 +71,7 @@ public class EmployeesController : BaseApiController<EmployeeId>
     var userId = _userIdProvider.GetUserId();
     await _sender.Send(
       new EmployeeModificationCommand(
-        id, tenantId, userId, model.FirstName, model.LastName, model.FullName),
+        _dataIdentityToDomainIdentityMapper.Map(id), tenantId, userId, model.FirstName, model.LastName, model.FullName),
       cancellationToken);
   }
 }
