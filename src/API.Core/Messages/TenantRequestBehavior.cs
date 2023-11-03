@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Fossa.API.Core.Entities;
+﻿using Fossa.API.Core.Entities;
 using Fossa.API.Core.Messages.Commands;
 using Fossa.API.Core.Messages.Queries;
 using Fossa.API.Core.Services;
@@ -10,24 +9,11 @@ using TIKSN.Data;
 
 namespace Fossa.API.Core.Messages;
 
-public class TenantRequestBehavior<TRequest, TResponse>
-  : TenantRequestBehavior<long, Guid, TRequest, TResponse>
-  where TRequest : notnull
-{
-  public TenantRequestBehavior(
-    ITenantIdProvider<Guid> tenantIdProvider,
-    IServiceProvider serviceProvider) : base(
-    tenantIdProvider,
-    serviceProvider)
-  {
-  }
-}
-
 public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, TResponse>
   : IPipelineBehavior<TRequest, TResponse>
-  where TRequest : notnull
   where TEntityIdentity : IEquatable<TEntityIdentity>
   where TTenantIdentity : IEquatable<TTenantIdentity>
+  where TRequest : notnull
 {
 #pragma warning disable S2743 // Static fields should not be used in generic types
   private static readonly Type _entityAwareBareEntityResolverType = typeof(IBareEntityResolver<,,>);

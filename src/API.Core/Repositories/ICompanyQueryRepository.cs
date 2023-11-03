@@ -4,7 +4,7 @@ using TIKSN.Data;
 
 namespace Fossa.API.Core.Repositories;
 
-public interface ICompanyQueryRepository : IQueryRepository<CompanyEntity, long>
+public interface ICompanyQueryRepository : IQueryRepository<CompanyEntity, CompanyId>
 {
   Task<Option<CompanyEntity>> FindByTenantIdAsync(
     Guid tenantId,

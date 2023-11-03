@@ -6,31 +6,37 @@ using Fossa.API.Web.ApiModels;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TIKSN.Mapping;
 
 namespace Fossa.API.Web.Api;
 
 [Authorize]
 [Route("api/[controller]")]
 [ApiController]
-public class CompanyController : BaseApiController
+public class CompanyController : BaseApiController<CompanyId>
 {
   private readonly ITenantIdProvider<Guid> _tenantIdProvider;
 
   public CompanyController(
     ITenantIdProvider<Guid> tenantIdProvider,
     ISender sender,
-    IPublisher publisher) : base(sender, publisher)
+    IPublisher publisher,
+    IMapper<CompanyId, long> domainIdentityToDataIdentityMapper,
+    IMapper<long, CompanyId> dataIdentityToDomainIdentityMapper)
+    : base(sender, publisher, domainIdentityToDataIdentityMapper, dataIdentityToDomainIdentityMapper)
   {
     _tenantIdProvider = tenantIdProvider ?? throw new ArgumentNullException(nameof(tenantIdProvider));
   }
 
   [HttpDelete("{id}")]
   [Authorize(Roles = "administrator")]
-  public async Task DeleteAsync(long id, CancellationToken cancellationToken)
+  public async Task DeleteAsync(
+    long id,
+    CancellationToken cancellationToken)
   {
     var tenantId = _tenantIdProvider.GetTenantId();
     await _sender.Send(
-      new CompanyDeletionCommand(id, tenantId),
+      new CompanyDeletionCommand(_dataIdentityToDomainIdentityMapper.Map(id), tenantId),
       cancellationToken);
   }
 
@@ -43,9 +49,9 @@ public class CompanyController : BaseApiController
       new CompanyRetrievalQuery(tenantId),
       cancellationToken);
 
-    return new CompanyRetrievalModel(entity.ID, entity.Name);
+    return new CompanyRetrievalModel(_domainIdentityToDataIdentityMapper.Map(entity.ID), entity.Name);
   }
-  
+
   [HttpPost]
   [Authorize(Roles = "administrator")]
   public async Task PostAsync(
@@ -57,7 +63,7 @@ public class CompanyController : BaseApiController
       new CompanyCreationCommand(tenantId, model.Name),
       cancellationToken);
   }
-  
+
   [HttpPut("{id}")]
   [Authorize(Roles = "administrator")]
   public async Task PutAsync(
@@ -67,7 +73,7 @@ public class CompanyController : BaseApiController
   {
     var tenantId = _tenantIdProvider.GetTenantId();
     await _sender.Send(
-      new CompanyModificationCommand(id, tenantId, model.Name),
+      new CompanyModificationCommand(_dataIdentityToDomainIdentityMapper.Map(id), tenantId, model.Name),
       cancellationToken);
   }
 }

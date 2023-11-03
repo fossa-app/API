@@ -7,9 +7,9 @@ public record EmployeePagingQuery(
     Guid TenantID,
     Guid UserID,
     Page Page)
-  : EntityTenantQuery<EmployeeEntity, long, Guid, PageResult<EmployeeEntity>>(TenantID)
-  , IPagingQuery<EmployeeEntity>
+  : EntityTenantQuery<EmployeeEntity, EmployeeId, Guid, PageResult<EmployeeEntity>>(TenantID)
+    , IPagingQuery<EmployeeEntity>
 {
-  public override IEnumerable<long> AffectingTenantEntitiesIdentities
-    => Enumerable.Empty<long>();
+  public override IEnumerable<EmployeeId> AffectingTenantEntitiesIdentities
+    => Enumerable.Empty<EmployeeId>();
 }

@@ -13,7 +13,7 @@ namespace Fossa.API.Web.Api;
 [Authorize]
 [Route("api/[controller]")]
 [ApiController]
-public class EmployeeController : BaseApiController
+public class EmployeeController : BaseApiController<EmployeeId>
 {
   private readonly ITenantIdProvider<Guid> _tenantIdProvider;
   private readonly IUserIdProvider<Guid> _userIdProvider;
@@ -22,7 +22,10 @@ public class EmployeeController : BaseApiController
     ITenantIdProvider<Guid> tenantIdProvider,
     IUserIdProvider<Guid> userIdProvider,
     ISender sender,
-    IPublisher publisher) : base(sender, publisher)
+    IPublisher publisher,
+    IMapper<EmployeeId, long> domainIdentityToDataIdentityMapper,
+    IMapper<long, EmployeeId> dataIdentityToDomainIdentityMapper)
+    : base(sender, publisher, domainIdentityToDataIdentityMapper, dataIdentityToDomainIdentityMapper)
   {
     _tenantIdProvider = tenantIdProvider ?? throw new ArgumentNullException(nameof(tenantIdProvider));
     _userIdProvider = userIdProvider ?? throw new ArgumentNullException(nameof(userIdProvider));

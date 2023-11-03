@@ -8,8 +8,8 @@ public record EmployeeCreationCommand(
     string FirstName,
     string LastName,
     string FullName)
-  : EntityTenantCommand<CompanyEntity, long, Guid>(TenantID)
+  : EntityTenantCommand<EmployeeEntity, EmployeeId, Guid>(TenantID)
 {
-  public override IEnumerable<long> AffectingTenantEntitiesIdentities
-    => Enumerable.Empty<long>();
+  public override IEnumerable<EmployeeId> AffectingTenantEntitiesIdentities
+    => Enumerable.Empty<EmployeeId>();
 }

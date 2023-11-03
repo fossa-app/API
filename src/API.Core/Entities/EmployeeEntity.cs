@@ -4,11 +4,11 @@ using Fossa.API.Core.User;
 namespace Fossa.API.Core.Entities;
 
 public record EmployeeEntity(
-    long ID,
+    EmployeeId ID,
     Guid TenantID,
     Guid UserID,
-    long CompanyId,
+    CompanyId CompanyId,
     string FirstName,
     string LastName,
     string FullName)
-  : ITenantEntity<long, Guid>, IUserEntity<long, Guid>;
+  : ITenantEntity<EmployeeId, Guid>, IUserEntity<EmployeeId, Guid>;

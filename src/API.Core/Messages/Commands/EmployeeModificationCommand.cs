@@ -4,14 +4,14 @@ using LanguageExt;
 namespace Fossa.API.Core.Messages.Commands;
 
 public record EmployeeModificationCommand(
-    long ID,
+    EmployeeId ID,
     Guid TenantID,
     Guid UserID,
     string FirstName,
     string LastName,
     string FullName)
-  : EntityTenantCommand<CompanyEntity, long, Guid>(TenantID)
+  : EntityTenantCommand<EmployeeEntity, EmployeeId, Guid>(TenantID)
 {
-  public override IEnumerable<long> AffectingTenantEntitiesIdentities
+  public override IEnumerable<EmployeeId> AffectingTenantEntitiesIdentities
     => Prelude.Seq1(ID);
 }
