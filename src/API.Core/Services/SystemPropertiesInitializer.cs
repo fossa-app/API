@@ -7,7 +7,7 @@ namespace Fossa.API.Core.Services;
 
 public class SystemPropertiesInitializer : ISystemPropertiesInitializer
 {
-  public const long MainSystemPropertiesId = 1L;
+  public static readonly SystemPropertiesId MainSystemPropertiesId = new(1L);
 
   private readonly ISystemPropertiesRepository _systemPropertiesRepository;
   private readonly ISystemPropertiesQueryRepository _systemPropertiesQueryRepository;
