@@ -4,10 +4,10 @@ using static LanguageExt.Prelude;
 namespace Fossa.API.Core.Messages.Commands;
 
 public record CompanyDeletionCommand(
-  long ID,
-  Guid TenantID)
-  : EntityTenantCommand<CompanyEntity, long, Guid>(TenantID)
+    CompanyId ID,
+    Guid TenantID)
+  : EntityTenantCommand<CompanyEntity, CompanyId, Guid>(TenantID)
 {
-  public override IEnumerable<long> AffectingTenantEntitiesIdentities
-  => Seq1(ID);
+  public override IEnumerable<CompanyId> AffectingTenantEntitiesIdentities
+    => Seq1(ID);
 }
