@@ -66,7 +66,7 @@ builder.Services.AddMediatR(cfg =>
 {
   cfg.Lifetime = ServiceLifetime.Scoped;
   cfg.RegisterServicesFromAssemblies(assemblies);
-  cfg.AddOpenBehavior(typeof(TenantRequestBehavior<,>));
+  cfg.AddOpenBehavior(typeof(TenantRequestBehavior<,,,>));
   cfg.AddOpenBehavior(typeof(PagingQueryBehavior<,>));
   cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
 });
