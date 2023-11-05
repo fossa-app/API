@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Fossa.API.Core.Entities;
 using Fossa.API.Core.Services;
+using TIKSN.Data.BareEntityResolvers;
 using TIKSN.Identity;
 
 namespace Fossa.API.Core;
