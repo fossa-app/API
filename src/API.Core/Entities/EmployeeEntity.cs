@@ -1,5 +1,4 @@
-﻿using Fossa.API.Core.Tenant;
-using Fossa.API.Core.User;
+﻿using TIKSN.Data;
 
 namespace Fossa.API.Core.Entities;
 
