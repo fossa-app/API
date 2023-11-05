@@ -116,10 +116,3 @@ await app.Services.GetRequiredService<ISystemInitializer>()
   .ConfigureAwait(false);
 
 await app.RunAsync().ConfigureAwait(false);
-
-// Make the implicit Program.cs class public, so integration tests can reference the correct assembly for host building
-public partial class Program
-{
-  protected Program()
-  { }
-}
