@@ -36,6 +36,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\API.Core\API.Core.csproj" />
+    <ProjectReference Include="..\..\src\API.Infrastructure\API.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\API.Persistence\API.Persistence.csproj" />
+    <ProjectReference Include="..\..\src\API.Web\API.Web.csproj" />
   </ItemGroup>
 
 </Project>
