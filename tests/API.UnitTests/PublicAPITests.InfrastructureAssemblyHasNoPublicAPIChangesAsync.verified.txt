@@ -1,0 +1,8 @@
+﻿namespace Fossa.API.Infrastructure
+{
+    public class DefaultInfrastructureModule : Autofac.Module
+    {
+        public DefaultInfrastructureModule(bool isDevelopment, System.Reflection.Assembly? callingAssembly = null) { }
+        protected override void Load(Autofac.ContainerBuilder builder) { }
+    }
+}

@@ -4,11 +4,11 @@ using Xunit;
 namespace Fossa.API.FunctionalTests.ControllerApis;
 
 [Collection("Sequential")]
-public class MetaControllerInfo : IClassFixture<CustomWebApplicationFactory<Program>>
+public class MetaControllerInfo : IClassFixture<CustomWebApplicationFactory<DefaultWebModule>>
 {
   private readonly HttpClient _client;
 
-  public MetaControllerInfo(CustomWebApplicationFactory<Program> factory)
+  public MetaControllerInfo(CustomWebApplicationFactory<DefaultWebModule> factory)
   {
     _client = factory.CreateClient();
   }
