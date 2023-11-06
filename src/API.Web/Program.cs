@@ -8,6 +8,7 @@ using Fossa.API.Infrastructure;
 using Fossa.API.Persistence;
 using Fossa.API.Web;
 using Fossa.API.Web.DependencyInjection;
+using Fossa.Licensing;
 using Hellang.Middleware.ProblemDetails;
 using Hellang.Middleware.ProblemDetails.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -53,6 +54,7 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 builder.Services.AddFrameworkCore();
+builder.Services.AddLicense();
 
 var assemblies = Seq(
     typeof(DefaultCoreModule),
