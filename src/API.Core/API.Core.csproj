@@ -9,6 +9,7 @@
   <ItemGroup>
     <PackageReference Include="Autofac" />
     <PackageReference Include="FluentValidation" />
+    <PackageReference Include="Fossa.Licensing" />
     <PackageReference Include="MediatR" />
     <PackageReference Include="TIKSN-Framework" />
     <PackageReference Include="UnitGenerator">
