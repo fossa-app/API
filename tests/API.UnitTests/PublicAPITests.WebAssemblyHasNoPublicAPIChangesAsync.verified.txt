@@ -1,0 +1,151 @@
+﻿namespace Fossa.API.Web.Api
+{
+    [Microsoft.AspNetCore.Mvc.ApiController]
+    [Microsoft.AspNetCore.Mvc.Route("api/[controller]")]
+    public abstract class BaseApiController<TEntityIdentity> : Microsoft.AspNetCore.Mvc.Controller
+    {
+        protected readonly TIKSN.Mapping.IMapper<long, TEntityIdentity> _dataIdentityToDomainIdentityMapper;
+        protected readonly TIKSN.Mapping.IMapper<TEntityIdentity, long> _domainIdentityToDataIdentityMapper;
+        protected readonly MediatR.IPublisher _publisher;
+        protected readonly MediatR.ISender _sender;
+        protected BaseApiController(MediatR.ISender sender, MediatR.IPublisher publisher, TIKSN.Mapping.IMapper<TEntityIdentity, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, TEntityIdentity> dataIdentityToDomainIdentityMapper) { }
+    }
+    [Microsoft.AspNetCore.Authorization.Authorize]
+    [Microsoft.AspNetCore.Mvc.ApiController]
+    [Microsoft.AspNetCore.Mvc.Route("api/[controller]")]
+    public class CompanyController : Fossa.API.Web.Api.BaseApiController<Fossa.API.Core.Entities.CompanyId>
+    {
+        public CompanyController(Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, MediatR.ISender sender, MediatR.IPublisher publisher, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId> dataIdentityToDomainIdentityMapper) { }
+        [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
+        [Microsoft.AspNetCore.Mvc.HttpDelete("{id}")]
+        public System.Threading.Tasks.Task DeleteAsync(long id, System.Threading.CancellationToken cancellationToken) { }
+        [Microsoft.AspNetCore.Mvc.HttpGet]
+        public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.CompanyRetrievalModel> GetAsync(System.Threading.CancellationToken cancellationToken) { }
+        [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
+        [Microsoft.AspNetCore.Mvc.HttpPost]
+        public System.Threading.Tasks.Task PostAsync([Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.CompanyModificationModel model, System.Threading.CancellationToken cancellationToken) { }
+        [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
+        [Microsoft.AspNetCore.Mvc.HttpPut("{id}")]
+        public System.Threading.Tasks.Task PutAsync(long id, [Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.CompanyModificationModel model, System.Threading.CancellationToken cancellationToken) { }
+    }
+    [Microsoft.AspNetCore.Authorization.Authorize]
+    [Microsoft.AspNetCore.Mvc.ApiController]
+    [Microsoft.AspNetCore.Mvc.Route("api/[controller]")]
+    public class EmployeeController : Fossa.API.Web.Api.BaseApiController<Fossa.API.Core.Entities.EmployeeId>
+    {
+        public EmployeeController(Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, MediatR.ISender sender, MediatR.IPublisher publisher, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId> dataIdentityToDomainIdentityMapper) { }
+        [Microsoft.AspNetCore.Mvc.HttpGet]
+        public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.EmployeeRetrievalModel> GetAsync([Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Web.ApiModels.EmployeeRetrievalModel> mapper, System.Threading.CancellationToken cancellationToken) { }
+    }
+    [Microsoft.AspNetCore.Authorization.Authorize]
+    [Microsoft.AspNetCore.Mvc.ApiController]
+    [Microsoft.AspNetCore.Mvc.Route("api/[controller]")]
+    public class EmployeesController : Fossa.API.Web.Api.BaseApiController<Fossa.API.Core.Entities.EmployeeId>
+    {
+        public EmployeesController(Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, MediatR.ISender sender, MediatR.IPublisher publisher, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId> dataIdentityToDomainIdentityMapper) { }
+        [Microsoft.AspNetCore.Mvc.HttpGet]
+        public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>> PageAsync([Microsoft.AspNetCore.Mvc.FromQuery] Fossa.API.Web.ApiModels.EmployeePagingRequestModel requestModel, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<TIKSN.Data.PageResult<Fossa.API.Core.Entities.EmployeeEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>> mapper, System.Threading.CancellationToken cancellationToken) { }
+        [Microsoft.AspNetCore.Mvc.HttpPost]
+        public System.Threading.Tasks.Task PostAsync([Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.EmployeeModificationModel model, System.Threading.CancellationToken cancellationToken) { }
+        [Microsoft.AspNetCore.Mvc.HttpPut("{id}")]
+        public System.Threading.Tasks.Task PutAsync(long id, [Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.EmployeeModificationModel model, System.Threading.CancellationToken cancellationToken) { }
+    }
+}
+namespace Fossa.API.Web.ApiModels
+{
+    public class CompanyModificationModel : System.IEquatable<Fossa.API.Web.ApiModels.CompanyModificationModel>
+    {
+        public CompanyModificationModel(string Name) { }
+        public string Name { get; init; }
+    }
+    public class CompanyRetrievalModel : System.IEquatable<Fossa.API.Web.ApiModels.CompanyRetrievalModel>
+    {
+        public CompanyRetrievalModel(long Id, string Name) { }
+        public long Id { get; init; }
+        public string Name { get; init; }
+    }
+    public class EmployeeModificationModel : System.IEquatable<Fossa.API.Web.ApiModels.EmployeeModificationModel>
+    {
+        public EmployeeModificationModel(string FirstName, string LastName, string FullName) { }
+        public string FirstName { get; init; }
+        public string FullName { get; init; }
+        public string LastName { get; init; }
+    }
+    public class EmployeePagingRequestModel : System.IEquatable<Fossa.API.Web.ApiModels.EmployeePagingRequestModel>
+    {
+        public EmployeePagingRequestModel(int PageNumber, int PageSize) { }
+        public int PageNumber { get; init; }
+        public int PageSize { get; init; }
+    }
+    public class EmployeeRetrievalModel : System.IEquatable<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>
+    {
+        public EmployeeRetrievalModel(long Id, long CompanyId, string FirstName, string LastName, string FullName) { }
+        public long CompanyId { get; init; }
+        public string FirstName { get; init; }
+        public string FullName { get; init; }
+        public long Id { get; init; }
+        public string LastName { get; init; }
+    }
+    public class PagingResponseModel<T> : System.IEquatable<Fossa.API.Web.ApiModels.PagingResponseModel<T>>
+    {
+        public PagingResponseModel(int PageNumber, int PageSize, System.Collections.Generic.IReadOnlyCollection<T> Items, long? TotalItems, long? TotalPages) { }
+        public System.Collections.Generic.IReadOnlyCollection<T> Items { get; init; }
+        public int PageNumber { get; init; }
+        public int PageSize { get; init; }
+        public long? TotalItems { get; init; }
+        public long? TotalPages { get; init; }
+    }
+}
+namespace Fossa.API.Web.Claims
+{
+    [System.Serializable]
+    public class ClaimNotFoundException : System.Exception
+    {
+        public ClaimNotFoundException() { }
+        public ClaimNotFoundException(string message) { }
+        protected ClaimNotFoundException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
+        public ClaimNotFoundException(string message, System.Exception inner) { }
+    }
+    public class ClaimsProvider : Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>, Fossa.API.Core.Tenant.ITenantIdProvider<int>, Fossa.API.Core.User.IUserIdProvider<System.Guid>, Fossa.API.Core.User.IUserIdProvider<int>
+    {
+        public ClaimsProvider(Microsoft.AspNetCore.Http.IHttpContextAccessor httpContextAccessor) { }
+    }
+}
+namespace Fossa.API.Web
+{
+    public class DefaultWebModule : Autofac.Module
+    {
+        public DefaultWebModule() { }
+        protected override void Load(Autofac.ContainerBuilder builder) { }
+    }
+    public class IdGenSetupLogger
+    {
+        public IdGenSetupLogger(IdGen.IdGenerator idGenerator, Microsoft.Extensions.Logging.ILogger<Fossa.API.Web.IdGenSetupLogger> logger) { }
+        public void LogIdGenSetup() { }
+    }
+    public static class ProblemDetailsOptionsExtensions
+    {
+        public static void MapFluentValidationException(this Hellang.Middleware.ProblemDetails.ProblemDetailsOptions options) { }
+        public static void MapKnownExceptions(this Hellang.Middleware.ProblemDetails.ProblemDetailsOptions options) { }
+    }
+}
+namespace Fossa.API.Web.DependencyInjection
+{
+    public static class ServiceCollectionExtensions
+    {
+        public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddIdGen(this Microsoft.Extensions.DependencyInjection.IServiceCollection services, Microsoft.Extensions.Configuration.IConfiguration configuration, System.DateOnly initialReleaseDate) { }
+    }
+}
+namespace Fossa.API.Web.Mappers
+{
+    public class EmployeeRetrievalModelMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Web.ApiModels.EmployeeRetrievalModel>
+    {
+        public EmployeeRetrievalModelMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId> dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> companyDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId> companyDataIdentityToDomainIdentityMapper) { }
+        public Fossa.API.Web.ApiModels.EmployeeRetrievalModel Map(Fossa.API.Core.Entities.EmployeeEntity source) { }
+    }
+    public class PagingResponseModelMapper<TEntity, TModel> : TIKSN.Mapping.IMapper<TIKSN.Data.PageResult<TEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<TModel>>
+    {
+        public PagingResponseModelMapper(TIKSN.Mapping.IMapper<TEntity, TModel> itemMapper) { }
+        public Fossa.API.Web.ApiModels.PagingResponseModel<TModel> Map(TIKSN.Data.PageResult<TEntity> source) { }
+    }
+}
