@@ -31,6 +31,16 @@ public class DefaultCoreModule : Module
       .RegisterType<SystemLicenseInitializer>()
       .AsImplementedInterfaces()
       .InstancePerLifetimeScope();
+
+    builder
+      .RegisterType<SystemLicenseRetriever>()
+      .AsImplementedInterfaces()
+      .InstancePerLifetimeScope();
+    
+    builder
+      .RegisterType<CertificateProvider>()
+      .AsImplementedInterfaces()
+      .InstancePerLifetimeScope();
   }
 
   private static void RegisterStronglyTypedIds(ContainerBuilder builder)
