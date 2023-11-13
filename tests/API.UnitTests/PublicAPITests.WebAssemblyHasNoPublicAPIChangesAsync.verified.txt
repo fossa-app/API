@@ -2,12 +2,18 @@
 {
     [Microsoft.AspNetCore.Mvc.ApiController]
     [Microsoft.AspNetCore.Mvc.Route("api/[controller]")]
-    public abstract class BaseApiController<TEntityIdentity> : Microsoft.AspNetCore.Mvc.Controller
+    public abstract class BaseApiController : Microsoft.AspNetCore.Mvc.Controller
+    {
+        protected readonly MediatR.IPublisher _publisher;
+        protected readonly MediatR.ISender _sender;
+        protected BaseApiController(MediatR.ISender sender, MediatR.IPublisher publisher) { }
+    }
+    [Microsoft.AspNetCore.Mvc.ApiController]
+    [Microsoft.AspNetCore.Mvc.Route("api/[controller]")]
+    public abstract class BaseApiController<TEntityIdentity> : Fossa.API.Web.Api.BaseApiController
     {
         protected readonly TIKSN.Mapping.IMapper<long, TEntityIdentity> _dataIdentityToDomainIdentityMapper;
         protected readonly TIKSN.Mapping.IMapper<TEntityIdentity, long> _domainIdentityToDataIdentityMapper;
-        protected readonly MediatR.IPublisher _publisher;
-        protected readonly MediatR.ISender _sender;
         protected BaseApiController(MediatR.ISender sender, MediatR.IPublisher publisher, TIKSN.Mapping.IMapper<TEntityIdentity, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, TEntityIdentity> dataIdentityToDomainIdentityMapper) { }
     }
     [Microsoft.AspNetCore.Authorization.Authorize]
@@ -51,6 +57,19 @@
         public System.Threading.Tasks.Task PutAsync(long id, [Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.EmployeeModificationModel model, System.Threading.CancellationToken cancellationToken) { }
     }
 }
+namespace Fossa.API.Web.Api.License
+{
+    [Microsoft.AspNetCore.Http.Tags(new string[] {
+            "System License"})]
+    [Microsoft.AspNetCore.Mvc.ApiController]
+    [Microsoft.AspNetCore.Mvc.Route("api/License/[controller]")]
+    public class SystemController : Fossa.API.Web.Api.BaseApiController
+    {
+        public SystemController(MediatR.ISender sender, MediatR.IPublisher publisher, TIKSN.Mapping.IMapper<TIKSN.Licensing.License<Fossa.Licensing.SystemEntitlements>, Fossa.API.Web.ApiModels.LicenseResponseModel<Fossa.API.Web.ApiModels.SystemEntitlementsModel>> licenseMapper) { }
+        [Microsoft.AspNetCore.Mvc.HttpGet]
+        public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.LicenseResponseModel<Fossa.API.Web.ApiModels.SystemEntitlementsModel>> GetAsync(System.Threading.CancellationToken cancellationToken) { }
+    }
+}
 namespace Fossa.API.Web.ApiModels
 {
     public class CompanyModificationModel : System.IEquatable<Fossa.API.Web.ApiModels.CompanyModificationModel>
@@ -86,6 +105,12 @@ namespace Fossa.API.Web.ApiModels
         public long Id { get; init; }
         public string LastName { get; init; }
     }
+    public class LicenseResponseModel<TEntitlementsModel> : System.IEquatable<Fossa.API.Web.ApiModels.LicenseResponseModel<TEntitlementsModel>>
+    {
+        public LicenseResponseModel(Fossa.API.Web.Mappers.LicenseTermsModel Terms, TEntitlementsModel Entitlements) { }
+        public TEntitlementsModel Entitlements { get; init; }
+        public Fossa.API.Web.Mappers.LicenseTermsModel Terms { get; init; }
+    }
     public class PagingResponseModel<T> : System.IEquatable<Fossa.API.Web.ApiModels.PagingResponseModel<T>>
     {
         public PagingResponseModel(int PageNumber, int PageSize, System.Collections.Generic.IReadOnlyCollection<T> Items, long? TotalItems, long? TotalPages) { }
@@ -94,6 +119,13 @@ namespace Fossa.API.Web.ApiModels
         public int PageSize { get; init; }
         public long? TotalItems { get; init; }
         public long? TotalPages { get; init; }
+    }
+    public class SystemEntitlementsModel : System.IEquatable<Fossa.API.Web.ApiModels.SystemEntitlementsModel>
+    {
+        public SystemEntitlementsModel(string EnvironmentName, string EnvironmentKind, int MaximumCompanyCount) { }
+        public string EnvironmentKind { get; init; }
+        public string EnvironmentName { get; init; }
+        public int MaximumCompanyCount { get; init; }
     }
 }
 namespace Fossa.API.Web.Claims
@@ -143,9 +175,43 @@ namespace Fossa.API.Web.Mappers
         public EmployeeRetrievalModelMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId> dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> companyDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId> companyDataIdentityToDomainIdentityMapper) { }
         public Fossa.API.Web.ApiModels.EmployeeRetrievalModel Map(Fossa.API.Core.Entities.EmployeeEntity source) { }
     }
+    public class LicenseResponseModelMapper<TEntitlements, TEntitlementsModel> : TIKSN.Mapping.IMapper<TIKSN.Licensing.License<TEntitlements>, Fossa.API.Web.ApiModels.LicenseResponseModel<TEntitlementsModel>>
+    {
+        public LicenseResponseModelMapper(TIKSN.Mapping.IMapper<TEntitlements, TEntitlementsModel> entitlementsMapper, TIKSN.Mapping.IMapper<TIKSN.Licensing.LicenseTerms, Fossa.API.Web.Mappers.LicenseTermsModel> licenseTermMapper) { }
+        public Fossa.API.Web.ApiModels.LicenseResponseModel<TEntitlementsModel> Map(TIKSN.Licensing.License<TEntitlements> source) { }
+    }
+    public class LicenseTermsModel : System.IEquatable<Fossa.API.Web.Mappers.LicenseTermsModel>
+    {
+        public LicenseTermsModel(Fossa.API.Web.Mappers.PartyModel licensor, Fossa.API.Web.Mappers.PartyModel licensee, System.DateTimeOffset notBefore, System.DateTimeOffset notAfter) { }
+        public Fossa.API.Web.Mappers.PartyModel licensee { get; init; }
+        public Fossa.API.Web.Mappers.PartyModel licensor { get; init; }
+        public System.DateTimeOffset notAfter { get; init; }
+        public System.DateTimeOffset notBefore { get; init; }
+    }
+    public class LicenseTermsModelMapper : TIKSN.Mapping.IMapper<TIKSN.Licensing.LicenseTerms, Fossa.API.Web.Mappers.LicenseTermsModel>
+    {
+        public LicenseTermsModelMapper(TIKSN.Mapping.IMapper<TIKSN.Licensing.Party, Fossa.API.Web.Mappers.PartyModel> partyModelMapper) { }
+        public Fossa.API.Web.Mappers.LicenseTermsModel Map(TIKSN.Licensing.LicenseTerms source) { }
+    }
     public class PagingResponseModelMapper<TEntity, TModel> : TIKSN.Mapping.IMapper<TIKSN.Data.PageResult<TEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<TModel>>
     {
         public PagingResponseModelMapper(TIKSN.Mapping.IMapper<TEntity, TModel> itemMapper) { }
         public Fossa.API.Web.ApiModels.PagingResponseModel<TModel> Map(TIKSN.Data.PageResult<TEntity> source) { }
+    }
+    public class PartyModel : System.IEquatable<Fossa.API.Web.Mappers.PartyModel>
+    {
+        public PartyModel(string LongName, string ShortName) { }
+        public string LongName { get; init; }
+        public string ShortName { get; init; }
+    }
+    public class PartyModelMapper : TIKSN.Mapping.IMapper<TIKSN.Licensing.Party, Fossa.API.Web.Mappers.PartyModel>
+    {
+        public PartyModelMapper() { }
+        public Fossa.API.Web.Mappers.PartyModel Map(TIKSN.Licensing.Party source) { }
+    }
+    public class SystemEntitlementsModelMapper : TIKSN.Mapping.IMapper<Fossa.Licensing.SystemEntitlements, Fossa.API.Web.ApiModels.SystemEntitlementsModel>
+    {
+        public SystemEntitlementsModelMapper(Microsoft.Extensions.Hosting.IHostEnvironment hostEnvironment) { }
+        public Fossa.API.Web.ApiModels.SystemEntitlementsModel Map(Fossa.Licensing.SystemEntitlements source) { }
     }
 }

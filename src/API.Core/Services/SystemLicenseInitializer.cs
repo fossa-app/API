@@ -5,8 +5,6 @@ namespace Fossa.API.Core.Services;
 
 public class SystemLicenseInitializer : ISystemLicenseInitializer
 {
-  public const string SystemLicensePath = "System";
-
   private readonly ILicenseFileRepository _licenseFileRepository;
   private readonly ILogger<SystemLicenseInitializer> _logger;
 
@@ -22,7 +20,7 @@ public class SystemLicenseInitializer : ISystemLicenseInitializer
   {
     _logger.LogInformation(1333693557, "Checking existence of System License");
     var systemLicenseExists = await _licenseFileRepository
-      .ExistsAsync(SystemLicensePath, cancellationToken)
+      .ExistsAsync(LicensePaths.SystemLicensePath, cancellationToken)
       .ConfigureAwait(false);
 
     if (!systemLicenseExists)
@@ -34,11 +32,11 @@ public class SystemLicenseInitializer : ISystemLicenseInitializer
   private async Task CreateEmptySystemLicenseAsync(
     CancellationToken cancellationToken)
   {
-    _logger.LogInformation("Creating empty System License");
+    _logger.LogInformation(1972365262, "Creating empty System License");
 
-    await _licenseFileRepository.UploadAsync(SystemLicensePath, Array.Empty<byte>(), cancellationToken)
+    await _licenseFileRepository.UploadAsync(LicensePaths.SystemLicensePath, Array.Empty<byte>(), cancellationToken)
       .ConfigureAwait(false);
 
-    _logger.LogInformation("Created empty System License");
+    _logger.LogInformation(1474946684, "Created empty System License");
   }
 }
