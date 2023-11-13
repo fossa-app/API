@@ -100,7 +100,7 @@ namespace Fossa.API.Persistence.Mongo.Repositories
         System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity>> PageAsync(Fossa.API.Core.Repositories.TenantEmployeePageQuery pageQuery, System.Threading.CancellationToken cancellationToken);
     }
     public interface ISystemPropertiesMongoRepository : TIKSN.Data.IQueryRepository<Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity, long>, TIKSN.Data.IRepository<Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity>, TIKSN.Data.IStreamRepository<Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity>, TIKSN.Data.Mongo.IMongoRepository<Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity, long> { }
-    public class LicenseMongoFileRepository : TIKSN.Data.Mongo.MongoFileRepository<System.Guid, object>, Fossa.API.Core.Repositories.ILicenseFileRepository, TIKSN.Data.IFileRepository
+    public class LicenseMongoFileRepository : TIKSN.Data.Mongo.MongoFileRepository<MongoDB.Bson.ObjectId, object>, Fossa.API.Core.Repositories.ILicenseFileRepository, TIKSN.Data.IFileRepository
     {
         public LicenseMongoFileRepository(TIKSN.Data.Mongo.IMongoDatabaseProvider mongoDatabaseProvider) { }
     }
