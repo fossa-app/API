@@ -13,4 +13,6 @@ public interface ICompanyQueryRepository : IQueryRepository<CompanyEntity, Compa
   Task<CompanyEntity> GetByTenantIdAsync(
     Guid tenantId,
     CancellationToken cancellationToken);
+
+  Task<int> CountAllAsync(CancellationToken cancellationToken);
 }
