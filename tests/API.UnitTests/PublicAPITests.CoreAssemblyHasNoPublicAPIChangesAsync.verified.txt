@@ -178,7 +178,7 @@ namespace Fossa.API.Core.Messages.Commands
     }
     public class CompanyCreationCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.CompanyCreationCommand>
     {
-        public CompanyCreationCommandHandler(TIKSN.Identity.IIdentityGenerator<Fossa.API.Core.Entities.CompanyId> identityGenerator, Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, Fossa.API.Core.Repositories.ICompanyRepository companyRepository) { }
+        public CompanyCreationCommandHandler(TIKSN.Identity.IIdentityGenerator<Fossa.API.Core.Entities.CompanyId> identityGenerator, Fossa.API.Core.Services.ISystemLicenseRetriever systemLicenseRetriever, Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, Fossa.API.Core.Repositories.ICompanyRepository companyRepository) { }
         public System.Threading.Tasks.Task Handle(Fossa.API.Core.Messages.Commands.CompanyCreationCommand request, System.Threading.CancellationToken cancellationToken) { }
     }
     public class CompanyDeletionCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Core.Entities.CompanyId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.CompanyDeletionCommand>
@@ -358,6 +358,7 @@ namespace Fossa.API.Core.Repositories
 {
     public interface ICompanyQueryRepository : TIKSN.Data.IQueryRepository<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Core.Entities.CompanyId>
     {
+        System.Threading.Tasks.Task<int> CountAllAsync(System.Threading.CancellationToken cancellationToken);
         System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Core.Entities.CompanyEntity>> FindByTenantIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken);
         System.Threading.Tasks.Task<Fossa.API.Core.Entities.CompanyEntity> GetByTenantIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken);
     }
