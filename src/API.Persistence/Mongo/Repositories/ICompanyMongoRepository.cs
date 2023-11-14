@@ -13,4 +13,6 @@ public interface ICompanyMongoRepository : IMongoRepository<CompanyMongoEntity, 
   Task<CompanyMongoEntity> GetByTenantIdAsync(
     Guid tenantId,
     CancellationToken cancellationToken);
+
+  Task<int> CountAllAsync(CancellationToken cancellationToken);
 }
