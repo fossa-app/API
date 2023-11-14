@@ -11,11 +11,11 @@ public class CompanyMongoRepository
   : MongoRepository<CompanyMongoEntity, long>, ICompanyMongoRepository
 {
   public CompanyMongoRepository(
-      IMongoClientSessionProvider mongoClientSessionProvider,
-      IMongoDatabaseProvider mongoDatabaseProvider) : base(
-          mongoClientSessionProvider,
-          mongoDatabaseProvider,
-          "Companies")
+    IMongoClientSessionProvider mongoClientSessionProvider,
+    IMongoDatabaseProvider mongoDatabaseProvider) : base(
+    mongoClientSessionProvider,
+    mongoDatabaseProvider,
+    "Companies")
   {
   }
 
@@ -37,5 +37,26 @@ public class CompanyMongoRepository
     var entity = await SingleOrDefaultAsync(filter, cancellationToken).ConfigureAwait(false);
 
     return entity ?? throw new EntityNotFoundException();
+  }
+
+  public async Task<int> CountAllAsync(CancellationToken cancellationToken)
+  {
+    var filter = Builders<CompanyMongoEntity>.Filter.Empty;
+
+    var count = await mongoClientSessionProvider.GetClientSessionHandle().Match(Some, None).ConfigureAwait(false);
+
+    return (int)count;
+
+    Task<long> Some(IClientSessionHandle clientSessionHandle)
+    {
+      return collection
+        .CountDocumentsAsync(clientSessionHandle, filter, null, cancellationToken);
+    }
+
+    Task<long> None()
+    {
+      return collection
+        .CountDocumentsAsync(filter, null, cancellationToken);
+    }
   }
 }

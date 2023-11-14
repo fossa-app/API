@@ -45,4 +45,9 @@ public class CompanyRepositoryAdapter
 
     return entity is null ? throw new EntityNotFoundException() : Map(entity);
   }
+
+  public Task<int> CountAllAsync(CancellationToken cancellationToken)
+  {
+    return _dataRepository.CountAllAsync(cancellationToken);
+  }
 }
