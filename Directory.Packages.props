@@ -21,7 +21,7 @@
     <PackageVersion Include="PublicApiGenerator" Version="11.0.0" />
     <PackageVersion Include="ReportGenerator" Version="5.1.26" />
     <PackageVersion Include="Scrutor" Version="4.2.2" />
-    <PackageVersion Include="Serilog.AspNetCore" Version="7.0.0" />
+    <PackageVersion Include="Serilog.AspNetCore" Version="8.0.0" />
     <PackageVersion Include="Serilog.Sinks.ApplicationInsights" Version="4.0.1-dev-00043" />
     <PackageVersion Include="SQLite" Version="3.13.0" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="6.5.0" />
