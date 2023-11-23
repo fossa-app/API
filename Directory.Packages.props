@@ -3,7 +3,7 @@
     <PackageVersion Include="Autofac" Version="7.1.0" />
     <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageVersion Include="coverlet.collector" Version="6.0.0" />
-    <PackageVersion Include="FluentValidation" Version="11.8.0" />
+    <PackageVersion Include="FluentValidation" Version="11.8.1" />
     <PackageVersion Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageVersion Include="Fossa.Licensing" Version="0.1.0" />
     <PackageVersion Include="Hellang.Middleware.ProblemDetails" Version="6.5.1" />
