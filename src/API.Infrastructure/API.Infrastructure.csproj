@@ -9,7 +9,6 @@
   <ItemGroup>
     <PackageReference Include="Autofac" />
     <PackageReference Include="Autofac.Extensions.DependencyInjection" />
-    <PackageReference Include="SQLite" />
     <PackageReference Include="TIKSN-Framework" />
   </ItemGroup>
   
