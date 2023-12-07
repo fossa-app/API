@@ -29,7 +29,7 @@ public class DefaultCoreModuleTests
         services.AddIdGen(0);
 
         services.Scan(scan => scan
-          .FromApplicationDependencies()
+          .FromAssemblyOf<DefaultCoreModule>()
           .AddClasses(classes => classes.AssignableTo(typeof(IMapper<,>)))
           .AsImplementedInterfaces());
       })
