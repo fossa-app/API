@@ -112,28 +112,22 @@ namespace Fossa.API.Core.Messages
         public TEntityIdentity EntityID { get; init; }
         public System.Type EntityType { get; init; }
     }
-    [System.Serializable]
     public class CrossTenantInboundUnauthorizedAccessException : Fossa.API.Core.Messages.CrossTenantUnauthorizedAccessException
     {
         public CrossTenantInboundUnauthorizedAccessException() { }
         public CrossTenantInboundUnauthorizedAccessException(string message) { }
-        protected CrossTenantInboundUnauthorizedAccessException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         public CrossTenantInboundUnauthorizedAccessException(string message, System.Exception inner) { }
     }
-    [System.Serializable]
     public class CrossTenantOutboundUnauthorizedAccessException : Fossa.API.Core.Messages.CrossTenantUnauthorizedAccessException
     {
         public CrossTenantOutboundUnauthorizedAccessException() { }
         public CrossTenantOutboundUnauthorizedAccessException(string message) { }
-        protected CrossTenantOutboundUnauthorizedAccessException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         public CrossTenantOutboundUnauthorizedAccessException(string message, System.Exception inner) { }
     }
-    [System.Serializable]
     public class CrossTenantUnauthorizedAccessException : System.Exception
     {
         public CrossTenantUnauthorizedAccessException() { }
         public CrossTenantUnauthorizedAccessException(string message) { }
-        protected CrossTenantUnauthorizedAccessException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         public CrossTenantUnauthorizedAccessException(string message, System.Exception inner) { }
     }
     public interface IAffectingTenantEntities<TEntityIdentity>
