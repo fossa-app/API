@@ -135,7 +135,6 @@ namespace Fossa.API.Web.Claims
     {
         public ClaimNotFoundException() { }
         public ClaimNotFoundException(string message) { }
-        protected ClaimNotFoundException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) { }
         public ClaimNotFoundException(string message, System.Exception inner) { }
     }
     public class ClaimsProvider : Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>, Fossa.API.Core.Tenant.ITenantIdProvider<int>, Fossa.API.Core.User.IUserIdProvider<System.Guid>, Fossa.API.Core.User.IUserIdProvider<int>
