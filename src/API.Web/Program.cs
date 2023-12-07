@@ -76,7 +76,7 @@ builder.Services.AddMediatR(cfg =>
 builder.Services.AddValidatorsFromAssemblies(assemblies);
 
 builder.Services.Scan(scan => scan
-    .FromApplicationDependencies()
+    .FromAssemblies(assemblies)
         .AddClasses(classes => classes.AssignableTo(typeof(IMapper<,>)))
             .AsImplementedInterfaces());
 
