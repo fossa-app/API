@@ -43,19 +43,19 @@ public class CompanyMongoRepository
   {
     var filter = Builders<CompanyMongoEntity>.Filter.Empty;
 
-    var count = await mongoClientSessionProvider.GetClientSessionHandle().Match(Some, None).ConfigureAwait(false);
+    var count = await MongoClientSessionProvider.GetClientSessionHandle().Match(Some, None).ConfigureAwait(false);
 
     return (int)count;
 
     Task<long> Some(IClientSessionHandle clientSessionHandle)
     {
-      return collection
+      return Collection
         .CountDocumentsAsync(clientSessionHandle, filter, null, cancellationToken);
     }
 
     Task<long> None()
     {
-      return collection
+      return Collection
         .CountDocumentsAsync(filter, null, cancellationToken);
     }
   }
