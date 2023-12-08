@@ -1,0 +1,49 @@
+﻿@HostAddress = http://localhost:57679
+@AccessToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+
+###
+GET {{HostAddress}}/api/License/System
+
+###
+GET {{HostAddress}}/api/Company
+Authorization: Bearer {{AccessToken}}
+
+
+###
+POST {{HostAddress}}/api/Company
+Authorization: Bearer {{AccessToken}}
+Content-Type: application/json
+
+{
+  "name": "MainCorp"
+}
+
+###
+GET {{HostAddress}}/api/Employee
+Authorization: Bearer {{AccessToken}}
+
+###
+POST {{HostAddress}}/api/Employees
+Authorization: Bearer {{AccessToken}}
+Content-Type: application/json
+
+{
+  "firstName": "Main",
+  "lastName": "Character",
+  "fullName": "Main character"
+}
+
+###
+PUT {{HostAddress}}/api/Employees/40450939236122624
+Authorization: Bearer {{AccessToken}}
+Content-Type: application/json
+
+{
+  "firstName": "Main",
+  "lastName": "Character",
+  "fullName": "Main character"
+}
+
+###
+GET {{HostAddress}}/api/Employees?PageNumber=1&PageSize=10
+Authorization: Bearer {{AccessToken}}
