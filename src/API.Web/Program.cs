@@ -47,6 +47,20 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddProblemDetails(ProblemDetailsHelper.ConfigureProblemDetails);
 builder.Services.AddControllers()
                 .AddProblemDetailsConventions();
+builder.Services.AddApiVersioning(
+                    options =>
+                    {
+                      options.ReportApiVersions = true;
+                      options.AssumeDefaultVersionWhenUnspecified = false;
+                    })
+                .AddMvc()
+                .AddApiExplorer(
+                    options =>
+                    {
+                      options.AssumeDefaultVersionWhenUnspecified = false;
+                      options.SubstituteApiVersionInUrl = true;
+                      options.GroupNameFormat = "'v'VVV";
+                    });
 builder.Services.AddSwaggerGen(c =>
 {
   c.SwaggerDoc("v1", new OpenApiInfo { Title = "FossaApp API", Version = "v1" });
@@ -106,8 +120,19 @@ app.UseAuthorization();
 // Enable middleware to serve generated Swagger as a JSON endpoint.
 app.UseSwagger();
 
-// Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), specifying the Swagger JSON endpoint.
-app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "FossaApp API V1"));
+app.UseSwaggerUI(
+    c =>
+    {
+      var descriptions = app.DescribeApiVersions();
+
+      for (var i = 0; i < descriptions.Count; i++)
+      {
+        var description = descriptions[i];
+        var url = $"/swagger/{description.GroupName}/swagger.json";
+        var name = description.GroupName.ToUpperInvariant();
+        c.SwaggerEndpoint(url, name);
+      }
+    });
 
 app.MapDefaultControllerRoute();
 
