@@ -1,4 +1,5 @@
-﻿using Fossa.API.Core.Entities;
+﻿using Asp.Versioning;
+using Fossa.API.Core.Entities;
 using Fossa.API.Core.Messages.Queries;
 using Fossa.API.Core.Tenant;
 using Fossa.API.Core.User;
@@ -11,7 +12,8 @@ using TIKSN.Mapping;
 namespace Fossa.API.Web.Api;
 
 [Authorize]
-[Route("api/[controller]")]
+[ApiVersion(1.0)]
+[Route("api/{version:apiVersion}/[controller]")]
 [ApiController]
 public class EmployeeController : BaseApiController<EmployeeId>
 {

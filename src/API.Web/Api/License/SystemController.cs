@@ -1,4 +1,5 @@
-﻿using Fossa.API.Core.Messages.Queries;
+﻿using Asp.Versioning;
+using Fossa.API.Core.Messages.Queries;
 using Fossa.API.Web.ApiModels;
 using Fossa.Licensing;
 using MediatR;
@@ -9,7 +10,8 @@ using TIKSN.Mapping;
 namespace Fossa.API.Web.Api.License;
 
 [Tags("System License")]
-[Route("api/License/[controller]")]
+[ApiVersion(1.0)]
+[Route("api/{version:apiVersion}/License/[controller]")]
 [ApiController]
 public class SystemController : BaseApiController
 {
