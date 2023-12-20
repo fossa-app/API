@@ -1,7 +1,7 @@
 ﻿namespace Fossa.API.Web.Api
 {
     [Microsoft.AspNetCore.Mvc.ApiController]
-    [Microsoft.AspNetCore.Mvc.Route("api/[controller]")]
+    [Microsoft.AspNetCore.Mvc.Route("api/{version:apiVersion}/[controller]")]
     public abstract class BaseApiController : Microsoft.AspNetCore.Mvc.Controller
     {
         protected readonly MediatR.IPublisher _publisher;
@@ -16,9 +16,10 @@
         protected readonly TIKSN.Mapping.IMapper<TEntityIdentity, long> _domainIdentityToDataIdentityMapper;
         protected BaseApiController(MediatR.ISender sender, MediatR.IPublisher publisher, TIKSN.Mapping.IMapper<TEntityIdentity, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, TEntityIdentity> dataIdentityToDomainIdentityMapper) { }
     }
+    [Asp.Versioning.ApiVersion(1D, null)]
     [Microsoft.AspNetCore.Authorization.Authorize]
     [Microsoft.AspNetCore.Mvc.ApiController]
-    [Microsoft.AspNetCore.Mvc.Route("api/[controller]")]
+    [Microsoft.AspNetCore.Mvc.Route("api/{version:apiVersion}/[controller]")]
     public class CompanyController : Fossa.API.Web.Api.BaseApiController<Fossa.API.Core.Entities.CompanyId>
     {
         public CompanyController(Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, MediatR.ISender sender, MediatR.IPublisher publisher, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId> dataIdentityToDomainIdentityMapper) { }
@@ -34,18 +35,20 @@
         [Microsoft.AspNetCore.Mvc.HttpPut("{id}")]
         public System.Threading.Tasks.Task PutAsync(long id, [Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.CompanyModificationModel model, System.Threading.CancellationToken cancellationToken) { }
     }
+    [Asp.Versioning.ApiVersion(1D, null)]
     [Microsoft.AspNetCore.Authorization.Authorize]
     [Microsoft.AspNetCore.Mvc.ApiController]
-    [Microsoft.AspNetCore.Mvc.Route("api/[controller]")]
+    [Microsoft.AspNetCore.Mvc.Route("api/{version:apiVersion}/[controller]")]
     public class EmployeeController : Fossa.API.Web.Api.BaseApiController<Fossa.API.Core.Entities.EmployeeId>
     {
         public EmployeeController(Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, MediatR.ISender sender, MediatR.IPublisher publisher, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId> dataIdentityToDomainIdentityMapper) { }
         [Microsoft.AspNetCore.Mvc.HttpGet]
         public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.EmployeeRetrievalModel> GetAsync([Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Web.ApiModels.EmployeeRetrievalModel> mapper, System.Threading.CancellationToken cancellationToken) { }
     }
+    [Asp.Versioning.ApiVersion(1D, null)]
     [Microsoft.AspNetCore.Authorization.Authorize]
     [Microsoft.AspNetCore.Mvc.ApiController]
-    [Microsoft.AspNetCore.Mvc.Route("api/[controller]")]
+    [Microsoft.AspNetCore.Mvc.Route("api/{version:apiVersion}/[controller]")]
     public class EmployeesController : Fossa.API.Web.Api.BaseApiController<Fossa.API.Core.Entities.EmployeeId>
     {
         public EmployeesController(Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, MediatR.ISender sender, MediatR.IPublisher publisher, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId> dataIdentityToDomainIdentityMapper) { }
@@ -59,10 +62,11 @@
 }
 namespace Fossa.API.Web.Api.License
 {
+    [Asp.Versioning.ApiVersion(1D, null)]
     [Microsoft.AspNetCore.Http.Tags(new string[] {
             "System License"})]
     [Microsoft.AspNetCore.Mvc.ApiController]
-    [Microsoft.AspNetCore.Mvc.Route("api/License/[controller]")]
+    [Microsoft.AspNetCore.Mvc.Route("api/{version:apiVersion}/License/[controller]")]
     public class SystemController : Fossa.API.Web.Api.BaseApiController
     {
         public SystemController(MediatR.ISender sender, MediatR.IPublisher publisher, TIKSN.Mapping.IMapper<TIKSN.Licensing.License<Fossa.Licensing.SystemEntitlements>, Fossa.API.Web.ApiModels.LicenseResponseModel<Fossa.API.Web.ApiModels.SystemEntitlementsModel>> licenseMapper) { }
