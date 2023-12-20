@@ -6,6 +6,8 @@ tasks:
   default:
     cmds:
       - dotnet format whitespace
+      - dotnet format style --severity info --verbosity diagnostic
+      - dotnet format analyzers --severity info --verbosity diagnostic
       - dotnet build
       - dotnet test
     silent: true
