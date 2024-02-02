@@ -6,7 +6,6 @@ using PublicApiGenerator;
 
 namespace Fossa.API.UnitTests;
 
-[UsesVerify]
 public class PublicAPITests
 {
   private readonly ApiGeneratorOptions _apiGeneratorOptions = new() { IncludeAssemblyAttributes = false };
