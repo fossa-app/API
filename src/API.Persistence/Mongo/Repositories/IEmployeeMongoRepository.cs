@@ -15,7 +15,7 @@ public interface IEmployeeMongoRepository : IMongoRepository<EmployeeMongoEntity
   Task<EmployeeMongoEntity> GetByUserIdAsync(
     Guid userId,
     CancellationToken cancellationToken);
-  
+
   Task<PageResult<EmployeeMongoEntity>> PageAsync(
     TenantEmployeePageQuery pageQuery,
     CancellationToken cancellationToken);

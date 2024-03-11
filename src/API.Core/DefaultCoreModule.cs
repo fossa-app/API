@@ -36,7 +36,7 @@ public class DefaultCoreModule : Module
       .RegisterType<SystemLicenseRetriever>()
       .AsImplementedInterfaces()
       .InstancePerLifetimeScope();
-    
+
     builder
       .RegisterType<CertificateProvider>()
       .AsImplementedInterfaces()

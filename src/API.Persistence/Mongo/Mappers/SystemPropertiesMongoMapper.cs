@@ -30,7 +30,8 @@ public class SystemPropertiesMongoMapper
   {
     return new SystemPropertiesMongoEntity
     {
-      ID = _domainIdentityToDataIdentityMapper.Map(source.ID), SystemID = source.SystemID.ToByteArray(),
+      ID = _domainIdentityToDataIdentityMapper.Map(source.ID),
+      SystemID = source.SystemID.ToByteArray(),
     };
   }
 }

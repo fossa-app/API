@@ -32,7 +32,7 @@ public class DefaultPersistenceModule : Module
       .RegisterType<CompanyRepositoryAdapter>()
       .AsImplementedInterfaces()
       .InstancePerLifetimeScope();
-    
+
     builder
       .RegisterType<EmployeeMongoRepository>()
       .AsImplementedInterfaces()
@@ -52,7 +52,7 @@ public class DefaultPersistenceModule : Module
       .RegisterType<SystemPropertiesRepositoryAdapter>()
       .AsImplementedInterfaces()
       .InstancePerLifetimeScope();
-    
+
     builder
       .RegisterType<LicenseMongoFileRepository>()
       .AsImplementedInterfaces()
