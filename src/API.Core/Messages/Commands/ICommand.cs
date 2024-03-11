@@ -2,6 +2,4 @@
 
 namespace Fossa.API.Core.Messages.Commands;
 
-public interface ICommand : IRequest
-{
-}
+public interface ICommand : IRequest;
