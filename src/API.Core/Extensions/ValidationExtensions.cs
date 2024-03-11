@@ -25,36 +25,35 @@ public static class ValidationExtensions
       .SelectMany(error => CreateValidationFailures(error, None));
   }
 
-  private static IEnumerable<ValidationFailure> CreateValidationFailures(
-    Error error,
-    Option<string> parentPropertyName)
+  private static IEnumerable<ValidationFailure> CreateValidationFailures(Error error, Option<string> parentPropertyName)
   {
-    if (error == null)
-    {
-      throw new ArgumentNullException(nameof(error));
-    }
+    ArgumentNullException.ThrowIfNull(error);
 
-    var errorCode = error.Code.ToString(CultureInfo.InvariantCulture);
-    var propertyName = parentPropertyName.Match(
-      p => $"{p}.E{errorCode}", $"E{errorCode}");
-    var errorMessage = error.Message;
-    yield return new ValidationFailure(propertyName, errorMessage) { ErrorCode = errorCode };
-
-    if (error is ManyErrors manyErrors)
+    return CreateValidationFailures(error, parentPropertyName);
+    IEnumerable<ValidationFailure> CreateValidationFailures(Error error, Option<string> parentPropertyName)
     {
-      foreach (var oneValidationFailure in manyErrors.Errors
+      var errorCode = error.Code.ToString(CultureInfo.InvariantCulture);
+      var propertyName = parentPropertyName.Match(
+        p => $"{p}.E{errorCode}", $"E{errorCode}");
+      var errorMessage = error.Message;
+      yield return new ValidationFailure(propertyName, errorMessage) { ErrorCode = errorCode };
+
+      if (error is ManyErrors manyErrors)
+      {
+        foreach (var oneValidationFailure in manyErrors.Errors
+                   .Map(e => CreateValidationFailures(e, Some(propertyName)))
+                   .SelectMany(x => x))
+        {
+          yield return oneValidationFailure;
+        }
+      }
+
+      foreach (var innerValidationFailure in error.Inner
                  .Map(e => CreateValidationFailures(e, Some(propertyName)))
                  .SelectMany(x => x))
       {
-        yield return oneValidationFailure;
+        yield return innerValidationFailure;
       }
-    }
-
-    foreach (var innerValidationFailure in error.Inner
-               .Map(e => CreateValidationFailures(e, Some(propertyName)))
-               .SelectMany(x => x))
-    {
-      yield return innerValidationFailure;
     }
   }
 }
