@@ -139,7 +139,7 @@ public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, T
       cancellationToken).ConfigureAwait(false);
   }
 
-  private Task InspectTenantEntityAsync(
+  private static Task InspectTenantEntityAsync(
     TTenantIdentity tenantId,
     ITenantEntity<TEntityIdentity, TTenantIdentity> tenantEntity,
     CancellationToken cancellationToken)
