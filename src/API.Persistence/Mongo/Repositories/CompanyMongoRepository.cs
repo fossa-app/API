@@ -50,13 +50,13 @@ public class CompanyMongoRepository
     Task<long> SomeAsync(IClientSessionHandle clientSessionHandle)
     {
       return Collection
-        .CountDocumentsAsync(clientSessionHandle, filter, null, cancellationToken);
+        .CountDocumentsAsync(clientSessionHandle, filter, options: null, cancellationToken);
     }
 
     Task<long> NoneAsync()
     {
       return Collection
-        .CountDocumentsAsync(filter, null, cancellationToken);
+        .CountDocumentsAsync(filter, options: null, cancellationToken);
     }
   }
 }

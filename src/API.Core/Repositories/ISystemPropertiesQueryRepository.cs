@@ -3,6 +3,4 @@ using TIKSN.Data;
 
 namespace Fossa.API.Core.Repositories;
 
-public interface ISystemPropertiesQueryRepository : IQueryRepository<SystemPropertiesEntity, SystemPropertiesId>
-{
-}
+public interface ISystemPropertiesQueryRepository : IQueryRepository<SystemPropertiesEntity, SystemPropertiesId>;

@@ -3,6 +3,4 @@ using TIKSN.Data;
 
 namespace Fossa.API.Core.Repositories;
 
-public interface ICompanyRepository : IRepository<CompanyEntity>
-{
-}
+public interface ICompanyRepository : IRepository<CompanyEntity>;

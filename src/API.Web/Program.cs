@@ -30,10 +30,7 @@ builder.Services.Configure<PagingQueryOptions>(builder.Configuration.GetSection(
 builder.Services.AddIdGen(builder.Configuration, initialReleaseDate);
 builder.Services.AddSingleton<IdGenSetupLogger>();
 
-builder.Services.AddAuthentication(options =>
-{
-  options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-})
+builder.Services.AddAuthentication(options => options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme)
 .AddJwtBearer(options =>
 {
   var identitySection = builder.Configuration.GetSection("Identity");

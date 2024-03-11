@@ -4,7 +4,5 @@ public interface ITenantUserQuery<TEntityIdentity, out TUserIdentity, out TTenan
   : ITenantQuery<TEntityIdentity, TTenantIdentity, TResult>
   , IUserQuery<TUserIdentity, TResult>
   where TEntityIdentity : IEquatable<TEntityIdentity>
-  where TTenantIdentity : IEquatable<TTenantIdentity>
   where TUserIdentity : IEquatable<TUserIdentity>
-{
-}
+  where TTenantIdentity : IEquatable<TTenantIdentity>;

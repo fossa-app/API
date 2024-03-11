@@ -2,6 +2,4 @@
 
 namespace Fossa.API.Core.Messages.Queries;
 
-public interface IQuery<out TResult> : IRequest<TResult>
-{
-}
+public interface IQuery<out TResult> : IRequest<TResult>;
