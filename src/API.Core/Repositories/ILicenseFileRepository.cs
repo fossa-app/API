@@ -2,6 +2,4 @@
 
 namespace Fossa.API.Core.Repositories;
 
-public interface ILicenseFileRepository : IFileRepository
-{
-}
+public interface ILicenseFileRepository : IFileRepository;
