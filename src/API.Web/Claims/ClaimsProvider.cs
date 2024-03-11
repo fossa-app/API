@@ -73,10 +73,7 @@ public class ClaimsProvider :
     string type,
     Func<string, T> parser)
   {
-    if (parser is null)
-    {
-      throw new ArgumentNullException(nameof(parser));
-    }
+    ArgumentNullException.ThrowIfNull(parser);
 
     var rawValue = FindFirstClaimValue(type);
 
