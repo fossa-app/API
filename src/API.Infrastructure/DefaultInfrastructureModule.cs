@@ -72,12 +72,12 @@ public class DefaultInfrastructureModule : Module
     }
   }
 
-  private void RegisterDevelopmentOnlyDependencies(ContainerBuilder builder)
+  private static void RegisterDevelopmentOnlyDependencies(ContainerBuilder builder)
   {
     // Register services
   }
 
-  private void RegisterProductionOnlyDependencies(ContainerBuilder builder)
+  private static void RegisterProductionOnlyDependencies(ContainerBuilder builder)
   {
     // Register services
   }
