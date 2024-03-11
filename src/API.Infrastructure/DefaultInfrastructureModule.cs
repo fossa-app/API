@@ -9,7 +9,7 @@ namespace Fossa.API.Infrastructure;
 
 public class DefaultInfrastructureModule : Module
 {
-  private readonly List<Assembly> _assemblies = new List<Assembly>();
+  private readonly List<Assembly> _assemblies = [];
   private readonly bool _isDevelopment = false;
 
   public DefaultInfrastructureModule(bool isDevelopment, Assembly? callingAssembly = null)
@@ -66,7 +66,7 @@ public class DefaultInfrastructureModule : Module
     foreach (var mediatrOpenType in mediatrOpenTypes)
     {
       builder
-        .RegisterAssemblyTypes(_assemblies.ToArray())
+        .RegisterAssemblyTypes([.. _assemblies])
         .AsClosedTypesOf(mediatrOpenType)
         .AsImplementedInterfaces();
     }

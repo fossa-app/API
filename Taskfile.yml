@@ -6,6 +6,7 @@ tasks:
   default:
     cmds:
       - dotnet format whitespace
+      - dotnet format style --severity info
       - dotnet build
       - dotnet test
     silent: true

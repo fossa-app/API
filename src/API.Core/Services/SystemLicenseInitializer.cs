@@ -34,7 +34,7 @@ public class SystemLicenseInitializer : ISystemLicenseInitializer
   {
     _logger.LogInformation(1972365262, "Creating empty System License");
 
-    await _licenseFileRepository.UploadAsync(LicensePaths.SystemLicensePath, Array.Empty<byte>(), cancellationToken)
+    await _licenseFileRepository.UploadAsync(LicensePaths.SystemLicensePath, [], cancellationToken)
       .ConfigureAwait(false);
 
     _logger.LogInformation(1474946684, "Created empty System License");
