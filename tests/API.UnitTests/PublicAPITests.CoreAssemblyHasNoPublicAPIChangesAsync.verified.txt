@@ -16,7 +16,7 @@ namespace Fossa.API.Core.Entities
         public System.Guid TenantID { get; init; }
     }
     [System.ComponentModel.TypeConverter(typeof(Fossa.API.Core.Entities.CompanyId.CompanyIdTypeConverter))]
-    public readonly struct CompanyId : System.IEquatable<Fossa.API.Core.Entities.CompanyId>, System.Numerics.IEqualityOperators<Fossa.API.Core.Entities.CompanyId, Fossa.API.Core.Entities.CompanyId, bool>
+    public readonly struct CompanyId : System.IEquatable<Fossa.API.Core.Entities.CompanyId>, System.IFormattable, System.ISpanFormattable, System.IUtf8SpanFormattable, System.Numerics.IEqualityOperators<Fossa.API.Core.Entities.CompanyId, Fossa.API.Core.Entities.CompanyId, bool>
     {
         public CompanyId(long value) { }
         public long AsPrimitive() { }
@@ -24,6 +24,9 @@ namespace Fossa.API.Core.Entities
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
         public override string ToString() { }
+        public string ToString(string? format, System.IFormatProvider? formatProvider) { }
+        public bool TryFormat(System.Span<byte> utf8Destination, out int bytesWritten, System.ReadOnlySpan<char> format, System.IFormatProvider? provider) { }
+        public bool TryFormat(System.Span<char> destination, out int charsWritten, System.ReadOnlySpan<char> format, System.IFormatProvider? provider) { }
         public static long op_Explicit(Fossa.API.Core.Entities.CompanyId value) { }
         public static Fossa.API.Core.Entities.CompanyId op_Explicit(long value) { }
         public static bool operator !=(Fossa.API.Core.Entities.CompanyId x, Fossa.API.Core.Entities.CompanyId y) { }
@@ -41,7 +44,7 @@ namespace Fossa.API.Core.Entities
         public System.Guid UserID { get; init; }
     }
     [System.ComponentModel.TypeConverter(typeof(Fossa.API.Core.Entities.EmployeeId.EmployeeIdTypeConverter))]
-    public readonly struct EmployeeId : System.IEquatable<Fossa.API.Core.Entities.EmployeeId>, System.Numerics.IEqualityOperators<Fossa.API.Core.Entities.EmployeeId, Fossa.API.Core.Entities.EmployeeId, bool>
+    public readonly struct EmployeeId : System.IEquatable<Fossa.API.Core.Entities.EmployeeId>, System.IFormattable, System.ISpanFormattable, System.IUtf8SpanFormattable, System.Numerics.IEqualityOperators<Fossa.API.Core.Entities.EmployeeId, Fossa.API.Core.Entities.EmployeeId, bool>
     {
         public EmployeeId(long value) { }
         public long AsPrimitive() { }
@@ -49,6 +52,9 @@ namespace Fossa.API.Core.Entities
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
         public override string ToString() { }
+        public string ToString(string? format, System.IFormatProvider? formatProvider) { }
+        public bool TryFormat(System.Span<byte> utf8Destination, out int bytesWritten, System.ReadOnlySpan<char> format, System.IFormatProvider? provider) { }
+        public bool TryFormat(System.Span<char> destination, out int charsWritten, System.ReadOnlySpan<char> format, System.IFormatProvider? provider) { }
         public static long op_Explicit(Fossa.API.Core.Entities.EmployeeId value) { }
         public static Fossa.API.Core.Entities.EmployeeId op_Explicit(long value) { }
         public static bool operator !=(Fossa.API.Core.Entities.EmployeeId x, Fossa.API.Core.Entities.EmployeeId y) { }
@@ -61,7 +67,7 @@ namespace Fossa.API.Core.Entities
         public System.Ulid SystemID { get; init; }
     }
     [System.ComponentModel.TypeConverter(typeof(Fossa.API.Core.Entities.SystemPropertiesId.SystemPropertiesIdTypeConverter))]
-    public readonly struct SystemPropertiesId : System.IEquatable<Fossa.API.Core.Entities.SystemPropertiesId>, System.Numerics.IEqualityOperators<Fossa.API.Core.Entities.SystemPropertiesId, Fossa.API.Core.Entities.SystemPropertiesId, bool>
+    public readonly struct SystemPropertiesId : System.IEquatable<Fossa.API.Core.Entities.SystemPropertiesId>, System.IFormattable, System.ISpanFormattable, System.IUtf8SpanFormattable, System.Numerics.IEqualityOperators<Fossa.API.Core.Entities.SystemPropertiesId, Fossa.API.Core.Entities.SystemPropertiesId, bool>
     {
         public SystemPropertiesId(long value) { }
         public long AsPrimitive() { }
@@ -69,6 +75,9 @@ namespace Fossa.API.Core.Entities
         public override bool Equals(object obj) { }
         public override int GetHashCode() { }
         public override string ToString() { }
+        public string ToString(string? format, System.IFormatProvider? formatProvider) { }
+        public bool TryFormat(System.Span<byte> utf8Destination, out int bytesWritten, System.ReadOnlySpan<char> format, System.IFormatProvider? provider) { }
+        public bool TryFormat(System.Span<char> destination, out int charsWritten, System.ReadOnlySpan<char> format, System.IFormatProvider? provider) { }
         public static long op_Explicit(Fossa.API.Core.Entities.SystemPropertiesId value) { }
         public static Fossa.API.Core.Entities.SystemPropertiesId op_Explicit(long value) { }
         public static bool operator !=(Fossa.API.Core.Entities.SystemPropertiesId x, Fossa.API.Core.Entities.SystemPropertiesId y) { }
