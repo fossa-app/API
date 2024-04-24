@@ -20,7 +20,7 @@
     <PackageVersion Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
     <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="PublicApiGenerator" Version="11.1.0" />
-    <PackageVersion Include="ReportGenerator" Version="5.2.4" />
+    <PackageVersion Include="ReportGenerator" Version="5.2.5" />
     <PackageVersion Include="Scrutor" Version="4.2.2" />
     <PackageVersion Include="Serilog.AspNetCore" Version="8.0.1" />
     <PackageVersion Include="Serilog.Sinks.ApplicationInsights" Version="4.0.1-dev-00043" />
