@@ -40,11 +40,11 @@ public class EmployeeRepositoryAdapter
   }
 
   public async Task<EmployeeEntity> GetByUserIdAsync(
-    Guid tenantId,
+    Guid userId,
     CancellationToken cancellationToken)
   {
     var entity = await _dataRepository.GetByUserIdAsync(
-      tenantId, cancellationToken).ConfigureAwait(false);
+      userId, cancellationToken).ConfigureAwait(false);
 
     return entity is null ? throw new EntityNotFoundException() : Map(entity);
   }
