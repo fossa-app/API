@@ -34,6 +34,7 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
     // context (AppDbContext).
     using (var scope = serviceProvider.CreateScope())
     {
+      // scope.ServiceProvider.GetRequiredService<>()
     }
 
     return host;
