@@ -9,14 +9,24 @@ GET {{HostAddress}}/api/{{ApiVersion}}/License/System
 GET {{HostAddress}}/api/{{ApiVersion}}/Company
 Authorization: Bearer {{AccessToken}}
 
-
 ###
 POST {{HostAddress}}/api/{{ApiVersion}}/Company
 Authorization: Bearer {{AccessToken}}
 Content-Type: application/json
 
 {
-  "name": "MainCorp"
+  "name": "Brooks Group",
+  "moniker": "brooks"
+}
+
+###
+PUT {{HostAddress}}/api/{{ApiVersion}}/Company/40442946197127168
+Authorization: Bearer {{AccessToken}}
+Content-Type: application/json
+
+{
+  "name": "Brooks Group",
+  "moniker": "brooks"
 }
 
 ###
