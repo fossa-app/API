@@ -37,9 +37,9 @@ public class EmployeeMongoMapper : IMapper<EmployeeMongoEntity, EmployeeEntity>,
       source.TenantID,
       source.UserID,
       _companyDataIdentityToDomainIdentityMapper.Map(source.CompanyId),
-      source?.FirstName ?? string.Empty,
-      source?.LastName ?? string.Empty,
-      source?.FullName ?? string.Empty);
+      source.FirstName ?? string.Empty,
+      source.LastName ?? string.Empty,
+      source.FullName ?? string.Empty);
   }
 
   public EmployeeMongoEntity Map(EmployeeEntity source)
