@@ -1,6 +1,5 @@
 ﻿namespace Fossa.API.Web.Claims;
 
-[Serializable]
 public class ClaimNotFoundException : Exception
 {
   public ClaimNotFoundException() : base("Claim not found")
