@@ -65,7 +65,7 @@ public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, T
 
       var bareTenantEntity = await bareEntityResolver.ResolveAsync(affectingTenantEntity.EntityID, cancellationToken)
         .ConfigureAwait(false);
-      if (bareTenantEntity.TenantID == null || !bareTenantEntity.TenantID.Equals(tenantId))
+      if (bareTenantEntity.TenantID.Equals(default) || !bareTenantEntity.TenantID.Equals(tenantId))
       {
         throw new CrossTenantInboundUnauthorizedAccessException();
       }
@@ -117,7 +117,7 @@ public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, T
       }
       else
       {
-        throw new InvalidOperationException($"Unknown response type {response?.GetType()?.FullName}");
+        throw new InvalidOperationException($"Unknown response type {response.GetType()?.FullName}");
       }
     }
   }
@@ -128,7 +128,7 @@ public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, T
   {
     var tenantId = _tenantIdProvider.GetTenantId();
 
-    if (tenantCommand.TenantID == null || !tenantCommand.TenantID.Equals(tenantId))
+    if (tenantCommand.TenantID.Equals(default) || !tenantCommand.TenantID.Equals(tenantId))
     {
       throw new CrossTenantInboundUnauthorizedAccessException();
     }
@@ -144,7 +144,7 @@ public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, T
     ITenantEntity<TEntityIdentity, TTenantIdentity> tenantEntity,
     CancellationToken cancellationToken)
   {
-    if (tenantEntity.TenantID == null || !tenantEntity.TenantID.Equals(tenantId))
+    if (tenantEntity.TenantID.Equals(default) || !tenantEntity.TenantID.Equals(tenantId))
     {
       throw new CrossTenantOutboundUnauthorizedAccessException();
     }
@@ -160,7 +160,7 @@ public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, T
   {
     var tenantId = _tenantIdProvider.GetTenantId();
 
-    if (tenantQuery.TenantID == null || !tenantQuery.TenantID.Equals(tenantId))
+    if (tenantQuery.TenantID.Equals(default) || !tenantQuery.TenantID.Equals(tenantId))
     {
       throw new CrossTenantInboundUnauthorizedAccessException();
     }
