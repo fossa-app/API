@@ -51,7 +51,7 @@ public class CompanyController : BaseApiController<CompanyId>
       new CompanyRetrievalQuery(tenantId),
       cancellationToken);
 
-    return new CompanyRetrievalModel(_domainIdentityToDataIdentityMapper.Map(entity.ID), entity.Name);
+    return new CompanyRetrievalModel(_domainIdentityToDataIdentityMapper.Map(entity.ID), entity.Name, entity.Moniker);
   }
 
   [HttpPost]
@@ -62,7 +62,7 @@ public class CompanyController : BaseApiController<CompanyId>
   {
     var tenantId = _tenantIdProvider.GetTenantId();
     await _sender.Send(
-      new CompanyCreationCommand(tenantId, model.Name),
+      new CompanyCreationCommand(tenantId, model.Name, model.Moniker),
       cancellationToken);
   }
 
@@ -75,7 +75,11 @@ public class CompanyController : BaseApiController<CompanyId>
   {
     var tenantId = _tenantIdProvider.GetTenantId();
     await _sender.Send(
-      new CompanyModificationCommand(_dataIdentityToDomainIdentityMapper.Map(id), tenantId, model.Name),
+      new CompanyModificationCommand(
+        _dataIdentityToDomainIdentityMapper.Map(id),
+        tenantId,
+        model.Name,
+        model.Moniker),
       cancellationToken);
   }
 }
