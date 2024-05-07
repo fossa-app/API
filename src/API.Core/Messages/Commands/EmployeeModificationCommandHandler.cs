@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Fossa.API.Core.Messages.Commands;
 
-public class EmployeeModificationCommandHandler : IRequestHandler<EmployeeModificationCommand>
+public class EmployeeModificationCommandHandler : IRequestHandler<EmployeeModificationCommand, Unit>
 {
   private readonly IEmployeeQueryRepository _employeeQueryRepository;
   private readonly IEmployeeRepository _employeeRepository;
@@ -17,7 +17,7 @@ public class EmployeeModificationCommandHandler : IRequestHandler<EmployeeModifi
     _employeeRepository = employeeRepository ?? throw new ArgumentNullException(nameof(employeeRepository));
   }
 
-  public async Task Handle(
+  public async Task<Unit> Handle(
     EmployeeModificationCommand request,
     CancellationToken cancellationToken)
   {
@@ -29,5 +29,6 @@ public class EmployeeModificationCommandHandler : IRequestHandler<EmployeeModifi
       FullName = request.FullName,
     };
     await _employeeRepository.UpdateAsync(entity, cancellationToken).ConfigureAwait(false);
+    return Unit.Value;
   }
 }
