@@ -5,7 +5,7 @@ using TIKSN.Identity;
 
 namespace Fossa.API.Core.Messages.Commands;
 
-public class EmployeeCreationCommandHandler : IRequestHandler<EmployeeCreationCommand>
+public class EmployeeCreationCommandHandler : IRequestHandler<EmployeeCreationCommand, Unit>
 {
   private readonly ICompanyQueryRepository _companyQueryRepository;
   private readonly IEmployeeQueryRepository _employeeQueryRepository;
@@ -25,7 +25,7 @@ public class EmployeeCreationCommandHandler : IRequestHandler<EmployeeCreationCo
     _employeeRepository = employeeRepository ?? throw new ArgumentNullException(nameof(employeeRepository));
   }
 
-  public async Task Handle(
+  public async Task<Unit> Handle(
     EmployeeCreationCommand request,
     CancellationToken cancellationToken)
   {
@@ -43,6 +43,7 @@ public class EmployeeCreationCommandHandler : IRequestHandler<EmployeeCreationCo
         s => CreateEmployeeAsync(s, request, cancellationToken),
         () => throw new InvalidOperationException("A company for this tenant have not been created."))
       .ConfigureAwait(false);
+    return Unit.Value;
   }
 
   public async Task CreateEmployeeAsync(
