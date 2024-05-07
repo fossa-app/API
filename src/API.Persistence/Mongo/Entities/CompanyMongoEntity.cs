@@ -11,6 +11,8 @@ public class CompanyMongoEntity : IEntity<long>
 
   public string? Name { get; set; }
 
+  public string? Moniker { get; set; }
+
   [BsonGuidRepresentation(GuidRepresentation.Standard)]
   public Guid TenantID { get; set; }
 }
