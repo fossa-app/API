@@ -30,7 +30,9 @@ public class CompanyRepositoryAdapter
     _dataRepository = dataRepository ?? throw new ArgumentNullException(nameof(dataRepository));
   }
 
-  public async Task<Option<CompanyEntity>> FindByTenantIdAsync(Guid tenantId, CancellationToken cancellationToken)
+  public async Task<Option<CompanyEntity>> FindByTenantIdAsync(
+    Guid tenantId,
+    CancellationToken cancellationToken)
   {
     var entity = await _dataRepository.FindByTenantIdAsync(
       tenantId, cancellationToken).ConfigureAwait(false);
@@ -38,7 +40,19 @@ public class CompanyRepositoryAdapter
     return entity.Map(Map);
   }
 
-  public async Task<CompanyEntity> GetByTenantIdAsync(Guid tenantId, CancellationToken cancellationToken)
+  public async Task<Option<CompanyEntity>> FindByMonikerAsync(
+    string moniker,
+    CancellationToken cancellationToken)
+  {
+    var entity = await _dataRepository.FindByMonikerAsync(
+      moniker, cancellationToken).ConfigureAwait(false);
+
+    return entity.Map(Map);
+  }
+
+  public async Task<CompanyEntity> GetByTenantIdAsync(
+    Guid tenantId,
+    CancellationToken cancellationToken)
   {
     var entity = await _dataRepository.GetByTenantIdAsync(
       tenantId, cancellationToken).ConfigureAwait(false);

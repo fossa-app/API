@@ -1,3 +1,6 @@
 ﻿namespace Fossa.API.Web.ApiModels;
 
-public record CompanyRetrievalModel(long Id, string Name);
+public record CompanyRetrievalModel(
+  long Id,
+  string Name,
+  string Moniker);

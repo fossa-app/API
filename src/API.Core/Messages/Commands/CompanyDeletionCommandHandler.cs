@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Fossa.API.Core.Messages.Commands;
 
-public class CompanyDeletionCommandHandler : IRequestHandler<CompanyDeletionCommand>
+public class CompanyDeletionCommandHandler : IRequestHandler<CompanyDeletionCommand, Unit>
 {
   private readonly ICompanyRepository _companyRepository;
 
@@ -14,11 +14,12 @@ public class CompanyDeletionCommandHandler : IRequestHandler<CompanyDeletionComm
     _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
   }
 
-  public async Task Handle(
+  public async Task<Unit> Handle(
     CompanyDeletionCommand request,
     CancellationToken cancellationToken)
   {
-    CompanyEntity entity = new(request.ID, request.TenantID, string.Empty);
+    CompanyEntity entity = new(request.ID, request.TenantID, string.Empty, string.Empty);
     await _companyRepository.RemoveAsync(entity, cancellationToken).ConfigureAwait(false);
+    return Unit.Value;
   }
 }

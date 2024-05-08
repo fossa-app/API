@@ -10,6 +10,10 @@ public interface ICompanyMongoRepository : IMongoRepository<CompanyMongoEntity, 
     Guid tenantId,
     CancellationToken cancellationToken);
 
+  Task<Option<CompanyMongoEntity>> FindByMonikerAsync(
+      string moniker,
+      CancellationToken cancellationToken);
+
   Task<CompanyMongoEntity> GetByTenantIdAsync(
     Guid tenantId,
     CancellationToken cancellationToken);

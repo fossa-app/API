@@ -23,7 +23,9 @@ public class CompanyMongoMapper : IMapper<CompanyMongoEntity, CompanyEntity>, IM
   {
     return new CompanyEntity(
       _dataIdentityToDomainIdentityMapper.Map(source.ID),
-      source.TenantID, source.Name ?? string.Empty);
+      source.TenantID,
+      source.Name ?? string.Empty,
+      source.Moniker ?? string.Empty);
   }
 
   public CompanyMongoEntity Map(CompanyEntity source)
@@ -33,6 +35,7 @@ public class CompanyMongoMapper : IMapper<CompanyMongoEntity, CompanyEntity>, IM
       ID = _domainIdentityToDataIdentityMapper.Map(source.ID),
       TenantID = source.TenantID,
       Name = source.Name,
+      Moniker = source.Moniker,
     };
   }
 }

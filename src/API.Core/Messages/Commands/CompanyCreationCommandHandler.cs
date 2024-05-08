@@ -9,7 +9,7 @@ using TIKSN.Licensing;
 
 namespace Fossa.API.Core.Messages.Commands;
 
-public class CompanyCreationCommandHandler : IRequestHandler<CompanyCreationCommand>
+public class CompanyCreationCommandHandler : IRequestHandler<CompanyCreationCommand, Unit>
 {
   private readonly ICompanyQueryRepository _companyQueryRepository;
   private readonly ICompanyRepository _companyRepository;
@@ -28,7 +28,7 @@ public class CompanyCreationCommandHandler : IRequestHandler<CompanyCreationComm
     _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
   }
 
-  public async Task Handle(
+  public async Task<Unit> Handle(
     CompanyCreationCommand request,
     CancellationToken cancellationToken)
   {
@@ -41,8 +41,10 @@ public class CompanyCreationCommandHandler : IRequestHandler<CompanyCreationComm
 
     await ValidateEntitlementsAsync(cancellationToken).ConfigureAwait(false);
     var id = _identityGenerator.Generate();
-    CompanyEntity entity = new(id, request.TenantID, request.Name);
+    CompanyEntity entity = new(id, request.TenantID, request.Name, request.Moniker);
     await _companyRepository.AddAsync(entity, cancellationToken).ConfigureAwait(false);
+
+    return Unit.Value;
   }
 
   private async Task ValidateEntitlementsAsync(CancellationToken cancellationToken)
