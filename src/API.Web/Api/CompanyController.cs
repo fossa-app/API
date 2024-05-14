@@ -62,7 +62,7 @@ public class CompanyController : BaseApiController<CompanyId>
   {
     var tenantId = _tenantIdProvider.GetTenantId();
     await _sender.Send(
-      new CompanyCreationCommand(tenantId, model.Name, model.Moniker),
+      new CompanyCreationCommand(tenantId, model.Name ?? string.Empty, model.Moniker ?? string.Empty),
       cancellationToken);
   }
 
@@ -78,8 +78,8 @@ public class CompanyController : BaseApiController<CompanyId>
       new CompanyModificationCommand(
         _dataIdentityToDomainIdentityMapper.Map(id),
         tenantId,
-        model.Name,
-        model.Moniker),
+        model.Name ?? string.Empty,
+        model.Moniker ?? string.Empty),
       cancellationToken);
   }
 }

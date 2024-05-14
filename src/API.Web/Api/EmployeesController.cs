@@ -44,7 +44,9 @@ public class EmployeesController : BaseApiController<EmployeeId>
     var tenantId = _tenantIdProvider.GetTenantId();
     var userId = _userIdProvider.GetUserId();
     var result = await _sender.Send(
-      new EmployeePagingQuery(tenantId, userId, new Page(requestModel.PageNumber, requestModel.PageSize)),
+      new EmployeePagingQuery(tenantId, userId, new Page(
+        requestModel.PageNumber ?? 0,
+        requestModel.PageSize ?? 0)),
       cancellationToken);
 
     return mapper.Map(result);
@@ -59,7 +61,11 @@ public class EmployeesController : BaseApiController<EmployeeId>
     var userId = _userIdProvider.GetUserId();
     await _sender.Send(
       new EmployeeCreationCommand(
-        tenantId, userId, model.FirstName, model.LastName, model.FullName),
+        tenantId,
+        userId,
+        model.FirstName ?? string.Empty,
+        model.LastName ?? string.Empty,
+        model.FullName ?? string.Empty),
       cancellationToken);
   }
 
@@ -73,7 +79,12 @@ public class EmployeesController : BaseApiController<EmployeeId>
     var userId = _userIdProvider.GetUserId();
     await _sender.Send(
       new EmployeeModificationCommand(
-        _dataIdentityToDomainIdentityMapper.Map(id), tenantId, userId, model.FirstName, model.LastName, model.FullName),
+        _dataIdentityToDomainIdentityMapper.Map(id),
+        tenantId,
+        userId,
+        model.FirstName ?? string.Empty,
+        model.LastName ?? string.Empty,
+        model.FullName ?? string.Empty),
       cancellationToken);
   }
 }

@@ -13,6 +13,7 @@ namespace Fossa.API.Persistence.Mongo.Entities
         public CompanyMongoEntity() { }
         [MongoDB.Bson.Serialization.Attributes.BsonId]
         public long ID { get; set; }
+        public string? Moniker { get; set; }
         public string? Name { get; set; }
         [MongoDB.Bson.Serialization.Attributes.BsonGuidRepresentation(MongoDB.Bson.GuidRepresentation.Standard)]
         public System.Guid TenantID { get; set; }
@@ -66,6 +67,7 @@ namespace Fossa.API.Persistence.Mongo.Repositories
     {
         public CompanyMongoRepository(TIKSN.Data.Mongo.IMongoClientSessionProvider mongoClientSessionProvider, TIKSN.Data.Mongo.IMongoDatabaseProvider mongoDatabaseProvider) { }
         public System.Threading.Tasks.Task<int> CountAllAsync(System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity>> FindByMonikerAsync(string moniker, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity>> FindByTenantIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity> GetByTenantIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken) { }
     }
@@ -73,6 +75,7 @@ namespace Fossa.API.Persistence.Mongo.Repositories
     {
         public CompanyRepositoryAdapter(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity> domainEntityToDataEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity, Fossa.API.Core.Entities.CompanyEntity> dataEntityToDomainEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId> dataIdentityToDomainIdentityMapper, Fossa.API.Persistence.Mongo.Repositories.ICompanyMongoRepository dataRepository) { }
         public System.Threading.Tasks.Task<int> CountAllAsync(System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Core.Entities.CompanyEntity>> FindByMonikerAsync(string moniker, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Core.Entities.CompanyEntity>> FindByTenantIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<Fossa.API.Core.Entities.CompanyEntity> GetByTenantIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken) { }
     }
@@ -87,12 +90,13 @@ namespace Fossa.API.Persistence.Mongo.Repositories
     {
         public EmployeeRepositoryAdapter(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity> domainEntityToDataEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity, Fossa.API.Core.Entities.EmployeeEntity> dataEntityToDomainEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId> dataIdentityToDomainIdentityMapper, Fossa.API.Persistence.Mongo.Repositories.IEmployeeMongoRepository dataRepository) { }
         public System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Core.Entities.EmployeeEntity>> FindByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken) { }
-        public System.Threading.Tasks.Task<Fossa.API.Core.Entities.EmployeeEntity> GetByUserIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task<Fossa.API.Core.Entities.EmployeeEntity> GetByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Core.Entities.EmployeeEntity>> PageAsync(Fossa.API.Core.Repositories.TenantEmployeePageQuery pageQuery, System.Threading.CancellationToken cancellationToken) { }
     }
     public interface ICompanyMongoRepository : TIKSN.Data.IQueryRepository<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity, long>, TIKSN.Data.IRepository<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity>, TIKSN.Data.IStreamRepository<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity>, TIKSN.Data.Mongo.IMongoRepository<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity, long>
     {
         System.Threading.Tasks.Task<int> CountAllAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity>> FindByMonikerAsync(string moniker, System.Threading.CancellationToken cancellationToken);
         System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity>> FindByTenantIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken);
         System.Threading.Tasks.Task<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity> GetByTenantIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken);
     }
