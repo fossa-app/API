@@ -7,8 +7,6 @@ namespace Fossa.API.Core.Services;
 
 public class SystemPropertiesInitializer : ISystemPropertiesInitializer
 {
-  public static readonly SystemPropertiesId MainSystemPropertiesId = new(1L);
-
   private readonly ISystemPropertiesRepository _systemPropertiesRepository;
   private readonly ISystemPropertiesQueryRepository _systemPropertiesQueryRepository;
   private readonly ILogger<SystemPropertiesInitializer> _logger;
@@ -29,7 +27,7 @@ public class SystemPropertiesInitializer : ISystemPropertiesInitializer
   {
     _logger.LogInformation("Checking existence of system properties");
     var systemPropertiesEntity = await _systemPropertiesQueryRepository
-      .GetOrNoneAsync(MainSystemPropertiesId, cancellationToken)
+      .GetOrNoneAsync(SystemProperties.MainSystemPropertiesId, cancellationToken)
       .ConfigureAwait(false);
 
     var systemProperties = await systemPropertiesEntity
@@ -47,7 +45,7 @@ public class SystemPropertiesInitializer : ISystemPropertiesInitializer
     _logger.LogInformation("Creating system properties");
 
     var entity = new SystemPropertiesEntity(
-      MainSystemPropertiesId,
+      SystemProperties.MainSystemPropertiesId,
       Ulid.NewUlid());
 
     await _systemPropertiesRepository.AddAsync(entity, cancellationToken).ConfigureAwait(false);
