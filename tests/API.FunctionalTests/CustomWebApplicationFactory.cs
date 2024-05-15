@@ -45,7 +45,14 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
     builder.ConfigureContainer<ContainerBuilder>(containerBuilder =>
     {
       containerBuilder
+        .RegisterType<SystemPropertiesEasyRepository>()
+        .AsSelf()
+        .AsImplementedInterfaces()
+        .InstancePerLifetimeScope();
+
+      containerBuilder
         .RegisterType<LicenseEasyFileRepository>()
+        .AsSelf()
         .AsImplementedInterfaces()
         .InstancePerLifetimeScope();
 
