@@ -434,12 +434,15 @@ namespace Fossa.API.Core.Services
     }
     public class SystemLicenseRetriever : Fossa.API.Core.Services.ISystemLicenseRetriever
     {
-        public SystemLicenseRetriever(Fossa.API.Core.Repositories.ILicenseFileRepository licenseFileRepository, TIKSN.Licensing.ILicenseFactory<Fossa.Licensing.SystemEntitlements, Fossa.Licensing.SystemLicenseEntitlements> licenseFactory, Fossa.API.Core.Services.ICertificateProvider certificateProvider) { }
+        public SystemLicenseRetriever(Fossa.API.Core.Repositories.ILicenseFileRepository licenseFileRepository, TIKSN.Licensing.ILicenseFactory<Fossa.Licensing.SystemEntitlements, Fossa.Licensing.SystemLicenseEntitlements> licenseFactory, Fossa.API.Core.Services.ICertificateProvider certificateProvider, Fossa.API.Core.Repositories.ISystemPropertiesQueryRepository systemPropertiesQueryRepository) { }
         public System.Threading.Tasks.Task<LanguageExt.Validation<LanguageExt.Common.Error, TIKSN.Licensing.License<Fossa.Licensing.SystemEntitlements>>> GetAsync(System.Threading.CancellationToken cancellationToken) { }
+    }
+    public static class SystemProperties
+    {
+        public static readonly Fossa.API.Core.Entities.SystemPropertiesId MainSystemPropertiesId;
     }
     public class SystemPropertiesInitializer : Fossa.API.Core.Services.ISystemPropertiesInitializer
     {
-        public static readonly Fossa.API.Core.Entities.SystemPropertiesId MainSystemPropertiesId;
         public SystemPropertiesInitializer(Fossa.API.Core.Repositories.ISystemPropertiesRepository systemPropertiesRepository, Fossa.API.Core.Repositories.ISystemPropertiesQueryRepository systemPropertiesQueryRepository, Microsoft.Extensions.Logging.ILogger<Fossa.API.Core.Services.SystemPropertiesInitializer> logger) { }
         public System.Threading.Tasks.Task InitializeAsync(System.Threading.CancellationToken cancellationToken) { }
     }
