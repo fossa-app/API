@@ -4,6 +4,7 @@ using EasyDoubles;
 using Fossa.API.Core.Extensions;
 using Fossa.API.Core.Repositories;
 using Fossa.API.Core.Services;
+using Fossa.API.FunctionalTests.Repositories;
 using Fossa.API.FunctionalTests.Services;
 using Fossa.Licensing;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -21,18 +22,21 @@ public static class SystemLicenseExtensions
     CancellationToken cancellationToken)
     where TEntryPoint : class
   {
+    var testCertificateProvider = factory.Services.GetRequiredService<ITestCertificateProvider>();
+    var licenseFactory = factory.Services.GetRequiredService<ILicenseFactory<SystemEntitlements, SystemLicenseEntitlements>>();
+    var licenseFileRepository = factory.Services.GetRequiredService<LicenseEasyFileRepository>();
+    var systemPropertiesRepository = factory.Services.GetRequiredService<SystemPropertiesEasyRepository>();
+
+    var systemPropertiesEntity = await systemPropertiesRepository.GetAsync(SystemProperties.MainSystemPropertiesId, default).ConfigureAwait(false);
+
     var licensor = new OrganizationParty("Microsoft Corporation", "Microsoft", new MailAddress("info@microsoft.com"), new Uri("https://microsoft.com/"));
     var licensee = new OrganizationParty("Alphabet Inc.", "Google", new MailAddress("info@google.com"), new Uri("https://www.google.com"));
     var licenseTerms = new LicenseTerms(Ulid.NewUlid(), licensor, licensee, DateTimeOffset.Now.AddYears(-1), DateTimeOffset.Now.AddYears(1));
     var systemEntitlements = new SystemEntitlements(
-      Ulid.NewUlid(),
+      systemPropertiesEntity.SystemID,
       EnvironmentName.Parse("Development", asciiOnly: true, CultureInfo.InvariantCulture).Single(),
       10,
       Seq(new RegionInfo("CA"), new RegionInfo("PL"), new RegionInfo("UA"), new RegionInfo("US")));
-
-    var testCertificateProvider = factory.Services.GetRequiredService<ITestCertificateProvider>();
-    var licenseFactory = factory.Services.GetRequiredService<ILicenseFactory<SystemEntitlements, SystemLicenseEntitlements>>();
-    var licenseFileRepository = factory.Services.GetRequiredService<ILicenseFileRepository>();
 
     var license = licenseFactory.Create(licenseTerms, systemEntitlements, testCertificateProvider.Certificate)
       .GetOrThrow();
