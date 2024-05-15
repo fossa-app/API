@@ -2,7 +2,7 @@
 {
     [Microsoft.AspNetCore.Mvc.ApiController]
     [Microsoft.AspNetCore.Mvc.Route("api/{version:apiVersion}/[controller]")]
-    public abstract class BaseApiController : Microsoft.AspNetCore.Mvc.Controller
+    public abstract class BaseApiController : Microsoft.AspNetCore.Mvc.ControllerBase
     {
         protected readonly MediatR.IPublisher _publisher;
         protected readonly MediatR.ISender _sender;
@@ -78,27 +78,29 @@ namespace Fossa.API.Web.ApiModels
 {
     public class CompanyModificationModel : System.IEquatable<Fossa.API.Web.ApiModels.CompanyModificationModel>
     {
-        public CompanyModificationModel(string Name) { }
-        public string Name { get; init; }
+        public CompanyModificationModel(string? Name, string? Moniker) { }
+        public string? Moniker { get; init; }
+        public string? Name { get; init; }
     }
     public class CompanyRetrievalModel : System.IEquatable<Fossa.API.Web.ApiModels.CompanyRetrievalModel>
     {
-        public CompanyRetrievalModel(long Id, string Name) { }
+        public CompanyRetrievalModel(long Id, string Name, string Moniker) { }
         public long Id { get; init; }
+        public string Moniker { get; init; }
         public string Name { get; init; }
     }
     public class EmployeeModificationModel : System.IEquatable<Fossa.API.Web.ApiModels.EmployeeModificationModel>
     {
-        public EmployeeModificationModel(string FirstName, string LastName, string FullName) { }
-        public string FirstName { get; init; }
-        public string FullName { get; init; }
-        public string LastName { get; init; }
+        public EmployeeModificationModel(string? FirstName, string? LastName, string? FullName) { }
+        public string? FirstName { get; init; }
+        public string? FullName { get; init; }
+        public string? LastName { get; init; }
     }
     public class EmployeePagingRequestModel : System.IEquatable<Fossa.API.Web.ApiModels.EmployeePagingRequestModel>
     {
-        public EmployeePagingRequestModel(int PageNumber, int PageSize) { }
-        public int PageNumber { get; init; }
-        public int PageSize { get; init; }
+        public EmployeePagingRequestModel(int? PageNumber, int? PageSize) { }
+        public int? PageNumber { get; init; }
+        public int? PageSize { get; init; }
     }
     public class EmployeeRetrievalModel : System.IEquatable<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>
     {
@@ -134,7 +136,6 @@ namespace Fossa.API.Web.ApiModels
 }
 namespace Fossa.API.Web.Claims
 {
-    [System.Serializable]
     public class ClaimNotFoundException : System.Exception
     {
         public ClaimNotFoundException() { }
@@ -158,11 +159,6 @@ namespace Fossa.API.Web
         public IdGenSetupLogger(IdGen.IdGenerator idGenerator, Microsoft.Extensions.Logging.ILogger<Fossa.API.Web.IdGenSetupLogger> logger) { }
         public void LogIdGenSetup() { }
     }
-    public static class ProblemDetailsOptionsExtensions
-    {
-        public static void MapFluentValidationException(this Hellang.Middleware.ProblemDetails.ProblemDetailsOptions options) { }
-        public static void MapKnownExceptions(this Hellang.Middleware.ProblemDetails.ProblemDetailsOptions options) { }
-    }
 }
 namespace Fossa.API.Web.DependencyInjection
 {
@@ -175,7 +171,7 @@ namespace Fossa.API.Web.Mappers
 {
     public class EmployeeRetrievalModelMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Web.ApiModels.EmployeeRetrievalModel>
     {
-        public EmployeeRetrievalModelMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId> dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> companyDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId> companyDataIdentityToDomainIdentityMapper) { }
+        public EmployeeRetrievalModelMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> companyDomainIdentityToDataIdentityMapper) { }
         public Fossa.API.Web.ApiModels.EmployeeRetrievalModel Map(Fossa.API.Core.Entities.EmployeeEntity source) { }
     }
     public class LicenseResponseModelMapper<TEntitlements, TEntitlementsModel> : TIKSN.Mapping.IMapper<TIKSN.Licensing.License<TEntitlements>, Fossa.API.Web.ApiModels.LicenseResponseModel<TEntitlementsModel>>
@@ -185,11 +181,11 @@ namespace Fossa.API.Web.Mappers
     }
     public class LicenseTermsModel : System.IEquatable<Fossa.API.Web.Mappers.LicenseTermsModel>
     {
-        public LicenseTermsModel(Fossa.API.Web.Mappers.PartyModel licensor, Fossa.API.Web.Mappers.PartyModel licensee, System.DateTimeOffset notBefore, System.DateTimeOffset notAfter) { }
-        public Fossa.API.Web.Mappers.PartyModel licensee { get; init; }
-        public Fossa.API.Web.Mappers.PartyModel licensor { get; init; }
-        public System.DateTimeOffset notAfter { get; init; }
-        public System.DateTimeOffset notBefore { get; init; }
+        public LicenseTermsModel(Fossa.API.Web.Mappers.PartyModel Licensor, Fossa.API.Web.Mappers.PartyModel Licensee, System.DateTimeOffset NotBefore, System.DateTimeOffset NotAfter) { }
+        public Fossa.API.Web.Mappers.PartyModel Licensee { get; init; }
+        public Fossa.API.Web.Mappers.PartyModel Licensor { get; init; }
+        public System.DateTimeOffset NotAfter { get; init; }
+        public System.DateTimeOffset NotBefore { get; init; }
     }
     public class LicenseTermsModelMapper : TIKSN.Mapping.IMapper<TIKSN.Licensing.LicenseTerms, Fossa.API.Web.Mappers.LicenseTermsModel>
     {
