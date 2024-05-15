@@ -6,9 +6,9 @@ using ProblemDetailsOptions = Hellang.Middleware.ProblemDetails.ProblemDetailsOp
 
 namespace Fossa.API.Web;
 
-public static class ProblemDetailsOptionsExtensions
+internal static class ProblemDetailsOptionsExtensions
 {
-  public static void MapFluentValidationException(
+  internal static void MapFluentValidationException(
     this ProblemDetailsOptions options) =>
       options.Map<ValidationException>((ctx, ex) =>
       {
@@ -23,12 +23,12 @@ public static class ProblemDetailsOptionsExtensions
         return factory.CreateValidationProblemDetails(ctx, errors);
       });
 
-  public static void MapKnownExceptions(
+  internal static void MapKnownExceptions(
       this ProblemDetailsOptions options)
   {
     options.MapToStatusCode<EntityNotFoundException>(StatusCodes.Status404NotFound);
-    options.MapToStatusCode<CrossTenantInboundUnauthorizedAccessException>(StatusCodes.Status401Unauthorized);
-    options.MapToStatusCode<CrossTenantOutboundUnauthorizedAccessException>(StatusCodes.Status401Unauthorized);
-    options.MapToStatusCode<CrossTenantUnauthorizedAccessException>(StatusCodes.Status401Unauthorized);
+    options.MapToStatusCode<CrossTenantInboundUnauthorizedAccessException>(StatusCodes.Status403Forbidden);
+    options.MapToStatusCode<CrossTenantOutboundUnauthorizedAccessException>(StatusCodes.Status403Forbidden);
+    options.MapToStatusCode<CrossTenantUnauthorizedAccessException>(StatusCodes.Status403Forbidden);
   }
 }
