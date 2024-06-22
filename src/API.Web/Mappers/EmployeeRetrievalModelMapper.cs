@@ -13,11 +13,8 @@ public class EmployeeRetrievalModelMapper : IMapper<EmployeeEntity, EmployeeRetr
     IMapper<EmployeeId, long> domainIdentityToDataIdentityMapper,
     IMapper<CompanyId, long> companyDomainIdentityToDataIdentityMapper)
   {
-    _domainIdentityToDataIdentityMapper = domainIdentityToDataIdentityMapper ??
-                                          throw new ArgumentNullException(nameof(domainIdentityToDataIdentityMapper));
-    _companyDomainIdentityToDataIdentityMapper = companyDomainIdentityToDataIdentityMapper ??
-                                                 throw new ArgumentNullException(
-                                                   nameof(companyDomainIdentityToDataIdentityMapper));
+    _domainIdentityToDataIdentityMapper = domainIdentityToDataIdentityMapper ?? throw new ArgumentNullException(nameof(domainIdentityToDataIdentityMapper));
+    _companyDomainIdentityToDataIdentityMapper = companyDomainIdentityToDataIdentityMapper ?? throw new ArgumentNullException(nameof(companyDomainIdentityToDataIdentityMapper));
   }
 
   public EmployeeRetrievalModel Map(EmployeeEntity source)
