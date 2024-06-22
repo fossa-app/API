@@ -1,11 +1,9 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <Sdk Name="Microsoft.Build.CentralPackageVersions" Version="2.1.3" />
-  
   <PropertyGroup>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
-  
   <ItemGroup>
     <PackageReference Include="EasyDoubles" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
@@ -22,10 +20,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
     <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\src\API.Web\API.Web.csproj" />
     <ProjectReference Include="..\API.UnitTests\API.UnitTests.csproj" />
   </ItemGroup>
-
 </Project>
