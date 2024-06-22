@@ -18,16 +18,10 @@ public class EmployeeMongoMapper : IMapper<EmployeeMongoEntity, EmployeeEntity>,
     IMapper<CompanyId, long> companyDomainIdentityToDataIdentityMapper,
     IMapper<long, CompanyId> companyDataIdentityToDomainIdentityMapper)
   {
-    _domainIdentityToDataIdentityMapper = domainIdentityToDataIdentityMapper ??
-                                          throw new ArgumentNullException(nameof(domainIdentityToDataIdentityMapper));
-    _dataIdentityToDomainIdentityMapper = dataIdentityToDomainIdentityMapper ??
-                                          throw new ArgumentNullException(nameof(dataIdentityToDomainIdentityMapper));
-    _companyDomainIdentityToDataIdentityMapper = companyDomainIdentityToDataIdentityMapper ??
-                                                 throw new ArgumentNullException(
-                                                   nameof(companyDomainIdentityToDataIdentityMapper));
-    _companyDataIdentityToDomainIdentityMapper = companyDataIdentityToDomainIdentityMapper ??
-                                                 throw new ArgumentNullException(
-                                                   nameof(companyDataIdentityToDomainIdentityMapper));
+    _domainIdentityToDataIdentityMapper = domainIdentityToDataIdentityMapper ?? throw new ArgumentNullException(nameof(domainIdentityToDataIdentityMapper));
+    _dataIdentityToDomainIdentityMapper = dataIdentityToDomainIdentityMapper ?? throw new ArgumentNullException(nameof(dataIdentityToDomainIdentityMapper));
+    _companyDomainIdentityToDataIdentityMapper = companyDomainIdentityToDataIdentityMapper ?? throw new ArgumentNullException(nameof(companyDomainIdentityToDataIdentityMapper));
+    _companyDataIdentityToDomainIdentityMapper = companyDataIdentityToDomainIdentityMapper ?? throw new ArgumentNullException(nameof(companyDataIdentityToDomainIdentityMapper));
   }
 
   public EmployeeEntity Map(EmployeeMongoEntity source)
