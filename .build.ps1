@@ -27,6 +27,23 @@ param(
 
 Set-StrictMode -Version Latest
 
+
+# Synopsis: Estimate Next Version
+Task EstimateVersion Restore, {
+    $state = Import-Clixml -Path ".\.trash\$Instance\state.clixml"
+    if ($Version) {
+        $state.NextVersion = [System.Management.Automation.SemanticVersion]$Version
+    }
+    else {
+        $gitversion = Exec { dotnet tool run dotnet-gitversion } | ConvertFrom-Json
+        $state.NextVersion = [System.Management.Automation.SemanticVersion]::Parse($gitversion.SemVer)
+    }
+
+    $state | Export-Clixml -Path ".\.trash\$Instance\state.clixml"
+    Write-Output "Next version estimated to be $($state.NextVersion)"
+    Write-Output $state
+}
+
 # Synopsis: Format
 Task Format Restore, FormatXmlFiles, FormatWhitespace, FormatStyle, FormatAnalyzers
 
@@ -173,10 +190,10 @@ Task Init {
     New-Item -Path $anyBuildArtifactsFolder -ItemType Directory | Out-Null
 
     $state = [PSCustomObject]@{
-        NextVersion                        = $null
-        TrashFolder                        = $trashFolder
-        BuildArtifactsFolder               = $buildArtifactsFolder
-        AnyBuildArtifactsFolder            = $anyBuildArtifactsFolder
+        NextVersion             = $null
+        TrashFolder             = $trashFolder
+        BuildArtifactsFolder    = $buildArtifactsFolder
+        AnyBuildArtifactsFolder = $anyBuildArtifactsFolder
     }
 
     $state | Export-Clixml -Path ".\.trash\$Instance\state.clixml"
