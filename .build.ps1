@@ -28,6 +28,22 @@ param(
 Set-StrictMode -Version Latest
 
 
+# Synopsis: Build
+Task Build Format, BuildWeb, {
+    $solution = Resolve-Path -Path 'API.sln'
+    Exec { dotnet build $solution }
+}
+
+# Synopsis: Build Core
+Task BuildWeb EstimateVersion, {
+    $state = Import-Clixml -Path ".\.trash\$Instance\state.clixml"
+    $anyBuildArtifactsFolder = $state.AnyBuildArtifactsFolder
+    $project = Resolve-Path -Path 'src/API.Web/API.Web.csproj'
+    $nextVersion = $state.NextVersion
+
+    Exec { dotnet build $project /v:m /p:Configuration=Release /p:version=$nextVersion /p:OutDir=$anyBuildArtifactsFolder }
+}
+
 # Synopsis: Estimate Next Version
 Task EstimateVersion Restore, {
     $state = Import-Clixml -Path ".\.trash\$Instance\state.clixml"
@@ -48,12 +64,19 @@ Task EstimateVersion Restore, {
 Task Format Restore, FormatXmlFiles, FormatWhitespace, FormatStyle, FormatAnalyzers
 
 # Synopsis: Format Analyzers
-Task FormatAnalyzers Restore, FormatAnalyzersSharedKernel, FormatAnalyzersPersistence, FormatAnalyzersCore, FormatAnalyzersInfrastructure, FormatAnalyzersSolution
+Task FormatAnalyzers Restore, FormatAnalyzersSharedKernel, FormatAnalyzersPersistence, FormatAnalyzersCore, FormatAnalyzersInfrastructure, FormatAnalyzersWeb, FormatAnalyzersSolution
 
 # Synopsis: Format Analyzers Solution
 Task FormatAnalyzersSolution Restore, {
     # $solution = Resolve-Path -Path 'API.sln'
     # Exec { dotnet format analyzers --severity info --verbosity diagnostic $solution }
+}
+
+# Synopsis: Format Analyzers Web
+Task FormatAnalyzersWeb Restore, {
+    $project = Resolve-Path -Path 'src/API.Web/API.Web.csproj'
+
+    Exec { dotnet format analyzers --severity info --verbosity diagnostic $project }
 }
 
 # Synopsis: Format Analyzers Infrastructure
@@ -85,12 +108,19 @@ Task FormatAnalyzersSharedKernel Restore, {
 }
 
 # Synopsis: Format Style
-Task FormatStyle Restore, FormatStyleSharedKernel, FormatStylePersistence, FormatStyleCore, FormatStyleInfrastructure, FormatStyleSolution
+Task FormatStyle Restore, FormatStyleSharedKernel, FormatStylePersistence, FormatStyleCore, FormatStyleInfrastructure, FormatStyleWeb, FormatStyleSolution
 
 # Synopsis: Format Style Solution
 Task FormatStyleSolution Restore, {
     # $solution = Resolve-Path -Path 'API.sln'
     # Exec { dotnet format style --severity info --verbosity diagnostic $solution }
+}
+
+# Synopsis: Format Style Web
+Task FormatStyleWeb Restore, {
+    $project = Resolve-Path -Path 'src/API.Web/API.Web.csproj'
+
+    Exec { dotnet format style --severity info --verbosity diagnostic $project }
 }
 
 # Synopsis: Format Style Persistence
