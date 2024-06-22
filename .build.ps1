@@ -27,6 +27,25 @@ param(
 
 Set-StrictMode -Version Latest
 
+# Synopsis: Test
+Task Test UnitTest, FunctionalTest, IntegrationTest
+
+# Synopsis: Integration Test
+Task IntegrationTest Build, {
+    if (-not $env:CI) {
+        Exec { dotnet test 'tests/API.IntegrationTests/API.IntegrationTests.csproj' }
+    }
+}
+
+# Synopsis: Functional Test
+Task FunctionalTest Build, {
+    Exec { dotnet test 'tests/API.FunctionalTests/API.FunctionalTests.csproj' }
+}
+
+# Synopsis: Unit Test
+Task UnitTest Build, {
+    Exec { dotnet test 'tests/API.UnitTests/API.UnitTests.csproj' }
+}
 
 # Synopsis: Build
 Task Build Format, BuildWeb, {
@@ -34,7 +53,7 @@ Task Build Format, BuildWeb, {
     Exec { dotnet build $solution }
 }
 
-# Synopsis: Build Core
+# Synopsis: Build Web
 Task BuildWeb EstimateVersion, {
     $state = Import-Clixml -Path ".\.trash\$Instance\state.clixml"
     $anyBuildArtifactsFolder = $state.AnyBuildArtifactsFolder
@@ -68,8 +87,8 @@ Task FormatAnalyzers Restore, FormatAnalyzersSharedKernel, FormatAnalyzersPersis
 
 # Synopsis: Format Analyzers Solution
 Task FormatAnalyzersSolution Restore, {
-    # $solution = Resolve-Path -Path 'API.sln'
-    # Exec { dotnet format analyzers --severity info --verbosity diagnostic $solution }
+    $solution = Resolve-Path -Path 'API.sln'
+    Exec { dotnet format analyzers --severity info --verbosity diagnostic $solution }
 }
 
 # Synopsis: Format Analyzers Web
@@ -112,8 +131,8 @@ Task FormatStyle Restore, FormatStyleSharedKernel, FormatStylePersistence, Forma
 
 # Synopsis: Format Style Solution
 Task FormatStyleSolution Restore, {
-    # $solution = Resolve-Path -Path 'API.sln'
-    # Exec { dotnet format style --severity info --verbosity diagnostic $solution }
+    $solution = Resolve-Path -Path 'API.sln'
+    Exec { dotnet format style --severity info --verbosity diagnostic $solution }
 }
 
 # Synopsis: Format Style Web
