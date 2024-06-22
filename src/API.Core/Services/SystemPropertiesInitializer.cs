@@ -16,10 +16,8 @@ public class SystemPropertiesInitializer : ISystemPropertiesInitializer
     ISystemPropertiesQueryRepository systemPropertiesQueryRepository,
     ILogger<SystemPropertiesInitializer> logger)
   {
-    _systemPropertiesRepository = systemPropertiesRepository ??
-                                  throw new ArgumentNullException(nameof(systemPropertiesRepository));
-    _systemPropertiesQueryRepository = systemPropertiesQueryRepository ??
-                                       throw new ArgumentNullException(nameof(systemPropertiesQueryRepository));
+    _systemPropertiesRepository = systemPropertiesRepository ?? throw new ArgumentNullException(nameof(systemPropertiesRepository));
+    _systemPropertiesQueryRepository = systemPropertiesQueryRepository ?? throw new ArgumentNullException(nameof(systemPropertiesQueryRepository));
     _logger = logger ?? throw new ArgumentNullException(nameof(logger));
   }
 

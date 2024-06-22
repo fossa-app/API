@@ -178,7 +178,7 @@ Task FormatWhitespace Restore, {
 
 # Synopsis: Format XML Files
 Task FormatXmlFiles Clean, {
-    Get-ChildItem -Include *.xml, *.config, *.props, *.targets, *.nuspec, *.resx, *.ruleset, *.vsixmanifest, *.vsct, *.xlf -Recurse -File
+    Get-ChildItem -Include *.xml, *.config, *.props, *.targets, *.nuspec, *.resx, *.ruleset, *.vsixmanifest, *.vsct, *.xlf, *.csproj -Recurse -File
     | Where-Object { -not (git check-ignore $PSItem) }
     | ForEach-Object {
         Write-Output "Formatting XML File: $PSItem"
