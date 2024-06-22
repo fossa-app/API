@@ -27,6 +27,14 @@ param(
 
 Set-StrictMode -Version Latest
 
+# Synopsis: Scan with DevSkim for security issues
+Task DevSkim Restore, {
+    $state = Import-Clixml -Path ".\.trash\$Instance\state.clixml"
+    $trashFolder = $state.TrashFolder
+    $sarifFile = Join-Path -Path $trashFolder -ChildPath 'DevSkim.sarif'
+    Exec { dotnet tool run devskim analyze --source-code . --output-file $sarifFile }
+    Exec { dotnet tool run devskim fix --source-code . --sarif-result $sarifFile --all }
+}
 
 # Synopsis: Restore
 Task Restore RestoreWorkloads, RestoreTools, RestorePackages
