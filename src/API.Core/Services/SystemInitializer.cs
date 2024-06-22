@@ -13,8 +13,7 @@ public class SystemInitializer : ISystemInitializer
     ISystemLicenseInitializer systemLicenseInitializer,
     ILogger<SystemInitializer> logger)
   {
-    _systemPropertiesInitializer = systemPropertiesInitializer ??
-                                   throw new ArgumentNullException(nameof(systemPropertiesInitializer));
+    _systemPropertiesInitializer = systemPropertiesInitializer ?? throw new ArgumentNullException(nameof(systemPropertiesInitializer));
     _systemLicenseInitializer = systemLicenseInitializer ?? throw new ArgumentNullException(nameof(systemLicenseInitializer));
     _logger = logger ?? throw new ArgumentNullException(nameof(logger));
   }
