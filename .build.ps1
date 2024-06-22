@@ -27,6 +27,101 @@ param(
 
 Set-StrictMode -Version Latest
 
+# Synopsis: Format
+Task Format Restore, FormatXmlFiles, FormatWhitespace, FormatStyle, FormatAnalyzers
+
+# Synopsis: Format Analyzers
+Task FormatAnalyzers Restore, FormatAnalyzersSharedKernel, FormatAnalyzersPersistence, FormatAnalyzersCore, FormatAnalyzersInfrastructure, FormatAnalyzersSolution
+
+# Synopsis: Format Analyzers Solution
+Task FormatAnalyzersSolution Restore, {
+    # $solution = Resolve-Path -Path 'API.sln'
+    # Exec { dotnet format analyzers --severity info --verbosity diagnostic $solution }
+}
+
+# Synopsis: Format Analyzers Infrastructure
+Task FormatAnalyzersInfrastructure Restore, {
+    $project = Resolve-Path -Path 'src/API.Infrastructure/API.Infrastructure.csproj'
+
+    Exec { dotnet format analyzers --severity info --verbosity diagnostic $project }
+}
+
+# Synopsis: Format Analyzers Persistence
+Task FormatAnalyzersPersistence Restore, {
+    $project = Resolve-Path -Path 'src/API.Persistence/API.Persistence.csproj'
+
+    Exec { dotnet format analyzers --severity info --verbosity diagnostic $project }
+}
+
+# Synopsis: Format Analyzers Core
+Task FormatAnalyzersCore Restore, {
+    $project = Resolve-Path -Path 'src/API.Core/API.Core.csproj'
+
+    Exec { dotnet format analyzers --severity info --verbosity diagnostic $project }
+}
+
+# Synopsis: Format Analyzers Shared Kernel
+Task FormatAnalyzersSharedKernel Restore, {
+    $project = Resolve-Path -Path 'src/API.SharedKernel/API.SharedKernel.csproj'
+
+    Exec { dotnet format analyzers --severity info --verbosity diagnostic $project }
+}
+
+# Synopsis: Format Style
+Task FormatStyle Restore, FormatStyleSharedKernel, FormatStylePersistence, FormatStyleCore, FormatStyleInfrastructure, FormatStyleSolution
+
+# Synopsis: Format Style Solution
+Task FormatStyleSolution Restore, {
+    # $solution = Resolve-Path -Path 'API.sln'
+    # Exec { dotnet format style --severity info --verbosity diagnostic $solution }
+}
+
+# Synopsis: Format Style Persistence
+Task FormatStylePersistence Restore, {
+    $project = Resolve-Path -Path 'src/API.Persistence/API.Persistence.csproj'
+
+    Exec { dotnet format style --severity info --verbosity diagnostic $project }
+}
+
+# Synopsis: Format Style Infrastructure
+Task FormatStyleInfrastructure Restore, {
+    $project = Resolve-Path -Path 'src/API.Infrastructure/API.Infrastructure.csproj'
+
+    Exec { dotnet format style --severity info --verbosity diagnostic $project }
+}
+
+# Synopsis: Format Style Core
+Task FormatStyleCore Restore, {
+    $project = Resolve-Path -Path 'src/API.Core/API.Core.csproj'
+
+    Exec { dotnet format style --severity info --verbosity diagnostic $project }
+}
+
+# Synopsis: Format Style Shared Kernel
+Task FormatStyleSharedKernel Restore, {
+    $project = Resolve-Path -Path 'src/API.SharedKernel/API.SharedKernel.csproj'
+
+    Exec { dotnet format style --severity info --verbosity diagnostic $project }
+}
+
+# Synopsis: Format Whitespace
+Task FormatWhitespace Restore, {
+    $solution = Resolve-Path -Path 'API.sln'
+    Exec { dotnet format whitespace --verbosity diagnostic $solution }
+}
+
+# Synopsis: Format XML Files
+Task FormatXmlFiles Clean, {
+    Get-ChildItem -Include *.xml, *.config, *.props, *.targets, *.nuspec, *.resx, *.ruleset, *.vsixmanifest, *.vsct, *.xlf -Recurse -File
+    | Where-Object { -not (git check-ignore $PSItem) }
+    | ForEach-Object {
+        Write-Output "Formatting XML File: $PSItem"
+        $content = Get-Content -Path $PSItem -Raw
+        $xml = [xml]$content
+        $xml.Save($PSItem)
+    }
+}
+
 # Synopsis: Scan with DevSkim for security issues
 Task DevSkim Restore, {
     $state = Import-Clixml -Path ".\.trash\$Instance\state.clixml"
