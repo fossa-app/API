@@ -8,6 +8,13 @@
         "snitch"
       ],
       "rollForward": false
+    },
+    "microsoft.cst.devskim.cli": {
+      "version": "1.0.33",
+      "commands": [
+        "devskim"
+      ],
+      "rollForward": false
     }
   }
 }
