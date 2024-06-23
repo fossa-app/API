@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:8.0.0
+FROM mcr.microsoft.com/dotnet/aspnet:8.0.6
 WORKDIR /App
 COPY . ./
 USER app
