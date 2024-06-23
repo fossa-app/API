@@ -10,7 +10,7 @@ updates:
   assignees:
   - tiksn
 - package-ecosystem: "docker"
-  directory: "/"
+  directory: "/src/API.Web/"
   schedule:
     interval: daily
   open-pull-requests-limit: 10
