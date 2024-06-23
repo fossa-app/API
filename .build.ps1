@@ -27,6 +27,24 @@ param(
 
 Set-StrictMode -Version Latest
 
+# Synopsis: Pack NuGet package
+Task Pack Build, Test, {
+    $state = Import-Clixml -Path ".\.trash\$Instance\state.clixml"
+    $dockerImageName = $state.DockerImageName
+    $nextVersion = $state.NextVersion
+    $linuxBuildArtifactsFolder = $state.LinuxBuildArtifactsFolder
+
+    $dockerImageVersionTag = "$($dockerImageName):$nextVersion"
+    $dockerImageLatestTag = "$($dockerImageName):latest"
+    $state.DockerImageVersionTag = $dockerImageVersionTag
+    $state.DockerImageLatestTag = $dockerImageLatestTag
+
+    Exec { docker buildx build --file .\src\API.Web\Dockerfile --tag $dockerImageVersionTag --tag $dockerImageLatestTag $linuxBuildArtifactsFolder }
+
+    $state | Export-Clixml -Path ".\.trash\$Instance\state.clixml"
+    Write-Output $state
+}
+
 # Synopsis: Test
 Task Test UnitTest, FunctionalTest, IntegrationTest
 
@@ -56,11 +74,13 @@ Task Build Format, BuildWeb, {
 # Synopsis: Build Web
 Task BuildWeb EstimateVersion, {
     $state = Import-Clixml -Path ".\.trash\$Instance\state.clixml"
-    $anyBuildArtifactsFolder = $state.AnyBuildArtifactsFolder
+    $linuxBuildArtifactsFolder = $state.LinuxBuildArtifactsFolder
+    $winBuildArtifactsFolder = $state.WinBuildArtifactsFolder
     $project = Resolve-Path -Path 'src/API.Web/API.Web.csproj'
     $nextVersion = $state.NextVersion
 
-    Exec { dotnet build $project /v:m /p:Configuration=Release /p:version=$nextVersion /p:OutDir=$anyBuildArtifactsFolder }
+    Exec { dotnet build $project /v:m /p:Configuration=Release /p:version=$nextVersion /p:OutDir=$linuxBuildArtifactsFolder --runtime linux-x64 }
+    Exec { dotnet build $project /v:m /p:Configuration=Release /p:version=$nextVersion /p:OutDir=$winBuildArtifactsFolder --runtime win-x64 }
 }
 
 # Synopsis: Estimate Next Version
@@ -235,14 +255,21 @@ Task Init {
     $buildArtifactsFolder = Join-Path -Path $trashFolder -ChildPath 'artifacts'
     New-Item -Path $buildArtifactsFolder -ItemType Directory | Out-Null
 
-    $anyBuildArtifactsFolder = Join-Path -Path $buildArtifactsFolder -ChildPath 'any'
-    New-Item -Path $anyBuildArtifactsFolder -ItemType Directory | Out-Null
+    $linuxBuildArtifactsFolder = Join-Path -Path $buildArtifactsFolder -ChildPath 'linux'
+    New-Item -Path $linuxBuildArtifactsFolder -ItemType Directory | Out-Null
+
+    $winBuildArtifactsFolder = Join-Path -Path $buildArtifactsFolder -ChildPath 'win'
+    New-Item -Path $winBuildArtifactsFolder -ItemType Directory | Out-Null
 
     $state = [PSCustomObject]@{
-        NextVersion             = $null
-        TrashFolder             = $trashFolder
-        BuildArtifactsFolder    = $buildArtifactsFolder
-        AnyBuildArtifactsFolder = $anyBuildArtifactsFolder
+        NextVersion               = $null
+        TrashFolder               = $trashFolder
+        BuildArtifactsFolder      = $buildArtifactsFolder
+        LinuxBuildArtifactsFolder = $linuxBuildArtifactsFolder
+        WinBuildArtifactsFolder   = $winBuildArtifactsFolder
+        DockerImageName           = 'tiksn/fossa-api'
+        DockerImageVersionTag     = $null
+        DockerImageLatestTag      = $null
     }
 
     $state | Export-Clixml -Path ".\.trash\$Instance\state.clixml"
