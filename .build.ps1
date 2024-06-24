@@ -59,13 +59,14 @@ Task Pack Build, Test, {
     $dockerImageName = $state.DockerImageName
     $nextVersion = $state.NextVersion
     $linuxBuildArtifactsFolder = $state.LinuxBuildArtifactsFolder
+    $dockerFilePath = Resolve-Path -Path '.\src\API.Web\Dockerfile'
 
     $dockerImageVersionTag = "$($dockerImageName):$nextVersion"
     $dockerImageLatestTag = "$($dockerImageName):latest"
     $state.DockerImageVersionTag = $dockerImageVersionTag
     $state.DockerImageLatestTag = $dockerImageLatestTag
 
-    Exec { docker buildx build --file .\src\API.Web\Dockerfile --tag $dockerImageVersionTag --tag $dockerImageLatestTag $linuxBuildArtifactsFolder }
+    Exec { docker buildx build --file $dockerFilePath --tag $dockerImageVersionTag --tag $dockerImageLatestTag $linuxBuildArtifactsFolder }
 
     $state | Export-Clixml -Path ".\.trash\$Instance\state.clixml"
     Write-Output $state
