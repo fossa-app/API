@@ -66,6 +66,7 @@ namespace Fossa.API.Persistence.Mongo.Repositories
     public class CompanyMongoRepository : TIKSN.Data.Mongo.MongoRepository<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity, long>, Fossa.API.Persistence.Mongo.Repositories.ICompanyMongoRepository, TIKSN.Data.IQueryRepository<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity, long>, TIKSN.Data.IRepository<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity>, TIKSN.Data.IStreamRepository<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity>, TIKSN.Data.Mongo.IMongoRepository<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity, long>
     {
         public CompanyMongoRepository(TIKSN.Data.Mongo.IMongoClientSessionProvider mongoClientSessionProvider, TIKSN.Data.Mongo.IMongoDatabaseProvider mongoDatabaseProvider) { }
+        protected override MongoDB.Driver.SortDefinition<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity> PageSortDefinition { get; }
         public System.Threading.Tasks.Task<int> CountAllAsync(System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity>> FindByMonikerAsync(string moniker, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity>> FindByTenantIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken) { }
@@ -82,6 +83,7 @@ namespace Fossa.API.Persistence.Mongo.Repositories
     public class EmployeeMongoRepository : TIKSN.Data.Mongo.MongoRepository<Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity, long>, Fossa.API.Persistence.Mongo.Repositories.IEmployeeMongoRepository, TIKSN.Data.IQueryRepository<Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity, long>, TIKSN.Data.IRepository<Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity>, TIKSN.Data.IStreamRepository<Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity>, TIKSN.Data.Mongo.IMongoRepository<Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity, long>
     {
         public EmployeeMongoRepository(TIKSN.Data.Mongo.IMongoClientSessionProvider mongoClientSessionProvider, TIKSN.Data.Mongo.IMongoDatabaseProvider mongoDatabaseProvider) { }
+        protected override MongoDB.Driver.SortDefinition<Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity> PageSortDefinition { get; }
         public System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity>> FindByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity> GetByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity>> PageAsync(Fossa.API.Core.Repositories.TenantEmployeePageQuery pageQuery, System.Threading.CancellationToken cancellationToken) { }
@@ -123,6 +125,7 @@ namespace Fossa.API.Persistence.Mongo.Repositories
     public class SystemPropertiesMongoRepository : TIKSN.Data.Mongo.MongoRepository<Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity, long>, Fossa.API.Persistence.Mongo.Repositories.ISystemPropertiesMongoRepository, TIKSN.Data.IQueryRepository<Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity, long>, TIKSN.Data.IRepository<Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity>, TIKSN.Data.IStreamRepository<Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity>, TIKSN.Data.Mongo.IMongoRepository<Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity, long>
     {
         public SystemPropertiesMongoRepository(TIKSN.Data.Mongo.IMongoClientSessionProvider mongoClientSessionProvider, TIKSN.Data.Mongo.IMongoDatabaseProvider mongoDatabaseProvider) { }
+        protected override MongoDB.Driver.SortDefinition<Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity> PageSortDefinition { get; }
     }
     public class SystemPropertiesRepositoryAdapter : TIKSN.Data.Mongo.MongoRepositoryAdapter<Fossa.API.Core.Entities.SystemPropertiesEntity, Fossa.API.Core.Entities.SystemPropertiesId, Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity, long>, Fossa.API.Core.Repositories.ISystemPropertiesQueryRepository, Fossa.API.Core.Repositories.ISystemPropertiesRepository, TIKSN.Data.IQueryRepository<Fossa.API.Core.Entities.SystemPropertiesEntity, Fossa.API.Core.Entities.SystemPropertiesId>, TIKSN.Data.IRepository<Fossa.API.Core.Entities.SystemPropertiesEntity>
     {
