@@ -20,6 +20,9 @@ public class EmployeeMongoRepository
   {
   }
 
+  protected override SortDefinition<EmployeeMongoEntity> PageSortDefinition
+    => Builders<EmployeeMongoEntity>.Sort.Ascending(x => x.ID);
+
   public async Task<Option<EmployeeMongoEntity>> FindByUserIdAsync(
     Guid userId,
     CancellationToken cancellationToken)

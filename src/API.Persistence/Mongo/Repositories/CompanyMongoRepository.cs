@@ -19,41 +19,8 @@ public class CompanyMongoRepository
   {
   }
 
-  public async Task<Option<CompanyMongoEntity>> FindByTenantIdAsync(
-    Guid tenantId,
-    CancellationToken cancellationToken)
-  {
-    var filter =
-      Builders<CompanyMongoEntity>.Filter.Eq(item => item.TenantID, tenantId);
-
-    var entity = await SingleOrDefaultAsync(filter, cancellationToken).ConfigureAwait(false);
-
-    return Optional(entity);
-  }
-
-  public async Task<Option<CompanyMongoEntity>> FindByMonikerAsync(
-    string moniker,
-    CancellationToken cancellationToken)
-  {
-    var filter =
-      Builders<CompanyMongoEntity>.Filter.Eq(item => item.Moniker, moniker);
-
-    var entity = await SingleOrDefaultAsync(filter, cancellationToken).ConfigureAwait(false);
-
-    return Optional(entity);
-  }
-
-  public async Task<CompanyMongoEntity> GetByTenantIdAsync(
-    Guid tenantId,
-    CancellationToken cancellationToken)
-  {
-    var filter =
-      Builders<CompanyMongoEntity>.Filter.Eq(item => item.TenantID, tenantId);
-
-    var entity = await SingleOrDefaultAsync(filter, cancellationToken).ConfigureAwait(false);
-
-    return entity ?? throw new EntityNotFoundException();
-  }
+  protected override SortDefinition<CompanyMongoEntity> PageSortDefinition
+      => Builders<CompanyMongoEntity>.Sort.Ascending(x => x.ID);
 
   public async Task<int> CountAllAsync(CancellationToken cancellationToken)
   {
@@ -74,5 +41,41 @@ public class CompanyMongoRepository
       return Collection
         .CountDocumentsAsync(filter, options: null, cancellationToken);
     }
+  }
+
+  public async Task<Option<CompanyMongoEntity>> FindByMonikerAsync(
+    string moniker,
+    CancellationToken cancellationToken)
+  {
+    var filter =
+      Builders<CompanyMongoEntity>.Filter.Eq(item => item.Moniker, moniker);
+
+    var entity = await SingleOrDefaultAsync(filter, cancellationToken).ConfigureAwait(false);
+
+    return Optional(entity);
+  }
+
+  public async Task<Option<CompanyMongoEntity>> FindByTenantIdAsync(
+        Guid tenantId,
+    CancellationToken cancellationToken)
+  {
+    var filter =
+      Builders<CompanyMongoEntity>.Filter.Eq(item => item.TenantID, tenantId);
+
+    var entity = await SingleOrDefaultAsync(filter, cancellationToken).ConfigureAwait(false);
+
+    return Optional(entity);
+  }
+
+  public async Task<CompanyMongoEntity> GetByTenantIdAsync(
+    Guid tenantId,
+    CancellationToken cancellationToken)
+  {
+    var filter =
+      Builders<CompanyMongoEntity>.Filter.Eq(item => item.TenantID, tenantId);
+
+    var entity = await SingleOrDefaultAsync(filter, cancellationToken).ConfigureAwait(false);
+
+    return entity ?? throw new EntityNotFoundException();
   }
 }
