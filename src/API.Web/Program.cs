@@ -66,6 +66,9 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddFrameworkCore();
 builder.Services.AddLicense();
+builder.Services
+  .AddHealthChecks()
+  .AddMongoDb(builder.Configuration.GetConnectionString("MongoDB") ?? string.Empty);
 
 var assemblies = Seq(
     typeof(DefaultCoreModule),
@@ -110,6 +113,7 @@ app.UseRouting();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseCookiePolicy();
+app.UseHealthChecks("/healthchecks");
 
 app.UseAuthentication();
 app.UseAuthorization();
