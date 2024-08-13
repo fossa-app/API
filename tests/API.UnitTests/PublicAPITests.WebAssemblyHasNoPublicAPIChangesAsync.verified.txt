@@ -214,3 +214,13 @@ namespace Fossa.API.Web.Mappers
         public Fossa.API.Web.ApiModels.SystemEntitlementsModel Map(Fossa.Licensing.SystemEntitlements source) { }
     }
 }
+namespace HealthChecks.MongoDb
+{
+    public class MongoDbHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    {
+        public MongoDbHealthCheck(MongoDB.Driver.IMongoClient client, string? databaseName = null) { }
+        public MongoDbHealthCheck(MongoDB.Driver.MongoClientSettings clientSettings, string? databaseName = null) { }
+        public MongoDbHealthCheck(string connectionString, string? databaseName = null) { }
+        public System.Threading.Tasks.Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context, System.Threading.CancellationToken cancellationToken = default) { }
+    }
+}

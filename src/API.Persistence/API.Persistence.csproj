@@ -5,6 +5,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="TIKSN-Framework" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\API.Core\API.Core.csproj" />
     <ProjectReference Include="..\API.SharedKernel\API.SharedKernel.csproj" />
   </ItemGroup>

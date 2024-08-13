@@ -26,6 +26,7 @@
     <PackageReference Include="TIKSN-Framework" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\API.Core\API.Core.csproj" />
     <ProjectReference Include="..\API.Infrastructure\API.Infrastructure.csproj" />
     <ProjectReference Include="..\API.Persistence\API.Persistence.csproj" />
   </ItemGroup>
