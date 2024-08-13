@@ -68,7 +68,9 @@ builder.Services.AddFrameworkCore();
 builder.Services.AddLicense();
 builder.Services
   .AddHealthChecks()
-  .AddMongoDb(builder.Configuration.GetConnectionString("MongoDB") ?? string.Empty);
+  .AddMongoDb(builder.Configuration.GetConnectionString("MongoDB") ?? string.Empty)
+  .AddIdentityServer(new Uri(
+    builder.Configuration.GetSection("Identity").GetValue<string>("RootAddress") ?? string.Empty));
 
 var assemblies = Seq(
     typeof(DefaultCoreModule),

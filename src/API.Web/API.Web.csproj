@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" />
+    <PackageReference Include="AspNetCore.HealthChecks.OpenIdConnectServer" />
     <PackageReference Include="FluentValidation.AspNetCore" />
     <PackageReference Include="Hellang.Middleware.ProblemDetails" />
     <PackageReference Include="IdGen.DependencyInjection" />
