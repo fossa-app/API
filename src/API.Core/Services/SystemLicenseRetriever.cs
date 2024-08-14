@@ -1,27 +1,33 @@
-﻿using Fossa.API.Core.Repositories;
+﻿using System.Globalization;
+using Fossa.API.Core.Repositories;
 using Fossa.Licensing;
 using LanguageExt;
 using LanguageExt.Common;
+using Microsoft.Extensions.Hosting;
 using TIKSN.Licensing;
+using EnvironmentName = TIKSN.Deployment.EnvironmentName;
 
 namespace Fossa.API.Core.Services;
 
 public class SystemLicenseRetriever : ISystemLicenseRetriever
 {
   private readonly ICertificateProvider _certificateProvider;
-  private readonly ISystemPropertiesQueryRepository _systemPropertiesQueryRepository;
+  private readonly IHostEnvironment _hostEnvironment;
   private readonly ILicenseFactory<SystemEntitlements, SystemLicenseEntitlements> _licenseFactory;
   private readonly ILicenseFileRepository _licenseFileRepository;
+  private readonly ISystemPropertiesQueryRepository _systemPropertiesQueryRepository;
 
   public SystemLicenseRetriever(
     ILicenseFileRepository licenseFileRepository,
     ILicenseFactory<SystemEntitlements, SystemLicenseEntitlements> licenseFactory,
     ICertificateProvider certificateProvider,
+    IHostEnvironment hostEnvironment,
     ISystemPropertiesQueryRepository systemPropertiesQueryRepository)
   {
     _licenseFileRepository = licenseFileRepository ?? throw new ArgumentNullException(nameof(licenseFileRepository));
     _licenseFactory = licenseFactory ?? throw new ArgumentNullException(nameof(licenseFactory));
     _certificateProvider = certificateProvider ?? throw new ArgumentNullException(nameof(certificateProvider));
+    _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
     _systemPropertiesQueryRepository = systemPropertiesQueryRepository ?? throw new ArgumentNullException(nameof(systemPropertiesQueryRepository));
   }
 
@@ -41,6 +47,9 @@ public class SystemLicenseRetriever : ISystemLicenseRetriever
     return licenseValidation
       .Validate(
         license => license.Entitlements.SystemId == systemPropertiesEntity.SystemID,
-        11751858, "Current System License is issued to another system.");
+        11751858, "Current System License is issued to another system.")
+      .Validate(
+        license => EnvironmentName.Parse(_hostEnvironment.EnvironmentName, asciiOnly: true, CultureInfo.InvariantCulture).Match(x => x.Matches(license.Entitlements.EnvironmentName), None: false),
+        19509088, "Current System License is issued for another deployment environment.");
   }
 }
