@@ -70,7 +70,8 @@ builder.Services
   .AddHealthChecks()
   .AddMongoDb(builder.Configuration.GetConnectionString("MongoDB") ?? string.Empty)
   .AddIdentityServer(new Uri(
-    builder.Configuration.GetSection("Identity").GetValue<string>("RootAddress") ?? string.Empty));
+    builder.Configuration.GetSection("Identity").GetValue<string>("RootAddress") ?? string.Empty))
+  .AddSystemLicense();
 
 var assemblies = Seq(
     typeof(DefaultCoreModule),
