@@ -434,7 +434,7 @@ namespace Fossa.API.Core.Services
     }
     public class SystemLicenseRetriever : Fossa.API.Core.Services.ISystemLicenseRetriever
     {
-        public SystemLicenseRetriever(Fossa.API.Core.Repositories.ILicenseFileRepository licenseFileRepository, TIKSN.Licensing.ILicenseFactory<Fossa.Licensing.SystemEntitlements, Fossa.Licensing.SystemLicenseEntitlements> licenseFactory, Fossa.API.Core.Services.ICertificateProvider certificateProvider, Fossa.API.Core.Repositories.ISystemPropertiesQueryRepository systemPropertiesQueryRepository) { }
+        public SystemLicenseRetriever(Fossa.API.Core.Repositories.ILicenseFileRepository licenseFileRepository, TIKSN.Licensing.ILicenseFactory<Fossa.Licensing.SystemEntitlements, Fossa.Licensing.SystemLicenseEntitlements> licenseFactory, Fossa.API.Core.Services.ICertificateProvider certificateProvider, Microsoft.Extensions.Hosting.IHostEnvironment hostEnvironment, Fossa.API.Core.Repositories.ISystemPropertiesQueryRepository systemPropertiesQueryRepository) { }
         public System.Threading.Tasks.Task<LanguageExt.Validation<LanguageExt.Common.Error, TIKSN.Licensing.License<Fossa.Licensing.SystemEntitlements>>> GetAsync(System.Threading.CancellationToken cancellationToken) { }
     }
     public static class SystemProperties
