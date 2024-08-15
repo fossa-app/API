@@ -2,6 +2,7 @@
 using Autofac.Extensions.DependencyInjection;
 using FluentValidation;
 using Fossa.API.Core;
+using Fossa.API.Core.Extensions;
 using Fossa.API.Core.Messages;
 using Fossa.API.Core.Services;
 using Fossa.API.Infrastructure;
@@ -35,9 +36,9 @@ builder.Services.AddAuthentication(options => options.DefaultScheme = JwtBearerD
 {
   var identitySection = builder.Configuration.GetSection("Identity");
   options.Authority = identitySection.GetValue<string>("RootAddress");
-  options.RequireHttpsMetadata = !builder.Environment.IsDevelopment();
+  options.RequireHttpsMetadata = !builder.Environment.MatchesDevelopment();
   options.Audience = identitySection.GetValue<string>("Audience");
-  options.TokenValidationParameters.ValidateAudience = !builder.Environment.IsDevelopment();
+  options.TokenValidationParameters.ValidateAudience = !builder.Environment.MatchesDevelopment();
 });
 
 builder.Services.AddHttpContextAccessor();
