@@ -1,11 +1,10 @@
-﻿using System.Globalization;
+﻿using Fossa.API.Core.Extensions;
 using Fossa.API.Core.Repositories;
 using Fossa.Licensing;
 using LanguageExt;
 using LanguageExt.Common;
 using Microsoft.Extensions.Hosting;
 using TIKSN.Licensing;
-using EnvironmentName = TIKSN.Deployment.EnvironmentName;
 
 namespace Fossa.API.Core.Services;
 
@@ -49,7 +48,7 @@ public class SystemLicenseRetriever : ISystemLicenseRetriever
         license => license.Entitlements.SystemId == systemPropertiesEntity.SystemID,
         11751858, "Current System License is issued to another system.")
       .Validate(
-        license => EnvironmentName.Parse(_hostEnvironment.EnvironmentName, asciiOnly: true, CultureInfo.InvariantCulture).Match(x => x.Matches(license.Entitlements.EnvironmentName), None: false),
+        license => _hostEnvironment.MatchesEnvironment(license.Entitlements.EnvironmentName),
         19509088, "Current System License is issued for another deployment environment.");
   }
 }
