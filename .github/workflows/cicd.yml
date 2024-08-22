@@ -63,7 +63,7 @@ jobs:
     environment:
       name: "DockerHub"
       url: https://hub.docker.com/r/tiksn/fossa-api
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
@@ -80,6 +80,6 @@ jobs:
         run: Install-Module -Name InvokeBuild -Force
       - name: "Publish"
         env:
-          NUGET_API_KEY: ${{secrets.Docker_ACCESS_TOKEN}}
+          DOCKER_ACCESS_TOKEN: ${{secrets.DOCKER_ACCESS_TOKEN}}
         shell: pwsh
         run: .\publish.ps1 -Instance ${{github.run_id}}
