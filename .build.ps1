@@ -33,13 +33,13 @@ Task Publish Pack, {
     $dockerImageVersionTag = $state.DockerImageVersionTag
     $dockerImageLatestTag = $state.DockerImageLatestTag
 
-    if ($null -eq $env:Docker_ACCESS_TOKEN) {
+    if ($null -eq $env:DOCKER_ACCESS_TOKEN) {
         Import-Module -Name Microsoft.PowerShell.SecretManagement
         $credential = Get-Secret -Name 'Fossa-DockerHub-Credential'
     }
     else {
         $securePassword = New-Object SecureString
-        foreach ($char in $env:Docker_ACCESS_TOKEN.ToCharArray()) {
+        foreach ($char in $env:DOCKER_ACCESS_TOKEN.ToCharArray()) {
             $securePassword.AppendChar($char)
         }
         $credential = [PSCredential]::New('tiksn', $securePassword)

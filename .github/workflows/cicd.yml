@@ -80,6 +80,6 @@ jobs:
         run: Install-Module -Name InvokeBuild -Force
       - name: "Publish"
         env:
-          NUGET_API_KEY: ${{secrets.Docker_ACCESS_TOKEN}}
+          DOCKER_ACCESS_TOKEN: ${{secrets.DOCKER_ACCESS_TOKEN}}
         shell: pwsh
         run: .\publish.ps1 -Instance ${{github.run_id}}
