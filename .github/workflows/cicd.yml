@@ -63,7 +63,7 @@ jobs:
     environment:
       name: "DockerHub"
       url: https://hub.docker.com/r/tiksn/fossa-api
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
       - name: "Checkout"
         uses: actions/checkout@v4
