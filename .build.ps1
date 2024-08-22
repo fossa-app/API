@@ -32,6 +32,13 @@ Task Publish Pack, {
     $state = Import-Clixml -Path ".\.trash\$Instance\state.clixml"
     $dockerImageVersionTag = $state.DockerImageVersionTag
     $dockerImageLatestTag = $state.DockerImageLatestTag
+    $dockerImageVersionArchiveName = $state.DockerImageVersionArchiveName
+    $dockerImageLatestArchiveName = $state.DockerImageLatestArchiveName
+    $dockerImageVersionArchive = Resolve-Path -Path ".\.trash\$Instance\artifacts\$dockerImageVersionArchiveName"
+    $dockerImageLatestArchive = Resolve-Path -Path ".\.trash\$Instance\artifacts\$dockerImageLatestArchiveName"
+
+    Exec { docker image load --input $dockerImageVersionArchive }
+    Exec { docker image load --input $dockerImageLatestArchive }
 
     if ($null -eq $env:DOCKER_ACCESS_TOKEN) {
         Import-Module -Name Microsoft.PowerShell.SecretManagement
@@ -63,10 +70,18 @@ Task Pack Build, Test, {
 
     $dockerImageVersionTag = "$($dockerImageName):$nextVersion"
     $dockerImageLatestTag = "$($dockerImageName):latest"
-    $state.DockerImageVersionTag = $dockerImageVersionTag
-    $state.DockerImageLatestTag = $dockerImageLatestTag
+
+    $dockerImageVersionArchiveName = $state.DockerImageVersionArchiveName
+    $dockerImageLatestArchiveName = $state.DockerImageLatestArchiveName
+    $dockerImageVersionArchive = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath(".\.trash\$Instance\artifacts\$dockerImageVersionArchiveName")
+    $dockerImageLatestArchive = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath(".\.trash\$Instance\artifacts\$dockerImageLatestArchiveName")
 
     Exec { docker buildx build --file $dockerFilePath --tag $dockerImageVersionTag --tag $dockerImageLatestTag $linuxBuildArtifactsFolder }
+    Exec { docker image save --output $dockerImageVersionArchive $dockerImageVersionTag }
+    Exec { docker image save --output $dockerImageLatestArchive $dockerImageLatestTag }
+
+    $state.DockerImageVersionTag = $dockerImageVersionTag
+    $state.DockerImageLatestTag = $dockerImageLatestTag
 
     $state | Export-Clixml -Path ".\.trash\$Instance\state.clixml"
     Write-Output $state
@@ -289,14 +304,16 @@ Task Init {
     New-Item -Path $winBuildArtifactsFolder -ItemType Directory | Out-Null
 
     $state = [PSCustomObject]@{
-        NextVersion               = $null
-        TrashFolder               = $trashFolder
-        BuildArtifactsFolder      = $buildArtifactsFolder
-        LinuxBuildArtifactsFolder = $linuxBuildArtifactsFolder
-        WinBuildArtifactsFolder   = $winBuildArtifactsFolder
-        DockerImageName           = 'tiksn/fossa-api'
-        DockerImageVersionTag     = $null
-        DockerImageLatestTag      = $null
+        NextVersion                   = $null
+        TrashFolder                   = $trashFolder
+        BuildArtifactsFolder          = $buildArtifactsFolder
+        LinuxBuildArtifactsFolder     = $linuxBuildArtifactsFolder
+        WinBuildArtifactsFolder       = $winBuildArtifactsFolder
+        DockerImageName               = 'tiksn/fossa-api'
+        DockerImageVersionTag         = $null
+        DockerImageLatestTag          = $null
+        DockerImageVersionArchiveName = 'tiksn-fossa-api-version.tar'
+        DockerImageLatestArchiveName  = 'tiksn-fossa-api-latest.tar'
     }
 
     $state | Export-Clixml -Path ".\.trash\$Instance\state.clixml"
