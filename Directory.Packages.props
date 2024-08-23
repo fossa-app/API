@@ -5,7 +5,7 @@
     <PackageVersion Include="Autofac" Version="8.0.0" />
     <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="9.0.0" />
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />
-    <PackageVersion Include="EasyDoubles" Version="1.1.9" />
+    <PackageVersion Include="EasyDoubles" Version="1.1.10" />
     <PackageVersion Include="FluentValidation" Version="11.9.2" />
     <PackageVersion Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageVersion Include="Fossa.Licensing" Version="1.1.9" />
