@@ -87,14 +87,6 @@ namespace Fossa.API.Core.Entities
 }
 namespace Fossa.API.Core.Extensions
 {
-    public static class HostEnvironmentExtensions
-    {
-        public static bool MatchesDevelopment(this Microsoft.Extensions.Hosting.IHostEnvironment hostEnvironment) { }
-        public static bool MatchesEnvironment(this Microsoft.Extensions.Hosting.IHostEnvironment hostEnvironment, string environmentName) { }
-        public static bool MatchesEnvironment(this Microsoft.Extensions.Hosting.IHostEnvironment hostEnvironment, TIKSN.Deployment.EnvironmentName environmentName) { }
-        public static bool MatchesProduction(this Microsoft.Extensions.Hosting.IHostEnvironment hostEnvironment) { }
-        public static bool MatchesStaging(this Microsoft.Extensions.Hosting.IHostEnvironment hostEnvironment) { }
-    }
     public static class MonikerValidationExtensions
     {
         public static FluentValidation.IRuleBuilderOptions<T, string> OnlyAsciiLetterLowersAndDigits<T>(this FluentValidation.IRuleBuilder<T, string> ruleBuilder) { }

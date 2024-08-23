@@ -2,7 +2,6 @@
 using Autofac.Extensions.DependencyInjection;
 using FluentValidation;
 using Fossa.API.Core;
-using Fossa.API.Core.Extensions;
 using Fossa.API.Core.Messages;
 using Fossa.API.Core.Services;
 using Fossa.API.Infrastructure;
@@ -16,6 +15,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using TIKSN.DependencyInjection;
+using TIKSN.Deployment;
 using TIKSN.Mapping;
 using static LanguageExt.Prelude;
 
