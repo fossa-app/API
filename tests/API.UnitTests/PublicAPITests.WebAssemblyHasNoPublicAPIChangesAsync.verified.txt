@@ -60,6 +60,20 @@
         public System.Threading.Tasks.Task PutAsync(long id, [Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.EmployeeModificationModel model, System.Threading.CancellationToken cancellationToken) { }
     }
 }
+namespace Fossa.API.Web.Api.Identity
+{
+    [Asp.Versioning.ApiVersion(1D, null)]
+    [Microsoft.AspNetCore.Http.Tags(new string[] {
+            "Identity Client"})]
+    [Microsoft.AspNetCore.Mvc.ApiController]
+    [Microsoft.AspNetCore.Mvc.Route("api/{version:apiVersion}/Identity/[controller]")]
+    public class ClientController : Fossa.API.Web.Api.BaseApiController
+    {
+        public ClientController(MediatR.ISender sender, MediatR.IPublisher publisher) { }
+        [Microsoft.AspNetCore.Mvc.HttpGet]
+        public System.Threading.Tasks.Task<Fossa.API.Infrastructure.Models.IdentityClient> GetAsync(System.Threading.CancellationToken cancellationToken) { }
+    }
+}
 namespace Fossa.API.Web.Api.License
 {
     [Asp.Versioning.ApiVersion(1D, null)]

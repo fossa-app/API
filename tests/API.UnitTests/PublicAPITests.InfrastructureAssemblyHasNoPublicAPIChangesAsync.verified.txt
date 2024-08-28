@@ -2,7 +2,127 @@
 {
     public class DefaultInfrastructureModule : Autofac.Module
     {
-        public DefaultInfrastructureModule(bool isDevelopment, System.Reflection.Assembly? callingAssembly = null) { }
+        public DefaultInfrastructureModule() { }
         protected override void Load(Autofac.ContainerBuilder builder) { }
+    }
+}
+namespace Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters
+{
+    public class ActiveFusionAuthApplicationFilter : Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters.IFusionAuthApplicationFilter
+    {
+        public ActiveFusionAuthApplicationFilter() { }
+        public System.Threading.Tasks.Task<LanguageExt.Seq<Fossa.API.Infrastructure.Models.FusionAuthApplication>> FilterAsync(LanguageExt.Seq<Fossa.API.Infrastructure.Models.FusionAuthApplication> fusionAuthApplications, Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery query, System.Threading.CancellationToken cancellationToken) { }
+    }
+    public interface IFusionAuthApplicationFilter
+    {
+        System.Threading.Tasks.Task<LanguageExt.Seq<Fossa.API.Infrastructure.Models.FusionAuthApplication>> FilterAsync(LanguageExt.Seq<Fossa.API.Infrastructure.Models.FusionAuthApplication> fusionAuthApplications, Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery query, System.Threading.CancellationToken cancellationToken);
+    }
+}
+namespace Fossa.API.Infrastructure.Messages.Queries
+{
+    public class IdentityClientRetrievalQuery : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Infrastructure.Models.IdentityClient>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Infrastructure.Models.IdentityClient>, System.IEquatable<Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery>
+    {
+        public IdentityClientRetrievalQuery() { }
+    }
+    public class IdentityClientRetrievalQueryHandler : MediatR.IRequestHandler<Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery, Fossa.API.Infrastructure.Models.IdentityClient>
+    {
+        public IdentityClientRetrievalQueryHandler(Fossa.API.Infrastructure.RestClients.IFusionAuthRestClient fusionAuthRestClient, Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters.ActiveFusionAuthApplicationFilter activeFusionAuthApplicationFilter) { }
+        public System.Threading.Tasks.Task<Fossa.API.Infrastructure.Models.IdentityClient> Handle(Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery request, System.Threading.CancellationToken cancellationToken) { }
+    }
+}
+namespace Fossa.API.Infrastructure.Models
+{
+    public class FusionAuthApplication
+    {
+        public FusionAuthApplication() { }
+        [System.Text.Json.Serialization.JsonPropertyName("active")]
+        public bool Active { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("id")]
+        public System.Guid Id { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("insertInstant")]
+        public long InsertInstant { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("lastUpdateInstant")]
+        public long LastUpdateInstant { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("name")]
+        public string? Name { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("oauthConfiguration")]
+        public Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration? OauthConfiguration { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("scopes")]
+        public string[]? Scopes { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("state")]
+        public string? State { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("tenantId")]
+        public System.Guid TenantId { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("verificationStrategy")]
+        public string? VerificationStrategy { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("verifyRegistration")]
+        public bool VerifyRegistration { get; set; }
+    }
+    public class FusionAuthApplicationOauthConfiguration
+    {
+        public FusionAuthApplicationOauthConfiguration() { }
+        [System.Text.Json.Serialization.JsonPropertyName("authorizedOriginURLs")]
+        public string[]? AuthorizedOriginUrLs { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("authorizedRedirectURLs")]
+        public string[]? AuthorizedRedirectUrLs { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("authorizedURLValidationPolicy")]
+        public string? AuthorizedUrlValidationPolicy { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("clientAuthenticationPolicy")]
+        public string? ClientAuthenticationPolicy { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("clientId")]
+        public System.Guid ClientId { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("clientSecret")]
+        public string? ClientSecret { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("consentMode")]
+        public string? ConsentMode { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("debug")]
+        public bool Debug { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("enabledGrants")]
+        public string[]? EnabledGrants { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("generateRefreshTokens")]
+        public bool GenerateRefreshTokens { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("logoutBehavior")]
+        public string? LogoutBehavior { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("logoutURL")]
+        public string? LogoutUrl { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("proofKeyForCodeExchangePolicy")]
+        public string? ProofKeyForCodeExchangePolicy { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("relationship")]
+        public string? Relationship { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("requireClientAuthentication")]
+        public bool RequireClientAuthentication { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("requireRegistration")]
+        public bool RequireRegistration { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("scopeHandlingPolicy")]
+        public string? ScopeHandlingPolicy { get; set; }
+        [System.Text.Json.Serialization.JsonPropertyName("unknownScopePolicy")]
+        public string? UnknownScopePolicy { get; set; }
+    }
+    public class FusionAuthApplicationsListingResponse
+    {
+        public FusionAuthApplicationsListingResponse() { }
+        [System.Text.Json.Serialization.JsonPropertyName("applications")]
+        public Fossa.API.Infrastructure.Models.FusionAuthApplication[]? Applications { get; set; }
+    }
+    public class IdentityClient : System.IEquatable<Fossa.API.Infrastructure.Models.IdentityClient>
+    {
+        public IdentityClient(System.Guid ClientId, string ClientName, System.Guid TenantId) { }
+        public System.Guid ClientId { get; init; }
+        public string ClientName { get; init; }
+        public System.Guid TenantId { get; init; }
+    }
+}
+namespace Fossa.API.Infrastructure.RestClients
+{
+    public class FusionAuthRestClient : Fossa.API.Infrastructure.RestClients.IFusionAuthRestClient
+    {
+        public FusionAuthRestClient(System.Net.Http.HttpClient httpClient, Microsoft.Extensions.Logging.ILogger<Fossa.API.Infrastructure.RestClients.FusionAuthRestClient> logger) { }
+        public System.Threading.Tasks.Task<Fossa.API.Infrastructure.Models.FusionAuthApplicationsListingResponse?> GetApplicationsAsync(System.Threading.CancellationToken cancellationToken) { }
+        [Microsoft.Extensions.Logging.LoggerMessage(EventId=20786118, Level=Microsoft.Extensions.Logging.LogLevel.Information, Message="Retrieved `{ApplicationCount}` applications for `{TenantCount}` tenants")]
+        public static void LogRetrievedApplications(Microsoft.Extensions.Logging.ILogger logger, int applicationCount, int tenantCount) { }
+    }
+    public interface IFusionAuthRestClient
+    {
+        System.Threading.Tasks.Task<Fossa.API.Infrastructure.Models.FusionAuthApplicationsListingResponse?> GetApplicationsAsync(System.Threading.CancellationToken cancellationToken);
     }
 }
