@@ -1,10 +1,12 @@
-﻿using Autofac;
+﻿using System.Net.Http.Headers;
+using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using FluentValidation;
 using Fossa.API.Core;
 using Fossa.API.Core.Messages;
 using Fossa.API.Core.Services;
 using Fossa.API.Infrastructure;
+using Fossa.API.Infrastructure.RestClients;
 using Fossa.API.Persistence;
 using Fossa.API.Web;
 using Fossa.API.Web.DependencyInjection;
@@ -74,6 +76,14 @@ builder.Services
     builder.Configuration.GetSection("Identity").GetValue<string>("RootAddress") ?? string.Empty))
   .AddSystemLicense();
 
+builder.Services.AddHttpClient<IFusionAuthRestClient, FusionAuthRestClient>()
+  .ConfigureHttpClient((serviceProvider, httpClient) =>
+  {
+    httpClient.BaseAddress = new Uri(
+      builder.Configuration.GetSection("Identity").GetValue<string>("RootAddress") ?? string.Empty);
+    httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(builder.Configuration.GetSection("Identity").GetValue<string>("ApiKey") ?? string.Empty);
+  });
+
 var assemblies = Seq(
     typeof(DefaultCoreModule),
     typeof(DefaultInfrastructureModule),
@@ -102,7 +112,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 {
   containerBuilder.RegisterModule<CoreModule>();
   containerBuilder.RegisterModule(new DefaultCoreModule());
-  containerBuilder.RegisterModule(new DefaultInfrastructureModule(string.Equals(builder.Environment.EnvironmentName, "Development", StringComparison.OrdinalIgnoreCase)));
+  containerBuilder.RegisterModule(new DefaultInfrastructureModule());
   containerBuilder.RegisterModule<DefaultPersistenceModule>();
   containerBuilder.RegisterModule<DefaultWebModule>();
 });
