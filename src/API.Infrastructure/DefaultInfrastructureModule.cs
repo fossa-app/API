@@ -9,5 +9,6 @@ public class DefaultInfrastructureModule : Module
   protected override void Load(ContainerBuilder builder)
   {
     builder.RegisterType<ActiveFusionAuthApplicationFilter>().AsSelf().InstancePerLifetimeScope();
+    builder.RegisterType<OriginFusionAuthApplicationFilter>().AsSelf().InstancePerLifetimeScope();
   }
 }
