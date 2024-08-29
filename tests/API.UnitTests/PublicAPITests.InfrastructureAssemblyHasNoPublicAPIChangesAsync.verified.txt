@@ -17,16 +17,22 @@ namespace Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters
     {
         System.Threading.Tasks.Task<LanguageExt.Seq<Fossa.API.Infrastructure.Models.FusionAuthApplication>> FilterAsync(LanguageExt.Seq<Fossa.API.Infrastructure.Models.FusionAuthApplication> fusionAuthApplications, Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery query, System.Threading.CancellationToken cancellationToken);
     }
+    public class OriginFusionAuthApplicationFilter : Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters.IFusionAuthApplicationFilter
+    {
+        public OriginFusionAuthApplicationFilter() { }
+        public System.Threading.Tasks.Task<LanguageExt.Seq<Fossa.API.Infrastructure.Models.FusionAuthApplication>> FilterAsync(LanguageExt.Seq<Fossa.API.Infrastructure.Models.FusionAuthApplication> fusionAuthApplications, Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery query, System.Threading.CancellationToken cancellationToken) { }
+    }
 }
 namespace Fossa.API.Infrastructure.Messages.Queries
 {
     public class IdentityClientRetrievalQuery : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Infrastructure.Models.IdentityClient>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Infrastructure.Models.IdentityClient>, System.IEquatable<Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery>
     {
-        public IdentityClientRetrievalQuery() { }
+        public IdentityClientRetrievalQuery(LanguageExt.Option<System.Uri> Origin) { }
+        public LanguageExt.Option<System.Uri> Origin { get; init; }
     }
     public class IdentityClientRetrievalQueryHandler : MediatR.IRequestHandler<Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery, Fossa.API.Infrastructure.Models.IdentityClient>
     {
-        public IdentityClientRetrievalQueryHandler(Fossa.API.Infrastructure.RestClients.IFusionAuthRestClient fusionAuthRestClient, Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters.ActiveFusionAuthApplicationFilter activeFusionAuthApplicationFilter) { }
+        public IdentityClientRetrievalQueryHandler(Fossa.API.Infrastructure.RestClients.IFusionAuthRestClient fusionAuthRestClient, Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters.ActiveFusionAuthApplicationFilter activeFusionAuthApplicationFilter, Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters.OriginFusionAuthApplicationFilter originFusionAuthApplicationFilter) { }
         public System.Threading.Tasks.Task<Fossa.API.Infrastructure.Models.IdentityClient> Handle(Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery request, System.Threading.CancellationToken cancellationToken) { }
     }
 }

@@ -3,6 +3,7 @@ using Fossa.API.Infrastructure.Messages.Queries;
 using Fossa.API.Infrastructure.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using static LanguageExt.Prelude;
 
 namespace Fossa.API.Web.Api.Identity;
 
@@ -21,10 +22,12 @@ public class ClientController : BaseApiController
 
   [HttpGet]
   public async Task<IdentityClient> GetAsync(
+    [FromQuery] string? origin,
     CancellationToken cancellationToken)
   {
     var identityClient = await _sender.Send(
-      new IdentityClientRetrievalQuery(),
+      new IdentityClientRetrievalQuery(
+        Optional(origin).Map(x => new Uri(x))),
       cancellationToken);
 
     return identityClient;

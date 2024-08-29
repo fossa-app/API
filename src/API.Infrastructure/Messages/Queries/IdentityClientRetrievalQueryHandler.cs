@@ -15,11 +15,13 @@ public partial class IdentityClientRetrievalQueryHandler : IRequestHandler<Ident
 
   public IdentityClientRetrievalQueryHandler(
     IFusionAuthRestClient fusionAuthRestClient,
-    ActiveFusionAuthApplicationFilter activeFusionAuthApplicationFilter)
+    ActiveFusionAuthApplicationFilter activeFusionAuthApplicationFilter,
+    OriginFusionAuthApplicationFilter originFusionAuthApplicationFilter)
   {
     _fusionAuthRestClient = fusionAuthRestClient ?? throw new ArgumentNullException(nameof(fusionAuthRestClient));
     _fusionAuthApplicationFilters = List<IFusionAuthApplicationFilter>(
-      activeFusionAuthApplicationFilter);
+      activeFusionAuthApplicationFilter,
+      originFusionAuthApplicationFilter);
   }
 
   public async Task<IdentityClient> Handle(
