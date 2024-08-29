@@ -71,7 +71,7 @@ namespace Fossa.API.Web.Api.Identity
     {
         public ClientController(MediatR.ISender sender, MediatR.IPublisher publisher) { }
         [Microsoft.AspNetCore.Mvc.HttpGet]
-        public System.Threading.Tasks.Task<Fossa.API.Infrastructure.Models.IdentityClient> GetAsync(System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task<Fossa.API.Infrastructure.Models.IdentityClient> GetAsync([Microsoft.AspNetCore.Mvc.FromQuery] string? origin, System.Threading.CancellationToken cancellationToken) { }
     }
 }
 namespace Fossa.API.Web.Api.License
