@@ -2,5 +2,4 @@
 
 public record CompanyRetrievalModel(
   long Id,
-  string Name,
-  string Moniker);
+  string Name);

@@ -15,8 +15,7 @@ Authorization: Bearer {{AccessToken}}
 Content-Type: application/json
 
 {
-  "name": "Brooks Group",
-  "moniker": "brooks"
+  "name": "Brooks Group"
 }
 
 ###
@@ -25,8 +24,7 @@ Authorization: Bearer {{AccessToken}}
 Content-Type: application/json
 
 {
-  "name": "Brooks Group",
-  "moniker": "brooks"
+  "name": "Brooks Group"
 }
 
 ###

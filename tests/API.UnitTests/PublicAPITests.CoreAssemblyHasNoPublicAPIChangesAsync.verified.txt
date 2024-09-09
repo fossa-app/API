@@ -10,9 +10,8 @@ namespace Fossa.API.Core.Entities
 {
     public class CompanyEntity : System.IEquatable<Fossa.API.Core.Entities.CompanyEntity>, TIKSN.Data.IEntity<Fossa.API.Core.Entities.CompanyId>, TIKSN.Data.ITenantEntity<Fossa.API.Core.Entities.CompanyId, System.Guid>
     {
-        public CompanyEntity(Fossa.API.Core.Entities.CompanyId ID, System.Guid TenantID, string Name, string Moniker) { }
+        public CompanyEntity(Fossa.API.Core.Entities.CompanyId ID, System.Guid TenantID, string Name) { }
         public Fossa.API.Core.Entities.CompanyId ID { get; init; }
-        public string Moniker { get; init; }
         public string Name { get; init; }
         public System.Guid TenantID { get; init; }
     }
@@ -87,11 +86,6 @@ namespace Fossa.API.Core.Entities
 }
 namespace Fossa.API.Core.Extensions
 {
-    public static class MonikerValidationExtensions
-    {
-        public static FluentValidation.IRuleBuilderOptions<T, string> OnlyAsciiLetterLowersAndDigits<T>(this FluentValidation.IRuleBuilder<T, string> ruleBuilder) { }
-        public static FluentValidation.IRuleBuilderOptions<T, string> SubDomainLength<T>(this FluentValidation.IRuleBuilder<T, string> ruleBuilder) { }
-    }
     public static class ValidationExtensions
     {
         public static T GetOrThrow<T>(this LanguageExt.Validation<LanguageExt.Common.Error, T> validation) { }
@@ -181,9 +175,8 @@ namespace Fossa.API.Core.Messages.Commands
 {
     public class CompanyCreationCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Core.Entities.CompanyId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.CompanyCreationCommand>
     {
-        public CompanyCreationCommand(System.Guid TenantID, string Name, string Moniker) { }
+        public CompanyCreationCommand(System.Guid TenantID, string Name) { }
         public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.CompanyId> AffectingTenantEntitiesIdentities { get; }
-        public string Moniker { get; init; }
         public string Name { get; init; }
     }
     public class CompanyCreationCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.CompanyCreationCommand, MediatR.Unit>
@@ -204,10 +197,9 @@ namespace Fossa.API.Core.Messages.Commands
     }
     public class CompanyModificationCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Core.Entities.CompanyId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.CompanyModificationCommand>
     {
-        public CompanyModificationCommand(Fossa.API.Core.Entities.CompanyId ID, System.Guid TenantID, string Name, string Moniker) { }
+        public CompanyModificationCommand(Fossa.API.Core.Entities.CompanyId ID, System.Guid TenantID, string Name) { }
         public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.CompanyId> AffectingTenantEntitiesIdentities { get; }
         public Fossa.API.Core.Entities.CompanyId ID { get; init; }
-        public string Moniker { get; init; }
         public string Name { get; init; }
     }
     public class CompanyModificationCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.CompanyModificationCommand, MediatR.Unit>
@@ -370,7 +362,6 @@ namespace Fossa.API.Core.Repositories
     public interface ICompanyQueryRepository : TIKSN.Data.IQueryRepository<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Core.Entities.CompanyId>
     {
         System.Threading.Tasks.Task<int> CountAllAsync(System.Threading.CancellationToken cancellationToken);
-        System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Core.Entities.CompanyEntity>> FindByMonikerAsync(string moniker, System.Threading.CancellationToken cancellationToken);
         System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Core.Entities.CompanyEntity>> FindByTenantIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken);
         System.Threading.Tasks.Task<Fossa.API.Core.Entities.CompanyEntity> GetByTenantIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken);
     }

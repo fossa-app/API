@@ -10,10 +10,6 @@ public interface ICompanyQueryRepository : IQueryRepository<CompanyEntity, Compa
     Guid tenantId,
     CancellationToken cancellationToken);
 
-  Task<Option<CompanyEntity>> FindByMonikerAsync(
-    string moniker,
-    CancellationToken cancellationToken);
-
   Task<CompanyEntity> GetByTenantIdAsync(
     Guid tenantId,
     CancellationToken cancellationToken);

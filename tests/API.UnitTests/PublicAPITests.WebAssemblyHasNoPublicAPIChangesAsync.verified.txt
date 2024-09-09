@@ -92,15 +92,13 @@ namespace Fossa.API.Web.ApiModels
 {
     public class CompanyModificationModel : System.IEquatable<Fossa.API.Web.ApiModels.CompanyModificationModel>
     {
-        public CompanyModificationModel(string? Name, string? Moniker) { }
-        public string? Moniker { get; init; }
+        public CompanyModificationModel(string? Name) { }
         public string? Name { get; init; }
     }
     public class CompanyRetrievalModel : System.IEquatable<Fossa.API.Web.ApiModels.CompanyRetrievalModel>
     {
-        public CompanyRetrievalModel(long Id, string Name, string Moniker) { }
+        public CompanyRetrievalModel(long Id, string Name) { }
         public long Id { get; init; }
-        public string Moniker { get; init; }
         public string Name { get; init; }
     }
     public class EmployeeModificationModel : System.IEquatable<Fossa.API.Web.ApiModels.EmployeeModificationModel>

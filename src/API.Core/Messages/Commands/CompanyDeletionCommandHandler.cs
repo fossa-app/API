@@ -18,7 +18,7 @@ public class CompanyDeletionCommandHandler : IRequestHandler<CompanyDeletionComm
     CompanyDeletionCommand request,
     CancellationToken cancellationToken)
   {
-    CompanyEntity entity = new(request.ID, request.TenantID, string.Empty, string.Empty);
+    CompanyEntity entity = new(request.ID, request.TenantID, string.Empty);
     await _companyRepository.RemoveAsync(entity, cancellationToken).ConfigureAwait(false);
     return Unit.Value;
   }
