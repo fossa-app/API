@@ -1,8 +1,6 @@
 ﻿using System.Globalization;
 using System.Net.Mail;
-using EasyDoubles;
 using Fossa.API.Core.Extensions;
-using Fossa.API.Core.Repositories;
 using Fossa.API.Core.Services;
 using Fossa.API.FunctionalTests.Repositories;
 using Fossa.API.FunctionalTests.Services;

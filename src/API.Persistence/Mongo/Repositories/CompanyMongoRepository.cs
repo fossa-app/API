@@ -43,18 +43,6 @@ public class CompanyMongoRepository
     }
   }
 
-  public async Task<Option<CompanyMongoEntity>> FindByMonikerAsync(
-    string moniker,
-    CancellationToken cancellationToken)
-  {
-    var filter =
-      Builders<CompanyMongoEntity>.Filter.Eq(item => item.Moniker, moniker);
-
-    var entity = await SingleOrDefaultAsync(filter, cancellationToken).ConfigureAwait(false);
-
-    return Optional(entity);
-  }
-
   public async Task<Option<CompanyMongoEntity>> FindByTenantIdAsync(
         Guid tenantId,
     CancellationToken cancellationToken)

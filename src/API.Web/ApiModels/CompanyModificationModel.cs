@@ -1,3 +1,3 @@
 ﻿namespace Fossa.API.Web.ApiModels;
 
-public record CompanyModificationModel(string? Name, string? Moniker);
+public record CompanyModificationModel(string? Name);
