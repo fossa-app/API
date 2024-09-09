@@ -149,6 +149,11 @@ app.UseSwaggerUI(
       }
     });
 
+app.MapGet("/", context =>
+{
+  context.Response.Redirect("swagger");
+  return Task.CompletedTask;
+});
 app.MapDefaultControllerRoute();
 
 app.Services.GetRequiredService<IdGenSetupLogger>().LogIdGenSetup();
