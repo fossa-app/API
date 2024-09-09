@@ -54,7 +54,8 @@ jobs:
         uses: actions/upload-artifact@v4.4.0
         with:
           name: .trash
-          path: "./.trash"
+          path: ".trash"
+          include-hidden-files: true
 
   cd:
     name: CD
