@@ -43,6 +43,20 @@ builder.Services.AddAuthentication(options => options.DefaultScheme = JwtBearerD
   options.TokenValidationParameters.ValidateAudience = !builder.Environment.MatchesDevelopment();
 });
 
+builder.Services.AddCors(options =>
+{
+  if (builder.Environment.MatchesDevelopment())
+  {
+    options.AddDefaultPolicy(builder =>
+    {
+      builder
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    });
+  }
+});
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddProblemDetails(ProblemDetailsHelper.ConfigureProblemDetails);
 builder.Services.AddControllers()
@@ -123,7 +137,7 @@ var app = builder.Build();
 
 app.UseProblemDetails();
 app.UseRouting();
-
+app.UseCors();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseCookiePolicy();
