@@ -1,5 +1,6 @@
 ﻿using Asp.Versioning;
 using Fossa.API.Core.Entities;
+using Fossa.API.Core.Messages.Commands;
 using Fossa.API.Core.Messages.Queries;
 using Fossa.API.Core.Tenant;
 using Fossa.API.Core.User;
@@ -45,5 +46,41 @@ public class EmployeeController : BaseApiController<EmployeeId>
       cancellationToken);
 
     return mapper.Map(entity);
+  }
+
+  [HttpPost]
+  public async Task PostAsync(
+    [FromBody] EmployeeModificationModel model,
+    CancellationToken cancellationToken)
+  {
+    var tenantId = _tenantIdProvider.GetTenantId();
+    var userId = _userIdProvider.GetUserId();
+    await _sender.Send(
+      new EmployeeCreationCommand(
+        tenantId,
+        userId,
+        model.FirstName ?? string.Empty,
+        model.LastName ?? string.Empty,
+        model.FullName ?? string.Empty),
+      cancellationToken);
+  }
+
+  [HttpPut("{id}")]
+  public async Task PutAsync(
+    long id,
+    [FromBody] EmployeeModificationModel model,
+    CancellationToken cancellationToken)
+  {
+    var tenantId = _tenantIdProvider.GetTenantId();
+    var userId = _userIdProvider.GetUserId();
+    await _sender.Send(
+      new EmployeeModificationCommand(
+        _dataIdentityToDomainIdentityMapper.Map(id),
+        tenantId,
+        userId,
+        model.FirstName ?? string.Empty,
+        model.LastName ?? string.Empty,
+        model.FullName ?? string.Empty),
+      cancellationToken);
   }
 }
