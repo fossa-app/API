@@ -20,6 +20,24 @@
     [Microsoft.AspNetCore.Authorization.Authorize]
     [Microsoft.AspNetCore.Mvc.ApiController]
     [Microsoft.AspNetCore.Mvc.Route("api/{version:apiVersion}/[controller]")]
+    public class BranchesController : Fossa.API.Web.Api.BaseApiController<Fossa.API.Core.Entities.BranchId>
+    {
+        public BranchesController(Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, MediatR.ISender sender, MediatR.IPublisher publisher, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.BranchId> dataIdentityToDomainIdentityMapper) { }
+        [Microsoft.AspNetCore.Mvc.HttpGet("{id}")]
+        public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.BranchRetrievalModel> GetAsync([Microsoft.AspNetCore.Mvc.FromRoute] long id, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Web.ApiModels.BranchRetrievalModel> mapper, System.Threading.CancellationToken cancellationToken) { }
+        [Microsoft.AspNetCore.Mvc.HttpGet]
+        public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.BranchRetrievalModel>> PageAsync([Microsoft.AspNetCore.Mvc.FromQuery] Fossa.API.Web.ApiModels.BranchPagingRequestModel requestModel, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<TIKSN.Data.PageResult<Fossa.API.Core.Entities.BranchEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.BranchRetrievalModel>> mapper, System.Threading.CancellationToken cancellationToken) { }
+        [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
+        [Microsoft.AspNetCore.Mvc.HttpPost]
+        public System.Threading.Tasks.Task PostAsync([Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.BranchModificationModel model, System.Threading.CancellationToken cancellationToken) { }
+        [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
+        [Microsoft.AspNetCore.Mvc.HttpPut("{id}")]
+        public System.Threading.Tasks.Task PutAsync(long id, [Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.BranchModificationModel model, System.Threading.CancellationToken cancellationToken) { }
+    }
+    [Asp.Versioning.ApiVersion(1D, null)]
+    [Microsoft.AspNetCore.Authorization.Authorize]
+    [Microsoft.AspNetCore.Mvc.ApiController]
+    [Microsoft.AspNetCore.Mvc.Route("api/{version:apiVersion}/[controller]")]
     public class CompanyController : Fossa.API.Web.Api.BaseApiController<Fossa.API.Core.Entities.CompanyId>
     {
         public CompanyController(Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, MediatR.ISender sender, MediatR.IPublisher publisher, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId> dataIdentityToDomainIdentityMapper) { }
@@ -90,6 +108,24 @@ namespace Fossa.API.Web.Api.License
 }
 namespace Fossa.API.Web.ApiModels
 {
+    public class BranchModificationModel : System.IEquatable<Fossa.API.Web.ApiModels.BranchModificationModel>
+    {
+        public BranchModificationModel(string? Name) { }
+        public string? Name { get; init; }
+    }
+    public class BranchPagingRequestModel : System.IEquatable<Fossa.API.Web.ApiModels.BranchPagingRequestModel>
+    {
+        public BranchPagingRequestModel(int? PageNumber, int? PageSize) { }
+        public int? PageNumber { get; init; }
+        public int? PageSize { get; init; }
+    }
+    public class BranchRetrievalModel : System.IEquatable<Fossa.API.Web.ApiModels.BranchRetrievalModel>
+    {
+        public BranchRetrievalModel(long Id, long CompanyId, string Name) { }
+        public long CompanyId { get; init; }
+        public long Id { get; init; }
+        public string Name { get; init; }
+    }
     public class CompanyModificationModel : System.IEquatable<Fossa.API.Web.ApiModels.CompanyModificationModel>
     {
         public CompanyModificationModel(string? Name) { }
@@ -170,6 +206,10 @@ namespace Fossa.API.Web
     {
         public IdGenSetupLogger(IdGen.IdGenerator idGenerator, Microsoft.Extensions.Logging.ILogger<Fossa.API.Web.IdGenSetupLogger> logger) { }
         public void LogIdGenSetup() { }
+    }
+    public static class Roles
+    {
+        public const string Administrator = "administrator";
     }
 }
 namespace Fossa.API.Web.DependencyInjection

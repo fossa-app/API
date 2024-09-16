@@ -39,7 +39,7 @@ public class EmployeeCreationCommandHandler : IRequestHandler<EmployeeCreationCo
     var companyEntity = await _companyQueryRepository.FindByTenantIdAsync(request.TenantID, cancellationToken)
       .ConfigureAwait(false);
 
-    _ = await companyEntity.MatchAsync(
+    await companyEntity.Match(
         s => CreateEmployeeAsync(s, request, cancellationToken),
         () => throw new InvalidOperationException("A company for this tenant have not been created."))
       .ConfigureAwait(false);
