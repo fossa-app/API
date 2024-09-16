@@ -71,6 +71,7 @@ public class BranchesController : BaseApiController<BranchId>
   }
 
   [HttpPost]
+  [Authorize(Roles = Roles.Administrator)]
   public async Task PostAsync(
     [FromBody] BranchModificationModel model,
     CancellationToken cancellationToken)
@@ -86,6 +87,7 @@ public class BranchesController : BaseApiController<BranchId>
   }
 
   [HttpPut("{id}")]
+  [Authorize(Roles = Roles.Administrator)]
   public async Task PutAsync(
     long id,
     [FromBody] BranchModificationModel model,

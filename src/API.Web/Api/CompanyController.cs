@@ -31,7 +31,7 @@ public class CompanyController : BaseApiController<CompanyId>
   }
 
   [HttpDelete("{id}")]
-  [Authorize(Roles = "administrator")]
+  [Authorize(Roles = Roles.Administrator)]
   public async Task DeleteAsync(
     long id,
     CancellationToken cancellationToken)
@@ -55,7 +55,7 @@ public class CompanyController : BaseApiController<CompanyId>
   }
 
   [HttpPost]
-  [Authorize(Roles = "administrator")]
+  [Authorize(Roles = Roles.Administrator)]
   public async Task PostAsync(
     [FromBody] CompanyModificationModel model,
     CancellationToken cancellationToken)
@@ -67,7 +67,7 @@ public class CompanyController : BaseApiController<CompanyId>
   }
 
   [HttpPut("{id}")]
-  [Authorize(Roles = "administrator")]
+  [Authorize(Roles = Roles.Administrator)]
   public async Task PutAsync(
     long id,
     [FromBody] CompanyModificationModel model,
