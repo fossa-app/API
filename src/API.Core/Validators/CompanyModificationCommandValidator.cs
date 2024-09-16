@@ -8,7 +8,6 @@ public class CompanyModificationCommandValidator : AbstractValidator<CompanyModi
 {
   public CompanyModificationCommandValidator(ICompanyQueryRepository companyQueryRepository)
   {
-    RuleFor(x => x.ID).NotEmpty();
     RuleFor(x => x.TenantID).NotEmpty();
     RuleFor(x => x.Name).NotEmpty();
   }

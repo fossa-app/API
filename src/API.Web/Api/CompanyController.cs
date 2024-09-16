@@ -54,17 +54,15 @@ public class CompanyController : BaseApiController<CompanyId>
       cancellationToken);
   }
 
-  [HttpPut("{id}")]
+  [HttpPut]
   [Authorize(Roles = Roles.Administrator)]
   public async Task PutAsync(
-    long id,
     [FromBody] CompanyModificationModel model,
     CancellationToken cancellationToken)
   {
     var tenantId = _tenantIdProvider.GetTenantId();
     await _sender.Send(
       new CompanyModificationCommand(
-        _dataIdentityToDomainIdentityMapper.Map(id),
         tenantId,
         model.Name ?? string.Empty),
       cancellationToken);

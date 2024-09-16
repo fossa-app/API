@@ -7,7 +7,6 @@ public class EmployeeModificationCommandValidator : AbstractValidator<EmployeeMo
 {
   public EmployeeModificationCommandValidator()
   {
-    RuleFor(x => x.ID).NotEmpty();
     RuleFor(x => x.TenantID).NotEmpty();
     RuleFor(x => x.UserID).NotEmpty();
     RuleFor(x => x.FirstName).NotEmpty();

@@ -65,9 +65,8 @@ public class EmployeeController : BaseApiController<EmployeeId>
       cancellationToken);
   }
 
-  [HttpPut("{id}")]
+  [HttpPut]
   public async Task PutAsync(
-    long id,
     [FromBody] EmployeeModificationModel model,
     CancellationToken cancellationToken)
   {
@@ -75,7 +74,6 @@ public class EmployeeController : BaseApiController<EmployeeId>
     var userId = _userIdProvider.GetUserId();
     await _sender.Send(
       new EmployeeModificationCommand(
-        _dataIdentityToDomainIdentityMapper.Map(id),
         tenantId,
         userId,
         model.FirstName ?? string.Empty,
