@@ -8,6 +8,32 @@
 }
 namespace Fossa.API.Core.Entities
 {
+    public class BranchEntity : System.IEquatable<Fossa.API.Core.Entities.BranchEntity>, TIKSN.Data.IEntity<Fossa.API.Core.Entities.BranchId>, TIKSN.Data.ITenantEntity<Fossa.API.Core.Entities.BranchId, System.Guid>, TIKSN.Data.IUserEntity<Fossa.API.Core.Entities.BranchId, System.Guid>
+    {
+        public BranchEntity(Fossa.API.Core.Entities.BranchId ID, System.Guid TenantID, System.Guid UserID, Fossa.API.Core.Entities.CompanyId CompanyId, string Name) { }
+        public Fossa.API.Core.Entities.CompanyId CompanyId { get; init; }
+        public Fossa.API.Core.Entities.BranchId ID { get; init; }
+        public string Name { get; init; }
+        public System.Guid TenantID { get; init; }
+        public System.Guid UserID { get; init; }
+    }
+    [System.ComponentModel.TypeConverter(typeof(Fossa.API.Core.Entities.BranchId.BranchIdTypeConverter))]
+    public readonly struct BranchId : System.IEquatable<Fossa.API.Core.Entities.BranchId>, System.IFormattable, System.ISpanFormattable, System.IUtf8SpanFormattable, System.Numerics.IEqualityOperators<Fossa.API.Core.Entities.BranchId, Fossa.API.Core.Entities.BranchId, bool>
+    {
+        public BranchId(long value) { }
+        public long AsPrimitive() { }
+        public bool Equals(Fossa.API.Core.Entities.BranchId other) { }
+        public override bool Equals(object obj) { }
+        public override int GetHashCode() { }
+        public override string ToString() { }
+        public string ToString(string? format, System.IFormatProvider? formatProvider) { }
+        public bool TryFormat(System.Span<byte> utf8Destination, out int bytesWritten, System.ReadOnlySpan<char> format, System.IFormatProvider? provider) { }
+        public bool TryFormat(System.Span<char> destination, out int charsWritten, System.ReadOnlySpan<char> format, System.IFormatProvider? provider) { }
+        public static long op_Explicit(Fossa.API.Core.Entities.BranchId value) { }
+        public static Fossa.API.Core.Entities.BranchId op_Explicit(long value) { }
+        public static bool operator !=(Fossa.API.Core.Entities.BranchId x, Fossa.API.Core.Entities.BranchId y) { }
+        public static bool operator ==(Fossa.API.Core.Entities.BranchId x, Fossa.API.Core.Entities.BranchId y) { }
+    }
     public class CompanyEntity : System.IEquatable<Fossa.API.Core.Entities.CompanyEntity>, TIKSN.Data.IEntity<Fossa.API.Core.Entities.CompanyId>, TIKSN.Data.ITenantEntity<Fossa.API.Core.Entities.CompanyId, System.Guid>
     {
         public CompanyEntity(Fossa.API.Core.Entities.CompanyId ID, System.Guid TenantID, string Name) { }
@@ -93,6 +119,12 @@ namespace Fossa.API.Core.Extensions
 }
 namespace Fossa.API.Core.Mappers
 {
+    public class BranchIdMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchId, long>, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.BranchId>
+    {
+        public BranchIdMapper() { }
+        public long Map(Fossa.API.Core.Entities.BranchId source) { }
+        public Fossa.API.Core.Entities.BranchId Map(long source) { }
+    }
     public class CompanyIdMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long>, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId>
     {
         public CompanyIdMapper() { }
@@ -173,6 +205,32 @@ namespace Fossa.API.Core.Messages
 }
 namespace Fossa.API.Core.Messages.Commands
 {
+    public class BranchCreationCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Core.Entities.BranchId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.BranchCreationCommand>
+    {
+        public BranchCreationCommand(System.Guid TenantID, System.Guid UserID, string Name) { }
+        public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.BranchId> AffectingTenantEntitiesIdentities { get; }
+        public string Name { get; init; }
+        public System.Guid UserID { get; init; }
+    }
+    public class BranchCreationCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.BranchCreationCommand, MediatR.Unit>
+    {
+        public BranchCreationCommandHandler(TIKSN.Identity.IIdentityGenerator<Fossa.API.Core.Entities.BranchId> identityGenerator, Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, Fossa.API.Core.Repositories.IBranchRepository branchRepository) { }
+        public System.Threading.Tasks.Task CreateBranchAsync(Fossa.API.Core.Entities.CompanyEntity companyEntity, Fossa.API.Core.Messages.Commands.BranchCreationCommand request, System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.BranchCreationCommand request, System.Threading.CancellationToken cancellationToken) { }
+    }
+    public class BranchModificationCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Core.Entities.BranchId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.BranchModificationCommand>
+    {
+        public BranchModificationCommand(Fossa.API.Core.Entities.BranchId ID, System.Guid TenantID, System.Guid UserID, string Name) { }
+        public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.BranchId> AffectingTenantEntitiesIdentities { get; }
+        public Fossa.API.Core.Entities.BranchId ID { get; init; }
+        public string Name { get; init; }
+        public System.Guid UserID { get; init; }
+    }
+    public class BranchModificationCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.BranchModificationCommand, MediatR.Unit>
+    {
+        public BranchModificationCommandHandler(Fossa.API.Core.Repositories.IBranchQueryRepository branchQueryRepository, Fossa.API.Core.Repositories.IBranchRepository branchRepository) { }
+        public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.BranchModificationCommand request, System.Threading.CancellationToken cancellationToken) { }
+    }
     public class CompanyCreationCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Core.Entities.CompanyId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.CompanyCreationCommand>
     {
         public CompanyCreationCommand(System.Guid TenantID, string Name) { }
@@ -283,6 +341,30 @@ namespace Fossa.API.Core.Messages.Events
 }
 namespace Fossa.API.Core.Messages.Queries
 {
+    public class BranchPagingQuery : Fossa.API.Core.Messages.Queries.EntityTenantQuery<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Core.Entities.BranchId, System.Guid, TIKSN.Data.PageResult<Fossa.API.Core.Entities.BranchEntity>>, Fossa.API.Core.Messages.Queries.IPagingQuery, Fossa.API.Core.Messages.Queries.IPagingQuery<Fossa.API.Core.Entities.BranchEntity>, Fossa.API.Core.Messages.Queries.IQuery<TIKSN.Data.PageResult<Fossa.API.Core.Entities.BranchEntity>>, MediatR.IBaseRequest, MediatR.IRequest<TIKSN.Data.PageResult<Fossa.API.Core.Entities.BranchEntity>>, System.IEquatable<Fossa.API.Core.Messages.Queries.BranchPagingQuery>
+    {
+        public BranchPagingQuery(System.Guid TenantID, System.Guid UserID, TIKSN.Data.Page Page) { }
+        public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.BranchId> AffectingTenantEntitiesIdentities { get; }
+        public TIKSN.Data.Page Page { get; init; }
+        public System.Guid UserID { get; init; }
+    }
+    public class BranchPagingQueryHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Queries.BranchPagingQuery, TIKSN.Data.PageResult<Fossa.API.Core.Entities.BranchEntity>>
+    {
+        public BranchPagingQueryHandler(Fossa.API.Core.Repositories.IBranchQueryRepository branchQueryRepository) { }
+        public System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Core.Entities.BranchEntity>> Handle(Fossa.API.Core.Messages.Queries.BranchPagingQuery request, System.Threading.CancellationToken cancellationToken) { }
+    }
+    public class BranchRetrievalQuery : Fossa.API.Core.Messages.Queries.EntityTenantQuery<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Core.Entities.BranchId, System.Guid, Fossa.API.Core.Entities.BranchEntity>, System.IEquatable<Fossa.API.Core.Messages.Queries.BranchRetrievalQuery>
+    {
+        public BranchRetrievalQuery(Fossa.API.Core.Entities.BranchId ID, System.Guid TenantID, System.Guid UserID) { }
+        public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.BranchId> AffectingTenantEntitiesIdentities { get; }
+        public Fossa.API.Core.Entities.BranchId ID { get; init; }
+        public System.Guid UserID { get; init; }
+    }
+    public class BranchRetrievalQueryHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Queries.BranchRetrievalQuery, Fossa.API.Core.Entities.BranchEntity>
+    {
+        public BranchRetrievalQueryHandler(Fossa.API.Core.Repositories.IBranchQueryRepository branchQueryRepository) { }
+        public System.Threading.Tasks.Task<Fossa.API.Core.Entities.BranchEntity> Handle(Fossa.API.Core.Messages.Queries.BranchRetrievalQuery request, System.Threading.CancellationToken cancellationToken) { }
+    }
     public class CompanyRetrievalQuery : Fossa.API.Core.Messages.Queries.EntityTenantQuery<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Core.Entities.CompanyId, System.Guid, Fossa.API.Core.Entities.CompanyEntity>, System.IEquatable<Fossa.API.Core.Messages.Queries.CompanyRetrievalQuery>
     {
         public CompanyRetrievalQuery(System.Guid TenantID) { }
@@ -359,6 +441,11 @@ namespace Fossa.API.Core.Messages.Queries
 }
 namespace Fossa.API.Core.Repositories
 {
+    public interface IBranchQueryRepository : TIKSN.Data.IQueryRepository<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Core.Entities.BranchId>
+    {
+        System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Core.Entities.BranchEntity>> PageAsync(Fossa.API.Core.Repositories.TenantBranchPageQuery pageQuery, System.Threading.CancellationToken cancellationToken);
+    }
+    public interface IBranchRepository : TIKSN.Data.IRepository<Fossa.API.Core.Entities.BranchEntity> { }
     public interface ICompanyQueryRepository : TIKSN.Data.IQueryRepository<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Core.Entities.CompanyId>
     {
         System.Threading.Tasks.Task<int> CountAllAsync(System.Threading.CancellationToken cancellationToken);
@@ -376,6 +463,11 @@ namespace Fossa.API.Core.Repositories
     public interface ILicenseFileRepository : TIKSN.Data.IFileRepository { }
     public interface ISystemPropertiesQueryRepository : TIKSN.Data.IQueryRepository<Fossa.API.Core.Entities.SystemPropertiesEntity, Fossa.API.Core.Entities.SystemPropertiesId> { }
     public interface ISystemPropertiesRepository : TIKSN.Data.IRepository<Fossa.API.Core.Entities.SystemPropertiesEntity> { }
+    public class TenantBranchPageQuery : TIKSN.Data.PageQuery
+    {
+        public TenantBranchPageQuery(System.Guid tenantId, TIKSN.Data.Page page) { }
+        public System.Guid TenantId { get; }
+    }
     public class TenantEmployeePageQuery : TIKSN.Data.PageQuery
     {
         public TenantEmployeePageQuery(System.Guid tenantId, TIKSN.Data.Page page) { }
@@ -456,6 +548,18 @@ namespace Fossa.API.Core.User
 }
 namespace Fossa.API.Core.Validators
 {
+    public class BranchCreationCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.BranchCreationCommand>
+    {
+        public BranchCreationCommandValidator() { }
+    }
+    public class BranchModificationCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.BranchModificationCommand>
+    {
+        public BranchModificationCommandValidator() { }
+    }
+    public class BranchRetrievalQueryValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Queries.BranchRetrievalQuery>
+    {
+        public BranchRetrievalQueryValidator() { }
+    }
     public class CompanyCreationCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.CompanyCreationCommand>
     {
         public CompanyCreationCommandValidator(Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository) { }
