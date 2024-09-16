@@ -8,6 +8,18 @@
 }
 namespace Fossa.API.Persistence.Mongo.Entities
 {
+    public class BranchMongoEntity : TIKSN.Data.IEntity<long>
+    {
+        public BranchMongoEntity() { }
+        public long CompanyId { get; set; }
+        [MongoDB.Bson.Serialization.Attributes.BsonId]
+        public long ID { get; set; }
+        public string? Name { get; set; }
+        [MongoDB.Bson.Serialization.Attributes.BsonGuidRepresentation(MongoDB.Bson.GuidRepresentation.Standard)]
+        public System.Guid TenantID { get; set; }
+        [MongoDB.Bson.Serialization.Attributes.BsonGuidRepresentation(MongoDB.Bson.GuidRepresentation.Standard)]
+        public System.Guid UserID { get; set; }
+    }
     public class CompanyMongoEntity : TIKSN.Data.IEntity<long>
     {
         public CompanyMongoEntity() { }
@@ -41,6 +53,12 @@ namespace Fossa.API.Persistence.Mongo.Entities
 }
 namespace Fossa.API.Persistence.Mongo.Mappers
 {
+    public class BranchMongoMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity>, TIKSN.Mapping.IMapper<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity, Fossa.API.Core.Entities.BranchEntity>
+    {
+        public BranchMongoMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.BranchId> dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> companyDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId> companyDataIdentityToDomainIdentityMapper) { }
+        public Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity Map(Fossa.API.Core.Entities.BranchEntity source) { }
+        public Fossa.API.Core.Entities.BranchEntity Map(Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity source) { }
+    }
     public class CompanyMongoMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity>, TIKSN.Mapping.IMapper<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity, Fossa.API.Core.Entities.CompanyEntity>
     {
         public CompanyMongoMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId> dataIdentityToDomainIdentityMapper) { }
@@ -62,6 +80,17 @@ namespace Fossa.API.Persistence.Mongo.Mappers
 }
 namespace Fossa.API.Persistence.Mongo.Repositories
 {
+    public class BranchMongoRepository : TIKSN.Data.Mongo.MongoRepository<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity, long>, Fossa.API.Persistence.Mongo.Repositories.IBranchMongoRepository, TIKSN.Data.IQueryRepository<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity, long>, TIKSN.Data.IRepository<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity>, TIKSN.Data.IStreamRepository<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity>, TIKSN.Data.Mongo.IMongoRepository<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity, long>
+    {
+        public BranchMongoRepository(TIKSN.Data.Mongo.IMongoClientSessionProvider mongoClientSessionProvider, TIKSN.Data.Mongo.IMongoDatabaseProvider mongoDatabaseProvider) { }
+        protected override MongoDB.Driver.SortDefinition<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity> PageSortDefinition { get; }
+        public System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity>> PageAsync(Fossa.API.Core.Repositories.TenantBranchPageQuery pageQuery, System.Threading.CancellationToken cancellationToken) { }
+    }
+    public class BranchRepositoryAdapter : TIKSN.Data.Mongo.MongoRepositoryAdapter<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Core.Entities.BranchId, Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity, long>, Fossa.API.Core.Repositories.IBranchQueryRepository, Fossa.API.Core.Repositories.IBranchRepository, TIKSN.Data.IQueryRepository<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Core.Entities.BranchId>, TIKSN.Data.IRepository<Fossa.API.Core.Entities.BranchEntity>
+    {
+        public BranchRepositoryAdapter(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity> domainEntityToDataEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity, Fossa.API.Core.Entities.BranchEntity> dataEntityToDomainEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.BranchId> dataIdentityToDomainIdentityMapper, Fossa.API.Persistence.Mongo.Repositories.IBranchMongoRepository dataRepository) { }
+        public System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Core.Entities.BranchEntity>> PageAsync(Fossa.API.Core.Repositories.TenantBranchPageQuery pageQuery, System.Threading.CancellationToken cancellationToken) { }
+    }
     public class CompanyMongoRepository : TIKSN.Data.Mongo.MongoRepository<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity, long>, Fossa.API.Persistence.Mongo.Repositories.ICompanyMongoRepository, TIKSN.Data.IQueryRepository<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity, long>, TIKSN.Data.IRepository<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity>, TIKSN.Data.IStreamRepository<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity>, TIKSN.Data.Mongo.IMongoRepository<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity, long>
     {
         public CompanyMongoRepository(TIKSN.Data.Mongo.IMongoClientSessionProvider mongoClientSessionProvider, TIKSN.Data.Mongo.IMongoDatabaseProvider mongoDatabaseProvider) { }
@@ -91,6 +120,10 @@ namespace Fossa.API.Persistence.Mongo.Repositories
         public System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Core.Entities.EmployeeEntity>> FindByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<Fossa.API.Core.Entities.EmployeeEntity> GetByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Core.Entities.EmployeeEntity>> PageAsync(Fossa.API.Core.Repositories.TenantEmployeePageQuery pageQuery, System.Threading.CancellationToken cancellationToken) { }
+    }
+    public interface IBranchMongoRepository : TIKSN.Data.IQueryRepository<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity, long>, TIKSN.Data.IRepository<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity>, TIKSN.Data.IStreamRepository<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity>, TIKSN.Data.Mongo.IMongoRepository<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity, long>
+    {
+        System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity>> PageAsync(Fossa.API.Core.Repositories.TenantBranchPageQuery pageQuery, System.Threading.CancellationToken cancellationToken);
     }
     public interface ICompanyMongoRepository : TIKSN.Data.IQueryRepository<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity, long>, TIKSN.Data.IRepository<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity>, TIKSN.Data.IStreamRepository<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity>, TIKSN.Data.Mongo.IMongoRepository<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity, long>
     {
