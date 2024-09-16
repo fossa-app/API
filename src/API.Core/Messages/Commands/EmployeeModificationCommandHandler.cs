@@ -20,7 +20,7 @@ public class EmployeeModificationCommandHandler : IRequestHandler<EmployeeModifi
     EmployeeModificationCommand request,
     CancellationToken cancellationToken)
   {
-    var entity = await _employeeQueryRepository.GetAsync(request.ID, cancellationToken).ConfigureAwait(false);
+    var entity = await _employeeQueryRepository.GetByUserIdAsync(request.UserID, cancellationToken).ConfigureAwait(false);
     entity = entity with
     {
       FirstName = request.FirstName,
