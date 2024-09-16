@@ -47,8 +47,8 @@
         [Microsoft.AspNetCore.Mvc.HttpPost]
         public System.Threading.Tasks.Task PostAsync([Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.CompanyModificationModel model, System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
-        [Microsoft.AspNetCore.Mvc.HttpPut("{id}")]
-        public System.Threading.Tasks.Task PutAsync(long id, [Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.CompanyModificationModel model, System.Threading.CancellationToken cancellationToken) { }
+        [Microsoft.AspNetCore.Mvc.HttpPut]
+        public System.Threading.Tasks.Task PutAsync([Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.CompanyModificationModel model, System.Threading.CancellationToken cancellationToken) { }
     }
     [Asp.Versioning.ApiVersion(1D, null)]
     [Microsoft.AspNetCore.Authorization.Authorize]
@@ -59,6 +59,10 @@
         public EmployeeController(Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, MediatR.ISender sender, MediatR.IPublisher publisher, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId> dataIdentityToDomainIdentityMapper) { }
         [Microsoft.AspNetCore.Mvc.HttpGet]
         public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.EmployeeRetrievalModel> GetAsync([Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Web.ApiModels.EmployeeRetrievalModel> mapper, System.Threading.CancellationToken cancellationToken) { }
+        [Microsoft.AspNetCore.Mvc.HttpPost]
+        public System.Threading.Tasks.Task PostAsync([Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.EmployeeModificationModel model, System.Threading.CancellationToken cancellationToken) { }
+        [Microsoft.AspNetCore.Mvc.HttpPut]
+        public System.Threading.Tasks.Task PutAsync([Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.EmployeeModificationModel model, System.Threading.CancellationToken cancellationToken) { }
     }
     [Asp.Versioning.ApiVersion(1D, null)]
     [Microsoft.AspNetCore.Authorization.Authorize]
@@ -69,10 +73,6 @@
         public EmployeesController(Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, MediatR.ISender sender, MediatR.IPublisher publisher, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId> dataIdentityToDomainIdentityMapper) { }
         [Microsoft.AspNetCore.Mvc.HttpGet]
         public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>> PageAsync([Microsoft.AspNetCore.Mvc.FromQuery] Fossa.API.Web.ApiModels.EmployeePagingRequestModel requestModel, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<TIKSN.Data.PageResult<Fossa.API.Core.Entities.EmployeeEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>> mapper, System.Threading.CancellationToken cancellationToken) { }
-        [Microsoft.AspNetCore.Mvc.HttpPost]
-        public System.Threading.Tasks.Task PostAsync([Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.EmployeeModificationModel model, System.Threading.CancellationToken cancellationToken) { }
-        [Microsoft.AspNetCore.Mvc.HttpPut("{id}")]
-        public System.Threading.Tasks.Task PutAsync(long id, [Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.EmployeeModificationModel model, System.Threading.CancellationToken cancellationToken) { }
     }
 }
 namespace Fossa.API.Web.Api.Identity
