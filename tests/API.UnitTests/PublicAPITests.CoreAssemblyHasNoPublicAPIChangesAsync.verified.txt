@@ -244,9 +244,8 @@ namespace Fossa.API.Core.Messages.Commands
     }
     public class CompanyModificationCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Core.Entities.CompanyId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.CompanyModificationCommand>
     {
-        public CompanyModificationCommand(Fossa.API.Core.Entities.CompanyId ID, System.Guid TenantID, string Name) { }
+        public CompanyModificationCommand(System.Guid TenantID, string Name) { }
         public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.CompanyId> AffectingTenantEntitiesIdentities { get; }
-        public Fossa.API.Core.Entities.CompanyId ID { get; init; }
         public string Name { get; init; }
     }
     public class CompanyModificationCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.CompanyModificationCommand, MediatR.Unit>
@@ -254,14 +253,13 @@ namespace Fossa.API.Core.Messages.Commands
         public CompanyModificationCommandHandler(Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, Fossa.API.Core.Repositories.ICompanyRepository companyRepository) { }
         public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.CompanyModificationCommand request, System.Threading.CancellationToken cancellationToken) { }
     }
-    public class EmployeeCreationCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Core.Entities.EmployeeId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.EmployeeCreationCommand>
+    public class EmployeeCreationCommand : Fossa.API.Core.Messages.Commands.EntityTenantUserCommand<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Core.Entities.EmployeeId, System.Guid, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.EmployeeCreationCommand>
     {
         public EmployeeCreationCommand(System.Guid TenantID, System.Guid UserID, string FirstName, string LastName, string FullName) { }
         public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.EmployeeId> AffectingTenantEntitiesIdentities { get; }
         public string FirstName { get; init; }
         public string FullName { get; init; }
         public string LastName { get; init; }
-        public System.Guid UserID { get; init; }
     }
     public class EmployeeCreationCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.EmployeeCreationCommand, MediatR.Unit>
     {
@@ -269,15 +267,13 @@ namespace Fossa.API.Core.Messages.Commands
         public System.Threading.Tasks.Task CreateEmployeeAsync(Fossa.API.Core.Entities.CompanyEntity companyEntity, Fossa.API.Core.Messages.Commands.EmployeeCreationCommand request, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.EmployeeCreationCommand request, System.Threading.CancellationToken cancellationToken) { }
     }
-    public class EmployeeModificationCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Core.Entities.EmployeeId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.EmployeeModificationCommand>
+    public class EmployeeModificationCommand : Fossa.API.Core.Messages.Commands.EntityTenantUserCommand<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Core.Entities.EmployeeId, System.Guid, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.EmployeeModificationCommand>
     {
-        public EmployeeModificationCommand(Fossa.API.Core.Entities.EmployeeId ID, System.Guid TenantID, System.Guid UserID, string FirstName, string LastName, string FullName) { }
+        public EmployeeModificationCommand(System.Guid TenantID, System.Guid UserID, string FirstName, string LastName, string FullName) { }
         public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.EmployeeId> AffectingTenantEntitiesIdentities { get; }
         public string FirstName { get; init; }
         public string FullName { get; init; }
-        public Fossa.API.Core.Entities.EmployeeId ID { get; init; }
         public string LastName { get; init; }
-        public System.Guid UserID { get; init; }
     }
     public class EmployeeModificationCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.EmployeeModificationCommand, MediatR.Unit>
     {
@@ -294,6 +290,18 @@ namespace Fossa.API.Core.Messages.Commands
         public abstract System.Collections.Generic.IEnumerable<TEntityIdentity> AffectingTenantEntitiesIdentities { get; }
         public TTenantIdentity TenantID { get; init; }
     }
+    public abstract class EntityTenantUserCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity> : Fossa.API.Core.Messages.Commands.ICommand, Fossa.API.Core.Messages.Commands.ITenantCommand<TEntityIdentity, TTenantIdentity>, Fossa.API.Core.Messages.Commands.ITenantUserCommand<TEntityIdentity, TTenantIdentity, TUserIdentity>, Fossa.API.Core.Messages.Commands.IUserCommand<TUserIdentity>, Fossa.API.Core.Messages.IAffectingTenantEntities<TEntityIdentity>, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Core.Messages.Commands.EntityTenantUserCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>>
+        where TEntity : TIKSN.Data.IEntity<TEntityIdentity>
+        where TEntityIdentity : System.IEquatable<TEntityIdentity>
+        where TTenantIdentity : System.IEquatable<TTenantIdentity>
+        where TUserIdentity : System.IEquatable<TUserIdentity>
+    {
+        protected EntityTenantUserCommand(TTenantIdentity TenantID, TUserIdentity UserID) { }
+        public System.Collections.Generic.IEnumerable<Fossa.API.Core.Messages.AffectingEntity<TEntityIdentity>> AffectingTenantEntities { get; }
+        public abstract System.Collections.Generic.IEnumerable<TEntityIdentity> AffectingTenantEntitiesIdentities { get; }
+        public TTenantIdentity TenantID { get; init; }
+        public TUserIdentity UserID { get; init; }
+    }
     public interface ICommand : MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit> { }
     public interface ITenantCommand<TEntityIdentity, out TTenantIdentity> : Fossa.API.Core.Messages.Commands.ICommand, Fossa.API.Core.Messages.IAffectingTenantEntities<TEntityIdentity>, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>
         where TEntityIdentity : System.IEquatable<TEntityIdentity>
@@ -301,10 +309,10 @@ namespace Fossa.API.Core.Messages.Commands
     {
         TTenantIdentity TenantID { get; }
     }
-    public interface ITenantUserCommand<TEntityIdentity, out TUserIdentity, out TTenantIdentity> : Fossa.API.Core.Messages.Commands.ICommand, Fossa.API.Core.Messages.Commands.ITenantCommand<TEntityIdentity, TTenantIdentity>, Fossa.API.Core.Messages.Commands.IUserCommand<TUserIdentity>, Fossa.API.Core.Messages.IAffectingTenantEntities<TEntityIdentity>, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>
+    public interface ITenantUserCommand<TEntityIdentity, out TTenantIdentity, out TUserIdentity> : Fossa.API.Core.Messages.Commands.ICommand, Fossa.API.Core.Messages.Commands.ITenantCommand<TEntityIdentity, TTenantIdentity>, Fossa.API.Core.Messages.Commands.IUserCommand<TUserIdentity>, Fossa.API.Core.Messages.IAffectingTenantEntities<TEntityIdentity>, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>
         where TEntityIdentity : System.IEquatable<TEntityIdentity>
-        where out TUserIdentity : System.IEquatable<TUserIdentity>
-        where out TTenantIdentity : System.IEquatable<TTenantIdentity> { }
+        where out TTenantIdentity : System.IEquatable<TTenantIdentity>
+        where out TUserIdentity : System.IEquatable<TUserIdentity> { }
     public interface IUserCommand<out TUserIdentity> : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>
         where out TUserIdentity : System.IEquatable<TUserIdentity>
     {
