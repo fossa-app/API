@@ -27,8 +27,10 @@
         public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.BranchRetrievalModel> GetAsync([Microsoft.AspNetCore.Mvc.FromRoute] long id, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Web.ApiModels.BranchRetrievalModel> mapper, System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Mvc.HttpGet]
         public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.BranchRetrievalModel>> PageAsync([Microsoft.AspNetCore.Mvc.FromQuery] Fossa.API.Web.ApiModels.BranchPagingRequestModel requestModel, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<TIKSN.Data.PageResult<Fossa.API.Core.Entities.BranchEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.BranchRetrievalModel>> mapper, System.Threading.CancellationToken cancellationToken) { }
+        [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
         [Microsoft.AspNetCore.Mvc.HttpPost]
         public System.Threading.Tasks.Task PostAsync([Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.BranchModificationModel model, System.Threading.CancellationToken cancellationToken) { }
+        [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
         [Microsoft.AspNetCore.Mvc.HttpPut("{id}")]
         public System.Threading.Tasks.Task PutAsync(long id, [Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.BranchModificationModel model, System.Threading.CancellationToken cancellationToken) { }
     }
@@ -204,6 +206,10 @@ namespace Fossa.API.Web
     {
         public IdGenSetupLogger(IdGen.IdGenerator idGenerator, Microsoft.Extensions.Logging.ILogger<Fossa.API.Web.IdGenSetupLogger> logger) { }
         public void LogIdGenSetup() { }
+    }
+    public static class Roles
+    {
+        public const string Administrator = "administrator";
     }
 }
 namespace Fossa.API.Web.DependencyInjection
