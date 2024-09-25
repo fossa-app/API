@@ -46,7 +46,7 @@ public class EmployeeCreationCommandHandler : IRequestHandler<EmployeeCreationCo
     return Unit.Value;
   }
 
-  public async Task CreateEmployeeAsync(
+  private async Task CreateEmployeeAsync(
     CompanyEntity companyEntity,
     EmployeeCreationCommand request,
     CancellationToken cancellationToken)

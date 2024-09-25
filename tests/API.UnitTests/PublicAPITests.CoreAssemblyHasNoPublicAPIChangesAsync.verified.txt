@@ -215,7 +215,6 @@ namespace Fossa.API.Core.Messages.Commands
     public class BranchCreationCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.BranchCreationCommand, MediatR.Unit>
     {
         public BranchCreationCommandHandler(TIKSN.Identity.IIdentityGenerator<Fossa.API.Core.Entities.BranchId> identityGenerator, Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, Fossa.API.Core.Repositories.IBranchRepository branchRepository) { }
-        public System.Threading.Tasks.Task CreateBranchAsync(Fossa.API.Core.Entities.CompanyEntity companyEntity, Fossa.API.Core.Messages.Commands.BranchCreationCommand request, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.BranchCreationCommand request, System.Threading.CancellationToken cancellationToken) { }
     }
     public class BranchModificationCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Core.Entities.BranchId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.BranchModificationCommand>
@@ -264,7 +263,6 @@ namespace Fossa.API.Core.Messages.Commands
     public class EmployeeCreationCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.EmployeeCreationCommand, MediatR.Unit>
     {
         public EmployeeCreationCommandHandler(TIKSN.Identity.IIdentityGenerator<Fossa.API.Core.Entities.EmployeeId> identityGenerator, Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, Fossa.API.Core.Repositories.IEmployeeQueryRepository employeeQueryRepository, Fossa.API.Core.Repositories.IEmployeeRepository employeeRepository) { }
-        public System.Threading.Tasks.Task CreateEmployeeAsync(Fossa.API.Core.Entities.CompanyEntity companyEntity, Fossa.API.Core.Messages.Commands.EmployeeCreationCommand request, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.EmployeeCreationCommand request, System.Threading.CancellationToken cancellationToken) { }
     }
     public class EmployeeModificationCommand : Fossa.API.Core.Messages.Commands.EntityTenantUserCommand<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Core.Entities.EmployeeId, System.Guid, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.EmployeeModificationCommand>
