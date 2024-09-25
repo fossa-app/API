@@ -61,7 +61,7 @@ Task Publish Pack, {
 }
 
 # Synopsis: Pack NuGet package
-Task Pack Build, Test, {
+Task Pack Build, Test, Ward, {
     $state = Import-Clixml -Path ".\.trash\$Instance\state.clixml"
     $dockerImageName = $state.DockerImageName
     $nextVersion = $state.NextVersion
@@ -278,6 +278,25 @@ Task RestorePackages Clean, {
     Exec { dotnet restore $solution }
 }
 
+# Synopsis: Store away public API contracts
+Task Ward Init, {
+    $state = Import-Clixml -Path ".\.trash\$Instance\state.clixml"
+    $contractsArtifactsFolder = $state.ContractsArtifactsFolder
+
+    $inputFiles = Get-ChildItem -Path *AssemblyHasNoPublicAPIChangesAsync.verified.txt -Recurse
+    $outoutFiles = $inputFiles
+    | ForEach-Object {
+        $outputFileName = $PSItem.Name -replace '.txt', '.cs'
+
+        $outputFilePath = Join-Path -Path $contractsArtifactsFolder -ChildPath $outputFileName
+
+        Copy-Item -Path $PSItem -Destination $outputFilePath -Force
+        Resolve-Path -Path $outputFilePath
+    }
+
+    $outoutFiles | Out-Host
+}
+
 # Synopsis: Clean previous build leftovers
 Task Clean Init, {
     Get-ChildItem -Directory
@@ -297,6 +316,9 @@ Task Init {
     $buildArtifactsFolder = Join-Path -Path $trashFolder -ChildPath 'artifacts'
     New-Item -Path $buildArtifactsFolder -ItemType Directory | Out-Null
 
+    $contractsArtifactsFolder = Join-Path -Path $buildArtifactsFolder -ChildPath 'contracts'
+    New-Item -Path $contractsArtifactsFolder -ItemType Directory | Out-Null
+
     $linuxBuildArtifactsFolder = Join-Path -Path $buildArtifactsFolder -ChildPath 'linux'
     New-Item -Path $linuxBuildArtifactsFolder -ItemType Directory | Out-Null
 
@@ -307,6 +329,7 @@ Task Init {
         NextVersion                   = $null
         TrashFolder                   = $trashFolder
         BuildArtifactsFolder          = $buildArtifactsFolder
+        ContractsArtifactsFolder      = $contractsArtifactsFolder
         LinuxBuildArtifactsFolder     = $linuxBuildArtifactsFolder
         WinBuildArtifactsFolder       = $winBuildArtifactsFolder
         DockerImageName               = 'tiksn/fossa-api'
