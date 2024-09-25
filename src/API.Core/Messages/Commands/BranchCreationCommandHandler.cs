@@ -35,7 +35,7 @@ public class BranchCreationCommandHandler : IRequestHandler<BranchCreationComman
     return Unit.Value;
   }
 
-  public async Task CreateBranchAsync(
+  private async Task CreateBranchAsync(
     CompanyEntity companyEntity,
     BranchCreationCommand request,
     CancellationToken cancellationToken)
