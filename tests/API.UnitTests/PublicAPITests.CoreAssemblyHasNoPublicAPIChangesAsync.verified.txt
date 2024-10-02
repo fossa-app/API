@@ -240,6 +240,17 @@ namespace Fossa.API.Core.Messages.Commands
         public CompanyCreationCommandHandler(TIKSN.Identity.IIdentityGenerator<Fossa.API.Core.Entities.CompanyId> identityGenerator, Fossa.API.Core.Services.ISystemLicenseRetriever systemLicenseRetriever, Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, Fossa.API.Core.Repositories.ICompanyRepository companyRepository) { }
         public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.CompanyCreationCommand request, System.Threading.CancellationToken cancellationToken) { }
     }
+    public class CompanyDeletionCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Core.Entities.CompanyId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.CompanyDeletionCommand>
+    {
+        public CompanyDeletionCommand(Fossa.API.Core.Entities.CompanyId ID, System.Guid TenantID) { }
+        public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.CompanyId> AffectingTenantEntitiesIdentities { get; }
+        public Fossa.API.Core.Entities.CompanyId ID { get; init; }
+    }
+    public class CompanyDeletionCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.CompanyDeletionCommand, MediatR.Unit>
+    {
+        public CompanyDeletionCommandHandler(Fossa.API.Core.Repositories.ICompanyRepository companyRepository) { }
+        public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.CompanyDeletionCommand request, System.Threading.CancellationToken cancellationToken) { }
+    }
     public class CompanyModificationCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Core.Entities.CompanyId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.CompanyModificationCommand>
     {
         public CompanyModificationCommand(System.Guid TenantID, string Name) { }
@@ -576,6 +587,10 @@ namespace Fossa.API.Core.Validators
     public class CompanyCreationCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.CompanyCreationCommand>
     {
         public CompanyCreationCommandValidator(Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository) { }
+    }
+    public class CompanyDeletionCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.CompanyDeletionCommand>
+    {
+        public CompanyDeletionCommandValidator() { }
     }
     public class CompanyModificationCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.CompanyModificationCommand>
     {
