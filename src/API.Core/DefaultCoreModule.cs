@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Fossa.API.Core.Entities;
+using Fossa.API.Core.Relationship;
 using Fossa.API.Core.Services;
 using TIKSN.Data.BareEntityResolvers;
 using TIKSN.Identity;
@@ -41,12 +42,11 @@ public class DefaultCoreModule : Module
       .RegisterType<CertificateProvider>()
       .AsImplementedInterfaces()
       .InstancePerLifetimeScope();
-  }
 
-  private static void RegisterStronglyTypedIds(ContainerBuilder builder)
-  {
-    RegisterStronglyTypedId<long, CompanyId>(builder);
-    RegisterStronglyTypedId<long, EmployeeId>(builder);
+    builder
+      .RegisterType<RelationshipGraph>()
+      .AsImplementedInterfaces()
+      .InstancePerLifetimeScope();
   }
 
   private static void RegisterStronglyTypedId<TSource, TDestination>(ContainerBuilder builder)
@@ -55,5 +55,11 @@ public class DefaultCoreModule : Module
       .RegisterType<MapperIdentityGenerator<TSource, TDestination>>()
       .AsImplementedInterfaces()
       .SingleInstance();
+  }
+
+  private static void RegisterStronglyTypedIds(ContainerBuilder builder)
+  {
+    RegisterStronglyTypedId<long, CompanyId>(builder);
+    RegisterStronglyTypedId<long, EmployeeId>(builder);
   }
 }
