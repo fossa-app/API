@@ -13,7 +13,7 @@ public class PartyModelMapper : IMapper<Party, PartyModel>
       OrganizationParty organizationParty => new PartyModel(organizationParty.LongName, organizationParty.ShortName),
       IndividualParty individualParty => new PartyModel(individualParty.FullName,
         $"{individualParty.FirstName} {individualParty.LastName}"),
-      _ => throw new ValidationException("Unknown party kind")
+      _ => throw new ValidationException("Unknown party kind"),
     };
   }
 }
