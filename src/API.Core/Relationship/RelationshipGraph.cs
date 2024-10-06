@@ -11,7 +11,7 @@ namespace Fossa.API.Core.Relationship;
 
 public partial class RelationshipGraph : IRelationshipGraph
 {
-  private static readonly string _entityIdName = nameof(IEntity<int>.ID);
+  private const string _entityIdName = nameof(IEntity<int>.ID);
   private static readonly Lazy<FrozenDictionary<Type, TypeInfo>> _entityIdTypeToOwnerEntityTypeMap = new(CreateEntityIdTypeToOwnerEntityTypeMap, LazyThreadSafetyMode.ExecutionAndPublication);
   private static readonly Lazy<FrozenDictionary<Type, Seq<PropertyInfo>>> _entityIdTypeToReferenceIdPropertiesMap = new(CreateEntityIdTypeToReferenceIdPropertiesMap, LazyThreadSafetyMode.ExecutionAndPublication);
   private static readonly Type _entityInterfaceType = typeof(IEntity<>);
