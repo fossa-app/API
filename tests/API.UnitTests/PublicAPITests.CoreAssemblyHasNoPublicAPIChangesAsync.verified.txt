@@ -434,6 +434,20 @@ namespace Fossa.API.Core.Messages.Queries
         public System.Threading.Tasks.Task<TIKSN.Licensing.License<Fossa.Licensing.SystemEntitlements>> Handle(Fossa.API.Core.Messages.Queries.SystemLicenseRetrievalQuery request, System.Threading.CancellationToken cancellationToken) { }
     }
 }
+namespace Fossa.API.Core.Relationship
+{
+    public interface IRelationshipGraph
+    {
+        System.Threading.Tasks.Task<bool> HasDependentEntitiesAsync<T>(T id, System.Threading.CancellationToken cancellationToken)
+            where T : System.IEquatable<T>;
+    }
+    public class RelationshipGraph : Fossa.API.Core.Relationship.IRelationshipGraph
+    {
+        public RelationshipGraph(System.IServiceProvider serviceProvider) { }
+        public System.Threading.Tasks.Task<bool> HasDependentEntitiesAsync<T>(T id, System.Threading.CancellationToken cancellationToken)
+            where T : System.IEquatable<T> { }
+    }
+}
 namespace Fossa.API.Core.Repositories
 {
     public interface IBranchQueryRepository : TIKSN.Data.IQueryRepository<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Core.Entities.BranchId>
@@ -448,6 +462,11 @@ namespace Fossa.API.Core.Repositories
         System.Threading.Tasks.Task<Fossa.API.Core.Entities.CompanyEntity> GetByTenantIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken);
     }
     public interface ICompanyRepository : TIKSN.Data.IRepository<Fossa.API.Core.Entities.CompanyEntity> { }
+    public interface IDependencyQueryRepository<T>
+        where T : System.IEquatable<T>
+    {
+        System.Threading.Tasks.Task<bool> HasDependencyAsync(T id, System.Threading.CancellationToken cancellationToken);
+    }
     public interface IEmployeeQueryRepository : TIKSN.Data.IQueryRepository<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Core.Entities.EmployeeId>
     {
         System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Core.Entities.EmployeeEntity>> FindByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken);
