@@ -12,6 +12,7 @@ public class EmployeeRepositoryAdapter
   : MongoRepositoryAdapter<EmployeeEntity, EmployeeId, EmployeeMongoEntity, long>
     , IEmployeeRepository, IEmployeeQueryRepository
 {
+  private readonly IMapper<CompanyId, long> _companyDomainIdentityToDataIdentityMapper;
   private readonly IEmployeeMongoRepository _dataRepository;
 
   public EmployeeRepositoryAdapter(
@@ -19,6 +20,7 @@ public class EmployeeRepositoryAdapter
     IMapper<EmployeeMongoEntity, EmployeeEntity> dataEntityToDomainEntityMapper,
     IMapper<EmployeeId, long> domainIdentityToDataIdentityMapper,
     IMapper<long, EmployeeId> dataIdentityToDomainIdentityMapper,
+    IMapper<CompanyId, long> companyDomainIdentityToDataIdentityMapper,
     IEmployeeMongoRepository dataRepository) : base(
     domainEntityToDataEntityMapper,
     dataEntityToDomainEntityMapper,
@@ -26,6 +28,7 @@ public class EmployeeRepositoryAdapter
     dataIdentityToDomainIdentityMapper,
     dataRepository)
   {
+    _companyDomainIdentityToDataIdentityMapper = companyDomainIdentityToDataIdentityMapper ?? throw new ArgumentNullException(nameof(companyDomainIdentityToDataIdentityMapper));
     _dataRepository = dataRepository ?? throw new ArgumentNullException(nameof(dataRepository));
   }
 
@@ -47,6 +50,11 @@ public class EmployeeRepositoryAdapter
       userId, cancellationToken).ConfigureAwait(false);
 
     return entity is null ? throw new EntityNotFoundException() : Map(entity);
+  }
+
+  public Task<bool> HasDependencyAsync(CompanyId id, CancellationToken cancellationToken)
+  {
+    return _dataRepository.HasDependencyOnCompanyAsync(_companyDomainIdentityToDataIdentityMapper.Map(id), cancellationToken);
   }
 
   public async Task<PageResult<EmployeeEntity>> PageAsync(
