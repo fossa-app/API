@@ -21,6 +21,16 @@ public class BranchMongoRepository
   protected override SortDefinition<BranchMongoEntity> PageSortDefinition
     => Builders<BranchMongoEntity>.Sort.Ascending(x => x.ID);
 
+  public async Task<bool> HasDependencyOnCompanyAsync(long companyId, CancellationToken cancellationToken)
+  {
+    var filter =
+      Builders<BranchMongoEntity>.Filter.Eq(item => item.CompanyId, companyId);
+
+    var firstEntity = await FirstOrDefaultAsync(filter, cancellationToken).ConfigureAwait(false);
+
+    return firstEntity is not null;
+  }
+
   public Task<PageResult<BranchMongoEntity>> PageAsync(
     TenantBranchPageQuery pageQuery,
     CancellationToken cancellationToken)
