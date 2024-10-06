@@ -12,6 +12,7 @@ public class BranchRepositoryAdapter
   : MongoRepositoryAdapter<BranchEntity, BranchId, BranchMongoEntity, long>
     , IBranchRepository, IBranchQueryRepository
 {
+  private readonly IMapper<CompanyId, long> _companyDomainIdentityToDataIdentityMapper;
   private readonly IBranchMongoRepository _dataRepository;
 
   public BranchRepositoryAdapter(
@@ -19,6 +20,7 @@ public class BranchRepositoryAdapter
     IMapper<BranchMongoEntity, BranchEntity> dataEntityToDomainEntityMapper,
     IMapper<BranchId, long> domainIdentityToDataIdentityMapper,
     IMapper<long, BranchId> dataIdentityToDomainIdentityMapper,
+    IMapper<CompanyId, long> companyDomainIdentityToDataIdentityMapper,
     IBranchMongoRepository dataRepository) : base(
     domainEntityToDataEntityMapper,
     dataEntityToDomainEntityMapper,
@@ -26,7 +28,13 @@ public class BranchRepositoryAdapter
     dataIdentityToDomainIdentityMapper,
     dataRepository)
   {
+    _companyDomainIdentityToDataIdentityMapper = companyDomainIdentityToDataIdentityMapper;
     _dataRepository = dataRepository ?? throw new ArgumentNullException(nameof(dataRepository));
+  }
+
+  public Task<bool> HasDependencyAsync(CompanyId id, CancellationToken cancellationToken)
+  {
+    return _dataRepository.HasDependencyOnCompanyAsync(_companyDomainIdentityToDataIdentityMapper.Map(id), cancellationToken);
   }
 
   public async Task<PageResult<BranchEntity>> PageAsync(
