@@ -5,12 +5,12 @@ using Fossa.API.Web.ApiModels;
 
 namespace Fossa.API.FunctionalTests.ControllerApis;
 
-public class LicenseControllerWithLicense : IClassFixture<CustomWebApplicationFactory<DefaultWebModule>>, IAsyncLifetime
+public class SystemLicenseControllerWithLicense : IClassFixture<CustomWebApplicationFactory<DefaultWebModule>>, IAsyncLifetime
 {
   private readonly CustomWebApplicationFactory<DefaultWebModule> _factory;
   private readonly HttpClient _client;
 
-  public LicenseControllerWithLicense(CustomWebApplicationFactory<DefaultWebModule> factory)
+  public SystemLicenseControllerWithLicense(CustomWebApplicationFactory<DefaultWebModule> factory)
   {
     _factory = factory ?? throw new ArgumentNullException(nameof(factory));
     _client = factory.CreateClient();
