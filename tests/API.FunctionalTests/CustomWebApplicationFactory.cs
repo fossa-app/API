@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using DotNext;
 using EasyDoubles;
 using Fossa.API.Core.Services;
 using Fossa.API.FunctionalTests.Repositories;
@@ -7,7 +8,9 @@ using Fossa.API.FunctionalTests.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Microsoft.Extensions.Configuration.Json;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 
 namespace Fossa.API.FunctionalTests;
@@ -15,6 +18,11 @@ namespace Fossa.API.FunctionalTests;
 public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram>, IAsyncLifetime
   where TProgram : class
 {
+  async Task IAsyncLifetime.DisposeAsync()
+  {
+    await base.DisposeAsync().ConfigureAwait(false);
+  }
+
   public Task InitializeAsync()
   {
     var systemInitializer = Services.GetRequiredService<ISystemInitializer>();
@@ -22,15 +30,20 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
     return systemInitializer.InitializeAsync(default);
   }
 
-  async Task IAsyncLifetime.DisposeAsync()
-  {
-    await base.DisposeAsync().ConfigureAwait(false);
-  }
-
   protected override void ConfigureWebHost(IWebHostBuilder builder)
   {
     builder
-      .ConfigureServices(services => services.AddEasyDoubles());
+      .ConfigureServices(services =>
+      {
+        services.AddEasyDoubles();
+        services.AddAuthentication("Test")
+          .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", options => { });
+      })
+      .ConfigureAppConfiguration(configure =>
+      {
+        var secretsSources = configure.Sources.OfType<JsonConfigurationSource>().Where(x => ((PhysicalFileProvider)x.FileProvider!).Root.StartsWith(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), StringComparison.OrdinalIgnoreCase)).ToList();
+        secretsSources.ForEach(x => configure.Sources.Remove(x));
+      });
   }
 
   /// <summary>
@@ -41,13 +54,12 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
   /// <returns></returns>
   protected override IHost CreateHost(IHostBuilder builder)
   {
-    builder.ConfigureServices(services => services.AddAuthentication("Test").AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", options => { }));
     builder.UseEnvironment("Development");
     builder.UseServiceProviderFactory(new AutofacServiceProviderFactory());
     builder.ConfigureContainer<ContainerBuilder>(containerBuilder =>
     {
       containerBuilder
-        .RegisterType<SystemPropertiesEasyRepository>()
+        .RegisterType<SystemPropertiesMongoEasyRepository>()
         .AsSelf()
         .AsImplementedInterfaces()
         .InstancePerLifetimeScope();
