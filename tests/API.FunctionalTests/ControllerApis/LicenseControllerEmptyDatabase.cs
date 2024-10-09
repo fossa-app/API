@@ -3,7 +3,6 @@ using Fossa.API.Web;
 
 namespace Fossa.API.FunctionalTests.ControllerApis;
 
-[Collection("Sequential")]
 public class LicenseControllerEmptyDatabase : IClassFixture<CustomWebApplicationFactory<DefaultWebModule>>
 {
   private readonly HttpClient _client;

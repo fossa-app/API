@@ -5,7 +5,6 @@ using Fossa.API.Web.ApiModels;
 
 namespace Fossa.API.FunctionalTests.ControllerApis;
 
-[Collection("Sequential")]
 public class LicenseControllerWithLicense : IClassFixture<CustomWebApplicationFactory<DefaultWebModule>>, IAsyncLifetime
 {
   private readonly CustomWebApplicationFactory<DefaultWebModule> _factory;
