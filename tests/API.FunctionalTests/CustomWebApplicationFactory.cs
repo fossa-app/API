@@ -4,6 +4,7 @@ using EasyDoubles;
 using Fossa.API.Core.Services;
 using Fossa.API.FunctionalTests.Repositories;
 using Fossa.API.FunctionalTests.Services;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,6 +41,7 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
   /// <returns></returns>
   protected override IHost CreateHost(IHostBuilder builder)
   {
+    builder.ConfigureServices(services => services.AddAuthentication("Test").AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", options => { }));
     builder.UseEnvironment("Development");
     builder.UseServiceProviderFactory(new AutofacServiceProviderFactory());
     builder.ConfigureContainer<ContainerBuilder>(containerBuilder =>
