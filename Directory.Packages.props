@@ -2,7 +2,7 @@
   <ItemGroup>
     <PackageVersion Include="Asp.Versioning.Mvc.ApiExplorer" Version="8.1.0" />
     <PackageVersion Include="AspNetCore.HealthChecks.OpenIdConnectServer" Version="8.0.1" />
-    <PackageVersion Include="Autofac" Version="8.1.0" />
+    <PackageVersion Include="Autofac" Version="8.1.1" />
     <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
     <PackageVersion Include="coverlet.collector" Version="6.0.2" />
     <PackageVersion Include="EasyDoubles" Version="1.1.11" />
