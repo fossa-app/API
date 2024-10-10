@@ -12,9 +12,6 @@ public class BranchMongoEntity : IEntity<long>
   [BsonGuidRepresentation(GuidRepresentation.Standard)]
   public Guid TenantID { get; set; }
 
-  [BsonGuidRepresentation(GuidRepresentation.Standard)]
-  public Guid UserID { get; set; }
-
   public long CompanyId { get; set; }
 
   public string? Name { get; set; }

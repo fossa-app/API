@@ -7,8 +7,8 @@ namespace Fossa.API.Core.Messages.Commands;
 
 public class BranchCreationCommandHandler : IRequestHandler<BranchCreationCommand, Unit>
 {
-  private readonly ICompanyQueryRepository _companyQueryRepository;
   private readonly IBranchRepository _branchRepository;
+  private readonly ICompanyQueryRepository _companyQueryRepository;
   private readonly IIdentityGenerator<BranchId> _identityGenerator;
 
   public BranchCreationCommandHandler(
@@ -44,7 +44,6 @@ public class BranchCreationCommandHandler : IRequestHandler<BranchCreationComman
     BranchEntity entity = new(
       id,
       request.TenantID,
-      request.UserID,
       companyEntity.ID,
       request.Name);
 
