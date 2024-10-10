@@ -8,14 +8,13 @@
 }
 namespace Fossa.API.Core.Entities
 {
-    public class BranchEntity : System.IEquatable<Fossa.API.Core.Entities.BranchEntity>, TIKSN.Data.IEntity<Fossa.API.Core.Entities.BranchId>, TIKSN.Data.ITenantEntity<Fossa.API.Core.Entities.BranchId, System.Guid>, TIKSN.Data.IUserEntity<Fossa.API.Core.Entities.BranchId, System.Guid>
+    public class BranchEntity : System.IEquatable<Fossa.API.Core.Entities.BranchEntity>, TIKSN.Data.IEntity<Fossa.API.Core.Entities.BranchId>, TIKSN.Data.ITenantEntity<Fossa.API.Core.Entities.BranchId, System.Guid>
     {
-        public BranchEntity(Fossa.API.Core.Entities.BranchId ID, System.Guid TenantID, System.Guid UserID, Fossa.API.Core.Entities.CompanyId CompanyId, string Name) { }
+        public BranchEntity(Fossa.API.Core.Entities.BranchId ID, System.Guid TenantID, Fossa.API.Core.Entities.CompanyId CompanyId, string Name) { }
         public Fossa.API.Core.Entities.CompanyId CompanyId { get; init; }
         public Fossa.API.Core.Entities.BranchId ID { get; init; }
         public string Name { get; init; }
         public System.Guid TenantID { get; init; }
-        public System.Guid UserID { get; init; }
     }
     [System.ComponentModel.TypeConverter(typeof(Fossa.API.Core.Entities.BranchId.BranchIdTypeConverter))]
     public readonly struct BranchId : System.IEquatable<Fossa.API.Core.Entities.BranchId>, System.IFormattable, System.ISpanFormattable, System.IUtf8SpanFormattable, System.Numerics.IEqualityOperators<Fossa.API.Core.Entities.BranchId, Fossa.API.Core.Entities.BranchId, bool>

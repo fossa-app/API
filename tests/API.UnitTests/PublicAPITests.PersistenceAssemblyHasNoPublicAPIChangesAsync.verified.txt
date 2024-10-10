@@ -17,8 +17,6 @@ namespace Fossa.API.Persistence.Mongo.Entities
         public string? Name { get; set; }
         [MongoDB.Bson.Serialization.Attributes.BsonGuidRepresentation(MongoDB.Bson.GuidRepresentation.Standard)]
         public System.Guid TenantID { get; set; }
-        [MongoDB.Bson.Serialization.Attributes.BsonGuidRepresentation(MongoDB.Bson.GuidRepresentation.Standard)]
-        public System.Guid UserID { get; set; }
     }
     public class CompanyMongoEntity : TIKSN.Data.IEntity<long>
     {
