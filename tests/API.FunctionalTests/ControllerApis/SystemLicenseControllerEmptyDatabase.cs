@@ -3,12 +3,11 @@ using Fossa.API.Web;
 
 namespace Fossa.API.FunctionalTests.ControllerApis;
 
-[Collection("Sequential")]
-public class LicenseControllerEmptyDatabase : IClassFixture<CustomWebApplicationFactory<DefaultWebModule>>
+public class SystemLicenseControllerEmptyDatabase : IClassFixture<CustomWebApplicationFactory<DefaultWebModule>>
 {
   private readonly HttpClient _client;
 
-  public LicenseControllerEmptyDatabase(CustomWebApplicationFactory<DefaultWebModule> factory)
+  public SystemLicenseControllerEmptyDatabase(CustomWebApplicationFactory<DefaultWebModule> factory)
   {
     _client = factory.CreateClient();
   }
