@@ -29,7 +29,6 @@ public class BranchMongoMapper : IMapper<BranchMongoEntity, BranchEntity>,
     return new BranchEntity(
       _dataIdentityToDomainIdentityMapper.Map(source.ID),
       source.TenantID,
-      source.UserID,
       _companyDataIdentityToDomainIdentityMapper.Map(source.CompanyId),
       source.Name ?? string.Empty);
   }
@@ -40,7 +39,6 @@ public class BranchMongoMapper : IMapper<BranchMongoEntity, BranchEntity>,
     {
       ID = _domainIdentityToDataIdentityMapper.Map(source.ID),
       TenantID = source.TenantID,
-      UserID = source.UserID,
       CompanyId = _companyDomainIdentityToDataIdentityMapper.Map(source.CompanyId),
       Name = source.Name,
     };

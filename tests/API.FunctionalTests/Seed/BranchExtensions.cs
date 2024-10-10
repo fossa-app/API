@@ -5,20 +5,21 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Fossa.API.FunctionalTests.Seed;
 
-public static class CompanyExtensions
+public static class BranchExtensions
 {
-  public static async Task SeedCompaniesAsync<TEntryPoint>(
+  public static async Task SeedBranchesAsync<TEntryPoint>(
     this WebApplicationFactory<TEntryPoint> factory,
     CancellationToken cancellationToken)
     where TEntryPoint : class
   {
-    var companyRepository = factory.Services.GetRequiredService<CompanyMongoEasyRepository>();
+    var branchRepository = factory.Services.GetRequiredService<BranchMongoEasyRepository>();
 
-    await companyRepository.TryAddAsync(new CompanyMongoEntity
+    await branchRepository.TryAddAsync(new BranchMongoEntity
     {
-      ID = 100L,
+      ID = 1000L,
+      CompanyId = 100L,
       TenantID = Guid.Parse("53ade3c2-8e36-52f2-88cf-d068b1ab247a"),
-      Name = "Company1",
+      Name = "Branch1",
     }, cancellationToken).ConfigureAwait(false);
   }
 }

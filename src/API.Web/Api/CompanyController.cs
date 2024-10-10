@@ -32,6 +32,7 @@ public class CompanyController : BaseApiController<CompanyId>
 
   [HttpGet]
   public async Task<CompanyRetrievalModel> GetAsync(
+    [FromServices] IMapper<CompanyEntity, CompanyRetrievalModel> mapper,
     CancellationToken cancellationToken)
   {
     var tenantId = _tenantIdProvider.GetTenantId();
@@ -39,7 +40,7 @@ public class CompanyController : BaseApiController<CompanyId>
       new CompanyRetrievalQuery(tenantId),
       cancellationToken);
 
-    return new CompanyRetrievalModel(_domainIdentityToDataIdentityMapper.Map(entity.ID), entity.Name);
+    return mapper.Map(entity);
   }
 
   [HttpPost]

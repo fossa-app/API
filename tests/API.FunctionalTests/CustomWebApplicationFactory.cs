@@ -1,6 +1,5 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using DotNext;
 using EasyDoubles;
 using Fossa.API.Core.Services;
 using Fossa.API.FunctionalTests.Repositories;
@@ -66,6 +65,12 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
 
       containerBuilder
         .RegisterType<CompanyMongoEasyRepository>()
+        .AsSelf()
+        .AsImplementedInterfaces()
+        .InstancePerLifetimeScope();
+
+      containerBuilder
+        .RegisterType<BranchMongoEasyRepository>()
         .AsSelf()
         .AsImplementedInterfaces()
         .InstancePerLifetimeScope();
