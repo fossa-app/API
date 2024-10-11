@@ -7,7 +7,6 @@ public class CompanyDeletionCommandValidator : AbstractValidator<CompanyDeletion
 {
   public CompanyDeletionCommandValidator()
   {
-    RuleFor(x => x.ID).NotEmpty();
     RuleFor(x => x.TenantID).NotEmpty();
   }
 }

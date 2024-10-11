@@ -30,15 +30,14 @@ public class CompanyController : BaseApiController<CompanyId>
     _tenantIdProvider = tenantIdProvider ?? throw new ArgumentNullException(nameof(tenantIdProvider));
   }
 
-  [HttpDelete("{id}")]
+  [HttpDelete]
   [Authorize(Roles = Roles.Administrator)]
   public async Task DeleteAsync(
-    long id,
     CancellationToken cancellationToken)
   {
     var tenantId = _tenantIdProvider.GetTenantId();
     await _sender.Send(
-      new CompanyDeletionCommand(_dataIdentityToDomainIdentityMapper.Map(id), tenantId),
+      new CompanyDeletionCommand(tenantId),
       cancellationToken);
   }
 

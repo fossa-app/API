@@ -1,16 +1,18 @@
-﻿using Fossa.API.Core.Entities;
-using Fossa.API.Core.Repositories;
+﻿using Fossa.API.Core.Repositories;
 using MediatR;
 
 namespace Fossa.API.Core.Messages.Commands;
 
 public class CompanyDeletionCommandHandler : IRequestHandler<CompanyDeletionCommand, Unit>
 {
+  private readonly ICompanyQueryRepository _companyQueryRepository;
   private readonly ICompanyRepository _companyRepository;
 
   public CompanyDeletionCommandHandler(
+    ICompanyQueryRepository companyQueryRepository,
     ICompanyRepository companyRepository)
   {
+    _companyQueryRepository = companyQueryRepository ?? throw new ArgumentNullException(nameof(companyQueryRepository));
     _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
   }
 
@@ -18,7 +20,7 @@ public class CompanyDeletionCommandHandler : IRequestHandler<CompanyDeletionComm
     CompanyDeletionCommand request,
     CancellationToken cancellationToken)
   {
-    CompanyEntity entity = new(request.ID, request.TenantID, string.Empty);
+    var entity = await _companyQueryRepository.GetByTenantIdAsync(request.TenantID, cancellationToken).ConfigureAwait(false);
     await _companyRepository.RemoveAsync(entity, cancellationToken).ConfigureAwait(false);
     return Unit.Value;
   }
