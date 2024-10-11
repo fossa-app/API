@@ -16,6 +16,11 @@ public class BranchMongoEasyRepository :
   {
   }
 
+  public Task<bool> HasDependencyOnCompanyAsync(long companyId, CancellationToken cancellationToken)
+  {
+    return Task.FromResult(EasyStore.Entities.Values.Any(x => x.CompanyId == companyId));
+  }
+
   public Task<PageResult<BranchMongoEntity>> PageAsync(TenantBranchPageQuery pageQuery, CancellationToken cancellationToken)
   {
     var allItems = EasyStore.Entities.Values.Where(x => x.TenantID == pageQuery.TenantId).ToList();
