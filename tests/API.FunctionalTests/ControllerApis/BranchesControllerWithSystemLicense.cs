@@ -22,7 +22,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     var client = _factory.CreateClient();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
-    var branchName = "Branch-392136901";
+    const string branchName = "Branch-392136901";
 
     var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName));
 
@@ -52,7 +52,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     var client = _factory.CreateClient();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.User1");
-    var branchName = "Branch-826076795";
+    const string branchName = "Branch-826076795";
     var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName));
 
     response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
