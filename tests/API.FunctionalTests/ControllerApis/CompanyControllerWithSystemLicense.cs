@@ -17,12 +17,42 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
     _factory = factory ?? throw new ArgumentNullException(nameof(factory));
   }
 
+  [Fact]
+  public async Task DeleteCompanyWithoutAccessTokenAsync()
+  {
+    var client = _factory.CreateClient();
+    var response = await client.DeleteAsync("/api/1.0/Company");
+
+    response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+  }
+
+  [Fact]
+  public async Task DeleteExistingCompanyWithAdministratorAccessTokenAsync()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9SJ94KK62JSRNQD7H70NCF7.Tenant1.ADMIN1");
+    var response = await client.DeleteAsync("/api/1.0/Company");
+
+    response.StatusCode.ShouldBe(HttpStatusCode.FailedDependency);
+  }
+
+  [Fact]
+  public async Task DeleteExistingCompanyWithUserAccessTokenAsync()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9SJ94KK62JSRNQD7H70NCF7.Tenant1.User1");
+    var response = await client.DeleteAsync("/api/1.0/Company");
+
+    response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+  }
+
   public Task DisposeAsync() => Task.CompletedTask;
 
   public async Task InitializeAsync()
   {
     await _factory.SeedSystemLicenseAsync(default).ConfigureAwait(false);
     await _factory.SeedCompaniesAsync(default).ConfigureAwait(false);
+    await _factory.SeedBranchesAsync(default).ConfigureAwait(false);
   }
 
   [Fact]
