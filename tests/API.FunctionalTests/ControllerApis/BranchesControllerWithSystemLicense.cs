@@ -17,6 +17,47 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     _factory = factory ?? throw new ArgumentNullException(nameof(factory));
   }
 
+  [Fact]
+  public async Task CreateBranchWithAdministratorAccessTokenAsync()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
+    var branchName = "Branch-392136901";
+
+    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName));
+
+    creationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    var retrievalResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
+
+    var responseModel =
+      await retrievalResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+
+    responseModel.ShouldNotBeNull();
+    responseModel.Items.Select(x => x.Name).ShouldContain(branchName);
+  }
+
+  [Fact]
+  public async Task CreateBranchWithoutAccessTokenAsync()
+  {
+    var client = _factory.CreateClient();
+
+    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel("Branch X"));
+
+    response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+  }
+
+  [Fact]
+  public async Task CreateBranchWithUserAccessTokenAsync()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.User1");
+    var branchName = "Branch-826076795";
+    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName));
+
+    response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+  }
+
   public Task DisposeAsync() => Task.CompletedTask;
 
   public async Task InitializeAsync()
