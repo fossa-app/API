@@ -3,7 +3,7 @@ using TIKSN.Data;
 
 namespace Fossa.API.Core.Repositories;
 
-public interface IBranchQueryRepository : IQueryRepository<BranchEntity, BranchId>
+public interface IBranchQueryRepository : IQueryRepository<BranchEntity, BranchId>, IDependencyQueryRepository<CompanyId>
 {
   Task<PageResult<BranchEntity>> PageAsync(
     TenantBranchPageQuery pageQuery,

@@ -41,6 +41,9 @@
     public class CompanyController : Fossa.API.Web.Api.BaseApiController<Fossa.API.Core.Entities.CompanyId>
     {
         public CompanyController(Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, MediatR.ISender sender, MediatR.IPublisher publisher, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId> dataIdentityToDomainIdentityMapper) { }
+        [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
+        [Microsoft.AspNetCore.Mvc.HttpDelete]
+        public System.Threading.Tasks.Task DeleteAsync(System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Mvc.HttpGet]
         public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.CompanyRetrievalModel> GetAsync([Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Web.ApiModels.CompanyRetrievalModel> mapper, System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]

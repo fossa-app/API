@@ -47,6 +47,16 @@ public class EmployeeMongoRepository
     return entity ?? throw new EntityNotFoundException();
   }
 
+  public async Task<bool> HasDependencyOnCompanyAsync(long companyId, CancellationToken cancellationToken)
+  {
+    var filter =
+      Builders<EmployeeMongoEntity>.Filter.Eq(item => item.CompanyId, companyId);
+
+    var firstEntity = await FirstOrDefaultAsync(filter, cancellationToken).ConfigureAwait(false);
+
+    return firstEntity is not null;
+  }
+
   public Task<PageResult<EmployeeMongoEntity>> PageAsync(
     TenantEmployeePageQuery pageQuery,
     CancellationToken cancellationToken)
