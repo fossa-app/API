@@ -1,9 +1,12 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using EasyDoubles;
 using Fossa.API.FunctionalTests.Seed;
+using Fossa.API.Persistence.Mongo.Entities;
 using Fossa.API.Web;
 using Fossa.API.Web.ApiModels;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 
 namespace Fossa.API.FunctionalTests.ControllerApis;
@@ -27,13 +30,28 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
   }
 
   [Fact]
-  public async Task DeleteExistingCompanyWithAdministratorAccessTokenAsync()
+  public async Task DeleteExistingCompanyWithDependenciesWithAdministratorAccessTokenAsync()
   {
     var client = _factory.CreateClient();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9SJ94KK62JSRNQD7H70NCF7.Tenant1.ADMIN1");
     var response = await client.DeleteAsync("/api/1.0/Company");
 
     response.StatusCode.ShouldBe(HttpStatusCode.FailedDependency);
+  }
+
+  [Fact]
+  public async Task DeleteExistingCompanyWithoutDependenciesWithAdministratorAccessTokenAsync()
+  {
+    var client = _factory.CreateClient();
+    var companyEasyStore = _factory.Services.GetRequiredService<IEasyStores>().Resolve<CompanyMongoEntity, long>();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9SJ94KK62JSRNQD7H70NCF7.Tenant2.ADMIN1");
+
+    companyEasyStore.Entities.ContainsKey(200L).ShouldBeTrue();
+
+    var response = await client.DeleteAsync("/api/1.0/Company");
+
+    response.StatusCode.ShouldBe(HttpStatusCode.OK);
+    companyEasyStore.Entities.ContainsKey(200L).ShouldBeFalse();
   }
 
   [Fact]
@@ -44,6 +62,16 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
     var response = await client.DeleteAsync("/api/1.0/Company");
 
     response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+  }
+
+  [Fact]
+  public async Task DeleteMissingCompanyWithAdministratorAccessTokenAsync()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9SJ94KK62JSRNQD7H70NCF7.Tenant1000.ADMIN1");
+    var response = await client.DeleteAsync("/api/1.0/Company");
+
+    response.StatusCode.ShouldBe(HttpStatusCode.OK);
   }
 
   public Task DisposeAsync() => Task.CompletedTask;

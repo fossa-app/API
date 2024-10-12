@@ -1,4 +1,5 @@
-﻿using Fossa.API.Core.Extensions;
+﻿using Fossa.API.Core.Entities;
+using Fossa.API.Core.Extensions;
 using Fossa.API.Core.Relationship;
 using Fossa.API.Core.Repositories;
 using MediatR;
@@ -21,13 +22,21 @@ public class CompanyDeletionCommandHandler : IRequestHandler<CompanyDeletionComm
     _relationshipGraph = relationshipGraph ?? throw new ArgumentNullException(nameof(relationshipGraph));
   }
 
+  public async Task DeleteCompanyAsync(
+    CompanyEntity entity,
+    CancellationToken cancellationToken)
+  {
+    await _relationshipGraph.ThrowIfHasDependentEntitiesAsync(entity.ID, cancellationToken).ConfigureAwait(false);
+    await _companyRepository.RemoveAsync(entity, cancellationToken).ConfigureAwait(false);
+  }
+
   public async Task<Unit> Handle(
     CompanyDeletionCommand request,
     CancellationToken cancellationToken)
   {
-    var entity = await _companyQueryRepository.GetByTenantIdAsync(request.TenantID, cancellationToken).ConfigureAwait(false);
-    await _relationshipGraph.ThrowIfHasDependentEntitiesAsync(entity.ID, cancellationToken).ConfigureAwait(false);
-    await _companyRepository.RemoveAsync(entity, cancellationToken).ConfigureAwait(false);
+    var entityMaybe = await _companyQueryRepository.FindByTenantIdAsync(request.TenantID, cancellationToken).ConfigureAwait(false);
+    await entityMaybe.IfSomeAsync(
+      entity => DeleteCompanyAsync(entity, cancellationToken)).ConfigureAwait(false);
     return Unit.Value;
   }
 }
