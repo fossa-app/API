@@ -286,6 +286,17 @@ namespace Fossa.API.Core.Messages.Commands
         public EmployeeCreationCommandHandler(TIKSN.Identity.IIdentityGenerator<Fossa.API.Core.Entities.EmployeeId> identityGenerator, Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, Fossa.API.Core.Repositories.IEmployeeQueryRepository employeeQueryRepository, Fossa.API.Core.Repositories.IEmployeeRepository employeeRepository) { }
         public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.EmployeeCreationCommand request, System.Threading.CancellationToken cancellationToken) { }
     }
+    public class EmployeeDeletionCommand : Fossa.API.Core.Messages.Commands.EntityTenantUserCommand<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Core.Entities.EmployeeId, System.Guid, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.EmployeeDeletionCommand>
+    {
+        public EmployeeDeletionCommand(System.Guid TenantID, System.Guid UserID) { }
+        public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.EmployeeId> AffectingTenantEntitiesIdentities { get; }
+    }
+    public class EmployeeDeletionCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.EmployeeDeletionCommand, MediatR.Unit>
+    {
+        public EmployeeDeletionCommandHandler(Fossa.API.Core.Repositories.IEmployeeQueryRepository employeeQueryRepository, Fossa.API.Core.Repositories.IEmployeeRepository employeeRepository, Fossa.API.Core.Relationship.IRelationshipGraph relationshipGraph) { }
+        public System.Threading.Tasks.Task DeleteEmployeeAsync(Fossa.API.Core.Entities.EmployeeEntity entity, System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.EmployeeDeletionCommand request, System.Threading.CancellationToken cancellationToken) { }
+    }
     public class EmployeeModificationCommand : Fossa.API.Core.Messages.Commands.EntityTenantUserCommand<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Core.Entities.EmployeeId, System.Guid, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.EmployeeModificationCommand>
     {
         public EmployeeModificationCommand(System.Guid TenantID, System.Guid UserID, string FirstName, string LastName, string FullName) { }
@@ -614,6 +625,10 @@ namespace Fossa.API.Core.Validators
     public class EmployeeCreationCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.EmployeeCreationCommand>
     {
         public EmployeeCreationCommandValidator() { }
+    }
+    public class EmployeeDeletionCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.EmployeeDeletionCommand>
+    {
+        public EmployeeDeletionCommandValidator() { }
     }
     public class EmployeeModificationCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.EmployeeModificationCommand>
     {
