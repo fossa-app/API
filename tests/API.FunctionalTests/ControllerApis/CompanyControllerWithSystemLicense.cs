@@ -81,6 +81,7 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
     await _factory.SeedSystemLicenseAsync(default).ConfigureAwait(false);
     await _factory.SeedCompaniesAsync(default).ConfigureAwait(false);
     await _factory.SeedBranchesAsync(default).ConfigureAwait(false);
+    await _factory.SeedEmployeesAsync(default).ConfigureAwait(false);
   }
 
   [Fact]
