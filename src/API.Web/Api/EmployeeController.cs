@@ -34,6 +34,19 @@ public class EmployeeController : BaseApiController<EmployeeId>
     _userIdProvider = userIdProvider ?? throw new ArgumentNullException(nameof(userIdProvider));
   }
 
+  [HttpDelete]
+  public async Task DeleteAsync(
+    CancellationToken cancellationToken)
+  {
+    var tenantId = _tenantIdProvider.GetTenantId();
+    var userId = _userIdProvider.GetUserId();
+    await _sender.Send(
+      new EmployeeDeletionCommand(
+        tenantId,
+        userId),
+      cancellationToken);
+  }
+
   [HttpGet]
   public async Task<EmployeeRetrievalModel> GetAsync(
     [FromServices] IMapper<EmployeeEntity, EmployeeRetrievalModel> mapper,
