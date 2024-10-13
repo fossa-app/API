@@ -1,9 +1,12 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using EasyDoubles;
 using Fossa.API.FunctionalTests.Seed;
+using Fossa.API.Persistence.Mongo.Entities;
 using Fossa.API.Web;
 using Fossa.API.Web.ApiModels;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 
 namespace Fossa.API.FunctionalTests.ControllerApis;
@@ -58,13 +61,98 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
   }
 
+  [Fact]
+  public async Task CreateThenDeleteBranchWithAdministratorAccessTokenAsync()
+  {
+    var client = _factory.CreateClient();
+    var branchEasyStore = _factory.Services.GetRequiredService<IEasyStores>().Resolve<BranchMongoEntity, long>();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
+    const string branchName = "Branch-832159009";
+
+    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName));
+
+    creationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    var retrievalResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
+
+    var responseModel =
+      await retrievalResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+
+    responseModel.ShouldNotBeNull();
+    var branchRetrievalModel = responseModel.Items.Single(x => string.Equals(x.Name, branchName, StringComparison.OrdinalIgnoreCase));
+    branchRetrievalModel.Name.ShouldBe(branchName);
+
+    branchEasyStore.Entities.ContainsKey(branchRetrievalModel.Id).ShouldBeTrue();
+    var deletionResponse = await client.DeleteAsync($"/api/1.0/Branches/{branchRetrievalModel.Id}");
+
+    deletionResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+    branchEasyStore.Entities.ContainsKey(branchRetrievalModel.Id).ShouldBeFalse();
+  }
+
+  [Fact]
+  public async Task DeleteBranchWithoutAccessTokenAsync()
+  {
+    var client = _factory.CreateClient();
+    var response = await client.DeleteAsync("/api/1.0/Branches/123456789");
+
+    response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+  }
+
+  [Fact]
+  public async Task DeleteExistingBranchWithoutDependenciesWithAdministratorAccessTokenAsync()
+  {
+    var client = _factory.CreateClient();
+    var branchEasyStore = _factory.Services.GetRequiredService<IEasyStores>().Resolve<BranchMongoEntity, long>();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA0JKF0VRC9JPZ9JSAMHGAFS.Tenant1.ADMIN1");
+
+    branchEasyStore.Entities.ContainsKey(2000L).ShouldBeTrue();
+
+    var response = await client.DeleteAsync("/api/1.0/Branches/2000");
+
+    response.StatusCode.ShouldBe(HttpStatusCode.OK);
+    branchEasyStore.Entities.ContainsKey(2000L).ShouldBeFalse();
+  }
+
+  [Fact]
+  public async Task DeleteExistingBranchWithoutDependenciesWithUserAccessTokenAsync()
+  {
+    var client = _factory.CreateClient();
+    var branchEasyStore = _factory.Services.GetRequiredService<IEasyStores>().Resolve<BranchMongoEntity, long>();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA0JKF0VRC9JPZ9JSAMHGAFS.Tenant1.User2");
+
+    branchEasyStore.Entities.ContainsKey(3000L).ShouldBeTrue();
+
+    var response = await client.DeleteAsync("/api/1.0/Branches/3000");
+
+    response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+  }
+
+  [Fact]
+  public async Task DeleteMissingBranchWithAdministratorAccessTokenAsync()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1J99K3NCGNA6X4Z194PJXF.Tenant1.ADMIN1");
+    var response = await client.DeleteAsync("/api/1.0/Branches/123456789");
+
+    response.StatusCode.ShouldBe(HttpStatusCode.OK);
+  }
+
+  [Fact]
+  public async Task DeleteMissingBranchWithUserAccessTokenAsync()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA0JKPRJDN7RXSMGXZ946WRB.Tenant1000.User1");
+    var response = await client.DeleteAsync("/api/1.0/Branches/123456789");
+
+    response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+  }
+
   public Task DisposeAsync() => Task.CompletedTask;
 
   public async Task InitializeAsync()
   {
     await _factory.SeedSystemLicenseAsync(default).ConfigureAwait(false);
-    await _factory.SeedCompaniesAsync(default).ConfigureAwait(false);
-    await _factory.SeedBranchesAsync(default).ConfigureAwait(false);
+    await _factory.SeedAllEntitiesAsync(default).ConfigureAwait(false);
   }
 
   [Fact]

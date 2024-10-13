@@ -23,6 +23,9 @@
     public class BranchesController : Fossa.API.Web.Api.BaseApiController<Fossa.API.Core.Entities.BranchId>
     {
         public BranchesController(Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, MediatR.ISender sender, MediatR.IPublisher publisher, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.BranchId> dataIdentityToDomainIdentityMapper) { }
+        [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
+        [Microsoft.AspNetCore.Mvc.HttpDelete("{id}")]
+        public System.Threading.Tasks.Task DeleteAsync(long id, System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Mvc.HttpGet("{id}")]
         public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.BranchRetrievalModel> GetAsync([Microsoft.AspNetCore.Mvc.FromRoute] long id, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Web.ApiModels.BranchRetrievalModel> mapper, System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Mvc.HttpGet]

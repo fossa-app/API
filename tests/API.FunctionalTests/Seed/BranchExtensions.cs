@@ -21,5 +21,21 @@ public static class BranchExtensions
       TenantID = Guid.Parse("53ade3c2-8e36-52f2-88cf-d068b1ab247a"),
       Name = "Branch1",
     }, cancellationToken).ConfigureAwait(false);
+
+    await branchRepository.TryAddAsync(new BranchMongoEntity
+    {
+      ID = 2000L,
+      CompanyId = 100L,
+      TenantID = Guid.Parse("53ade3c2-8e36-52f2-88cf-d068b1ab247a"),
+      Name = "Branch2",
+    }, cancellationToken).ConfigureAwait(false);
+
+    await branchRepository.TryAddAsync(new BranchMongoEntity
+    {
+      ID = 3000L,
+      CompanyId = 100L,
+      TenantID = Guid.Parse("53ade3c2-8e36-52f2-88cf-d068b1ab247a"),
+      Name = "Branch3",
+    }, cancellationToken).ConfigureAwait(false);
   }
 }
