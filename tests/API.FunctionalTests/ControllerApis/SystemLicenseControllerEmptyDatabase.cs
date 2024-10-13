@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using Fossa.API.Web;
+using Shouldly;
 
 namespace Fossa.API.FunctionalTests.ControllerApis;
 
@@ -17,6 +18,6 @@ public class SystemLicenseControllerEmptyDatabase : IClassFixture<CustomWebAppli
   {
     var response = await _client.GetAsync("/api/1.0/License/System");
 
-    Assert.Equal(HttpStatusCode.UnprocessableEntity, response.StatusCode);
+    response.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
   }
 }
