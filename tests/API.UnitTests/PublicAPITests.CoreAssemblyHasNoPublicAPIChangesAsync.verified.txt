@@ -405,6 +405,16 @@ namespace Fossa.API.Core.Messages.Queries
         public BranchRetrievalQueryHandler(Fossa.API.Core.Repositories.IBranchQueryRepository branchQueryRepository) { }
         public System.Threading.Tasks.Task<Fossa.API.Core.Entities.BranchEntity> Handle(Fossa.API.Core.Messages.Queries.BranchRetrievalQuery request, System.Threading.CancellationToken cancellationToken) { }
     }
+    public class CompanyLicenseRetrievalQuery : Fossa.API.Core.Messages.Queries.IQuery<TIKSN.Licensing.License<Fossa.Licensing.CompanyEntitlements>>, MediatR.IBaseRequest, MediatR.IRequest<TIKSN.Licensing.License<Fossa.Licensing.CompanyEntitlements>>, System.IEquatable<Fossa.API.Core.Messages.Queries.CompanyLicenseRetrievalQuery>
+    {
+        public CompanyLicenseRetrievalQuery(System.Guid TenantID) { }
+        public System.Guid TenantID { get; init; }
+    }
+    public class CompanyLicenseRetrievalQueryHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Queries.CompanyLicenseRetrievalQuery, TIKSN.Licensing.License<Fossa.Licensing.CompanyEntitlements>>
+    {
+        public CompanyLicenseRetrievalQueryHandler(Fossa.API.Core.Services.ICompanyLicenseRetriever companyLicenseRetriever, Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository) { }
+        public System.Threading.Tasks.Task<TIKSN.Licensing.License<Fossa.Licensing.CompanyEntitlements>> Handle(Fossa.API.Core.Messages.Queries.CompanyLicenseRetrievalQuery request, System.Threading.CancellationToken cancellationToken) { }
+    }
     public class CompanyRetrievalQuery : Fossa.API.Core.Messages.Queries.EntityTenantQuery<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Core.Entities.CompanyId, System.Guid, Fossa.API.Core.Entities.CompanyEntity>, System.IEquatable<Fossa.API.Core.Messages.Queries.CompanyRetrievalQuery>
     {
         public CompanyRetrievalQuery(System.Guid TenantID) { }
@@ -545,6 +555,11 @@ namespace Fossa.API.Core.Services
         public CompanyLicenseInitializer(Fossa.API.Core.Repositories.ILicenseFileRepository licenseFileRepository, Microsoft.Extensions.Logging.ILogger<Fossa.API.Core.Services.CompanyLicenseInitializer> logger) { }
         public System.Threading.Tasks.Task InitializeAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken) { }
     }
+    public class CompanyLicenseRetriever : Fossa.API.Core.Services.ICompanyLicenseRetriever
+    {
+        public CompanyLicenseRetriever(Fossa.API.Core.Repositories.ILicenseFileRepository licenseFileRepository, TIKSN.Licensing.ILicenseFactory<Fossa.Licensing.CompanyEntitlements, Fossa.Licensing.CompanyLicenseEntitlements> licenseFactory, Fossa.API.Core.Services.ICertificateProvider certificateProvider, Fossa.API.Core.Services.ISystemLicenseRetriever systemLicenseRetriever) { }
+        public System.Threading.Tasks.Task<LanguageExt.Validation<LanguageExt.Common.Error, TIKSN.Licensing.License<Fossa.Licensing.CompanyEntitlements>>> GetAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken) { }
+    }
     public interface ICertificateProvider
     {
         System.Threading.Tasks.Task<System.Security.Cryptography.X509Certificates.X509Certificate2> GetCertificateAsync(System.Threading.CancellationToken cancellationToken);
@@ -552,6 +567,10 @@ namespace Fossa.API.Core.Services
     public interface ICompanyLicenseInitializer
     {
         System.Threading.Tasks.Task InitializeAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken);
+    }
+    public interface ICompanyLicenseRetriever
+    {
+        System.Threading.Tasks.Task<LanguageExt.Validation<LanguageExt.Common.Error, TIKSN.Licensing.License<Fossa.Licensing.CompanyEntitlements>>> GetAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken);
     }
     public interface ISystemInitializer
     {

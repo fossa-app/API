@@ -100,6 +100,18 @@ namespace Fossa.API.Web.Api.Identity
 namespace Fossa.API.Web.Api.License
 {
     [Asp.Versioning.ApiVersion(1D, null)]
+    [Microsoft.AspNetCore.Authorization.Authorize]
+    [Microsoft.AspNetCore.Http.Tags(new string[] {
+            "Company License"})]
+    [Microsoft.AspNetCore.Mvc.ApiController]
+    [Microsoft.AspNetCore.Mvc.Route("api/{version:apiVersion}/License/[controller]")]
+    public class CompanyController : Fossa.API.Web.Api.BaseApiController
+    {
+        public CompanyController(MediatR.ISender sender, MediatR.IPublisher publisher, TIKSN.Mapping.IMapper<TIKSN.Licensing.License<Fossa.Licensing.CompanyEntitlements>, Fossa.API.Web.ApiModels.LicenseResponseModel<Fossa.API.Web.ApiModels.CompanyEntitlementsModel>> licenseMapper, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider) { }
+        [Microsoft.AspNetCore.Mvc.HttpGet]
+        public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.LicenseResponseModel<Fossa.API.Web.ApiModels.CompanyEntitlementsModel>> GetAsync(System.Threading.CancellationToken cancellationToken) { }
+    }
+    [Asp.Versioning.ApiVersion(1D, null)]
     [Microsoft.AspNetCore.Http.Tags(new string[] {
             "System License"})]
     [Microsoft.AspNetCore.Mvc.ApiController]
@@ -130,6 +142,13 @@ namespace Fossa.API.Web.ApiModels
         public long CompanyId { get; init; }
         public long Id { get; init; }
         public string Name { get; init; }
+    }
+    public class CompanyEntitlementsModel : System.IEquatable<Fossa.API.Web.ApiModels.CompanyEntitlementsModel>
+    {
+        public CompanyEntitlementsModel(long CompanyId, int MaximumBranchCount, int MaximumEmployeeCount) { }
+        public long CompanyId { get; init; }
+        public int MaximumBranchCount { get; init; }
+        public int MaximumEmployeeCount { get; init; }
     }
     public class CompanyModificationModel : System.IEquatable<Fossa.API.Web.ApiModels.CompanyModificationModel>
     {
@@ -230,6 +249,11 @@ namespace Fossa.API.Web.Mappers
     {
         public BranchRetrievalModelMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> companyDomainIdentityToDataIdentityMapper) { }
         public Fossa.API.Web.ApiModels.BranchRetrievalModel Map(Fossa.API.Core.Entities.BranchEntity source) { }
+    }
+    public class CompanyEntitlementsModelMapper : TIKSN.Mapping.IMapper<Fossa.Licensing.CompanyEntitlements, Fossa.API.Web.ApiModels.CompanyEntitlementsModel>
+    {
+        public CompanyEntitlementsModelMapper() { }
+        public Fossa.API.Web.ApiModels.CompanyEntitlementsModel Map(Fossa.Licensing.CompanyEntitlements source) { }
     }
     public class CompanyRetrievalModelMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Web.ApiModels.CompanyRetrievalModel>
     {
