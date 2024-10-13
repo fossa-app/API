@@ -62,6 +62,34 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   }
 
   [Fact]
+  public async Task CreateThenDeleteBranchWithAdministratorAccessTokenAsync()
+  {
+    var client = _factory.CreateClient();
+    var branchEasyStore = _factory.Services.GetRequiredService<IEasyStores>().Resolve<BranchMongoEntity, long>();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
+    const string branchName = "Branch-832159009";
+
+    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName));
+
+    creationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    var retrievalResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
+
+    var responseModel =
+      await retrievalResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+
+    responseModel.ShouldNotBeNull();
+    var branchRetrievalModel = responseModel.Items.Single(x => string.Equals(x.Name, branchName, StringComparison.OrdinalIgnoreCase));
+    branchRetrievalModel.Name.ShouldBe(branchName);
+
+    branchEasyStore.Entities.ContainsKey(branchRetrievalModel.Id).ShouldBeTrue();
+    var deletionResponse = await client.DeleteAsync($"/api/1.0/Branches/{branchRetrievalModel.Id}");
+
+    deletionResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+    branchEasyStore.Entities.ContainsKey(branchRetrievalModel.Id).ShouldBeFalse();
+  }
+
+  [Fact]
   public async Task DeleteBranchWithoutAccessTokenAsync()
   {
     var client = _factory.CreateClient();
