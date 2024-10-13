@@ -14,4 +14,3 @@ public static class AllEntitiesExtensions
     await factory.SeedEmployeesAsync(default).ConfigureAwait(false);
   }
 }
-

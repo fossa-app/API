@@ -21,6 +21,51 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
   }
 
   [Fact]
+  public async Task CreateCompanyWithAdministratorAccessTokenAsync()
+  {
+    var client = _factory.CreateClient();
+    var licenseEasyStoreBucket = _factory.Services.GetRequiredService<IEasyStores>().ResolveBucket<long, object>("License");
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant101.ADMIN1");
+    const string companyName = "Company-1993954667";
+
+    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Company", new CompanyModificationModel(companyName));
+
+    creationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    var retrievalResponse = await client.GetAsync("/api/1.0/Company");
+
+    var responseModel =
+      await retrievalResponse.Content.ReadFromJsonAsync<CompanyRetrievalModel>();
+
+    responseModel.ShouldNotBeNull();
+    responseModel.Id.ShouldBePositive();
+    responseModel.Name.ShouldBe(companyName);
+
+    licenseEasyStoreBucket.BucketContent.Values.Where(x => string.Equals(x.Path, $"Company{responseModel.Id}", StringComparison.Ordinal)).ShouldNotBeEmpty();
+  }
+
+  [Fact]
+  public async Task CreateCompanyWithoutAccessTokenAsync()
+  {
+    var client = _factory.CreateClient();
+
+    var response = await client.PostAsJsonAsync("/api/1.0/Company", new CompanyModificationModel("Company X"));
+
+    response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+  }
+
+  [Fact]
+  public async Task CreateCompanyWithUserAccessTokenAsync()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJFK2J690FS0Q3TCX4P3F.Tenant101.User1");
+    const string companyName = "Company-144764445";
+    var response = await client.PostAsJsonAsync("/api/1.0/Company", new CompanyModificationModel(companyName));
+
+    response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+  }
+
+  [Fact]
   public async Task DeleteCompanyWithoutAccessTokenAsync()
   {
     var client = _factory.CreateClient();

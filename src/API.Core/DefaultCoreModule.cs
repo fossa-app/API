@@ -34,6 +34,11 @@ public class DefaultCoreModule : Module
       .InstancePerLifetimeScope();
 
     builder
+      .RegisterType<CompanyLicenseInitializer>()
+      .AsImplementedInterfaces()
+      .InstancePerLifetimeScope();
+
+    builder
       .RegisterType<SystemLicenseRetriever>()
       .AsImplementedInterfaces()
       .InstancePerLifetimeScope();

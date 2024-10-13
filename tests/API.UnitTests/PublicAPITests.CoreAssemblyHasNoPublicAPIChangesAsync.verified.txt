@@ -261,7 +261,7 @@ namespace Fossa.API.Core.Messages.Commands
     }
     public class CompanyCreationCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.CompanyCreationCommand, MediatR.Unit>
     {
-        public CompanyCreationCommandHandler(TIKSN.Identity.IIdentityGenerator<Fossa.API.Core.Entities.CompanyId> identityGenerator, Fossa.API.Core.Services.ISystemLicenseRetriever systemLicenseRetriever, Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, Fossa.API.Core.Repositories.ICompanyRepository companyRepository) { }
+        public CompanyCreationCommandHandler(TIKSN.Identity.IIdentityGenerator<Fossa.API.Core.Entities.CompanyId> identityGenerator, Fossa.API.Core.Services.ISystemLicenseRetriever systemLicenseRetriever, Fossa.API.Core.Services.ICompanyLicenseInitializer companyLicenseInitializer, Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, Fossa.API.Core.Repositories.ICompanyRepository companyRepository) { }
         public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.CompanyCreationCommand request, System.Threading.CancellationToken cancellationToken) { }
     }
     public class CompanyDeletionCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Core.Entities.CompanyId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.CompanyDeletionCommand>
@@ -540,9 +540,18 @@ namespace Fossa.API.Core.Services
         public CertificateProvider() { }
         public System.Threading.Tasks.Task<System.Security.Cryptography.X509Certificates.X509Certificate2> GetCertificateAsync(System.Threading.CancellationToken cancellationToken) { }
     }
+    public class CompanyLicenseInitializer : Fossa.API.Core.Services.ICompanyLicenseInitializer
+    {
+        public CompanyLicenseInitializer(Fossa.API.Core.Repositories.ILicenseFileRepository licenseFileRepository, Microsoft.Extensions.Logging.ILogger<Fossa.API.Core.Services.CompanyLicenseInitializer> logger) { }
+        public System.Threading.Tasks.Task InitializeAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken) { }
+    }
     public interface ICertificateProvider
     {
         System.Threading.Tasks.Task<System.Security.Cryptography.X509Certificates.X509Certificate2> GetCertificateAsync(System.Threading.CancellationToken cancellationToken);
+    }
+    public interface ICompanyLicenseInitializer
+    {
+        System.Threading.Tasks.Task InitializeAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken);
     }
     public interface ISystemInitializer
     {
@@ -563,6 +572,7 @@ namespace Fossa.API.Core.Services
     public static class LicensePaths
     {
         public const string SystemLicensePath = "System";
+        public static readonly System.Text.CompositeFormat CompanyLicensePathFormat;
     }
     public class SystemInitializer : Fossa.API.Core.Services.ISystemInitializer
     {
