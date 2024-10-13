@@ -227,6 +227,19 @@ namespace Fossa.API.Core.Messages.Commands
         public BranchCreationCommandHandler(TIKSN.Identity.IIdentityGenerator<Fossa.API.Core.Entities.BranchId> identityGenerator, Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, Fossa.API.Core.Repositories.IBranchRepository branchRepository) { }
         public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.BranchCreationCommand request, System.Threading.CancellationToken cancellationToken) { }
     }
+    public class BranchDeletionCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Core.Entities.BranchId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.BranchDeletionCommand>
+    {
+        public BranchDeletionCommand(Fossa.API.Core.Entities.BranchId ID, System.Guid TenantID, System.Guid UserID) { }
+        public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.BranchId> AffectingTenantEntitiesIdentities { get; }
+        public Fossa.API.Core.Entities.BranchId ID { get; init; }
+        public System.Guid UserID { get; init; }
+    }
+    public class BranchDeletionCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.BranchDeletionCommand, MediatR.Unit>
+    {
+        public BranchDeletionCommandHandler(Fossa.API.Core.Repositories.IBranchQueryRepository branchQueryRepository, Fossa.API.Core.Repositories.IBranchRepository branchRepository, Fossa.API.Core.Relationship.IRelationshipGraph relationshipGraph) { }
+        public System.Threading.Tasks.Task DeleteBranchAsync(Fossa.API.Core.Entities.BranchEntity entity, System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.BranchDeletionCommand request, System.Threading.CancellationToken cancellationToken) { }
+    }
     public class BranchModificationCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Core.Entities.BranchId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.BranchModificationCommand>
     {
         public BranchModificationCommand(Fossa.API.Core.Entities.BranchId ID, System.Guid TenantID, System.Guid UserID, string Name) { }
@@ -597,6 +610,10 @@ namespace Fossa.API.Core.Validators
     public class BranchCreationCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.BranchCreationCommand>
     {
         public BranchCreationCommandValidator() { }
+    }
+    public class BranchDeletionCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.BranchDeletionCommand>
+    {
+        public BranchDeletionCommandValidator() { }
     }
     public class BranchModificationCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.BranchModificationCommand>
     {
