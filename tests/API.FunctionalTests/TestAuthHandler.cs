@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Identity.Web;
+using UUIDNext;
 
 namespace Fossa.API.FunctionalTests;
 
@@ -18,7 +19,10 @@ public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions
   public TestAuthHandler(IOptionsMonitor<AuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder)
       : base(options, logger, encoder) { }
 
+#pragma warning disable MA0051 // Method is too long
+
   protected override Task<AuthenticateResult> HandleAuthenticateAsync()
+#pragma warning restore MA0051 // Method is too long
   {
     if (Context.Request.Headers.Authorization.Count == 0)
     {
@@ -59,14 +63,19 @@ public class TestAuthHandler : AuthenticationHandler<AuthenticationSchemeOptions
       return Task.FromResult(AuthenticateResult.Fail(new InvalidOperationException("Access Token third part is user, it needs to start with `User` or `ADMIN`")));
     }
 
+    var tenant = accessTokenParts[1];
+    var user = accessTokenParts[2];
+
+    var tenantUserIdNamespaceId = Uuid.NewNameBased(_userIdNamespaceId, tenant);
+
     var claims = new List<Claim>()
     {
-      new(ClaimConstants.TenantId, UUIDNext.Uuid.NewNameBased(_tenantIdNamespaceId, accessTokenParts[1]).ToString()),
-      new(ClaimTypes.Name, $"{accessTokenParts[1]} {accessTokenParts[2]}"),
-      new(ClaimTypes.NameIdentifier, UUIDNext.Uuid.NewNameBased(_userIdNamespaceId, accessTokenParts[2]).ToString()),
+      new(ClaimConstants.TenantId, Uuid.NewNameBased(_tenantIdNamespaceId, tenant).ToString()),
+      new(ClaimTypes.Name, $"{tenant} {user}"),
+      new(ClaimTypes.NameIdentifier, Uuid.NewNameBased(tenantUserIdNamespaceId, user).ToString()),
     };
 
-    if (accessTokenParts[2].StartsWith("ADMIN", StringComparison.OrdinalIgnoreCase))
+    if (user.StartsWith("ADMIN", StringComparison.OrdinalIgnoreCase))
     {
       claims.Add(new Claim(ClaimTypes.Role, Roles.Administrator));
     }
