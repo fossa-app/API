@@ -35,6 +35,22 @@ public class BranchesController : BaseApiController<BranchId>
     _userIdProvider = userIdProvider ?? throw new ArgumentNullException(nameof(userIdProvider));
   }
 
+  [HttpDelete("{id}")]
+  [Authorize(Roles = Roles.Administrator)]
+  public async Task DeleteAsync(
+    long id,
+    CancellationToken cancellationToken)
+  {
+    var tenantId = _tenantIdProvider.GetTenantId();
+    var userId = _userIdProvider.GetUserId();
+    await _sender.Send(
+      new BranchDeletionCommand(
+        _dataIdentityToDomainIdentityMapper.Map(id),
+        tenantId,
+        userId),
+      cancellationToken);
+  }
+
   [HttpGet("{id}")]
   public async Task<BranchRetrievalModel> GetAsync(
     [FromRoute] long id,
