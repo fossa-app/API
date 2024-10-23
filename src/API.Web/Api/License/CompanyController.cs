@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using Fossa.API.Core.Messages.Commands;
 using Fossa.API.Core.Messages.Queries;
 using Fossa.API.Core.Tenant;
 using Fossa.API.Web.ApiModels;
@@ -30,6 +31,26 @@ public class CompanyController : BaseApiController
   {
     _licenseMapper = licenseMapper ?? throw new ArgumentNullException(nameof(licenseMapper));
     _tenantIdProvider = tenantIdProvider ?? throw new ArgumentNullException(nameof(tenantIdProvider));
+  }
+
+  [HttpPost]
+  [Authorize(Roles = Roles.Administrator)]
+  public async Task CreateAsync(
+    IFormFile licenseFile,
+    CancellationToken cancellationToken)
+  {
+    var tenantId = _tenantIdProvider.GetTenantId();
+
+    await using var memoryStream = new MemoryStream();
+    await licenseFile.CopyToAsync(memoryStream, cancellationToken);
+
+    var licenseData = memoryStream.ToArray().ToSeq();
+
+    await _sender.Send(
+      new CompanyLicenseCreationCommand(
+        tenantId,
+        licenseData),
+      cancellationToken);
   }
 
   [HttpGet]
