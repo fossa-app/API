@@ -1,5 +1,8 @@
-﻿using Fossa.API.FunctionalTests.Repositories;
+﻿using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using EasyDoubles;
 using Fossa.API.Persistence.Mongo.Entities;
+using Fossa.API.Web.ApiModels;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,20 +15,26 @@ public static class CompanyExtensions
     CancellationToken cancellationToken)
     where TEntryPoint : class
   {
-    var companyRepository = factory.Services.GetRequiredService<CompanyMongoEasyRepository>();
+    await SeedCompanyAsync(factory, "Company1-1587795889", "01JB0QS2K6SA4KYD8S920W7DMG.Tenant1.ADMIN1", cancellationToken).ConfigureAwait(false);
+    await SeedCompanyAsync(factory, "Company2-1031522025", "01JB0RAH24ZJBA53AJF5F5MMZX.Tenant2.ADMIN1", cancellationToken).ConfigureAwait(false);
+  }
 
-    await companyRepository.TryAddAsync(new CompanyMongoEntity
-    {
-      ID = 100L,
-      TenantID = Guid.Parse("53ade3c2-8e36-52f2-88cf-d068b1ab247a"),
-      Name = "Company1",
-    }, cancellationToken).ConfigureAwait(false);
+  private static async Task SeedCompanyAsync<TEntryPoint>(
+    WebApplicationFactory<TEntryPoint> factory,
+    string companyName,
+    string accessToken,
+    CancellationToken cancellationToken) where TEntryPoint : class
+  {
+    var companyEasyStore = factory.Services.GetRequiredService<IEasyStores>().Resolve<CompanyMongoEntity, long>();
 
-    await companyRepository.TryAddAsync(new CompanyMongoEntity
+    if (!companyEasyStore.Entities.Values.Any(x => string.Equals(x.Name, companyName, StringComparison.Ordinal)))
     {
-      ID = 200L,
-      TenantID = Guid.Parse("cf59d3dd-5258-5a20-88ab-0169cf128440"),
-      Name = "Company2",
-    }, cancellationToken).ConfigureAwait(false);
+      var client = factory.CreateClient();
+      client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+      var creationResponse = await client.PostAsJsonAsync("/api/1.0/Company", new CompanyModificationModel(companyName), cancellationToken).ConfigureAwait(false);
+
+      creationResponse.EnsureSuccessStatusCode();
+    }
   }
 }
