@@ -91,12 +91,12 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
     var companyEasyStore = _factory.Services.GetRequiredService<IEasyStores>().Resolve<CompanyMongoEntity, long>();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9SJ94KK62JSRNQD7H70NCF7.Tenant2.ADMIN1");
 
-    companyEasyStore.Entities.ContainsKey(200L).ShouldBeTrue();
+    companyEasyStore.Entities.Values.FirstOrDefault(x => string.Equals(x.Name, "Company2-1031522025", StringComparison.Ordinal)).ShouldNotBeNull();
 
     var response = await client.DeleteAsync("/api/1.0/Company");
 
     response.StatusCode.ShouldBe(HttpStatusCode.OK);
-    companyEasyStore.Entities.ContainsKey(200L).ShouldBeFalse();
+    companyEasyStore.Entities.Values.FirstOrDefault(x => string.Equals(x.Name, "Company2-1031522025", StringComparison.Ordinal)).ShouldBeNull();
   }
 
   [Fact]

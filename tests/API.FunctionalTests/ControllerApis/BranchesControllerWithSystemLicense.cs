@@ -105,12 +105,12 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var branchEasyStore = _factory.Services.GetRequiredService<IEasyStores>().Resolve<BranchMongoEntity, long>();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA0JKF0VRC9JPZ9JSAMHGAFS.Tenant1.ADMIN1");
 
-    branchEasyStore.Entities.ContainsKey(2000L).ShouldBeTrue();
+    var existingBranch = branchEasyStore.Entities.Values.Single(x => string.Equals(x.Name, "Branch2-1972002548", StringComparison.Ordinal));
 
-    var response = await client.DeleteAsync("/api/1.0/Branches/2000");
+    var response = await client.DeleteAsync($"/api/1.0/Branches/{existingBranch.ID}");
 
     response.StatusCode.ShouldBe(HttpStatusCode.OK);
-    branchEasyStore.Entities.ContainsKey(2000L).ShouldBeFalse();
+    branchEasyStore.Entities.Values.FirstOrDefault(x => string.Equals(x.Name, "Branch2-1972002548", StringComparison.Ordinal)).ShouldBeNull();
   }
 
   [Fact]
@@ -120,9 +120,9 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var branchEasyStore = _factory.Services.GetRequiredService<IEasyStores>().Resolve<BranchMongoEntity, long>();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA0JKF0VRC9JPZ9JSAMHGAFS.Tenant1.User2");
 
-    branchEasyStore.Entities.ContainsKey(3000L).ShouldBeTrue();
+    var existingBranch = branchEasyStore.Entities.Values.Single(x => string.Equals(x.Name, "Branch3-1513925028", StringComparison.Ordinal));
 
-    var response = await client.DeleteAsync("/api/1.0/Branches/3000");
+    var response = await client.DeleteAsync($"/api/1.0/Branches/{existingBranch.ID}");
 
     response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
   }

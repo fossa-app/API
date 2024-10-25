@@ -175,6 +175,12 @@ namespace Fossa.API.Core.Messages
         public CrossTenantUnauthorizedAccessException(string message) { }
         public CrossTenantUnauthorizedAccessException(string message, System.Exception inner) { }
     }
+    public class EntityExistsException : System.Exception
+    {
+        public EntityExistsException() { }
+        public EntityExistsException(string message) { }
+        public EntityExistsException(string message, System.Exception inner) { }
+    }
     public class FailedDependencyException : System.Exception
     {
         public FailedDependencyException() { }

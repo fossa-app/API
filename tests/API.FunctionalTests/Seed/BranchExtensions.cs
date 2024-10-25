@@ -1,5 +1,8 @@
-﻿using Fossa.API.FunctionalTests.Repositories;
+﻿using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using EasyDoubles;
 using Fossa.API.Persistence.Mongo.Entities;
+using Fossa.API.Web.ApiModels;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,30 +15,27 @@ public static class BranchExtensions
     CancellationToken cancellationToken)
     where TEntryPoint : class
   {
-    var branchRepository = factory.Services.GetRequiredService<BranchMongoEasyRepository>();
+    await SeedBranchAsync(factory, "Branch1-1937190788", "01JB0S0PAQTKGEWXBX1060B00T.Tenant1.ADMIN1", cancellationToken).ConfigureAwait(false);
+    await SeedBranchAsync(factory, "Branch2-1972002548", "01JB0S0SYP3T4REGTTC3Y74N51.Tenant1.ADMIN1", cancellationToken).ConfigureAwait(false);
+    await SeedBranchAsync(factory, "Branch3-1513925028", "01JB0S0SYP3T4REGTTC3Y74N51.Tenant1.ADMIN1", cancellationToken).ConfigureAwait(false);
+  }
 
-    await branchRepository.TryAddAsync(new BranchMongoEntity
-    {
-      ID = 1000L,
-      CompanyId = 100L,
-      TenantID = Guid.Parse("53ade3c2-8e36-52f2-88cf-d068b1ab247a"),
-      Name = "Branch1",
-    }, cancellationToken).ConfigureAwait(false);
+  private static async Task SeedBranchAsync<TEntryPoint>(
+    WebApplicationFactory<TEntryPoint> factory,
+    string branchName,
+    string accessToken,
+    CancellationToken cancellationToken) where TEntryPoint : class
+  {
+    var branchEasyStore = factory.Services.GetRequiredService<IEasyStores>().Resolve<BranchMongoEntity, long>();
 
-    await branchRepository.TryAddAsync(new BranchMongoEntity
+    if (!branchEasyStore.Entities.Values.Any(x => string.Equals(x.Name, branchName, StringComparison.Ordinal)))
     {
-      ID = 2000L,
-      CompanyId = 100L,
-      TenantID = Guid.Parse("53ade3c2-8e36-52f2-88cf-d068b1ab247a"),
-      Name = "Branch2",
-    }, cancellationToken).ConfigureAwait(false);
+      var client = factory.CreateClient();
+      client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-    await branchRepository.TryAddAsync(new BranchMongoEntity
-    {
-      ID = 3000L,
-      CompanyId = 100L,
-      TenantID = Guid.Parse("53ade3c2-8e36-52f2-88cf-d068b1ab247a"),
-      Name = "Branch3",
-    }, cancellationToken).ConfigureAwait(false);
+      var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName), cancellationToken).ConfigureAwait(false);
+
+      creationResponse.EnsureSuccessStatusCode();
+    }
   }
 }
