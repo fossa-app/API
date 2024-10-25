@@ -31,5 +31,6 @@ internal static class ProblemDetailsOptionsExtensions
     options.MapToStatusCode<CrossTenantOutboundUnauthorizedAccessException>(StatusCodes.Status403Forbidden);
     options.MapToStatusCode<CrossTenantUnauthorizedAccessException>(StatusCodes.Status403Forbidden);
     options.MapToStatusCode<FailedDependencyException>(StatusCodes.Status424FailedDependency);
+    options.MapToStatusCode<EntityExistsException>(StatusCodes.Status409Conflict);
   }
 }

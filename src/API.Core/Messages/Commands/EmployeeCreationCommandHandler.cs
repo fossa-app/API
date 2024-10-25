@@ -33,7 +33,7 @@ public class EmployeeCreationCommandHandler : IRequestHandler<EmployeeCreationCo
       .ConfigureAwait(false);
     if (oldEntity.IsSome)
     {
-      throw new InvalidOperationException("An employee for this user has already been created.");
+      throw new EntityExistsException("An employee for this user has already been created.");
     }
 
     var companyEntity = await _companyQueryRepository.FindByTenantIdAsync(request.TenantID, cancellationToken)
