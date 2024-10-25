@@ -41,7 +41,7 @@ public class EmployeeCreationCommandHandler : IRequestHandler<EmployeeCreationCo
 
     await companyEntity.Match(
         s => CreateEmployeeAsync(s, request, cancellationToken),
-        () => throw new InvalidOperationException("A company for this tenant have not been created."))
+        () => throw new FailedDependencyException("A company for this tenant have not been created."))
       .ConfigureAwait(false);
     return Unit.Value;
   }

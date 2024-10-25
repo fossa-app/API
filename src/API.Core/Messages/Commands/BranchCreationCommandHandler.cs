@@ -30,7 +30,7 @@ public class BranchCreationCommandHandler : IRequestHandler<BranchCreationComman
 
     await companyEntity.Match(
         s => CreateBranchAsync(s, request, cancellationToken),
-        () => throw new InvalidOperationException("A company for this tenant have not been created."))
+        () => throw new FailedDependencyException("A company for this tenant have not been created."))
       .ConfigureAwait(false);
     return Unit.Value;
   }
