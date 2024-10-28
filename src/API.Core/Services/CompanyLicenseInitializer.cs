@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using Fossa.API.Core.Entities;
+﻿using Fossa.API.Core.Entities;
 using Fossa.API.Core.Repositories;
 using Microsoft.Extensions.Logging;
 
@@ -21,7 +20,7 @@ public class CompanyLicenseInitializer : ICompanyLicenseInitializer
   public async Task InitializeAsync(CompanyId companyId, CancellationToken cancellationToken)
   {
     _logger.LogInformation(24705152, "Checking existence of Company License");
-    var companyLicensePath = string.Format(CultureInfo.InvariantCulture, LicensePaths.CompanyLicensePathFormat, companyId.AsPrimitive());
+    var companyLicensePath = CompanyLicenseHelper.GetCompanyLicensePath(companyId);
     var companyLicenseExists = await _licenseFileRepository
       .ExistsAsync(companyLicensePath, cancellationToken)
       .ConfigureAwait(false);

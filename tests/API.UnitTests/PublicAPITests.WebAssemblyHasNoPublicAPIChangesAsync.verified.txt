@@ -108,6 +108,9 @@ namespace Fossa.API.Web.Api.License
     public class CompanyController : Fossa.API.Web.Api.BaseApiController
     {
         public CompanyController(MediatR.ISender sender, MediatR.IPublisher publisher, TIKSN.Mapping.IMapper<TIKSN.Licensing.License<Fossa.Licensing.CompanyEntitlements>, Fossa.API.Web.ApiModels.LicenseResponseModel<Fossa.API.Web.ApiModels.CompanyEntitlementsModel>> licenseMapper, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider) { }
+        [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
+        [Microsoft.AspNetCore.Mvc.HttpPost]
+        public System.Threading.Tasks.Task CreateAsync(Microsoft.AspNetCore.Http.IFormFile licenseFile, System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Mvc.HttpGet]
         public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.LicenseResponseModel<Fossa.API.Web.ApiModels.CompanyEntitlementsModel>> GetAsync(System.Threading.CancellationToken cancellationToken) { }
     }

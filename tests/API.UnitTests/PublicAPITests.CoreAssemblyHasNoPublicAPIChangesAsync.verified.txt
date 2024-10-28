@@ -281,6 +281,17 @@ namespace Fossa.API.Core.Messages.Commands
         public System.Threading.Tasks.Task DeleteCompanyAsync(Fossa.API.Core.Entities.CompanyEntity entity, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.CompanyDeletionCommand request, System.Threading.CancellationToken cancellationToken) { }
     }
+    public class CompanyLicenseCreationCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Core.Messages.Commands.CompanyLicenseCreationCommand>
+    {
+        public CompanyLicenseCreationCommand(System.Guid TenantID, LanguageExt.Seq<byte> LicenseData) { }
+        public LanguageExt.Seq<byte> LicenseData { get; init; }
+        public System.Guid TenantID { get; init; }
+    }
+    public class CompanyLicenseCreationCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.CompanyLicenseCreationCommand, MediatR.Unit>
+    {
+        public CompanyLicenseCreationCommandHandler(Fossa.API.Core.Services.ICompanyLicenseCreator companyLicenseCreator, Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository) { }
+        public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.CompanyLicenseCreationCommand request, System.Threading.CancellationToken cancellationToken) { }
+    }
     public class CompanyModificationCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Core.Entities.CompanyId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.CompanyModificationCommand>
     {
         public CompanyModificationCommand(System.Guid TenantID, string Name) { }
@@ -556,12 +567,28 @@ namespace Fossa.API.Core.Services
         public CertificateProvider() { }
         public System.Threading.Tasks.Task<System.Security.Cryptography.X509Certificates.X509Certificate2> GetCertificateAsync(System.Threading.CancellationToken cancellationToken) { }
     }
+    public class CompanyLicenseCreator : Fossa.API.Core.Services.CompanyLicenseManager, Fossa.API.Core.Services.ICompanyLicenseCreator
+    {
+        public CompanyLicenseCreator(Fossa.API.Core.Repositories.ILicenseFileRepository licenseFileRepository, TIKSN.Licensing.ILicenseFactory<Fossa.Licensing.CompanyEntitlements, Fossa.Licensing.CompanyLicenseEntitlements> licenseFactory, Fossa.API.Core.Services.ICertificateProvider certificateProvider, Fossa.API.Core.Services.ISystemLicenseRetriever systemLicenseRetriever) { }
+        public System.Threading.Tasks.Task<LanguageExt.Validation<LanguageExt.Common.Error, TIKSN.Licensing.License<Fossa.Licensing.CompanyEntitlements>>> CreateAsync(Fossa.API.Core.Entities.CompanyId companyId, LanguageExt.Seq<byte> licenseData, System.Threading.CancellationToken cancellationToken) { }
+    }
+    public static class CompanyLicenseHelper
+    {
+        public static string GetCompanyLicensePath(Fossa.API.Core.Entities.CompanyId companyId) { }
+    }
     public class CompanyLicenseInitializer : Fossa.API.Core.Services.ICompanyLicenseInitializer
     {
         public CompanyLicenseInitializer(Fossa.API.Core.Repositories.ILicenseFileRepository licenseFileRepository, Microsoft.Extensions.Logging.ILogger<Fossa.API.Core.Services.CompanyLicenseInitializer> logger) { }
         public System.Threading.Tasks.Task InitializeAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken) { }
     }
-    public class CompanyLicenseRetriever : Fossa.API.Core.Services.ICompanyLicenseRetriever
+    public abstract class CompanyLicenseManager
+    {
+        protected readonly Fossa.API.Core.Services.ICertificateProvider _certificateProvider;
+        protected readonly TIKSN.Licensing.ILicenseFactory<Fossa.Licensing.CompanyEntitlements, Fossa.Licensing.CompanyLicenseEntitlements> _licenseFactory;
+        protected CompanyLicenseManager(Fossa.API.Core.Services.ICertificateProvider certificateProvider, TIKSN.Licensing.ILicenseFactory<Fossa.Licensing.CompanyEntitlements, Fossa.Licensing.CompanyLicenseEntitlements> licenseFactory) { }
+        protected System.Threading.Tasks.Task<LanguageExt.Validation<LanguageExt.Common.Error, TIKSN.Licensing.License<Fossa.Licensing.CompanyEntitlements>>> ValidateCompanyLicenseAsync(TIKSN.Licensing.License<Fossa.Licensing.SystemEntitlements> systemLicense, Fossa.API.Core.Entities.CompanyId companyId, LanguageExt.Seq<byte> licenseData, System.Threading.CancellationToken cancellationToken) { }
+    }
+    public class CompanyLicenseRetriever : Fossa.API.Core.Services.CompanyLicenseManager, Fossa.API.Core.Services.ICompanyLicenseRetriever
     {
         public CompanyLicenseRetriever(Fossa.API.Core.Repositories.ILicenseFileRepository licenseFileRepository, TIKSN.Licensing.ILicenseFactory<Fossa.Licensing.CompanyEntitlements, Fossa.Licensing.CompanyLicenseEntitlements> licenseFactory, Fossa.API.Core.Services.ICertificateProvider certificateProvider, Fossa.API.Core.Services.ISystemLicenseRetriever systemLicenseRetriever) { }
         public System.Threading.Tasks.Task<LanguageExt.Validation<LanguageExt.Common.Error, TIKSN.Licensing.License<Fossa.Licensing.CompanyEntitlements>>> GetAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken) { }
@@ -569,6 +596,10 @@ namespace Fossa.API.Core.Services
     public interface ICertificateProvider
     {
         System.Threading.Tasks.Task<System.Security.Cryptography.X509Certificates.X509Certificate2> GetCertificateAsync(System.Threading.CancellationToken cancellationToken);
+    }
+    public interface ICompanyLicenseCreator
+    {
+        System.Threading.Tasks.Task<LanguageExt.Validation<LanguageExt.Common.Error, TIKSN.Licensing.License<Fossa.Licensing.CompanyEntitlements>>> CreateAsync(Fossa.API.Core.Entities.CompanyId companyId, LanguageExt.Seq<byte> licenseData, System.Threading.CancellationToken cancellationToken);
     }
     public interface ICompanyLicenseInitializer
     {
