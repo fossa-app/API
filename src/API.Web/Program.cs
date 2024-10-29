@@ -21,7 +21,7 @@ using TIKSN.Deployment;
 using TIKSN.Mapping;
 using static LanguageExt.Prelude;
 
-var initialReleaseDate = new DateOnly(2023, 07, 15);
+var initialReleaseDate = new DateOnly(1970, 01, 01);
 
 var builder = WebApplication.CreateBuilder(args);
 
