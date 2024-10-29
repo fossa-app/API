@@ -9,9 +9,6 @@ trim_trailing_whitespace = true
 vsspell_section_id = cb4a4387061549238f01a4c2739f296e
 vsspell_ignored_keywords_cb4a4387061549238f01a4c2739f296e = Mongo|Validator|validators|Oauth|Auth
 
-[*.sln]
-indent_style = tab
-
 # XML project files
 [*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj}]
 indent_size = 2
