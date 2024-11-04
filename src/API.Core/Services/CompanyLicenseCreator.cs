@@ -51,7 +51,11 @@ public class CompanyLicenseCreator : CompanyLicenseManager, ICompanyLicenseCreat
 
     if (companyLicenseExists)
     {
-      return Fail<Error, License<CompanyEntitlements>>(Error.New(25578518, "Company License already exists."));
+      var companyLicenseFile = await _licenseFileRepository.DownloadAsync(companyLicensePath, cancellationToken).ConfigureAwait(false);
+      if (companyLicenseFile?.Content.Count > 0)
+      {
+        return Fail<Error, License<CompanyEntitlements>>(Error.New(25578518, "Company License already exists."));
+      }
     }
 
     await _licenseFileRepository.UploadAsync(companyLicensePath, [.. licenseData], cancellationToken).ConfigureAwait(false);
