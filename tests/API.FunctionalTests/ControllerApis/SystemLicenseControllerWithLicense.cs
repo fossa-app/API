@@ -2,6 +2,7 @@
 using Fossa.API.FunctionalTests.Seed;
 using Fossa.API.Web;
 using Fossa.API.Web.ApiModels;
+using Shouldly;
 
 namespace Fossa.API.FunctionalTests.ControllerApis;
 
@@ -24,14 +25,15 @@ public class SystemLicenseControllerWithLicense : IClassFixture<CustomWebApplica
     var licenseResponseModel =
       await response.Content.ReadFromJsonAsync<LicenseResponseModel<SystemEntitlementsModel>>();
 
-    Assert.NotNull(licenseResponseModel);
-    Assert.NotNull(licenseResponseModel.Terms);
-    Assert.NotNull(licenseResponseModel.Terms.Licensor);
-    Assert.NotNull(licenseResponseModel.Terms.Licensee);
-    Assert.NotNull(licenseResponseModel.Entitlements);
-    Assert.NotNull(licenseResponseModel.Entitlements.EnvironmentName);
-    Assert.NotNull(licenseResponseModel.Entitlements.EnvironmentKind);
-    Assert.True(licenseResponseModel.Entitlements.MaximumCompanyCount > 0);
+    licenseResponseModel.ShouldNotBeNull();
+    licenseResponseModel.Terms.ShouldNotBeNull();
+    licenseResponseModel.Terms.Licensor.ShouldNotBeNull();
+    licenseResponseModel.Terms.Licensee.ShouldNotBeNull();
+    licenseResponseModel.Entitlements.ShouldNotBeNull();
+    licenseResponseModel.Entitlements.EnvironmentName.ShouldNotBeNull();
+    licenseResponseModel.Entitlements.EnvironmentKind.ShouldNotBeNull();
+    licenseResponseModel.Entitlements.Countries.ShouldNotBeEmpty();
+    licenseResponseModel.Entitlements.MaximumCompanyCount.ShouldBePositive();
   }
 
   public async Task InitializeAsync()
