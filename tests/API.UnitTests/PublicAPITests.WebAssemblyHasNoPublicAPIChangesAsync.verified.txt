@@ -164,6 +164,12 @@ namespace Fossa.API.Web.ApiModels
         public long Id { get; init; }
         public string Name { get; init; }
     }
+    public class CountryModel : System.IEquatable<Fossa.API.Web.ApiModels.CountryModel>
+    {
+        public CountryModel(string Name, string Code) { }
+        public string Code { get; init; }
+        public string Name { get; init; }
+    }
     public class EmployeeModificationModel : System.IEquatable<Fossa.API.Web.ApiModels.EmployeeModificationModel>
     {
         public EmployeeModificationModel(string? FirstName, string? LastName, string? FullName) { }
@@ -203,7 +209,8 @@ namespace Fossa.API.Web.ApiModels
     }
     public class SystemEntitlementsModel : System.IEquatable<Fossa.API.Web.ApiModels.SystemEntitlementsModel>
     {
-        public SystemEntitlementsModel(string EnvironmentName, string EnvironmentKind, int MaximumCompanyCount) { }
+        public SystemEntitlementsModel(string EnvironmentName, string EnvironmentKind, System.Collections.Generic.IReadOnlyList<Fossa.API.Web.ApiModels.CountryModel> Countries, int MaximumCompanyCount) { }
+        public System.Collections.Generic.IReadOnlyList<Fossa.API.Web.ApiModels.CountryModel> Countries { get; init; }
         public string EnvironmentKind { get; init; }
         public string EnvironmentName { get; init; }
         public int MaximumCompanyCount { get; init; }
@@ -263,6 +270,11 @@ namespace Fossa.API.Web.Mappers
         public CompanyRetrievalModelMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> domainIdentityToDataIdentityMapper) { }
         public Fossa.API.Web.ApiModels.CompanyRetrievalModel Map(Fossa.API.Core.Entities.CompanyEntity source) { }
     }
+    public class CountryModelMapper : TIKSN.Mapping.IMapper<System.Globalization.RegionInfo, Fossa.API.Web.ApiModels.CountryModel>
+    {
+        public CountryModelMapper() { }
+        public Fossa.API.Web.ApiModels.CountryModel Map(System.Globalization.RegionInfo source) { }
+    }
     public class EmployeeRetrievalModelMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Web.ApiModels.EmployeeRetrievalModel>
     {
         public EmployeeRetrievalModelMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> companyDomainIdentityToDataIdentityMapper) { }
@@ -304,7 +316,7 @@ namespace Fossa.API.Web.Mappers
     }
     public class SystemEntitlementsModelMapper : TIKSN.Mapping.IMapper<Fossa.Licensing.SystemEntitlements, Fossa.API.Web.ApiModels.SystemEntitlementsModel>
     {
-        public SystemEntitlementsModelMapper(Microsoft.Extensions.Hosting.IHostEnvironment hostEnvironment) { }
+        public SystemEntitlementsModelMapper(Microsoft.Extensions.Hosting.IHostEnvironment hostEnvironment, TIKSN.Mapping.IMapper<System.Globalization.RegionInfo, Fossa.API.Web.ApiModels.CountryModel> countryModelMapper) { }
         public Fossa.API.Web.ApiModels.SystemEntitlementsModel Map(Fossa.Licensing.SystemEntitlements source) { }
     }
 }
