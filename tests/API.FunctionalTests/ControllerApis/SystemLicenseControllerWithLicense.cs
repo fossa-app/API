@@ -33,6 +33,7 @@ public class SystemLicenseControllerWithLicense : IClassFixture<CustomWebApplica
     licenseResponseModel.Entitlements.EnvironmentName.ShouldNotBeNull();
     licenseResponseModel.Entitlements.EnvironmentKind.ShouldNotBeNull();
     licenseResponseModel.Entitlements.Countries.ShouldNotBeEmpty();
+    licenseResponseModel.Entitlements.TimeZones.ShouldNotBeEmpty();
     licenseResponseModel.Entitlements.MaximumCompanyCount.ShouldBePositive();
   }
 
