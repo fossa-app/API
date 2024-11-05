@@ -209,11 +209,18 @@ namespace Fossa.API.Web.ApiModels
     }
     public class SystemEntitlementsModel : System.IEquatable<Fossa.API.Web.ApiModels.SystemEntitlementsModel>
     {
-        public SystemEntitlementsModel(string EnvironmentName, string EnvironmentKind, System.Collections.Generic.IReadOnlyList<Fossa.API.Web.ApiModels.CountryModel> Countries, int MaximumCompanyCount) { }
+        public SystemEntitlementsModel(string EnvironmentName, string EnvironmentKind, System.Collections.Generic.IReadOnlyList<Fossa.API.Web.ApiModels.CountryModel> Countries, System.Collections.Generic.IReadOnlyList<Fossa.API.Web.ApiModels.TimeZoneModel> TimeZones, int MaximumCompanyCount) { }
         public System.Collections.Generic.IReadOnlyList<Fossa.API.Web.ApiModels.CountryModel> Countries { get; init; }
         public string EnvironmentKind { get; init; }
         public string EnvironmentName { get; init; }
         public int MaximumCompanyCount { get; init; }
+        public System.Collections.Generic.IReadOnlyList<Fossa.API.Web.ApiModels.TimeZoneModel> TimeZones { get; init; }
+    }
+    public class TimeZoneModel : System.IEquatable<Fossa.API.Web.ApiModels.TimeZoneModel>
+    {
+        public TimeZoneModel(string Id, string Name) { }
+        public string Id { get; init; }
+        public string Name { get; init; }
     }
 }
 namespace Fossa.API.Web.Claims
@@ -316,8 +323,13 @@ namespace Fossa.API.Web.Mappers
     }
     public class SystemEntitlementsModelMapper : TIKSN.Mapping.IMapper<Fossa.Licensing.SystemEntitlements, Fossa.API.Web.ApiModels.SystemEntitlementsModel>
     {
-        public SystemEntitlementsModelMapper(Microsoft.Extensions.Hosting.IHostEnvironment hostEnvironment, TIKSN.Mapping.IMapper<System.Globalization.RegionInfo, Fossa.API.Web.ApiModels.CountryModel> countryModelMapper) { }
+        public SystemEntitlementsModelMapper(Microsoft.Extensions.Hosting.IHostEnvironment hostEnvironment, NodaTime.IClock clock, TIKSN.Mapping.IMapper<System.Globalization.RegionInfo, Fossa.API.Web.ApiModels.CountryModel> countryModelMapper, TIKSN.Mapping.IMapper<NodaTime.DateTimeZone, Fossa.API.Web.ApiModels.TimeZoneModel> timeZoneModelMapper) { }
         public Fossa.API.Web.ApiModels.SystemEntitlementsModel Map(Fossa.Licensing.SystemEntitlements source) { }
+    }
+    public class TimeZoneModelMapper : TIKSN.Mapping.IMapper<NodaTime.DateTimeZone, Fossa.API.Web.ApiModels.TimeZoneModel>
+    {
+        public TimeZoneModelMapper() { }
+        public Fossa.API.Web.ApiModels.TimeZoneModel Map(NodaTime.DateTimeZone source) { }
     }
 }
 namespace HealthChecks.MongoDb
