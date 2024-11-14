@@ -28,7 +28,7 @@
     <PackageVersion Include="Serilog.Sinks.ApplicationInsights" Version="4.0.1-dev-00046" />
     <PackageVersion Include="Shouldly" Version="4.2.1" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="7.0.0" />
-    <PackageVersion Include="Swashbuckle.AspNetCore.Annotations" Version="6.9.0" />
+    <PackageVersion Include="Swashbuckle.AspNetCore.Annotations" Version="7.0.0" />
     <PackageVersion Include="UnitGenerator" Version="1.6.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
