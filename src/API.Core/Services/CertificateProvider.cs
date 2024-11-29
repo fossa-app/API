@@ -7,7 +7,7 @@ public class CertificateProvider : ICertificateProvider
 {
   public Task<X509Certificate2> GetCertificateAsync(CancellationToken cancellationToken)
   {
-    var certificate = new X509Certificate2(Resources.FossaFirstPartyLicensing);
+    var certificate = X509CertificateLoader.LoadCertificate(Resources.FossaFirstPartyLicensing);
     return Task.FromResult(certificate);
   }
 }

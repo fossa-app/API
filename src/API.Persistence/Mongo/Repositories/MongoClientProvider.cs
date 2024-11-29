@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using TIKSN.Data.Mongo;
 
@@ -15,8 +17,6 @@ public class MongoClientProvider : MongoClientProviderBase
   {
     base.ConfigureClientSettings(mongoClientSettings);
 
-#pragma warning disable CS0618 // Type or member is obsolete
-    mongoClientSettings.GuidRepresentation = GuidRepresentation.Standard;
-#pragma warning restore CS0618 // Type or member is obsolete
+    BsonSerializer.TryRegisterSerializer(new GuidSerializer(GuidRepresentation.Standard));
   }
 }
