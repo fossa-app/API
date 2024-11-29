@@ -11,5 +11,5 @@ public record EmployeePagingQuery(
     , IPagingQuery<EmployeeEntity>
 {
   public override IEnumerable<EmployeeId> AffectingTenantEntitiesIdentities
-    => Enumerable.Empty<EmployeeId>();
+    => [];
 }

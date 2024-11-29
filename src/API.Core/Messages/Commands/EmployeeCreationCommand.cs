@@ -11,5 +11,5 @@ public record EmployeeCreationCommand(
   : EntityTenantUserCommand<EmployeeEntity, EmployeeId, Guid, Guid>(TenantID, UserID)
 {
   public override IEnumerable<EmployeeId> AffectingTenantEntitiesIdentities
-    => Enumerable.Empty<EmployeeId>();
+    => [];
 }

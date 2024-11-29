@@ -9,5 +9,5 @@ public record BranchCreationCommand(
 : EntityTenantCommand<BranchEntity, BranchId, Guid>(TenantID)
 {
   public override IEnumerable<BranchId> AffectingTenantEntitiesIdentities
-    => Enumerable.Empty<BranchId>();
+    => [];
 }

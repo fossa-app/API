@@ -8,5 +8,5 @@ public record EmployeeRetrievalQuery(
   : EntityTenantQuery<EmployeeEntity, EmployeeId, Guid, EmployeeEntity>(TenantID)
 {
   public override IEnumerable<EmployeeId> AffectingTenantEntitiesIdentities
-    => Enumerable.Empty<EmployeeId>();
+    => [];
 }
