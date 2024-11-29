@@ -10,6 +10,7 @@ using Fossa.API.Infrastructure.RestClients;
 using Fossa.API.Persistence;
 using Fossa.API.Web;
 using Fossa.API.Web.DependencyInjection;
+using Fossa.API.Web.HealthChecks.DependencyInjection;
 using Fossa.Licensing;
 using Hellang.Middleware.ProblemDetails;
 using Hellang.Middleware.ProblemDetails.Mvc;

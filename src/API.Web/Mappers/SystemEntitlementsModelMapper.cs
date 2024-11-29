@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using System.Linq;
 using Fossa.API.Web.ApiModels;
 using Fossa.Licensing;
 using NodaTime;

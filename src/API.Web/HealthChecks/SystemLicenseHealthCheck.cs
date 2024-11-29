@@ -2,7 +2,7 @@
 using Fossa.API.Core.Services;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace HealthChecks.MongoDb;
+namespace Fossa.API.Web.HealthChecks;
 
 public class SystemLicenseHealthCheck : IHealthCheck
 {
