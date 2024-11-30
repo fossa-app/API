@@ -4,5 +4,6 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <TargetFramework>net9.0</TargetFramework>
     <RootNamespace>Fossa.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
+    <NoWarn>$(NoWarn);NU1903;NU1902</NoWarn>
   </PropertyGroup>
 </Project>
