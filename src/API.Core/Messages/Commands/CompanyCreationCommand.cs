@@ -8,5 +8,5 @@ public record CompanyCreationCommand(
   : EntityTenantCommand<CompanyEntity, CompanyId, Guid>(TenantID)
 {
   public override IEnumerable<CompanyId> AffectingTenantEntitiesIdentities
-    => Enumerable.Empty<CompanyId>();
+    => [];
 }

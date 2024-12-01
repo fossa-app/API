@@ -11,5 +11,5 @@ public record BranchPagingQuery(
     , IPagingQuery<BranchEntity>
 {
   public override IEnumerable<BranchId> AffectingTenantEntitiesIdentities
-    => Enumerable.Empty<BranchId>();
+    => [];
 }

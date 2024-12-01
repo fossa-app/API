@@ -7,5 +7,5 @@ public record CompanyRetrievalQuery(
   : EntityTenantQuery<CompanyEntity, CompanyId, Guid, CompanyEntity>(TenantID)
 {
   public override IEnumerable<CompanyId> AffectingTenantEntitiesIdentities
-    => Enumerable.Empty<CompanyId>();
+    => [];
 }

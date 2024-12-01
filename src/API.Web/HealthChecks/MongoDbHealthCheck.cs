@@ -3,7 +3,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace HealthChecks.MongoDb;
+namespace Fossa.API.Web.HealthChecks;
 
 public class MongoDbHealthCheck : IHealthCheck
 {

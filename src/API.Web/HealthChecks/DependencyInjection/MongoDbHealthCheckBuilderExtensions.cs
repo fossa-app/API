@@ -1,8 +1,7 @@
-﻿using HealthChecks.MongoDb;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
+﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using MongoDB.Driver;
 
-namespace Microsoft.Extensions.DependencyInjection;
+namespace Fossa.API.Web.HealthChecks.DependencyInjection;
 
 /// <summary>
 /// Extension methods to configure <see cref="MongoDbHealthCheck"/>.

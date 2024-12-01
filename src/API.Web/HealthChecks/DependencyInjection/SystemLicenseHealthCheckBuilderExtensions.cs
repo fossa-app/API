@@ -1,8 +1,7 @@
 ﻿using Fossa.API.Core.Services;
-using HealthChecks.MongoDb;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace Microsoft.Extensions.DependencyInjection;
+namespace Fossa.API.Web.HealthChecks.DependencyInjection;
 
 public static class SystemLicenseHealthCheckBuilderExtensions
 {
