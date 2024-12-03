@@ -7,6 +7,7 @@ using Fossa.API.Web.ApiModels;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TIKSN.Globalization;
 using TIKSN.Mapping;
 
 namespace Fossa.API.Web.Api;
@@ -58,11 +59,13 @@ public class CompanyController : BaseApiController<CompanyId>
   [Authorize(Roles = Roles.Administrator)]
   public async Task PostAsync(
     [FromBody] CompanyModificationModel model,
+    [FromServices] IRegionFactory regionFactory,
     CancellationToken cancellationToken)
   {
     var tenantId = _tenantIdProvider.GetTenantId();
     await _sender.Send(
-      new CompanyCreationCommand(tenantId, model.Name ?? string.Empty),
+      new CompanyCreationCommand(tenantId, model.Name ?? string.Empty,
+      regionFactory.Create(model.CountryCode ?? string.Empty)),
       cancellationToken);
   }
 
@@ -70,13 +73,15 @@ public class CompanyController : BaseApiController<CompanyId>
   [Authorize(Roles = Roles.Administrator)]
   public async Task PutAsync(
     [FromBody] CompanyModificationModel model,
+    [FromServices] IRegionFactory regionFactory,
     CancellationToken cancellationToken)
   {
     var tenantId = _tenantIdProvider.GetTenantId();
     await _sender.Send(
       new CompanyModificationCommand(
         tenantId,
-        model.Name ?? string.Empty),
+        model.Name ?? string.Empty,
+        regionFactory.Create(model.CountryCode ?? string.Empty)),
       cancellationToken);
   }
 }
