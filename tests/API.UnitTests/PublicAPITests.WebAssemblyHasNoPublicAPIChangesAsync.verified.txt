@@ -51,10 +51,10 @@
         public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.CompanyRetrievalModel> GetAsync([Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Web.ApiModels.CompanyRetrievalModel> mapper, System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
         [Microsoft.AspNetCore.Mvc.HttpPost]
-        public System.Threading.Tasks.Task PostAsync([Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.CompanyModificationModel model, System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task PostAsync([Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.CompanyModificationModel model, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Globalization.IRegionFactory regionFactory, System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
         [Microsoft.AspNetCore.Mvc.HttpPut]
-        public System.Threading.Tasks.Task PutAsync([Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.CompanyModificationModel model, System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task PutAsync([Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.CompanyModificationModel model, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Globalization.IRegionFactory regionFactory, System.Threading.CancellationToken cancellationToken) { }
     }
     [Asp.Versioning.ApiVersion(1D, null)]
     [Microsoft.AspNetCore.Authorization.Authorize]
@@ -155,12 +155,14 @@ namespace Fossa.API.Web.ApiModels
     }
     public class CompanyModificationModel : System.IEquatable<Fossa.API.Web.ApiModels.CompanyModificationModel>
     {
-        public CompanyModificationModel(string? Name) { }
+        public CompanyModificationModel(string? Name, string? CountryCode) { }
+        public string? CountryCode { get; init; }
         public string? Name { get; init; }
     }
     public class CompanyRetrievalModel : System.IEquatable<Fossa.API.Web.ApiModels.CompanyRetrievalModel>
     {
-        public CompanyRetrievalModel(long Id, string Name) { }
+        public CompanyRetrievalModel(long Id, string Name, Fossa.API.Web.ApiModels.CountryModel Country) { }
+        public Fossa.API.Web.ApiModels.CountryModel Country { get; init; }
         public long Id { get; init; }
         public string Name { get; init; }
     }
@@ -307,7 +309,7 @@ namespace Fossa.API.Web.Mappers
     }
     public class CompanyRetrievalModelMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Web.ApiModels.CompanyRetrievalModel>
     {
-        public CompanyRetrievalModelMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> domainIdentityToDataIdentityMapper) { }
+        public CompanyRetrievalModelMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<System.Globalization.RegionInfo, Fossa.API.Web.ApiModels.CountryModel> regionInfoToCountryModelMapper) { }
         public Fossa.API.Web.ApiModels.CompanyRetrievalModel Map(Fossa.API.Core.Entities.CompanyEntity source) { }
     }
     public class CountryModelMapper : TIKSN.Mapping.IMapper<System.Globalization.RegionInfo, Fossa.API.Web.ApiModels.CountryModel>
