@@ -32,7 +32,7 @@ public static class CompanyExtensions
       var client = factory.CreateClient();
       client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-      var creationResponse = await client.PostAsJsonAsync("/api/1.0/Company", new CompanyModificationModel(companyName), cancellationToken).ConfigureAwait(false);
+      var creationResponse = await client.PostAsJsonAsync("/api/1.0/Company", new CompanyModificationModel(companyName, "US"), cancellationToken).ConfigureAwait(false);
 
       creationResponse.EnsureSuccessStatusCode();
     }

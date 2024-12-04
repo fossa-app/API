@@ -44,7 +44,7 @@ public class CompanyCreationCommandHandler : IRequestHandler<CompanyCreationComm
 
     await ValidateEntitlementsAsync(cancellationToken).ConfigureAwait(false);
     var id = _identityGenerator.Generate();
-    CompanyEntity entity = new(id, request.TenantID, request.Name);
+    CompanyEntity entity = new(id, request.TenantID, request.Name, request.Country);
     await _companyRepository.AddAsync(entity, cancellationToken).ConfigureAwait(false);
     await _companyLicenseInitializer.InitializeAsync(id, cancellationToken).ConfigureAwait(false);
 

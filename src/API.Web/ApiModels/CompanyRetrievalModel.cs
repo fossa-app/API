@@ -2,4 +2,5 @@
 
 public record CompanyRetrievalModel(
   long Id,
-  string Name);
+  string Name,
+  CountryModel Country);

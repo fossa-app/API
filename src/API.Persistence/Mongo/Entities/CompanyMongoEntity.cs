@@ -13,4 +13,6 @@ public class CompanyMongoEntity : IEntity<long>
 
   [BsonGuidRepresentation(GuidRepresentation.Standard)]
   public Guid TenantID { get; set; }
+
+  public string? CountryCode { get; set; }
 }

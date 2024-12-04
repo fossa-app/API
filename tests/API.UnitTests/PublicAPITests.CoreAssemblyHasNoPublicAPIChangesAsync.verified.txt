@@ -35,7 +35,8 @@ namespace Fossa.API.Core.Entities
     }
     public class CompanyEntity : System.IEquatable<Fossa.API.Core.Entities.CompanyEntity>, TIKSN.Data.IEntity<Fossa.API.Core.Entities.CompanyId>, TIKSN.Data.ITenantEntity<Fossa.API.Core.Entities.CompanyId, System.Guid>
     {
-        public CompanyEntity(Fossa.API.Core.Entities.CompanyId ID, System.Guid TenantID, string Name) { }
+        public CompanyEntity(Fossa.API.Core.Entities.CompanyId ID, System.Guid TenantID, string Name, System.Globalization.RegionInfo Country) { }
+        public System.Globalization.RegionInfo Country { get; init; }
         public Fossa.API.Core.Entities.CompanyId ID { get; init; }
         public string Name { get; init; }
         public System.Guid TenantID { get; init; }
@@ -255,8 +256,9 @@ namespace Fossa.API.Core.Messages.Commands
     }
     public class CompanyCreationCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Core.Entities.CompanyId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.CompanyCreationCommand>
     {
-        public CompanyCreationCommand(System.Guid TenantID, string Name) { }
+        public CompanyCreationCommand(System.Guid TenantID, string Name, System.Globalization.RegionInfo Country) { }
         public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.CompanyId> AffectingTenantEntitiesIdentities { get; }
+        public System.Globalization.RegionInfo Country { get; init; }
         public string Name { get; init; }
     }
     public class CompanyCreationCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.CompanyCreationCommand, MediatR.Unit>
@@ -288,8 +290,9 @@ namespace Fossa.API.Core.Messages.Commands
     }
     public class CompanyModificationCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Core.Entities.CompanyId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.CompanyModificationCommand>
     {
-        public CompanyModificationCommand(System.Guid TenantID, string Name) { }
+        public CompanyModificationCommand(System.Guid TenantID, string Name, System.Globalization.RegionInfo Country) { }
         public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.CompanyId> AffectingTenantEntitiesIdentities { get; }
+        public System.Globalization.RegionInfo Country { get; init; }
         public string Name { get; init; }
     }
     public class CompanyModificationCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.CompanyModificationCommand, MediatR.Unit>
@@ -683,9 +686,13 @@ namespace Fossa.API.Core.Validators
     {
         public BranchRetrievalQueryValidator() { }
     }
+    public static class CompanyCommandValidatorHelper
+    {
+        public static System.Threading.Tasks.Task<bool> CompanyCountryMustBeLicensedAsync(Fossa.API.Core.Services.ISystemLicenseRetriever systemLicenseRetriever, System.Globalization.RegionInfo companyCountry, System.Threading.CancellationToken cancellationToken) { }
+    }
     public class CompanyCreationCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.CompanyCreationCommand>
     {
-        public CompanyCreationCommandValidator(Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository) { }
+        public CompanyCreationCommandValidator(Fossa.API.Core.Services.ISystemLicenseRetriever systemLicenseRetriever, Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository) { }
     }
     public class CompanyDeletionCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.CompanyDeletionCommand>
     {
@@ -693,7 +700,7 @@ namespace Fossa.API.Core.Validators
     }
     public class CompanyModificationCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.CompanyModificationCommand>
     {
-        public CompanyModificationCommandValidator(Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository) { }
+        public CompanyModificationCommandValidator(Fossa.API.Core.Services.ISystemLicenseRetriever systemLicenseRetriever, Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository) { }
     }
     public class CompanyRetrievalQueryValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Queries.CompanyRetrievalQuery>
     {
