@@ -8,27 +8,49 @@ using Fossa.API.Web;
 using Fossa.API.Web.ApiModels;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using Xunit.Abstractions;
 
 namespace Fossa.API.FunctionalTests.ControllerApis;
 
 public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplicationFactory<DefaultWebModule>>, IAsyncLifetime
 {
   private readonly CustomWebApplicationFactory<DefaultWebModule> _factory;
+  private readonly ITestOutputHelper _testOutputHelper;
 
-  public CompanyControllerWithSystemLicense(CustomWebApplicationFactory<DefaultWebModule> factory)
+  public CompanyControllerWithSystemLicense(
+    ITestOutputHelper testOutputHelper,
+    CustomWebApplicationFactory<DefaultWebModule> factory)
   {
+    _testOutputHelper = testOutputHelper ?? throw new ArgumentNullException(nameof(testOutputHelper));
     _factory = factory ?? throw new ArgumentNullException(nameof(factory));
   }
 
   [Fact]
-  public async Task CreateCompanyWithAdministratorAccessTokenAsync()
+  public async Task CreateCompanyWithAdministratorAccessTokenAndUnlicensedCountryAsync()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant102.ADMIN1");
+    const string companyName = "Company-1412593541";
+
+    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Company", new CompanyModificationModel(companyName, "KZ"));
+
+    if (creationResponse.StatusCode != HttpStatusCode.OK)
+    {
+      _testOutputHelper.WriteLine(await creationResponse.Content.ReadAsStringAsync());
+    }
+
+    creationResponse.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+  }
+
+  [Fact]
+  public async Task CreateCompanyWithAdministratorAccessTokenWithLicensedCountryAsync()
   {
     var client = _factory.CreateClient();
     var licenseEasyStoreBucket = _factory.Services.GetRequiredService<IEasyStores>().ResolveBucket<long, object>("License");
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant101.ADMIN1");
     const string companyName = "Company-1993954667";
 
-    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Company", new CompanyModificationModel(companyName));
+    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Company", new CompanyModificationModel(companyName, "us"));
 
     creationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 
@@ -40,6 +62,9 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
     responseModel.ShouldNotBeNull();
     responseModel.Id.ShouldBePositive();
     responseModel.Name.ShouldBe(companyName);
+    responseModel.Country.ShouldNotBeNull();
+    responseModel.Country.Code.ShouldBe("US");
+    responseModel.Country.Name.ShouldBe("United States");
 
     licenseEasyStoreBucket.BucketContent.Values.Where(x => string.Equals(x.Path, $"Company{responseModel.Id}", StringComparison.Ordinal)).ShouldNotBeEmpty();
   }
@@ -49,7 +74,7 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
   {
     var client = _factory.CreateClient();
 
-    var response = await client.PostAsJsonAsync("/api/1.0/Company", new CompanyModificationModel("Company X"));
+    var response = await client.PostAsJsonAsync("/api/1.0/Company", new CompanyModificationModel("Company X", "US"));
 
     response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
   }
@@ -60,7 +85,7 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
     var client = _factory.CreateClient();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJFK2J690FS0Q3TCX4P3F.Tenant101.User1");
     const string companyName = "Company-144764445";
-    var response = await client.PostAsJsonAsync("/api/1.0/Company", new CompanyModificationModel(companyName));
+    var response = await client.PostAsJsonAsync("/api/1.0/Company", new CompanyModificationModel(companyName, "US"));
 
     response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
   }
