@@ -362,7 +362,7 @@ namespace Fossa.API.Web.Mappers
     }
     public class SystemEntitlementsModelMapper : TIKSN.Mapping.IMapper<Fossa.Licensing.SystemEntitlements, Fossa.API.Web.ApiModels.SystemEntitlementsModel>
     {
-        public SystemEntitlementsModelMapper(Microsoft.Extensions.Hosting.IHostEnvironment hostEnvironment, TIKSN.Mapping.IMapper<System.Globalization.RegionInfo, Fossa.API.Web.ApiModels.CountryModel> countryModelMapper, TIKSN.Mapping.IMapper<NodaTime.DateTimeZone, Fossa.API.Web.ApiModels.TimeZoneModel> timeZoneModelMapper) { }
+        public SystemEntitlementsModelMapper(Microsoft.Extensions.Hosting.IHostEnvironment hostEnvironment, Fossa.API.Core.Services.IDateTimeZoneLookup dateTimeZoneLookup, TIKSN.Mapping.IMapper<System.Globalization.RegionInfo, Fossa.API.Web.ApiModels.CountryModel> countryModelMapper, TIKSN.Mapping.IMapper<NodaTime.DateTimeZone, Fossa.API.Web.ApiModels.TimeZoneModel> timeZoneModelMapper) { }
         public Fossa.API.Web.ApiModels.SystemEntitlementsModel Map(Fossa.Licensing.SystemEntitlements source) { }
     }
     public class TimeZoneModelMapper : TIKSN.Mapping.IMapper<NodaTime.DateTimeZone, Fossa.API.Web.ApiModels.TimeZoneModel>
