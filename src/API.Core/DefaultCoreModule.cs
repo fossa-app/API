@@ -62,6 +62,11 @@ public class DefaultCoreModule : Module
       .RegisterType<RelationshipGraph>()
       .AsImplementedInterfaces()
       .InstancePerLifetimeScope();
+
+    builder
+      .RegisterType<DateTimeZoneLookup>()
+      .AsImplementedInterfaces()
+      .SingleInstance();
   }
 
   private static void RegisterStronglyTypedId<TSource, TDestination>(ContainerBuilder builder)
