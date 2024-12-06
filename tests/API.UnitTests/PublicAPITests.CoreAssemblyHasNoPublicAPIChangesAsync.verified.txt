@@ -592,8 +592,9 @@ namespace Fossa.API.Core.Services
     }
     public class DateTimeZoneLookup : Fossa.API.Core.Services.IDateTimeZoneLookup
     {
-        public DateTimeZoneLookup() { }
+        public DateTimeZoneLookup(TIKSN.Globalization.IRegionFactory regionFactory) { }
         public LanguageExt.Seq<NodaTime.DateTimeZone> ListRegionalTimeZones(System.Globalization.RegionInfo region) { }
+        public System.Globalization.RegionInfo ResolveTimeZoneRegion(NodaTime.DateTimeZone timeZone) { }
     }
     public interface ICertificateProvider
     {
@@ -614,6 +615,7 @@ namespace Fossa.API.Core.Services
     public interface IDateTimeZoneLookup
     {
         LanguageExt.Seq<NodaTime.DateTimeZone> ListRegionalTimeZones(System.Globalization.RegionInfo region);
+        System.Globalization.RegionInfo ResolveTimeZoneRegion(NodaTime.DateTimeZone timeZone);
     }
     public interface ISystemInitializer
     {
