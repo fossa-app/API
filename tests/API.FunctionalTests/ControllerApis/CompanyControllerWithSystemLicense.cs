@@ -175,6 +175,9 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
     responseModel.ShouldNotBeNull();
     responseModel.Id.ShouldBePositive();
     responseModel.Name.ShouldNotBeNullOrEmpty();
+    responseModel.Country.ShouldNotBeNull();
+    responseModel.Country.Code.ShouldBe("US");
+    responseModel.Country.Name.ShouldBe("United States");
   }
 
   [Fact]

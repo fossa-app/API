@@ -590,6 +590,11 @@ namespace Fossa.API.Core.Services
         public CompanyLicenseRetriever(Fossa.API.Core.Repositories.ILicenseFileRepository licenseFileRepository, TIKSN.Licensing.ILicenseFactory<Fossa.Licensing.CompanyEntitlements, Fossa.Licensing.CompanyLicenseEntitlements> licenseFactory, Fossa.API.Core.Services.ICertificateProvider certificateProvider, Fossa.API.Core.Services.ISystemLicenseRetriever systemLicenseRetriever) { }
         public System.Threading.Tasks.Task<LanguageExt.Validation<LanguageExt.Common.Error, TIKSN.Licensing.License<Fossa.Licensing.CompanyEntitlements>>> GetAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken) { }
     }
+    public class DateTimeZoneLookup : Fossa.API.Core.Services.IDateTimeZoneLookup
+    {
+        public DateTimeZoneLookup() { }
+        public LanguageExt.Seq<NodaTime.DateTimeZone> ListRegionalTimeZones(System.Globalization.RegionInfo region) { }
+    }
     public interface ICertificateProvider
     {
         System.Threading.Tasks.Task<System.Security.Cryptography.X509Certificates.X509Certificate2> GetCertificateAsync(System.Threading.CancellationToken cancellationToken);
@@ -605,6 +610,10 @@ namespace Fossa.API.Core.Services
     public interface ICompanyLicenseRetriever
     {
         System.Threading.Tasks.Task<LanguageExt.Validation<LanguageExt.Common.Error, TIKSN.Licensing.License<Fossa.Licensing.CompanyEntitlements>>> GetAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken);
+    }
+    public interface IDateTimeZoneLookup
+    {
+        LanguageExt.Seq<NodaTime.DateTimeZone> ListRegionalTimeZones(System.Globalization.RegionInfo region);
     }
     public interface ISystemInitializer
     {

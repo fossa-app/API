@@ -1,8 +1,9 @@
 ﻿using System.Globalization;
+using Fossa.API.Core.Services;
 using Fossa.API.Web.ApiModels;
 using Fossa.Licensing;
+using LanguageExt;
 using NodaTime;
-using NodaTime.TimeZones;
 using TIKSN.Mapping;
 
 namespace Fossa.API.Web.Mappers;
@@ -10,18 +11,18 @@ namespace Fossa.API.Web.Mappers;
 public class SystemEntitlementsModelMapper : IMapper<SystemEntitlements, SystemEntitlementsModel>
 {
   private readonly IMapper<RegionInfo, CountryModel> _countryModelMapper;
+  private readonly IDateTimeZoneLookup _dateTimeZoneLookup;
   private readonly IHostEnvironment _hostEnvironment;
-  private readonly IClock _clock;
   private readonly IMapper<DateTimeZone, TimeZoneModel> _timeZoneModelMapper;
 
   public SystemEntitlementsModelMapper(
     IHostEnvironment hostEnvironment,
-    IClock clock,
+    IDateTimeZoneLookup dateTimeZoneLookup,
     IMapper<RegionInfo, CountryModel> countryModelMapper,
     IMapper<DateTimeZone, TimeZoneModel> timeZoneModelMapper)
   {
     _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
-    _clock = clock ?? throw new ArgumentNullException(nameof(clock));
+    _dateTimeZoneLookup = dateTimeZoneLookup ?? throw new ArgumentNullException(nameof(dateTimeZoneLookup));
     _countryModelMapper = countryModelMapper ?? throw new ArgumentNullException(nameof(countryModelMapper));
     _timeZoneModelMapper = timeZoneModelMapper ?? throw new ArgumentNullException(nameof(timeZoneModelMapper));
   }
@@ -29,16 +30,14 @@ public class SystemEntitlementsModelMapper : IMapper<SystemEntitlements, SystemE
   public SystemEntitlementsModel Map(SystemEntitlements source)
   {
     var timeZones = source.Countries
-      .SelectMany(x => TzdbDateTimeZoneSource.Default.ZoneLocations?.Where(z => string.Equals(x.TwoLetterISORegionName, z.CountryCode, StringComparison.OrdinalIgnoreCase)) ?? [])
-      .Select(x => DateTimeZoneProviders.Tzdb[x.ZoneId])
-      .OrderBy(x => x.GetUtcOffset(_clock.GetCurrentInstant()))
+      .SelectMany(x => _dateTimeZoneLookup.ListRegionalTimeZones(x))
       .ToSeq();
 
     return new SystemEntitlementsModel(
       _hostEnvironment.EnvironmentName,
       source.EnvironmentName.ToString() ?? string.Empty,
       [.. source.Countries.Map(_countryModelMapper.Map)],
-      [.. timeZones.Map(_timeZoneModelMapper.Map)],
+      [.. timeZones.Map(_timeZoneModelMapper.Map).OrderBy(x => x.CurrentOffset)],
       source.MaximumCompanyCount);
   }
 }

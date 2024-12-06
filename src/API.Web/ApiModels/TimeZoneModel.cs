@@ -2,4 +2,8 @@
 
 public record TimeZoneModel(
   string Id,
-  string Name);
+  string Name,
+  TimeSpan CurrentOffset,
+  double CurrentOffsetTotalHours,
+  int CurrentOffsetHours,
+  int CurrentOffsetMinutes);
