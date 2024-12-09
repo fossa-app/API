@@ -23,7 +23,7 @@
     <PackageVersion Include="PublicApiGenerator" Version="11.1.0" />
     <PackageVersion Include="ReportGenerator" Version="5.4.1" />
     <PackageVersion Include="Scrutor" Version="5.0.2" />
-    <PackageVersion Include="Serilog.AspNetCore" Version="8.0.3" />
+    <PackageVersion Include="Serilog.AspNetCore" Version="9.0.0" />
     <PackageVersion Include="Shouldly" Version="4.2.1" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="7.1.0" />
     <PackageVersion Include="Swashbuckle.AspNetCore.Annotations" Version="7.1.0" />
