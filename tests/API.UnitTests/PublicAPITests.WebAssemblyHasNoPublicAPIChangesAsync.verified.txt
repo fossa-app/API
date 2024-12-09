@@ -220,11 +220,8 @@ namespace Fossa.API.Web.ApiModels
     }
     public class TimeZoneModel : System.IEquatable<Fossa.API.Web.ApiModels.TimeZoneModel>
     {
-        public TimeZoneModel(string Id, string Name, Fossa.API.Web.ApiModels.CountryModel Country, System.TimeSpan CurrentOffset, double CurrentOffsetTotalHours, int CurrentOffsetHours, int CurrentOffsetMinutes) { }
-        public Fossa.API.Web.ApiModels.CountryModel Country { get; init; }
-        public int CurrentOffsetHours { get; init; }
-        public int CurrentOffsetMinutes { get; init; }
-        public double CurrentOffsetTotalHours { get; init; }
+        public TimeZoneModel(string Id, string Name, string CountryCode, System.TimeSpan CurrentOffset) { }
+        public string CountryCode { get; init; }
         public System.TimeSpan CurrentOffset { get; init; }
         public string Id { get; init; }
         public string Name { get; init; }
@@ -368,7 +365,7 @@ namespace Fossa.API.Web.Mappers
     }
     public class TimeZoneModelMapper : TIKSN.Mapping.IMapper<NodaTime.DateTimeZone, Fossa.API.Web.ApiModels.TimeZoneModel>
     {
-        public TimeZoneModelMapper(Fossa.API.Core.Services.IDateTimeZoneLookup dateTimeZoneLookup, TIKSN.Mapping.IMapper<System.Globalization.RegionInfo, Fossa.API.Web.ApiModels.CountryModel> countryModelMapper, NodaTime.IClock clock) { }
+        public TimeZoneModelMapper(Fossa.API.Core.Services.IDateTimeZoneLookup dateTimeZoneLookup, NodaTime.IClock clock) { }
         public Fossa.API.Web.ApiModels.TimeZoneModel Map(NodaTime.DateTimeZone source) { }
     }
 }
