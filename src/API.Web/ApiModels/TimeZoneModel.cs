@@ -3,5 +3,5 @@
 public record TimeZoneModel(
   string Id,
   string Name,
-  CountryModel Country,
+  string CountryCode,
   TimeSpan CurrentOffset);
