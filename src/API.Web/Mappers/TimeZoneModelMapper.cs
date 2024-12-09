@@ -25,14 +25,10 @@ public class TimeZoneModelMapper : IMapper<DateTimeZone, TimeZoneModel>
 
   public TimeZoneModel Map(DateTimeZone source)
   {
-    var currentOffset = source.GetUtcOffset(_clock.GetCurrentInstant()).ToTimeSpan();
     return new TimeZoneModel(
       source.Id,
       TzdbDateTimeZoneSource.Default.TzdbToWindowsIds[source.Id],
       _countryModelMapper.Map(_dateTimeZoneLookup.ResolveTimeZoneRegion(source)),
-      currentOffset,
-      currentOffset.TotalHours,
-      currentOffset.Hours,
-      currentOffset.Minutes);
+      source.GetUtcOffset(_clock.GetCurrentInstant()).ToTimeSpan());
   }
 }
