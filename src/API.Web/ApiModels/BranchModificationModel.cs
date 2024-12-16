@@ -1,4 +1,5 @@
 ﻿namespace Fossa.API.Web.ApiModels;
 
 public record BranchModificationModel(
-  string? Name);
+  string? Name,
+  string? TimeZoneId);

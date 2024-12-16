@@ -15,4 +15,6 @@ public class BranchMongoEntity : IEntity<long>
   public long CompanyId { get; set; }
 
   public string? Name { get; set; }
+
+  public string? TimeZoneId { get; set; }
 }
