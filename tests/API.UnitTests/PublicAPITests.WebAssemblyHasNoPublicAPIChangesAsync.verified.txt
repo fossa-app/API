@@ -183,9 +183,10 @@ namespace Fossa.API.Web.ApiModels
     }
     public class EmployeePagingRequestModel : System.IEquatable<Fossa.API.Web.ApiModels.EmployeePagingRequestModel>
     {
-        public EmployeePagingRequestModel(int? PageNumber, int? PageSize) { }
+        public EmployeePagingRequestModel(string? Search, int? PageNumber, int? PageSize) { }
         public int? PageNumber { get; init; }
         public int? PageSize { get; init; }
+        public string? Search { get; init; }
     }
     public class EmployeeRetrievalModel : System.IEquatable<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>
     {

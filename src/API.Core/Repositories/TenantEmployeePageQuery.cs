@@ -5,11 +5,14 @@ namespace Fossa.API.Core.Repositories;
 public class TenantEmployeePageQuery : PageQuery
 {
   public Guid TenantId { get; }
+  public string Search { get; }
 
   public TenantEmployeePageQuery(
     Guid tenantId,
+    string search,
     Page page) : base(page, estimateTotalItems: true)
   {
     TenantId = tenantId;
+    Search = search;
   }
 }

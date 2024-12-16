@@ -61,8 +61,15 @@ public class EmployeeMongoRepository
     TenantEmployeePageQuery pageQuery,
     CancellationToken cancellationToken)
   {
-    var filter =
+    var filterByTenantId =
       Builders<EmployeeMongoEntity>.Filter.Eq(item => item.TenantID, pageQuery.TenantId);
+
+    var search = pageQuery.Search.Trim();
+    var filter = string.IsNullOrEmpty(search)
+      ? filterByTenantId
+      : Builders<EmployeeMongoEntity>.Filter.And(
+        filterByTenantId,
+        Builders<EmployeeMongoEntity>.Filter.Text(search));
 
     return this.PageAsync(filter, pageQuery, cancellationToken);
   }
