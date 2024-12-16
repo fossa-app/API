@@ -32,10 +32,10 @@
         public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.BranchRetrievalModel>> PageAsync([Microsoft.AspNetCore.Mvc.FromQuery] Fossa.API.Web.ApiModels.BranchPagingRequestModel requestModel, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<TIKSN.Data.PageResult<Fossa.API.Core.Entities.BranchEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.BranchRetrievalModel>> mapper, System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
         [Microsoft.AspNetCore.Mvc.HttpPost]
-        public System.Threading.Tasks.Task PostAsync([Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.BranchModificationModel model, System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task PostAsync([Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.BranchModificationModel model, [Microsoft.AspNetCore.Mvc.FromServices] Fossa.API.Core.TimeZone.IDateTimeZoneProvider dateTimeZoneProvider, System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
         [Microsoft.AspNetCore.Mvc.HttpPut("{id}")]
-        public System.Threading.Tasks.Task PutAsync(long id, [Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.BranchModificationModel model, System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task PutAsync(long id, [Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.BranchModificationModel model, [Microsoft.AspNetCore.Mvc.FromServices] Fossa.API.Core.TimeZone.IDateTimeZoneProvider dateTimeZoneProvider, System.Threading.CancellationToken cancellationToken) { }
     }
     [Asp.Versioning.ApiVersion(1D, null)]
     [Microsoft.AspNetCore.Authorization.Authorize]
@@ -130,8 +130,9 @@ namespace Fossa.API.Web.ApiModels
 {
     public class BranchModificationModel : System.IEquatable<Fossa.API.Web.ApiModels.BranchModificationModel>
     {
-        public BranchModificationModel(string? Name) { }
+        public BranchModificationModel(string? Name, string? TimeZoneId) { }
         public string? Name { get; init; }
+        public string? TimeZoneId { get; init; }
     }
     public class BranchPagingRequestModel : System.IEquatable<Fossa.API.Web.ApiModels.BranchPagingRequestModel>
     {
@@ -141,10 +142,11 @@ namespace Fossa.API.Web.ApiModels
     }
     public class BranchRetrievalModel : System.IEquatable<Fossa.API.Web.ApiModels.BranchRetrievalModel>
     {
-        public BranchRetrievalModel(long Id, long CompanyId, string Name) { }
+        public BranchRetrievalModel(long Id, long CompanyId, string Name, string TimeZoneId) { }
         public long CompanyId { get; init; }
         public long Id { get; init; }
         public string Name { get; init; }
+        public string TimeZoneId { get; init; }
     }
     public class CompanyEntitlementsModel : System.IEquatable<Fossa.API.Web.ApiModels.CompanyEntitlementsModel>
     {

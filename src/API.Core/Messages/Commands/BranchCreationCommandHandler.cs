@@ -45,7 +45,8 @@ public class BranchCreationCommandHandler : IRequestHandler<BranchCreationComman
       id,
       request.TenantID,
       companyEntity.ID,
-      request.Name);
+      request.Name,
+      request.TimeZone);
 
     await _branchRepository.AddAsync(entity, cancellationToken).ConfigureAwait(false);
   }

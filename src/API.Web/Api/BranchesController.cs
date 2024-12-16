@@ -3,6 +3,7 @@ using Fossa.API.Core.Entities;
 using Fossa.API.Core.Messages.Commands;
 using Fossa.API.Core.Messages.Queries;
 using Fossa.API.Core.Tenant;
+using Fossa.API.Core.TimeZone;
 using Fossa.API.Core.User;
 using Fossa.API.Web.ApiModels;
 using MediatR;
@@ -90,15 +91,18 @@ public class BranchesController : BaseApiController<BranchId>
   [Authorize(Roles = Roles.Administrator)]
   public async Task PostAsync(
     [FromBody] BranchModificationModel model,
+    [FromServices] IDateTimeZoneProvider dateTimeZoneProvider,
     CancellationToken cancellationToken)
   {
     var tenantId = _tenantIdProvider.GetTenantId();
     var userId = _userIdProvider.GetUserId();
+    var timeZone = dateTimeZoneProvider.GetDateTimeZoneById(model.TimeZoneId ?? string.Empty);
     await _sender.Send(
       new BranchCreationCommand(
         tenantId,
         userId,
-        model.Name ?? string.Empty),
+        model.Name ?? string.Empty,
+        timeZone),
       cancellationToken);
   }
 
@@ -107,16 +111,19 @@ public class BranchesController : BaseApiController<BranchId>
   public async Task PutAsync(
     long id,
     [FromBody] BranchModificationModel model,
+    [FromServices] IDateTimeZoneProvider dateTimeZoneProvider,
     CancellationToken cancellationToken)
   {
     var tenantId = _tenantIdProvider.GetTenantId();
     var userId = _userIdProvider.GetUserId();
+    var timeZone = dateTimeZoneProvider.GetDateTimeZoneById(model.TimeZoneId ?? string.Empty);
     await _sender.Send(
       new BranchModificationCommand(
         _dataIdentityToDomainIdentityMapper.Map(id),
         tenantId,
         userId,
-        model.Name ?? string.Empty),
+        model.Name ?? string.Empty,
+        timeZone),
       cancellationToken);
   }
 }

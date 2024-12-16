@@ -8,26 +8,50 @@ using Fossa.API.Web;
 using Fossa.API.Web.ApiModels;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using Xunit.Abstractions;
 
 namespace Fossa.API.FunctionalTests.ControllerApis;
 
 public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplicationFactory<DefaultWebModule>>, IAsyncLifetime
 {
   private readonly CustomWebApplicationFactory<DefaultWebModule> _factory;
+  private readonly ITestOutputHelper _testOutputHelper;
 
-  public BranchesControllerWithSystemLicense(CustomWebApplicationFactory<DefaultWebModule> factory)
+  public BranchesControllerWithSystemLicense(
+    ITestOutputHelper testOutputHelper,
+    CustomWebApplicationFactory<DefaultWebModule> factory)
   {
+    _testOutputHelper = testOutputHelper ?? throw new ArgumentNullException(nameof(testOutputHelper));
     _factory = factory ?? throw new ArgumentNullException(nameof(factory));
   }
 
   [Fact]
-  public async Task CreateBranchWithAdministratorAccessTokenAsync()
+  public async Task CreateBranchWithAdministratorAccessWithInvalidTimeZoneIdTokenAsync()
   {
     var client = _factory.CreateClient();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
     const string branchName = "Branch-392136901";
+    const string timeZoneId = "USZone";
 
-    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName));
+    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId));
+
+    if (creationResponse.StatusCode != HttpStatusCode.OK)
+    {
+      _testOutputHelper.WriteLine(await creationResponse.Content.ReadAsStringAsync());
+    }
+
+    creationResponse.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+  }
+
+  [Fact]
+  public async Task CreateBranchWithAdministratorAccessWithLicensedTimeZoneIdTokenAsync()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
+    const string branchName = "Branch-392136901";
+    const string timeZoneId = "America/New_York";
+
+    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId));
 
     creationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 
@@ -38,6 +62,25 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     responseModel.ShouldNotBeNull();
     responseModel.Items.Select(x => x.Name).ShouldContain(branchName);
+    responseModel.Items.Select(x => x.TimeZoneId).ShouldContain(timeZoneId);
+  }
+
+  [Fact]
+  public async Task CreateBranchWithAdministratorAccessWithUnlicensedTimeZoneIdTokenAsync()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
+    const string branchName = "Branch-392136901";
+    const string timeZoneId = "Australia/Perth";
+
+    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId));
+
+    if (creationResponse.StatusCode != HttpStatusCode.OK)
+    {
+      _testOutputHelper.WriteLine(await creationResponse.Content.ReadAsStringAsync());
+    }
+
+    creationResponse.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
   }
 
   [Fact]
@@ -45,18 +88,40 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     var client = _factory.CreateClient();
 
-    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel("Branch X"));
+    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel("Branch X", "America/New_York"));
 
     response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
   }
 
   [Fact]
-  public async Task CreateBranchWithUserAccessTokenAsync()
+  public async Task CreateBranchWithUserAccessTokenWithInvalidTimeZoneIdAsync()
   {
     var client = _factory.CreateClient();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.User1");
     const string branchName = "Branch-826076795";
-    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName));
+    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, "USZone"));
+
+    response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+  }
+
+  [Fact]
+  public async Task CreateBranchWithUserAccessTokenWithLicensedTimeZoneIdAsync()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.User1");
+    const string branchName = "Branch-826076795";
+    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, "America/Detroit"));
+
+    response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+  }
+
+  [Fact]
+  public async Task CreateBranchWithUserAccessTokenWithUnlicensedTimeZoneIdAsync()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.User1");
+    const string branchName = "Branch-826076795";
+    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, "Australia/Perth"));
 
     response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
   }
@@ -68,8 +133,9 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var branchEasyStore = _factory.Services.GetRequiredService<IEasyStores>().Resolve<BranchMongoEntity, long>();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
     const string branchName = "Branch-832159009";
+    const string timeZoneId = "America/New_York";
 
-    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName));
+    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId));
 
     creationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 

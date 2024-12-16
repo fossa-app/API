@@ -22,6 +22,7 @@ public class BranchRetrievalModelMapper : IMapper<BranchEntity, BranchRetrievalM
     return new BranchRetrievalModel(
       _domainIdentityToDataIdentityMapper.Map(source.ID),
       _companyDomainIdentityToDataIdentityMapper.Map(source.CompanyId),
-      source.Name);
+      source.Name,
+      source.TimeZone.Id);
   }
 }

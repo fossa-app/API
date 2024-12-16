@@ -15,14 +15,15 @@ public static class BranchExtensions
     CancellationToken cancellationToken)
     where TEntryPoint : class
   {
-    await SeedBranchAsync(factory, "Branch1-1937190788", "01JB0S0PAQTKGEWXBX1060B00T.Tenant1.ADMIN1", cancellationToken).ConfigureAwait(false);
-    await SeedBranchAsync(factory, "Branch2-1972002548", "01JB0S0SYP3T4REGTTC3Y74N51.Tenant1.ADMIN1", cancellationToken).ConfigureAwait(false);
-    await SeedBranchAsync(factory, "Branch3-1513925028", "01JB0S0SYP3T4REGTTC3Y74N51.Tenant1.ADMIN1", cancellationToken).ConfigureAwait(false);
+    await SeedBranchAsync(factory, "Branch1-1937190788", "America/New_York", "01JB0S0PAQTKGEWXBX1060B00T.Tenant1.ADMIN1", cancellationToken).ConfigureAwait(false);
+    await SeedBranchAsync(factory, "Branch2-1972002548", "America/New_York", "01JB0S0SYP3T4REGTTC3Y74N51.Tenant1.ADMIN1", cancellationToken).ConfigureAwait(false);
+    await SeedBranchAsync(factory, "Branch3-1513925028", "America/New_York", "01JB0S0SYP3T4REGTTC3Y74N51.Tenant1.ADMIN1", cancellationToken).ConfigureAwait(false);
   }
 
   private static async Task SeedBranchAsync<TEntryPoint>(
     WebApplicationFactory<TEntryPoint> factory,
     string branchName,
+    string timeZoneId,
     string accessToken,
     CancellationToken cancellationToken) where TEntryPoint : class
   {
@@ -33,7 +34,7 @@ public static class BranchExtensions
       var client = factory.CreateClient();
       client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-      var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName), cancellationToken).ConfigureAwait(false);
+      var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId), cancellationToken).ConfigureAwait(false);
 
       creationResponse.EnsureSuccessStatusCode();
     }

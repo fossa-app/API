@@ -17,6 +17,7 @@ namespace Fossa.API.Persistence.Mongo.Entities
         public string? Name { get; set; }
         [MongoDB.Bson.Serialization.Attributes.BsonGuidRepresentation(MongoDB.Bson.GuidRepresentation.Standard)]
         public System.Guid TenantID { get; set; }
+        public string? TimeZoneId { get; set; }
     }
     public class CompanyMongoEntity : TIKSN.Data.IEntity<long>
     {
@@ -54,7 +55,7 @@ namespace Fossa.API.Persistence.Mongo.Mappers
 {
     public class BranchMongoMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity>, TIKSN.Mapping.IMapper<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity, Fossa.API.Core.Entities.BranchEntity>
     {
-        public BranchMongoMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.BranchId> dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> companyDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId> companyDataIdentityToDomainIdentityMapper) { }
+        public BranchMongoMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.BranchId> dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> companyDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId> companyDataIdentityToDomainIdentityMapper, Fossa.API.Core.TimeZone.IDateTimeZoneProvider dateTimeZoneProvider) { }
         public Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity Map(Fossa.API.Core.Entities.BranchEntity source) { }
         public Fossa.API.Core.Entities.BranchEntity Map(Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity source) { }
     }

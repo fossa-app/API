@@ -1,5 +1,7 @@
 ﻿namespace Fossa.API.Web.ApiModels;
 
 public record BranchRetrievalModel(
-  long Id, long CompanyId,
-  string Name);
+  long Id,
+  long CompanyId,
+  string Name,
+  string TimeZoneId);
