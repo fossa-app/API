@@ -57,7 +57,7 @@ public class CompanyLicenseCreator : CompanyLicenseManager, ICompanyLicenseCreat
         return Fail<Error, License<CompanyEntitlements>>(Error.New(25578518, "Company License already exists."));
       }
 
-      if (companyLicenseFile is not null && companyLicenseFile.Content.Count == 0)
+      if (companyLicenseFile?.Content.Count == 0)
       {
         await _licenseFileRepository.DeleteAsync(companyLicensePath, cancellationToken).ConfigureAwait(false);
       }
