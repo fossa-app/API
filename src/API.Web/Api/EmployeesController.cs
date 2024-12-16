@@ -43,7 +43,8 @@ public class EmployeesController : BaseApiController<EmployeeId>
     var tenantId = _tenantIdProvider.GetTenantId();
     var userId = _userIdProvider.GetUserId();
     var result = await _sender.Send(
-      new EmployeePagingQuery(tenantId, userId, new Page(
+      new EmployeePagingQuery(tenantId, userId, requestModel.Search ?? string.Empty,
+        new Page(
         requestModel.PageNumber ?? 0,
         requestModel.PageSize ?? 0)),
       cancellationToken);
