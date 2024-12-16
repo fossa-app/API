@@ -20,7 +20,7 @@ public class BranchPagingQueryHandler : IRequestHandler<BranchPagingQuery, PageR
     CancellationToken cancellationToken)
   {
     return _branchQueryRepository.PageAsync(
-      new TenantBranchPageQuery(request.TenantID, request.Page),
+      new TenantBranchPageQuery(request.TenantID, request.Search, request.Page),
       cancellationToken);
   }
 }
