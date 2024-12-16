@@ -2,6 +2,7 @@
 using Fossa.API.Core.Entities;
 using Fossa.API.Core.Relationship;
 using Fossa.API.Core.Services;
+using Fossa.API.Core.TimeZone;
 using TIKSN.Data.BareEntityResolvers;
 using TIKSN.Identity;
 
@@ -9,7 +10,9 @@ namespace Fossa.API.Core;
 
 public class DefaultCoreModule : Module
 {
+#pragma warning disable MA0051 // Method is too long
   protected override void Load(ContainerBuilder builder)
+#pragma warning restore MA0051 // Method is too long
   {
     RegisterStronglyTypedIds(builder);
 
@@ -65,6 +68,11 @@ public class DefaultCoreModule : Module
 
     builder
       .RegisterType<DateTimeZoneLookup>()
+      .AsImplementedInterfaces()
+      .SingleInstance();
+
+    builder
+      .RegisterType<DateTimeZoneProvider>()
       .AsImplementedInterfaces()
       .SingleInstance();
   }
