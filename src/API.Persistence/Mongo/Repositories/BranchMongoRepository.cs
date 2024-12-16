@@ -35,8 +35,15 @@ public class BranchMongoRepository
     TenantBranchPageQuery pageQuery,
     CancellationToken cancellationToken)
   {
-    var filter =
+    var filterByTenantId =
       Builders<BranchMongoEntity>.Filter.Eq(item => item.TenantID, pageQuery.TenantId);
+
+    var search = pageQuery.Search.Trim();
+    var filter = string.IsNullOrEmpty(search)
+      ? filterByTenantId
+      : Builders<BranchMongoEntity>.Filter.And(
+        filterByTenantId,
+        Builders<BranchMongoEntity>.Filter.Text(search));
 
     return this.PageAsync(filter, pageQuery, cancellationToken);
   }
