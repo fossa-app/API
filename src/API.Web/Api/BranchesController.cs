@@ -79,7 +79,7 @@ public class BranchesController : BaseApiController<BranchId>
     var tenantId = _tenantIdProvider.GetTenantId();
     var userId = _userIdProvider.GetUserId();
     var result = await _sender.Send(
-      new BranchPagingQuery(tenantId, userId, new Page(
+      new BranchPagingQuery(tenantId, userId, requestModel.Search ?? string.Empty, new Page(
         requestModel.PageNumber ?? 0,
         requestModel.PageSize ?? 0)),
       cancellationToken);

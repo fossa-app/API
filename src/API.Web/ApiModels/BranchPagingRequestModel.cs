@@ -1,4 +1,6 @@
 ﻿namespace Fossa.API.Web.ApiModels;
 
 public record BranchPagingRequestModel(
-  int? PageNumber, int? PageSize);
+  string? Search,
+  int? PageNumber,
+  int? PageSize);
