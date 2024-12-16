@@ -20,7 +20,7 @@ public class EmployeePagingQueryHandler : IRequestHandler<EmployeePagingQuery, P
     CancellationToken cancellationToken)
   {
     return _employeeQueryRepository.PageAsync(
-      new TenantEmployeePageQuery(request.TenantID, request.Page),
+      new TenantEmployeePageQuery(request.TenantID, request.Search, request.Page),
       cancellationToken);
   }
 }
