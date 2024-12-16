@@ -136,9 +136,10 @@ namespace Fossa.API.Web.ApiModels
     }
     public class BranchPagingRequestModel : System.IEquatable<Fossa.API.Web.ApiModels.BranchPagingRequestModel>
     {
-        public BranchPagingRequestModel(int? PageNumber, int? PageSize) { }
+        public BranchPagingRequestModel(string? Search, int? PageNumber, int? PageSize) { }
         public int? PageNumber { get; init; }
         public int? PageSize { get; init; }
+        public string? Search { get; init; }
     }
     public class BranchRetrievalModel : System.IEquatable<Fossa.API.Web.ApiModels.BranchRetrievalModel>
     {

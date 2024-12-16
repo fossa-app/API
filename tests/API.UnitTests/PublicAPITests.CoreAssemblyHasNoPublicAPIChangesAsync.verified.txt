@@ -400,9 +400,10 @@ namespace Fossa.API.Core.Messages.Queries
 {
     public class BranchPagingQuery : Fossa.API.Core.Messages.Queries.EntityTenantQuery<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Core.Entities.BranchId, System.Guid, TIKSN.Data.PageResult<Fossa.API.Core.Entities.BranchEntity>>, Fossa.API.Core.Messages.Queries.IPagingQuery, Fossa.API.Core.Messages.Queries.IPagingQuery<Fossa.API.Core.Entities.BranchEntity>, Fossa.API.Core.Messages.Queries.IQuery<TIKSN.Data.PageResult<Fossa.API.Core.Entities.BranchEntity>>, MediatR.IBaseRequest, MediatR.IRequest<TIKSN.Data.PageResult<Fossa.API.Core.Entities.BranchEntity>>, System.IEquatable<Fossa.API.Core.Messages.Queries.BranchPagingQuery>
     {
-        public BranchPagingQuery(System.Guid TenantID, System.Guid UserID, TIKSN.Data.Page Page) { }
+        public BranchPagingQuery(System.Guid TenantID, System.Guid UserID, string Search, TIKSN.Data.Page Page) { }
         public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.BranchId> AffectingTenantEntitiesIdentities { get; }
         public TIKSN.Data.Page Page { get; init; }
+        public string Search { get; init; }
         public System.Guid UserID { get; init; }
     }
     public class BranchPagingQueryHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Queries.BranchPagingQuery, TIKSN.Data.PageResult<Fossa.API.Core.Entities.BranchEntity>>
@@ -552,7 +553,8 @@ namespace Fossa.API.Core.Repositories
     public interface ISystemPropertiesRepository : TIKSN.Data.IRepository<Fossa.API.Core.Entities.SystemPropertiesEntity> { }
     public class TenantBranchPageQuery : TIKSN.Data.PageQuery
     {
-        public TenantBranchPageQuery(System.Guid tenantId, TIKSN.Data.Page page) { }
+        public TenantBranchPageQuery(System.Guid tenantId, string search, TIKSN.Data.Page page) { }
+        public string Search { get; }
         public System.Guid TenantId { get; }
     }
     public class TenantEmployeePageQuery : TIKSN.Data.PageQuery
