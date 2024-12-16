@@ -444,9 +444,10 @@ namespace Fossa.API.Core.Messages.Queries
     }
     public class EmployeePagingQuery : Fossa.API.Core.Messages.Queries.EntityTenantQuery<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Core.Entities.EmployeeId, System.Guid, TIKSN.Data.PageResult<Fossa.API.Core.Entities.EmployeeEntity>>, Fossa.API.Core.Messages.Queries.IPagingQuery, Fossa.API.Core.Messages.Queries.IPagingQuery<Fossa.API.Core.Entities.EmployeeEntity>, Fossa.API.Core.Messages.Queries.IQuery<TIKSN.Data.PageResult<Fossa.API.Core.Entities.EmployeeEntity>>, MediatR.IBaseRequest, MediatR.IRequest<TIKSN.Data.PageResult<Fossa.API.Core.Entities.EmployeeEntity>>, System.IEquatable<Fossa.API.Core.Messages.Queries.EmployeePagingQuery>
     {
-        public EmployeePagingQuery(System.Guid TenantID, System.Guid UserID, TIKSN.Data.Page Page) { }
+        public EmployeePagingQuery(System.Guid TenantID, System.Guid UserID, string Search, TIKSN.Data.Page Page) { }
         public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.EmployeeId> AffectingTenantEntitiesIdentities { get; }
         public TIKSN.Data.Page Page { get; init; }
+        public string Search { get; init; }
         public System.Guid UserID { get; init; }
     }
     public class EmployeePagingQueryHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Queries.EmployeePagingQuery, TIKSN.Data.PageResult<Fossa.API.Core.Entities.EmployeeEntity>>
@@ -556,7 +557,8 @@ namespace Fossa.API.Core.Repositories
     }
     public class TenantEmployeePageQuery : TIKSN.Data.PageQuery
     {
-        public TenantEmployeePageQuery(System.Guid tenantId, TIKSN.Data.Page page) { }
+        public TenantEmployeePageQuery(System.Guid tenantId, string search, TIKSN.Data.Page page) { }
+        public string Search { get; }
         public System.Guid TenantId { get; }
     }
 }
