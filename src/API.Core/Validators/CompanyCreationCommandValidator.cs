@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Fossa.API.Core.Messages.Commands;
-using Fossa.API.Core.Repositories;
 using Fossa.API.Core.Services;
 
 namespace Fossa.API.Core.Validators;
@@ -8,8 +7,7 @@ namespace Fossa.API.Core.Validators;
 public class CompanyCreationCommandValidator : AbstractValidator<CompanyCreationCommand>
 {
   public CompanyCreationCommandValidator(
-    ISystemLicenseRetriever systemLicenseRetriever,
-    ICompanyQueryRepository companyQueryRepository)
+    ISystemLicenseRetriever systemLicenseRetriever)
   {
     ArgumentNullException.ThrowIfNull(systemLicenseRetriever);
 
