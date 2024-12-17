@@ -164,8 +164,8 @@ namespace Fossa.API.Web.ApiModels
     }
     public class CompanyRetrievalModel : System.IEquatable<Fossa.API.Web.ApiModels.CompanyRetrievalModel>
     {
-        public CompanyRetrievalModel(long Id, string Name, Fossa.API.Web.ApiModels.CountryModel Country) { }
-        public Fossa.API.Web.ApiModels.CountryModel Country { get; init; }
+        public CompanyRetrievalModel(long Id, string Name, string CountryCode) { }
+        public string CountryCode { get; init; }
         public long Id { get; init; }
         public string Name { get; init; }
     }
@@ -315,7 +315,7 @@ namespace Fossa.API.Web.Mappers
     }
     public class CompanyRetrievalModelMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Web.ApiModels.CompanyRetrievalModel>
     {
-        public CompanyRetrievalModelMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<System.Globalization.RegionInfo, Fossa.API.Web.ApiModels.CountryModel> regionInfoToCountryModelMapper) { }
+        public CompanyRetrievalModelMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> domainIdentityToDataIdentityMapper) { }
         public Fossa.API.Web.ApiModels.CompanyRetrievalModel Map(Fossa.API.Core.Entities.CompanyEntity source) { }
     }
     public class CountryModelMapper : TIKSN.Mapping.IMapper<System.Globalization.RegionInfo, Fossa.API.Web.ApiModels.CountryModel>
