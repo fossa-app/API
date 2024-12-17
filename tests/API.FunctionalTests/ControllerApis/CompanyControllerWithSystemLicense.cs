@@ -62,9 +62,7 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
     responseModel.ShouldNotBeNull();
     responseModel.Id.ShouldBePositive();
     responseModel.Name.ShouldBe(companyName);
-    responseModel.Country.ShouldNotBeNull();
-    responseModel.Country.Code.ShouldBe("US");
-    responseModel.Country.Name.ShouldBe("United States");
+    responseModel.CountryCode.ShouldBe("US");
 
     licenseEasyStoreBucket.BucketContent.Values.Where(x => string.Equals(x.Path, $"Company{responseModel.Id}", StringComparison.Ordinal)).ShouldNotBeEmpty();
   }
@@ -175,9 +173,7 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
     responseModel.ShouldNotBeNull();
     responseModel.Id.ShouldBePositive();
     responseModel.Name.ShouldNotBeNullOrEmpty();
-    responseModel.Country.ShouldNotBeNull();
-    responseModel.Country.Code.ShouldBe("US");
-    responseModel.Country.Name.ShouldBe("United States");
+    responseModel.CountryCode.ShouldBe("US");
   }
 
   [Fact]
