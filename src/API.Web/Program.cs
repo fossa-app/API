@@ -87,7 +87,7 @@ builder.Services.AddLicense();
 builder.Services
   .AddHealthChecks()
   .AddMongoDb(builder.Configuration.GetConnectionString("MongoDB") ?? string.Empty)
-  .AddIdentityServer(new Uri(
+  .AddOpenIdConnectServer(new Uri(
     builder.Configuration.GetSection("Identity").GetValue<string>("RootAddress") ?? string.Empty))
   .AddSystemLicense();
 
