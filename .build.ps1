@@ -65,7 +65,8 @@ Task Pack Build, Test, Ward, {
     $state = Import-Clixml -Path ".\.trash\$Instance\state.clixml"
     $dockerImageName = $state.DockerImageName
     $nextVersion = $state.NextVersion
-    $linuxBuildArtifactsFolder = $state.LinuxBuildArtifactsFolder
+    $linuxX64BuildArtifactsFolder = $state.LinuxX64BuildArtifactsFolder
+    $linuxArm64BuildArtifactsFolder = $state.LinuxArm64BuildArtifactsFolder
     $dockerFilePath = Resolve-Path -Path '.\src\API.Web\Dockerfile'
 
     $dockerImageVersionTag = "$($dockerImageName):$nextVersion"
@@ -76,7 +77,7 @@ Task Pack Build, Test, Ward, {
     $dockerImageVersionArchive = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath(".\.trash\$Instance\artifacts\$dockerImageVersionArchiveName")
     $dockerImageLatestArchive = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath(".\.trash\$Instance\artifacts\$dockerImageLatestArchiveName")
 
-    Exec { docker buildx build --file $dockerFilePath --tag $dockerImageVersionTag --tag $dockerImageLatestTag $linuxBuildArtifactsFolder }
+    Exec { docker buildx build --file $dockerFilePath --tag $dockerImageVersionTag --tag $dockerImageLatestTag $linuxX64BuildArtifactsFolder }
     Exec { docker image save --output $dockerImageVersionArchive $dockerImageVersionTag }
     Exec { docker image save --output $dockerImageLatestArchive $dockerImageLatestTag }
 
@@ -116,13 +117,15 @@ Task Build Format, BuildWeb, {
 # Synopsis: Build Web
 Task BuildWeb EstimateVersion, {
     $state = Import-Clixml -Path ".\.trash\$Instance\state.clixml"
-    $linuxBuildArtifactsFolder = $state.LinuxBuildArtifactsFolder
-    $winBuildArtifactsFolder = $state.WinBuildArtifactsFolder
+    $linuxX64BuildArtifactsFolder = $state.LinuxX64BuildArtifactsFolder
+    $linuxArm64BuildArtifactsFolder = $state.LinuxArm64BuildArtifactsFolder
+    $winX64BuildArtifactsFolder = $state.WinX64BuildArtifactsFolder
     $project = Resolve-Path -Path 'src/API.Web/API.Web.csproj'
     $nextVersion = $state.NextVersion
 
-    Exec { dotnet build $project /v:m /p:Configuration=Release /p:version=$nextVersion /p:OutDir=$linuxBuildArtifactsFolder --runtime linux-x64 }
-    Exec { dotnet build $project /v:m /p:Configuration=Release /p:version=$nextVersion /p:OutDir=$winBuildArtifactsFolder --runtime win-x64 }
+    Exec { dotnet build $project /v:m /p:Configuration=Release /p:version=$nextVersion /p:OutDir=$linuxX64BuildArtifactsFolder --runtime linux-x64 }
+    Exec { dotnet build $project /v:m /p:Configuration=Release /p:version=$nextVersion /p:OutDir=$linuxArm64BuildArtifactsFolder --runtime linux-x64 }
+    Exec { dotnet build $project /v:m /p:Configuration=Release /p:version=$nextVersion /p:OutDir=$winX64BuildArtifactsFolder --runtime win-x64 }
 }
 
 # Synopsis: Estimate Next Version
@@ -319,24 +322,28 @@ Task Init {
     $contractsArtifactsFolder = Join-Path -Path $buildArtifactsFolder -ChildPath 'contracts'
     New-Item -Path $contractsArtifactsFolder -ItemType Directory | Out-Null
 
-    $linuxBuildArtifactsFolder = Join-Path -Path $buildArtifactsFolder -ChildPath 'linux'
-    New-Item -Path $linuxBuildArtifactsFolder -ItemType Directory | Out-Null
+    $linuxX64BuildArtifactsFolder = Join-Path -Path $buildArtifactsFolder -ChildPath 'linux-x64'
+    New-Item -Path $linuxX64BuildArtifactsFolder -ItemType Directory | Out-Null
 
-    $winBuildArtifactsFolder = Join-Path -Path $buildArtifactsFolder -ChildPath 'win'
-    New-Item -Path $winBuildArtifactsFolder -ItemType Directory | Out-Null
+    $linuxArm64BuildArtifactsFolder = Join-Path -Path $buildArtifactsFolder -ChildPath 'linux-arm64'
+    New-Item -Path $linuxArm64BuildArtifactsFolder -ItemType Directory | Out-Null
+
+    $winX64BuildArtifactsFolder = Join-Path -Path $buildArtifactsFolder -ChildPath 'win-x64'
+    New-Item -Path $winX64BuildArtifactsFolder -ItemType Directory | Out-Null
 
     $state = [PSCustomObject]@{
-        NextVersion                   = $null
-        TrashFolder                   = $trashFolder
-        BuildArtifactsFolder          = $buildArtifactsFolder
-        ContractsArtifactsFolder      = $contractsArtifactsFolder
-        LinuxBuildArtifactsFolder     = $linuxBuildArtifactsFolder
-        WinBuildArtifactsFolder       = $winBuildArtifactsFolder
-        DockerImageName               = 'tiksn/fossa-api'
-        DockerImageVersionTag         = $null
-        DockerImageLatestTag          = $null
-        DockerImageVersionArchiveName = 'tiksn-fossa-api-version.tar'
-        DockerImageLatestArchiveName  = 'tiksn-fossa-api-latest.tar'
+        NextVersion                    = $null
+        TrashFolder                    = $trashFolder
+        BuildArtifactsFolder           = $buildArtifactsFolder
+        ContractsArtifactsFolder       = $contractsArtifactsFolder
+        LinuxX64BuildArtifactsFolder   = $linuxX64BuildArtifactsFolder
+        LinuxArm64BuildArtifactsFolder = $linuxArm64BuildArtifactsFolder
+        WinX64BuildArtifactsFolder        = $winX64BuildArtifactsFolder
+        DockerImageName                = 'tiksn/fossa-api'
+        DockerImageVersionTag          = $null
+        DockerImageLatestTag           = $null
+        DockerImageVersionArchiveName  = 'tiksn-fossa-api-version.tar'
+        DockerImageLatestArchiveName   = 'tiksn-fossa-api-latest.tar'
     }
 
     $state | Export-Clixml -Path ".\.trash\$Instance\state.clixml"
