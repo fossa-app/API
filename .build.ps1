@@ -119,13 +119,13 @@ Task BuildWeb EstimateVersion, {
     $state = Import-Clixml -Path ".\.trash\$Instance\state.clixml"
     $linuxX64BuildArtifactsFolder = $state.LinuxX64BuildArtifactsFolder
     $linuxArm64BuildArtifactsFolder = $state.LinuxArm64BuildArtifactsFolder
-    $winBuildArtifactsFolder = $state.WinBuildArtifactsFolder
+    $winX64BuildArtifactsFolder = $state.WinX64BuildArtifactsFolder
     $project = Resolve-Path -Path 'src/API.Web/API.Web.csproj'
     $nextVersion = $state.NextVersion
 
     Exec { dotnet build $project /v:m /p:Configuration=Release /p:version=$nextVersion /p:OutDir=$linuxX64BuildArtifactsFolder --runtime linux-x64 }
     Exec { dotnet build $project /v:m /p:Configuration=Release /p:version=$nextVersion /p:OutDir=$linuxArm64BuildArtifactsFolder --runtime linux-x64 }
-    Exec { dotnet build $project /v:m /p:Configuration=Release /p:version=$nextVersion /p:OutDir=$winBuildArtifactsFolder --runtime win-x64 }
+    Exec { dotnet build $project /v:m /p:Configuration=Release /p:version=$nextVersion /p:OutDir=$winX64BuildArtifactsFolder --runtime win-x64 }
 }
 
 # Synopsis: Estimate Next Version
@@ -328,8 +328,8 @@ Task Init {
     $linuxArm64BuildArtifactsFolder = Join-Path -Path $buildArtifactsFolder -ChildPath 'linux-arm64'
     New-Item -Path $linuxArm64BuildArtifactsFolder -ItemType Directory | Out-Null
 
-    $winBuildArtifactsFolder = Join-Path -Path $buildArtifactsFolder -ChildPath 'win'
-    New-Item -Path $winBuildArtifactsFolder -ItemType Directory | Out-Null
+    $winX64BuildArtifactsFolder = Join-Path -Path $buildArtifactsFolder -ChildPath 'win-x64'
+    New-Item -Path $winX64BuildArtifactsFolder -ItemType Directory | Out-Null
 
     $state = [PSCustomObject]@{
         NextVersion                    = $null
@@ -338,7 +338,7 @@ Task Init {
         ContractsArtifactsFolder       = $contractsArtifactsFolder
         LinuxX64BuildArtifactsFolder   = $linuxX64BuildArtifactsFolder
         LinuxArm64BuildArtifactsFolder = $linuxArm64BuildArtifactsFolder
-        WinBuildArtifactsFolder        = $winBuildArtifactsFolder
+        WinX64BuildArtifactsFolder        = $winX64BuildArtifactsFolder
         DockerImageName                = 'tiksn/fossa-api'
         DockerImageVersionTag          = $null
         DockerImageLatestTag           = $null
