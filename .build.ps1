@@ -32,13 +32,12 @@ Task Publish Pack, {
     $state = Import-Clixml -Path ".\.trash\$Instance\state.clixml"
     $dockerImageVersionTag = $state.DockerImageVersionTag
     $dockerImageLatestTag = $state.DockerImageLatestTag
-    $dockerImageVersionArchiveName = $state.DockerImageVersionArchiveName
-    $dockerImageLatestArchiveName = $state.DockerImageLatestArchiveName
-    $dockerImageVersionArchive = Resolve-Path -Path ".\.trash\$Instance\artifacts\$dockerImageVersionArchiveName"
-    $dockerImageLatestArchive = Resolve-Path -Path ".\.trash\$Instance\artifacts\$dockerImageLatestArchiveName"
+    $buildArtifactsFolder = $state.BuildArtifactsFolder
+    $dockerImageMultiArchArchiveName = $state.DockerImageMultiArchArchiveName
+    $dockerImageMultiArchArchive = Join-Path -Path $buildArtifactsFolder -ChildPath $dockerImageMultiArchArchiveName
+    $dockerImageMultiArchArchive = Resolve-Path -Path $dockerImageMultiArchArchive
 
-    Exec { docker image load --input $dockerImageVersionArchive }
-    Exec { docker image load --input $dockerImageLatestArchive }
+    Exec { docker image load --input $dockerImageMultiArchArchive }
 
     if ($null -eq $env:DOCKER_ACCESS_TOKEN) {
         Import-Module -Name Microsoft.PowerShell.SecretManagement
@@ -60,26 +59,21 @@ Task Publish Pack, {
     Exec { docker push $dockerImageLatestTag }
 }
 
-# Synopsis: Pack NuGet package
+# Synopsis: Pack Docker image artifact
 Task Pack Build, Test, Ward, {
     $state = Import-Clixml -Path ".\.trash\$Instance\state.clixml"
     $dockerImageName = $state.DockerImageName
     $nextVersion = $state.NextVersion
-    $linuxX64BuildArtifactsFolder = $state.LinuxX64BuildArtifactsFolder
-    $linuxArm64BuildArtifactsFolder = $state.LinuxArm64BuildArtifactsFolder
     $dockerFilePath = Resolve-Path -Path '.\src\API.Web\Dockerfile'
+    $buildArtifactsFolder = $state.BuildArtifactsFolder
 
     $dockerImageVersionTag = "$($dockerImageName):$nextVersion"
     $dockerImageLatestTag = "$($dockerImageName):latest"
 
-    $dockerImageVersionArchiveName = $state.DockerImageVersionArchiveName
-    $dockerImageLatestArchiveName = $state.DockerImageLatestArchiveName
-    $dockerImageVersionArchive = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath(".\.trash\$Instance\artifacts\$dockerImageVersionArchiveName")
-    $dockerImageLatestArchive = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath(".\.trash\$Instance\artifacts\$dockerImageLatestArchiveName")
+    $dockerImageMultiArchArchiveName = $state.DockerImageMultiArchArchiveName
+    $dockerImageMultiArchArchive = Join-Path -Path $buildArtifactsFolder -ChildPath $dockerImageMultiArchArchiveName
 
-    Exec { docker buildx build --file $dockerFilePath --tag $dockerImageVersionTag --tag $dockerImageLatestTag $linuxX64BuildArtifactsFolder }
-    Exec { docker image save --output $dockerImageVersionArchive $dockerImageVersionTag }
-    Exec { docker image save --output $dockerImageLatestArchive $dockerImageLatestTag }
+    Exec { docker buildx build --platform 'linux/amd64,linux/arm64' --output "type=oci,dest=$dockerImageMultiArchArchive" --load --file $dockerFilePath --tag $dockerImageVersionTag --tag $dockerImageLatestTag . }
 
     $state.DockerImageVersionTag = $dockerImageVersionTag
     $state.DockerImageLatestTag = $dockerImageLatestTag
@@ -124,7 +118,7 @@ Task BuildWeb EstimateVersion, {
     $nextVersion = $state.NextVersion
 
     Exec { dotnet build $project /v:m /p:Configuration=Release /p:version=$nextVersion /p:OutDir=$linuxX64BuildArtifactsFolder --runtime linux-x64 }
-    Exec { dotnet build $project /v:m /p:Configuration=Release /p:version=$nextVersion /p:OutDir=$linuxArm64BuildArtifactsFolder --runtime linux-x64 }
+    Exec { dotnet build $project /v:m /p:Configuration=Release /p:version=$nextVersion /p:OutDir=$linuxArm64BuildArtifactsFolder --runtime linux-arm64 }
     Exec { dotnet build $project /v:m /p:Configuration=Release /p:version=$nextVersion /p:OutDir=$winX64BuildArtifactsFolder --runtime win-x64 }
 }
 
@@ -324,12 +318,11 @@ Task Init {
         ContractsArtifactsFolder       = $contractsArtifactsFolder
         LinuxX64BuildArtifactsFolder   = $linuxX64BuildArtifactsFolder
         LinuxArm64BuildArtifactsFolder = $linuxArm64BuildArtifactsFolder
-        WinX64BuildArtifactsFolder        = $winX64BuildArtifactsFolder
+        WinX64BuildArtifactsFolder     = $winX64BuildArtifactsFolder
         DockerImageName                = 'tiksn/fossa-api'
         DockerImageVersionTag          = $null
         DockerImageLatestTag           = $null
-        DockerImageVersionArchiveName  = 'tiksn-fossa-api-version.tar'
-        DockerImageLatestArchiveName   = 'tiksn-fossa-api-latest.tar'
+        DockerImageMultiArchArchiveName= 'fossa-api-multiarch.tar'
     }
 
     $state | Export-Clixml -Path ".\.trash\$Instance\state.clixml"
