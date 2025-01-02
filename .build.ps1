@@ -75,7 +75,7 @@ Task Pack Build, Test, Ward, {
     $dockerImageVersionArchive = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath(".\.trash\$Instance\artifacts\$dockerImageVersionArchiveName")
     $dockerImageLatestArchive = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath(".\.trash\$Instance\artifacts\$dockerImageLatestArchiveName")
 
-    Exec { docker buildx build --platform 'linux/amd64,linux/arm64' --file $dockerFilePath --tag $dockerImageVersionTag --tag $dockerImageLatestTag . }
+    Exec { docker buildx build --platform 'linux/amd64,linux/arm64' --load --file $dockerFilePath --tag $dockerImageVersionTag --tag $dockerImageLatestTag . }
 
     Exec { docker image save --output $dockerImageVersionArchive $dockerImageVersionTag }
     Exec { docker image save --output $dockerImageLatestArchive $dockerImageLatestTag }
