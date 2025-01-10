@@ -23,6 +23,19 @@ public class EmployeeMongoRepository
   protected override SortDefinition<EmployeeMongoEntity> PageSortDefinition
     => Builders<EmployeeMongoEntity>.Sort.Ascending(x => x.ID);
 
+  public Task EnsureIndexesCreatedAsync(CancellationToken cancellationToken)
+  {
+    var indexKeysDefinition =
+      Builders<EmployeeMongoEntity>
+      .IndexKeys
+      .Text(x => x.FirstName)
+      .Text(x => x.LastName)
+      .Text(x => x.FullName);
+    var indexOptions = new CreateIndexOptions { Name = "text_index" };
+    var indexModel = new CreateIndexModel<EmployeeMongoEntity>(indexKeysDefinition, indexOptions);
+    return Collection.Indexes.CreateOneAsync(indexModel, cancellationToken: cancellationToken);
+  }
+
   public async Task<Option<EmployeeMongoEntity>> FindByUserIdAsync(
     Guid userId,
     CancellationToken cancellationToken)
