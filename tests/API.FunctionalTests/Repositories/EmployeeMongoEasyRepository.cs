@@ -16,6 +16,11 @@ public class EmployeeMongoEasyRepository :
   {
   }
 
+  public Task EnsureIndexesCreatedAsync(CancellationToken cancellationToken)
+  {
+    return Task.CompletedTask;
+  }
+
   public Task<Option<EmployeeMongoEntity>> FindByUserIdAsync(Guid userId, CancellationToken cancellationToken)
   {
     return Task.FromResult(Optional(EasyStore.Entities.Values.FirstOrDefault(x => x.UserID == userId)));
