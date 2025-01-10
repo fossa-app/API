@@ -21,6 +21,17 @@ public class BranchMongoRepository
   protected override SortDefinition<BranchMongoEntity> PageSortDefinition
     => Builders<BranchMongoEntity>.Sort.Ascending(x => x.ID);
 
+  public Task EnsureIndexesCreatedAsync(CancellationToken cancellationToken)
+  {
+    var indexKeysDefinition =
+      Builders<BranchMongoEntity>
+      .IndexKeys
+      .Text(x => x.Name);
+    var indexOptions = new CreateIndexOptions { Name = "text_index" };
+    var indexModel = new CreateIndexModel<BranchMongoEntity>(indexKeysDefinition, indexOptions);
+    return Collection.Indexes.CreateOneAsync(indexModel, cancellationToken: cancellationToken);
+  }
+
   public async Task<bool> HasDependencyOnCompanyAsync(long companyId, CancellationToken cancellationToken)
   {
     var filter =

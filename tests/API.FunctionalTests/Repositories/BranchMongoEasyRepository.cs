@@ -16,6 +16,11 @@ public class BranchMongoEasyRepository :
   {
   }
 
+  public Task EnsureIndexesCreatedAsync(CancellationToken cancellationToken)
+  {
+    return Task.CompletedTask;
+  }
+
   public Task<bool> HasDependencyOnCompanyAsync(long companyId, CancellationToken cancellationToken)
   {
     return Task.FromResult(EasyStore.Entities.Values.Any(x => x.CompanyId == companyId));

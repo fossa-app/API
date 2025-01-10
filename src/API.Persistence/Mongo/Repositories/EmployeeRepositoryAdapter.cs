@@ -5,12 +5,13 @@ using LanguageExt;
 using TIKSN.Data;
 using TIKSN.Data.Mongo;
 using TIKSN.Mapping;
+using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 
 namespace Fossa.API.Persistence.Mongo.Repositories;
 
 public class EmployeeRepositoryAdapter
   : MongoRepositoryAdapter<EmployeeEntity, EmployeeId, EmployeeMongoEntity, long>
-    , IEmployeeRepository, IEmployeeQueryRepository
+    , IEmployeeRepository, IEmployeeQueryRepository, IEmployeeIndexRepository
 {
   private readonly IMapper<CompanyId, long> _companyDomainIdentityToDataIdentityMapper;
   private readonly IEmployeeMongoRepository _dataRepository;
@@ -30,6 +31,11 @@ public class EmployeeRepositoryAdapter
   {
     _companyDomainIdentityToDataIdentityMapper = companyDomainIdentityToDataIdentityMapper ?? throw new ArgumentNullException(nameof(companyDomainIdentityToDataIdentityMapper));
     _dataRepository = dataRepository ?? throw new ArgumentNullException(nameof(dataRepository));
+  }
+
+  public Task EnsureIndexesCreatedAsync(CancellationToken cancellationToken)
+  {
+    return _dataRepository.EnsureIndexesCreatedAsync(cancellationToken);
   }
 
   public async Task<Option<EmployeeEntity>> FindByUserIdAsync(

@@ -10,7 +10,7 @@ namespace Fossa.API.Persistence.Mongo.Repositories;
 
 public class BranchRepositoryAdapter
   : MongoRepositoryAdapter<BranchEntity, BranchId, BranchMongoEntity, long>
-    , IBranchRepository, IBranchQueryRepository
+    , IBranchRepository, IBranchQueryRepository, IBranchIndexRepository
 {
   private readonly IMapper<CompanyId, long> _companyDomainIdentityToDataIdentityMapper;
   private readonly IBranchMongoRepository _dataRepository;
@@ -30,6 +30,11 @@ public class BranchRepositoryAdapter
   {
     _companyDomainIdentityToDataIdentityMapper = companyDomainIdentityToDataIdentityMapper;
     _dataRepository = dataRepository ?? throw new ArgumentNullException(nameof(dataRepository));
+  }
+
+  public Task EnsureIndexesCreatedAsync(CancellationToken cancellationToken)
+  {
+    return _dataRepository.EnsureIndexesCreatedAsync(cancellationToken);
   }
 
   public Task<bool> HasDependencyAsync(CompanyId id, CancellationToken cancellationToken)
