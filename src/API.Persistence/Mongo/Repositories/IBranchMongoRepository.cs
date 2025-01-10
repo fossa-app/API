@@ -7,6 +7,7 @@ namespace Fossa.API.Persistence.Mongo.Repositories;
 
 public interface IBranchMongoRepository : IMongoRepository<BranchMongoEntity, long>
 {
+  Task EnsureIndexesCreatedAsync(CancellationToken cancellationToken);
   Task<bool> HasDependencyOnCompanyAsync(long companyId, CancellationToken cancellationToken);
 
   Task<PageResult<BranchMongoEntity>> PageAsync(

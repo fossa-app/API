@@ -8,6 +8,7 @@ namespace Fossa.API.Persistence.Mongo.Repositories;
 
 public interface IEmployeeMongoRepository : IMongoRepository<EmployeeMongoEntity, long>
 {
+  Task EnsureIndexesCreatedAsync(CancellationToken cancellationToken);
   Task<Option<EmployeeMongoEntity>> FindByUserIdAsync(
     Guid userId,
     CancellationToken cancellationToken);
