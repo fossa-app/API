@@ -112,14 +112,14 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
   {
     var client = _factory.CreateClient();
     var companyEasyStore = _factory.Services.GetRequiredService<IEasyStores>().Resolve<CompanyMongoEntity, long>();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9SJ94KK62JSRNQD7H70NCF7.Tenant2.ADMIN1");
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9SJ94KK62JSRNQD7H70NCF7.Tenant3.ADMIN1");
 
-    companyEasyStore.Entities.Values.FirstOrDefault(x => string.Equals(x.Name, "Company2-1031522025", StringComparison.Ordinal)).ShouldNotBeNull();
+    companyEasyStore.Entities.Values.FirstOrDefault(x => string.Equals(x.Name, "Company3-1868946743", StringComparison.Ordinal)).ShouldNotBeNull();
 
     var response = await client.DeleteAsync("/api/1.0/Company");
 
     response.StatusCode.ShouldBe(HttpStatusCode.OK);
-    companyEasyStore.Entities.Values.FirstOrDefault(x => string.Equals(x.Name, "Company2-1031522025", StringComparison.Ordinal)).ShouldBeNull();
+    companyEasyStore.Entities.Values.FirstOrDefault(x => string.Equals(x.Name, "Company3-1868946743", StringComparison.Ordinal)).ShouldBeNull();
   }
 
   [Fact]

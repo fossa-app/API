@@ -17,6 +17,7 @@ public static class CompanyExtensions
   {
     await SeedCompanyAsync(factory, "Company1-1587795889", "01JB0QS2K6SA4KYD8S920W7DMG.Tenant1.ADMIN1", cancellationToken).ConfigureAwait(false);
     await SeedCompanyAsync(factory, "Company2-1031522025", "01JB0RAH24ZJBA53AJF5F5MMZX.Tenant2.ADMIN1", cancellationToken).ConfigureAwait(false);
+    await SeedCompanyAsync(factory, "Company3-1868946743", "01JB0RAH24ZJBA53AJF5F5MMZX.Tenant3.ADMIN1", cancellationToken).ConfigureAwait(false);
   }
 
   private static async Task SeedCompanyAsync<TEntryPoint>(

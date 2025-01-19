@@ -100,14 +100,14 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     var client = _factory.CreateClient();
     var employeeEasyStore = _factory.Services.GetRequiredService<IEasyStores>().Resolve<EmployeeMongoEntity, long>();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9ZHFMA4ZXFE4EVMZARRTK7M.Tenant2.User2");
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9ZHFMA4ZXFE4EVMZARRTK7M.Tenant2.User1");
 
-    employeeEasyStore.Entities.ContainsKey(20000L).ShouldBeTrue();
+    var existingEmployee = employeeEasyStore.Entities.Values.Single(x => string.Equals(x.FullName, "Meaghan Riley", StringComparison.OrdinalIgnoreCase));
 
     var response = await client.DeleteAsync("/api/1.0/Employee");
 
     response.StatusCode.ShouldBe(HttpStatusCode.OK);
-    employeeEasyStore.Entities.ContainsKey(20000L).ShouldBeFalse();
+    employeeEasyStore.Entities.ContainsKey(existingEmployee.ID).ShouldBeFalse();
   }
 
   [Fact]
