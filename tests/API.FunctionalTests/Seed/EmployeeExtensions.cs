@@ -1,5 +1,8 @@
-﻿using Fossa.API.FunctionalTests.Repositories;
+﻿using System.Net.Http.Headers;
+using System.Net.Http.Json;
+using EasyDoubles;
 using Fossa.API.Persistence.Mongo.Entities;
+using Fossa.API.Web.ApiModels;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,28 +15,36 @@ public static class EmployeeExtensions
     CancellationToken cancellationToken)
     where TEntryPoint : class
   {
-    var EmployeeRepository = factory.Services.GetRequiredService<EmployeeMongoEasyRepository>();
+    await SeedEmployeeAsync(factory, "Bill", "Gates", "01JHY9QQQB55BM6D3Y9PZQ22TD.Tenant1.ADMIN1", cancellationToken).ConfigureAwait(false);
+    await SeedEmployeeAsync(factory, "Steve", "Ballmer", "01JHY9QWEWVJFPN25TKCA942NX.Tenant1.ADMIN2", cancellationToken).ConfigureAwait(false);
+    await SeedEmployeeAsync(factory, "Paul", "Allen", "01JB0S0SYP3T4REGTTC3Y74N51.Tenant1.User1", cancellationToken).ConfigureAwait(false);
+    await SeedEmployeeAsync(factory, "Jim", "Allchin", "01JB0S0SYP3T4REGTTC3Y74N51.Tenant1.User2", cancellationToken).ConfigureAwait(false);
+  }
 
-    await EmployeeRepository.TryAddAsync(new EmployeeMongoEntity
-    {
-      ID = 10000L,
-      CompanyId = 100L,
-      TenantID = Guid.Parse("53ade3c2-8e36-52f2-88cf-d068b1ab247a"),
-      UserID = Guid.Parse("b7d80904-d65c-5469-912c-899e403d91db"),
-      FirstName = "Employee1F",
-      LastName = "Employee1L",
-      FullName = "Employee1FL",
-    }, cancellationToken).ConfigureAwait(false);
+  private static async Task SeedEmployeeAsync<TEntryPoint>(
+    WebApplicationFactory<TEntryPoint> factory,
+    string employeeFirstName,
+    string employeeLastName,
+    string accessToken,
+    CancellationToken cancellationToken) where TEntryPoint : class
+  {
+    var employeeFullName = $"{employeeFirstName} {employeeLastName}";
+    var employeeEasyStore = factory.Services.GetRequiredService<IEasyStores>().Resolve<EmployeeMongoEntity, long>();
 
-    await EmployeeRepository.TryAddAsync(new EmployeeMongoEntity
+    if (!employeeEasyStore.Entities.Values.Any(x => string.Equals(x.FullName, employeeFullName, StringComparison.Ordinal)))
     {
-      ID = 20000L,
-      CompanyId = 100L,
-      TenantID = Guid.Parse("53ade3c2-8e36-52f2-88cf-d068b1ab247a"),
-      UserID = Guid.Parse("ba463b27-82c1-59cc-b5d6-596622ac6998"),
-      FirstName = "Employee2F",
-      LastName = "Employee2L",
-      FullName = "Employee2FL",
-    }, cancellationToken).ConfigureAwait(false);
+      var client = factory.CreateClient();
+      client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+      var creationResponse = await client.PostAsJsonAsync(
+        "/api/1.0/Employee",
+        new EmployeeModificationModel(
+          employeeFirstName,
+          employeeLastName,
+          employeeFullName),
+        cancellationToken).ConfigureAwait(false);
+
+      creationResponse.EnsureSuccessStatusCode();
+    }
   }
 }
