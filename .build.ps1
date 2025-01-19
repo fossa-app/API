@@ -65,8 +65,6 @@ Task Pack Build, Test, Ward, {
     $state = Import-Clixml -Path ".\.trash\$Instance\state.clixml"
     $dockerImageName = $state.DockerImageName
     $nextVersion = $state.NextVersion
-    $linuxX64BuildArtifactsFolder = $state.LinuxX64BuildArtifactsFolder
-    $linuxArm64BuildArtifactsFolder = $state.LinuxArm64BuildArtifactsFolder
     $dockerFilePath = Resolve-Path -Path '.\src\API.Web\Dockerfile'
 
     $dockerImageVersionTag = "$($dockerImageName):$nextVersion"
@@ -77,7 +75,8 @@ Task Pack Build, Test, Ward, {
     $dockerImageVersionArchive = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath(".\.trash\$Instance\artifacts\$dockerImageVersionArchiveName")
     $dockerImageLatestArchive = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath(".\.trash\$Instance\artifacts\$dockerImageLatestArchiveName")
 
-    Exec { docker buildx build --file $dockerFilePath --tag $dockerImageVersionTag --tag $dockerImageLatestTag $linuxX64BuildArtifactsFolder }
+    Exec { docker buildx build --platform 'linux/amd64,linux/arm64' --load --file $dockerFilePath --tag $dockerImageVersionTag --tag $dockerImageLatestTag . }
+
     Exec { docker image save --output $dockerImageVersionArchive $dockerImageVersionTag }
     Exec { docker image save --output $dockerImageLatestArchive $dockerImageLatestTag }
 
@@ -338,7 +337,7 @@ Task Init {
         ContractsArtifactsFolder       = $contractsArtifactsFolder
         LinuxX64BuildArtifactsFolder   = $linuxX64BuildArtifactsFolder
         LinuxArm64BuildArtifactsFolder = $linuxArm64BuildArtifactsFolder
-        WinX64BuildArtifactsFolder        = $winX64BuildArtifactsFolder
+        WinX64BuildArtifactsFolder     = $winX64BuildArtifactsFolder
         DockerImageName                = 'tiksn/fossa-api'
         DockerImageVersionTag          = $null
         DockerImageLatestTag           = $null
