@@ -19,6 +19,8 @@ public static class EmployeeExtensions
     await SeedEmployeeAsync(factory, "Steve", "Ballmer", "01JHY9QWEWVJFPN25TKCA942NX.Tenant1.ADMIN2", cancellationToken).ConfigureAwait(false);
     await SeedEmployeeAsync(factory, "Paul", "Allen", "01JB0S0SYP3T4REGTTC3Y74N51.Tenant1.User1", cancellationToken).ConfigureAwait(false);
     await SeedEmployeeAsync(factory, "Jim", "Allchin", "01JB0S0SYP3T4REGTTC3Y74N51.Tenant1.User2", cancellationToken).ConfigureAwait(false);
+    await SeedEmployeeAsync(factory, "Larry", "Page", "01JHYAWW828D9R513JEFAB8NM9.Tenant2.ADMIN1", cancellationToken).ConfigureAwait(false);
+    await SeedEmployeeAsync(factory, "Meaghan", "Riley", "01JHYA68XARR5K66RZDESHXV6G.Tenant2.User1", cancellationToken).ConfigureAwait(false);
   }
 
   private static async Task SeedEmployeeAsync<TEntryPoint>(
