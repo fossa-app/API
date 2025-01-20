@@ -266,4 +266,33 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     responseModel.Items.ShouldNotBeNull();
     responseModel.Items.ShouldBeEmpty();
   }
+
+  [Fact]
+  public async Task UpdateBranchWithAdministratorAccessWithLicensedTimeZoneIdTokenAsync()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
+    const string creationBranchName = "Branch-753988509";
+    const string creationTimeZoneId = "America/New_York";
+
+    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(creationBranchName, creationTimeZoneId));
+
+    creationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    const string modificationBranchName = "Branch-509762905";
+    const string modificationTimeZoneId = "America/Chicago";
+
+    var modificationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(modificationBranchName, modificationTimeZoneId));
+
+    modificationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    var retrievalResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
+
+    var responseModel =
+      await retrievalResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+
+    responseModel.ShouldNotBeNull();
+    responseModel.Items.Select(x => x.Name).ShouldContain(modificationBranchName);
+    responseModel.Items.Select(x => x.TimeZoneId).ShouldContain(modificationTimeZoneId);
+  }
 }
