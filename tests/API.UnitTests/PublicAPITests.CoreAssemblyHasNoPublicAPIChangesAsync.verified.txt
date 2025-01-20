@@ -731,6 +731,7 @@ namespace Fossa.API.Core.Validators
     public static class CompanyCommandValidatorHelper
     {
         public static System.Threading.Tasks.Task<bool> CompanyCountryMustBeLicensedAsync(Fossa.API.Core.Services.ISystemLicenseRetriever systemLicenseRetriever, System.Globalization.RegionInfo companyCountry, System.Threading.CancellationToken cancellationToken) { }
+        public static string CompanyCountryMustBeLicensedErrorMessage<T>(T command, System.Globalization.RegionInfo property) { }
     }
     public class CompanyCreationCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.CompanyCreationCommand>
     {
