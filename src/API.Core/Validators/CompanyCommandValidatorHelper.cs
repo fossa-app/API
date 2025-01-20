@@ -14,4 +14,9 @@ public static class CompanyCommandValidatorHelper
 
     return systemLicenseResult.Match(license => license.Entitlements.Countries.Contains(companyCountry), _ => false);
   }
+
+  public static string CompanyCountryMustBeLicensedErrorMessage<T>(T command, RegionInfo property)
+  {
+    return $"Country '{property.TwoLetterISORegionName} - {property.EnglishName}' is not licensed.";
+  }
 }

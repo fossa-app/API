@@ -24,6 +24,7 @@ public class BranchModificationCommandHandler : IRequestHandler<BranchModificati
     entity = entity with
     {
       Name = request.Name,
+      TimeZone = request.TimeZone,
     };
     await _branchRepository.UpdateAsync(entity, cancellationToken).ConfigureAwait(false);
     return Unit.Value;

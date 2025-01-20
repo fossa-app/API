@@ -17,6 +17,7 @@ public class CompanyModificationCommandValidator : AbstractValidator<CompanyModi
     (companyCountry, cancellationToken) => CompanyCommandValidatorHelper.CompanyCountryMustBeLicensedAsync(
       systemLicenseRetriever,
       companyCountry,
-      cancellationToken));
+      cancellationToken))
+      .WithMessage(CompanyCommandValidatorHelper.CompanyCountryMustBeLicensedErrorMessage);
   }
 }

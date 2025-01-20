@@ -62,7 +62,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     responseModel.ShouldNotBeNull();
     responseModel.Items.Select(x => x.Name).ShouldContain(branchName);
-    responseModel.Items.Select(x => x.TimeZoneId).ShouldContain(timeZoneId);
+    responseModel.Items.Single(x => string.Equals(x.Name, branchName, StringComparison.OrdinalIgnoreCase)).TimeZoneId.ShouldBe(timeZoneId);
   }
 
   [Fact]
@@ -265,5 +265,40 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     responseModel.PageSize.ShouldBe(5);
     responseModel.Items.ShouldNotBeNull();
     responseModel.Items.ShouldBeEmpty();
+  }
+
+  [Fact]
+  public async Task UpdateBranchWithAdministratorAccessWithLicensedTimeZoneIdTokenAsync()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
+    const string creationBranchName = "Branch-753988509";
+    const string creationTimeZoneId = "America/New_York";
+
+    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(creationBranchName, creationTimeZoneId));
+
+    creationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    var retrievalResponse1 = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
+
+    var response1Model =
+      await retrievalResponse1.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    var creationBranch = response1Model?.Items.Single(x => string.Equals(x.Name, creationBranchName, StringComparison.OrdinalIgnoreCase));
+
+    const string modificationBranchName = "Branch-509762905";
+    const string modificationTimeZoneId = "America/Chicago";
+
+    var modificationResponse = await client.PutAsJsonAsync($"/api/1.0/Branches/{creationBranch?.Id}", new BranchModificationModel(modificationBranchName, modificationTimeZoneId));
+
+    modificationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    var retrievalResponse2 = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
+
+    var response2Model =
+      await retrievalResponse2.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+
+    response2Model.ShouldNotBeNull();
+    response2Model.Items.Select(x => x.Name).ShouldContain(modificationBranchName);
+    response2Model.Items.Single(x => string.Equals(x.Name, modificationBranchName, StringComparison.OrdinalIgnoreCase)).TimeZoneId.ShouldBe(modificationTimeZoneId);
   }
 }
