@@ -62,7 +62,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     responseModel.ShouldNotBeNull();
     responseModel.Items.Select(x => x.Name).ShouldContain(branchName);
-    responseModel.Items.Select(x => x.TimeZoneId).ShouldContain(timeZoneId);
+    responseModel.Items.Single(x => string.Equals(x.Name, branchName, StringComparison.OrdinalIgnoreCase)).TimeZoneId.ShouldBe(timeZoneId);
   }
 
   [Fact]
@@ -279,20 +279,26 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     creationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 
+    var retrievalResponse1 = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
+
+    var response1Model =
+      await retrievalResponse1.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    var creationBranch = response1Model?.Items.Single(x => string.Equals(x.Name, creationBranchName, StringComparison.OrdinalIgnoreCase));
+
     const string modificationBranchName = "Branch-509762905";
     const string modificationTimeZoneId = "America/Chicago";
 
-    var modificationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(modificationBranchName, modificationTimeZoneId));
+    var modificationResponse = await client.PutAsJsonAsync($"/api/1.0/Branches/{creationBranch?.Id}", new BranchModificationModel(modificationBranchName, modificationTimeZoneId));
 
     modificationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-    var retrievalResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
+    var retrievalResponse2 = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
 
-    var responseModel =
-      await retrievalResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    var response2Model =
+      await retrievalResponse2.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
 
-    responseModel.ShouldNotBeNull();
-    responseModel.Items.Select(x => x.Name).ShouldContain(modificationBranchName);
-    responseModel.Items.Select(x => x.TimeZoneId).ShouldContain(modificationTimeZoneId);
+    response2Model.ShouldNotBeNull();
+    response2Model.Items.Select(x => x.Name).ShouldContain(modificationBranchName);
+    response2Model.Items.Single(x => string.Equals(x.Name, modificationBranchName, StringComparison.OrdinalIgnoreCase)).TimeZoneId.ShouldBe(modificationTimeZoneId);
   }
 }
