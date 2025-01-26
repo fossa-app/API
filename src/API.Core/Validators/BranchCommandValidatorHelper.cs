@@ -1,4 +1,5 @@
-﻿using Fossa.API.Core.Repositories;
+﻿using Fossa.API.Core.Entities;
+using Fossa.API.Core.Repositories;
 using Fossa.API.Core.Services;
 using NodaTime;
 
@@ -6,6 +7,31 @@ namespace Fossa.API.Core.Validators;
 
 public static class BranchCommandValidatorHelper
 {
+  public static Task<bool> BranchAddressCountryMustBeCompanyCountryAsync(
+    ICompanyQueryRepository companyQueryRepository,
+    Guid tenantId,
+    Option<Address> address,
+    CancellationToken cancellationToken)
+  {
+    ArgumentNullException.ThrowIfNull(companyQueryRepository);
+
+    return address.MatchAsync(
+      async x =>
+      {
+        var companyEntity = await companyQueryRepository.GetByTenantIdAsync(tenantId, cancellationToken).ConfigureAwait(false);
+        return string.Equals(
+          companyEntity.Country.TwoLetterISORegionName,
+          x.Country.TwoLetterISORegionName,
+          StringComparison.OrdinalIgnoreCase);
+      },
+      () => true);
+  }
+
+  public static string BranchAddressCountryMustBeCompanyCountryErrorMessage<T>(T command, Option<Address> property)
+  {
+    return $"Address Country '{property.Map(x => x.Country.TwoLetterISORegionName)}' is same as Company Country.";
+  }
+
   public static async Task<bool> BranchTimeZoneCountryMustBeCompanyCountryAsync(
     ICompanyQueryRepository companyQueryRepository,
     IDateTimeZoneLookup dateTimeZoneLookup,

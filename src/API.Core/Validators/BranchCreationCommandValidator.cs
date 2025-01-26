@@ -26,5 +26,12 @@ public class BranchCreationCommandValidator : AbstractValidator<BranchCreationCo
       cancellationToken))
       .WithMessage(BranchCommandValidatorHelper.BranchTimeZoneCountryMustBeCompanyCountryErrorMessage);
     RuleFor(x => x.Address).IfSome(addressValidator);
+    RuleFor(x => x.Address).MustAsync(
+      (command, branchTimeZone, cancellationToken) => BranchCommandValidatorHelper.BranchAddressCountryMustBeCompanyCountryAsync(
+        companyQueryRepository,
+        command.TenantID,
+        branchTimeZone,
+        cancellationToken))
+        .WithMessage(BranchCommandValidatorHelper.BranchAddressCountryMustBeCompanyCountryErrorMessage);
   }
 }
