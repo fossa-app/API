@@ -9,7 +9,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\API.Core\API.Core.csproj" />
-    <ProjectReference Include="..\API.SharedKernel\API.SharedKernel.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Using Include="LanguageExt" />
