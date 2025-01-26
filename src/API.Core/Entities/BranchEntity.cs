@@ -1,4 +1,5 @@
-﻿using NodaTime;
+﻿using LanguageExt;
+using NodaTime;
 using TIKSN.Data;
 
 namespace Fossa.API.Core.Entities;
@@ -8,5 +9,6 @@ public record BranchEntity(
     Guid TenantID,
     CompanyId CompanyId,
     string Name,
-    DateTimeZone TimeZone)
+    DateTimeZone TimeZone,
+    Option<Address> Address)
   : ITenantEntity<BranchId, Guid>;
