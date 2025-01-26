@@ -8,9 +8,20 @@
 }
 namespace Fossa.API.Core.Entities
 {
+    public class Address : System.IEquatable<Fossa.API.Core.Entities.Address>
+    {
+        public Address(string Line1, LanguageExt.Option<string> Line2, string City, string Subdivision, string PostalCode, System.Globalization.RegionInfo Country) { }
+        public string City { get; init; }
+        public System.Globalization.RegionInfo Country { get; init; }
+        public string Line1 { get; init; }
+        public LanguageExt.Option<string> Line2 { get; init; }
+        public string PostalCode { get; init; }
+        public string Subdivision { get; init; }
+    }
     public class BranchEntity : System.IEquatable<Fossa.API.Core.Entities.BranchEntity>, TIKSN.Data.IEntity<Fossa.API.Core.Entities.BranchId>, TIKSN.Data.ITenantEntity<Fossa.API.Core.Entities.BranchId, System.Guid>
     {
-        public BranchEntity(Fossa.API.Core.Entities.BranchId ID, System.Guid TenantID, Fossa.API.Core.Entities.CompanyId CompanyId, string Name, NodaTime.DateTimeZone TimeZone) { }
+        public BranchEntity(Fossa.API.Core.Entities.BranchId ID, System.Guid TenantID, Fossa.API.Core.Entities.CompanyId CompanyId, string Name, NodaTime.DateTimeZone TimeZone, LanguageExt.Option<Fossa.API.Core.Entities.Address> Address) { }
+        public LanguageExt.Option<Fossa.API.Core.Entities.Address> Address { get; init; }
         public Fossa.API.Core.Entities.CompanyId CompanyId { get; init; }
         public Fossa.API.Core.Entities.BranchId ID { get; init; }
         public string Name { get; init; }
@@ -122,6 +133,10 @@ namespace Fossa.API.Core.Extensions
     {
         public static T GetOrThrow<T>(this LanguageExt.Validation<LanguageExt.Common.Error, T> validation) { }
     }
+    public static class ValidatorExtensions
+    {
+        public static FluentValidation.IRuleBuilderOptions<T, LanguageExt.Option<TProperty>> IfSome<T, TProperty>(this FluentValidation.IRuleBuilder<T, LanguageExt.Option<TProperty>> ruleBuilder, FluentValidation.IValidator<TProperty> validator) { }
+    }
 }
 namespace Fossa.API.Core.Mappers
 {
@@ -219,8 +234,9 @@ namespace Fossa.API.Core.Messages.Commands
 {
     public class BranchCreationCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Core.Entities.BranchId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.BranchCreationCommand>
     {
-        public BranchCreationCommand(System.Guid TenantID, System.Guid UserID, string Name, NodaTime.DateTimeZone TimeZone) { }
+        public BranchCreationCommand(System.Guid TenantID, System.Guid UserID, string Name, NodaTime.DateTimeZone TimeZone, LanguageExt.Option<Fossa.API.Core.Entities.Address> Address) { }
         public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.BranchId> AffectingTenantEntitiesIdentities { get; }
+        public LanguageExt.Option<Fossa.API.Core.Entities.Address> Address { get; init; }
         public string Name { get; init; }
         public NodaTime.DateTimeZone TimeZone { get; init; }
         public System.Guid UserID { get; init; }
@@ -245,8 +261,9 @@ namespace Fossa.API.Core.Messages.Commands
     }
     public class BranchModificationCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Core.Entities.BranchId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.BranchModificationCommand>
     {
-        public BranchModificationCommand(Fossa.API.Core.Entities.BranchId ID, System.Guid TenantID, System.Guid UserID, string Name, NodaTime.DateTimeZone TimeZone) { }
+        public BranchModificationCommand(Fossa.API.Core.Entities.BranchId ID, System.Guid TenantID, System.Guid UserID, string Name, NodaTime.DateTimeZone TimeZone, LanguageExt.Option<Fossa.API.Core.Entities.Address> Address) { }
         public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.BranchId> AffectingTenantEntitiesIdentities { get; }
+        public LanguageExt.Option<Fossa.API.Core.Entities.Address> Address { get; init; }
         public Fossa.API.Core.Entities.BranchId ID { get; init; }
         public string Name { get; init; }
         public NodaTime.DateTimeZone TimeZone { get; init; }
@@ -605,6 +622,11 @@ namespace Fossa.API.Core.Services
         public CompanyLicenseRetriever(Fossa.API.Core.Repositories.ILicenseFileRepository licenseFileRepository, TIKSN.Licensing.ILicenseFactory<Fossa.Licensing.CompanyEntitlements, Fossa.Licensing.CompanyLicenseEntitlements> licenseFactory, Fossa.API.Core.Services.ICertificateProvider certificateProvider, Fossa.API.Core.Services.ISystemLicenseRetriever systemLicenseRetriever) { }
         public System.Threading.Tasks.Task<LanguageExt.Validation<LanguageExt.Common.Error, TIKSN.Licensing.License<Fossa.Licensing.CompanyEntitlements>>> GetAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken) { }
     }
+    public class CountryProvider : Fossa.API.Core.Services.ICountryProvider
+    {
+        public CountryProvider(TIKSN.Globalization.IRegionFactory regionFactory) { }
+        public System.Globalization.RegionInfo GetCountry(string countryCode) { }
+    }
     public class DateTimeZoneLookup : Fossa.API.Core.Services.IDateTimeZoneLookup
     {
         public DateTimeZoneLookup(TIKSN.Globalization.IRegionFactory regionFactory) { }
@@ -626,6 +648,10 @@ namespace Fossa.API.Core.Services
     public interface ICompanyLicenseRetriever
     {
         System.Threading.Tasks.Task<LanguageExt.Validation<LanguageExt.Common.Error, TIKSN.Licensing.License<Fossa.Licensing.CompanyEntitlements>>> GetAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken);
+    }
+    public interface ICountryProvider
+    {
+        System.Globalization.RegionInfo GetCountry(string countryCode);
     }
     public interface IDateTimeZoneLookup
     {
@@ -708,13 +734,20 @@ namespace Fossa.API.Core.User
 }
 namespace Fossa.API.Core.Validators
 {
+    public class AddressValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Entities.Address>
+    {
+        public AddressValidator() { }
+    }
     public static class BranchCommandValidatorHelper
     {
+        public static System.Threading.Tasks.Task<bool> BranchAddressCountryMustBeCompanyCountryAsync(Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, System.Guid tenantId, LanguageExt.Option<Fossa.API.Core.Entities.Address> address, System.Threading.CancellationToken cancellationToken) { }
+        public static string BranchAddressCountryMustBeCompanyCountryErrorMessage<T>(T command, LanguageExt.Option<Fossa.API.Core.Entities.Address> property) { }
         public static System.Threading.Tasks.Task<bool> BranchTimeZoneCountryMustBeCompanyCountryAsync(Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, Fossa.API.Core.Services.IDateTimeZoneLookup dateTimeZoneLookup, System.Guid tenantId, NodaTime.DateTimeZone branchTimeZone, System.Threading.CancellationToken cancellationToken) { }
+        public static string BranchTimeZoneCountryMustBeCompanyCountryErrorMessage<T>(T command, NodaTime.DateTimeZone property) { }
     }
     public class BranchCreationCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.BranchCreationCommand>
     {
-        public BranchCreationCommandValidator(Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, Fossa.API.Core.Services.IDateTimeZoneLookup dateTimeZoneLookup) { }
+        public BranchCreationCommandValidator(Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, FluentValidation.IValidator<Fossa.API.Core.Entities.Address> addressValidator, Fossa.API.Core.Services.IDateTimeZoneLookup dateTimeZoneLookup) { }
     }
     public class BranchDeletionCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.BranchDeletionCommand>
     {
@@ -722,7 +755,7 @@ namespace Fossa.API.Core.Validators
     }
     public class BranchModificationCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.BranchModificationCommand>
     {
-        public BranchModificationCommandValidator(Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, Fossa.API.Core.Services.IDateTimeZoneLookup dateTimeZoneLookup) { }
+        public BranchModificationCommandValidator(Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, FluentValidation.IValidator<Fossa.API.Core.Entities.Address> addressValidator, Fossa.API.Core.Services.IDateTimeZoneLookup dateTimeZoneLookup) { }
     }
     public class BranchRetrievalQueryValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Queries.BranchRetrievalQuery>
     {
@@ -760,5 +793,11 @@ namespace Fossa.API.Core.Validators
     public class EmployeeModificationCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.EmployeeModificationCommand>
     {
         public EmployeeModificationCommandValidator() { }
+    }
+    public class OptionValidator<T, TProperty> : FluentValidation.Validators.PropertyValidator<T, LanguageExt.Option<TProperty>>
+    {
+        public OptionValidator(FluentValidation.IValidator<TProperty> validator) { }
+        public override string Name { get; }
+        public override bool IsValid(FluentValidation.ValidationContext<T> context, LanguageExt.Option<TProperty> value) { }
     }
 }

@@ -5,9 +5,12 @@ using TIKSN.Mapping;
 
 namespace Fossa.API.Persistence.Mongo.Mappers;
 
-public class BranchMongoMapper : IMapper<BranchMongoEntity, BranchEntity>,
+public class BranchMongoMapper :
+  IMapper<BranchMongoEntity, BranchEntity>,
   IMapper<BranchEntity, BranchMongoEntity>
 {
+  private readonly IMapper<AddressMongo, Address> _addressDataToDomainMapper;
+  private readonly IMapper<Address, AddressMongo> _addressDomainToDataMapper;
   private readonly IMapper<long, CompanyId> _companyDataIdentityToDomainIdentityMapper;
   private readonly IMapper<CompanyId, long> _companyDomainIdentityToDataIdentityMapper;
   private readonly IMapper<long, BranchId> _dataIdentityToDomainIdentityMapper;
@@ -19,12 +22,16 @@ public class BranchMongoMapper : IMapper<BranchMongoEntity, BranchEntity>,
     IMapper<long, BranchId> dataIdentityToDomainIdentityMapper,
     IMapper<CompanyId, long> companyDomainIdentityToDataIdentityMapper,
     IMapper<long, CompanyId> companyDataIdentityToDomainIdentityMapper,
+    IMapper<Address, AddressMongo> addressDomainToDataMapper,
+    IMapper<AddressMongo, Address> addressDataToDomainMapper,
     IDateTimeZoneProvider dateTimeZoneProvider)
   {
     _domainIdentityToDataIdentityMapper = domainIdentityToDataIdentityMapper ?? throw new ArgumentNullException(nameof(domainIdentityToDataIdentityMapper));
     _dataIdentityToDomainIdentityMapper = dataIdentityToDomainIdentityMapper ?? throw new ArgumentNullException(nameof(dataIdentityToDomainIdentityMapper));
     _companyDomainIdentityToDataIdentityMapper = companyDomainIdentityToDataIdentityMapper ?? throw new ArgumentNullException(nameof(companyDomainIdentityToDataIdentityMapper));
     _companyDataIdentityToDomainIdentityMapper = companyDataIdentityToDomainIdentityMapper ?? throw new ArgumentNullException(nameof(companyDataIdentityToDomainIdentityMapper));
+    _addressDomainToDataMapper = addressDomainToDataMapper ?? throw new ArgumentNullException(nameof(addressDomainToDataMapper));
+    _addressDataToDomainMapper = addressDataToDomainMapper ?? throw new ArgumentNullException(nameof(addressDataToDomainMapper));
     _dateTimeZoneProvider = dateTimeZoneProvider ?? throw new ArgumentNullException(nameof(dateTimeZoneProvider));
   }
 
@@ -35,7 +42,8 @@ public class BranchMongoMapper : IMapper<BranchMongoEntity, BranchEntity>,
       source.TenantID,
       _companyDataIdentityToDomainIdentityMapper.Map(source.CompanyId),
       source.Name ?? string.Empty,
-      _dateTimeZoneProvider.GetDateTimeZoneById(source.TimeZoneId ?? string.Empty));
+      _dateTimeZoneProvider.GetDateTimeZoneById(source.TimeZoneId ?? string.Empty),
+      Optional(source.Address).Map(_addressDataToDomainMapper.Map));
   }
 
   public BranchMongoEntity Map(BranchEntity source)
@@ -47,6 +55,7 @@ public class BranchMongoMapper : IMapper<BranchMongoEntity, BranchEntity>,
       CompanyId = _companyDomainIdentityToDataIdentityMapper.Map(source.CompanyId),
       Name = source.Name,
       TimeZoneId = source.TimeZone.Id,
+      Address = source.Address.Map(_addressDomainToDataMapper.Map).MatchUnsafe(x => x, () => null),
     };
   }
 }

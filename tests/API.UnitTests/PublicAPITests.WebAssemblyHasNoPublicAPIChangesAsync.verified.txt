@@ -32,10 +32,10 @@
         public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.BranchRetrievalModel>> PageAsync([Microsoft.AspNetCore.Mvc.FromQuery] Fossa.API.Web.ApiModels.BranchPagingRequestModel requestModel, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<TIKSN.Data.PageResult<Fossa.API.Core.Entities.BranchEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.BranchRetrievalModel>> mapper, System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
         [Microsoft.AspNetCore.Mvc.HttpPost]
-        public System.Threading.Tasks.Task PostAsync([Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.BranchModificationModel model, [Microsoft.AspNetCore.Mvc.FromServices] Fossa.API.Core.TimeZone.IDateTimeZoneProvider dateTimeZoneProvider, System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task PostAsync([Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.BranchModificationModel model, [Microsoft.AspNetCore.Mvc.FromServices] Fossa.API.Core.TimeZone.IDateTimeZoneProvider dateTimeZoneProvider, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<Fossa.API.Web.ApiModels.AddressModel, Fossa.API.Core.Entities.Address> addressModelToDomainMapper, System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
         [Microsoft.AspNetCore.Mvc.HttpPut("{id}")]
-        public System.Threading.Tasks.Task PutAsync(long id, [Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.BranchModificationModel model, [Microsoft.AspNetCore.Mvc.FromServices] Fossa.API.Core.TimeZone.IDateTimeZoneProvider dateTimeZoneProvider, System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task PutAsync(long id, [Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.BranchModificationModel model, [Microsoft.AspNetCore.Mvc.FromServices] Fossa.API.Core.TimeZone.IDateTimeZoneProvider dateTimeZoneProvider, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<Fossa.API.Web.ApiModels.AddressModel, Fossa.API.Core.Entities.Address> addressModelToDomainMapper, System.Threading.CancellationToken cancellationToken) { }
     }
     [Asp.Versioning.ApiVersion(1D, null)]
     [Microsoft.AspNetCore.Authorization.Authorize]
@@ -128,9 +128,20 @@ namespace Fossa.API.Web.Api.License
 }
 namespace Fossa.API.Web.ApiModels
 {
+    public class AddressModel : System.IEquatable<Fossa.API.Web.ApiModels.AddressModel>
+    {
+        public AddressModel(string? Line1, string? Line2, string? City, string? Subdivision, string? PostalCode, string? CountryCode) { }
+        public string? City { get; init; }
+        public string? CountryCode { get; init; }
+        public string? Line1 { get; init; }
+        public string? Line2 { get; init; }
+        public string? PostalCode { get; init; }
+        public string? Subdivision { get; init; }
+    }
     public class BranchModificationModel : System.IEquatable<Fossa.API.Web.ApiModels.BranchModificationModel>
     {
-        public BranchModificationModel(string? Name, string? TimeZoneId) { }
+        public BranchModificationModel(string? Name, string? TimeZoneId, Fossa.API.Web.ApiModels.AddressModel? Address) { }
+        public Fossa.API.Web.ApiModels.AddressModel? Address { get; init; }
         public string? Name { get; init; }
         public string? TimeZoneId { get; init; }
     }
@@ -143,7 +154,8 @@ namespace Fossa.API.Web.ApiModels
     }
     public class BranchRetrievalModel : System.IEquatable<Fossa.API.Web.ApiModels.BranchRetrievalModel>
     {
-        public BranchRetrievalModel(long Id, long CompanyId, string Name, string TimeZoneId) { }
+        public BranchRetrievalModel(long Id, long CompanyId, string Name, string TimeZoneId, Fossa.API.Web.ApiModels.AddressModel? Address) { }
+        public Fossa.API.Web.ApiModels.AddressModel? Address { get; init; }
         public long CompanyId { get; init; }
         public long Id { get; init; }
         public string Name { get; init; }
@@ -303,9 +315,15 @@ namespace Fossa.API.Web.HealthChecks
 }
 namespace Fossa.API.Web.Mappers
 {
+    public class AddressModelMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.Address, Fossa.API.Web.ApiModels.AddressModel>, TIKSN.Mapping.IMapper<Fossa.API.Web.ApiModels.AddressModel, Fossa.API.Core.Entities.Address>
+    {
+        public AddressModelMapper(Fossa.API.Core.Services.ICountryProvider countryProvider) { }
+        public Fossa.API.Web.ApiModels.AddressModel Map(Fossa.API.Core.Entities.Address source) { }
+        public Fossa.API.Core.Entities.Address Map(Fossa.API.Web.ApiModels.AddressModel source) { }
+    }
     public class BranchRetrievalModelMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Web.ApiModels.BranchRetrievalModel>
     {
-        public BranchRetrievalModelMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> companyDomainIdentityToDataIdentityMapper) { }
+        public BranchRetrievalModelMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> companyDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.Address, Fossa.API.Web.ApiModels.AddressModel> domainToModelMapper) { }
         public Fossa.API.Web.ApiModels.BranchRetrievalModel Map(Fossa.API.Core.Entities.BranchEntity source) { }
     }
     public class CompanyEntitlementsModelMapper : TIKSN.Mapping.IMapper<Fossa.Licensing.CompanyEntitlements, Fossa.API.Web.ApiModels.CompanyEntitlementsModel>

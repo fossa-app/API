@@ -8,9 +8,20 @@
 }
 namespace Fossa.API.Persistence.Mongo.Entities
 {
+    public class AddressMongo
+    {
+        public AddressMongo() { }
+        public string? City { get; set; }
+        public string? CountryCode { get; set; }
+        public string? Line1 { get; set; }
+        public string? Line2 { get; set; }
+        public string? PostalCode { get; set; }
+        public string? Subdivision { get; set; }
+    }
     public class BranchMongoEntity : TIKSN.Data.IEntity<long>
     {
         public BranchMongoEntity() { }
+        public Fossa.API.Persistence.Mongo.Entities.AddressMongo? Address { get; set; }
         public long CompanyId { get; set; }
         [MongoDB.Bson.Serialization.Attributes.BsonId]
         public long ID { get; set; }
@@ -53,9 +64,15 @@ namespace Fossa.API.Persistence.Mongo.Entities
 }
 namespace Fossa.API.Persistence.Mongo.Mappers
 {
+    public class AddressMongoMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.Address, Fossa.API.Persistence.Mongo.Entities.AddressMongo>, TIKSN.Mapping.IMapper<Fossa.API.Persistence.Mongo.Entities.AddressMongo, Fossa.API.Core.Entities.Address>
+    {
+        public AddressMongoMapper(TIKSN.Globalization.IRegionFactory regionFactory) { }
+        public Fossa.API.Persistence.Mongo.Entities.AddressMongo Map(Fossa.API.Core.Entities.Address source) { }
+        public Fossa.API.Core.Entities.Address Map(Fossa.API.Persistence.Mongo.Entities.AddressMongo source) { }
+    }
     public class BranchMongoMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity>, TIKSN.Mapping.IMapper<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity, Fossa.API.Core.Entities.BranchEntity>
     {
-        public BranchMongoMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.BranchId> dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> companyDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId> companyDataIdentityToDomainIdentityMapper, Fossa.API.Core.TimeZone.IDateTimeZoneProvider dateTimeZoneProvider) { }
+        public BranchMongoMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.BranchId> dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> companyDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId> companyDataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.Address, Fossa.API.Persistence.Mongo.Entities.AddressMongo> addressDomainToDataMapper, TIKSN.Mapping.IMapper<Fossa.API.Persistence.Mongo.Entities.AddressMongo, Fossa.API.Core.Entities.Address> addressDataToDomainMapper, Fossa.API.Core.TimeZone.IDateTimeZoneProvider dateTimeZoneProvider) { }
         public Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity Map(Fossa.API.Core.Entities.BranchEntity source) { }
         public Fossa.API.Core.Entities.BranchEntity Map(Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity source) { }
     }

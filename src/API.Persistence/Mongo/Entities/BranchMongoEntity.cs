@@ -17,4 +17,6 @@ public class BranchMongoEntity : IEntity<long>
   public string? Name { get; set; }
 
   public string? TimeZoneId { get; set; }
+
+  public AddressMongo? Address { get; set; }
 }
