@@ -23,7 +23,8 @@ public class BranchCreationCommandValidator : AbstractValidator<BranchCreationCo
       dateTimeZoneLookup,
       command.TenantID,
       branchTimeZone,
-      cancellationToken));
+      cancellationToken))
+      .WithMessage(BranchCommandValidatorHelper.BranchTimeZoneCountryMustBeCompanyCountryErrorMessage);
     RuleFor(x => x.Address).IfSome(addressValidator);
   }
 }

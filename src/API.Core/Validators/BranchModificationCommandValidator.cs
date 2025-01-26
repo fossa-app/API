@@ -24,7 +24,8 @@ public class BranchModificationCommandValidator : AbstractValidator<BranchModifi
       dateTimeZoneLookup,
       command.TenantID,
       branchTimeZone,
-      cancellationToken));
+      cancellationToken))
+      .WithMessage(BranchCommandValidatorHelper.BranchTimeZoneCountryMustBeCompanyCountryErrorMessage);
     RuleFor(x => x.Address).IfSome(addressValidator);
   }
 }

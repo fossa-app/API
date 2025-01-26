@@ -23,4 +23,9 @@ public static class BranchCommandValidatorHelper
       dateTimeZoneLookup.ResolveTimeZoneRegion(branchTimeZone).TwoLetterISORegionName,
       StringComparison.OrdinalIgnoreCase);
   }
+
+  public static string BranchTimeZoneCountryMustBeCompanyCountryErrorMessage<T>(T command, DateTimeZone property)
+  {
+    return $"Time Zone '{property.Id}' is not for Company Country.";
+  }
 }
