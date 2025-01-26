@@ -1,6 +1,4 @@
-﻿using LanguageExt;
-
-namespace Fossa.API.Core.Tenant;
+﻿namespace Fossa.API.Core.Tenant;
 
 public interface ITenantIdProvider<T>
 {

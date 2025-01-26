@@ -1,6 +1,5 @@
 ﻿using Fossa.API.Core.Entities;
 using Fossa.API.Core.Repositories;
-using MediatR;
 using TIKSN.Data;
 using TIKSN.Identity;
 

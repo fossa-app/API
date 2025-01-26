@@ -1,6 +1,5 @@
 ﻿using Fossa.API.Core.Repositories;
 using Fossa.API.Persistence.Mongo.Entities;
-using LanguageExt;
 using TIKSN.Data;
 using TIKSN.Data.Mongo;
 

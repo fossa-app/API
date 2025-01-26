@@ -2,7 +2,6 @@
 using Fossa.API.Core.Services;
 using Fossa.API.Web.ApiModels;
 using Fossa.Licensing;
-using LanguageExt;
 using NodaTime;
 using TIKSN.Mapping;
 

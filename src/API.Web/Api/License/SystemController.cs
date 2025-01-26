@@ -2,7 +2,6 @@
 using Fossa.API.Core.Messages.Queries;
 using Fossa.API.Web.ApiModels;
 using Fossa.Licensing;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TIKSN.Licensing;
 using TIKSN.Mapping;

@@ -20,7 +20,6 @@ using Serilog;
 using TIKSN.DependencyInjection;
 using TIKSN.Deployment;
 using TIKSN.Mapping;
-using static LanguageExt.Prelude;
 
 var initialReleaseDate = new DateOnly(1970, 01, 01);
 

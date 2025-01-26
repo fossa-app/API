@@ -1,6 +1,4 @@
 ﻿using Fossa.API.Infrastructure.Models;
-using LanguageExt;
-using static LanguageExt.Prelude;
 
 namespace Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters;
 

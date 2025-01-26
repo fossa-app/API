@@ -1,5 +1,4 @@
 ﻿using Fossa.API.Core.Entities;
-using LanguageExt;
 
 namespace Fossa.API.Core.Messages.Commands;
 

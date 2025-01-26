@@ -6,7 +6,6 @@ using Fossa.API.Core.Tenant;
 using Fossa.API.Core.TimeZone;
 using Fossa.API.Core.User;
 using Fossa.API.Web.ApiModels;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TIKSN.Data;
