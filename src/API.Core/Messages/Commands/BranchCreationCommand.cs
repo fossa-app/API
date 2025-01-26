@@ -1,4 +1,5 @@
 ﻿using Fossa.API.Core.Entities;
+using LanguageExt;
 using NodaTime;
 
 namespace Fossa.API.Core.Messages.Commands;
@@ -7,7 +8,8 @@ public record BranchCreationCommand(
   Guid TenantID,
   Guid UserID,
   string Name,
-  DateTimeZone TimeZone)
+  DateTimeZone TimeZone,
+  Option<Address> Address)
 : EntityTenantCommand<BranchEntity, BranchId, Guid>(TenantID)
 {
   public override IEnumerable<BranchId> AffectingTenantEntitiesIdentities
