@@ -75,6 +75,11 @@ public class DefaultCoreModule : Module
       .RegisterType<DateTimeZoneProvider>()
       .AsImplementedInterfaces()
       .SingleInstance();
+
+    builder
+      .RegisterType<CountryProvider>()
+      .AsImplementedInterfaces()
+      .SingleInstance();
   }
 
   private static void RegisterStronglyTypedId<TSource, TDestination>(ContainerBuilder builder)
