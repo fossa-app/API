@@ -148,7 +148,7 @@ Task EstimateVersion Restore, {
 Task Format Restore, FormatXmlFiles, FormatWhitespace, FormatStyle, FormatAnalyzers
 
 # Synopsis: Format Analyzers
-Task FormatAnalyzers Restore, FormatAnalyzersSharedKernel, FormatAnalyzersPersistence, FormatAnalyzersCore, FormatAnalyzersInfrastructure, FormatAnalyzersWeb, FormatAnalyzersSolution
+Task FormatAnalyzers Restore, FormatAnalyzersPersistence, FormatAnalyzersCore, FormatAnalyzersInfrastructure, FormatAnalyzersWeb, FormatAnalyzersSolution
 
 # Synopsis: Format Analyzers Solution
 Task FormatAnalyzersSolution Restore, {
@@ -184,15 +184,8 @@ Task FormatAnalyzersCore Restore, {
     Exec { dotnet format analyzers --severity info --verbosity diagnostic $project }
 }
 
-# Synopsis: Format Analyzers Shared Kernel
-Task FormatAnalyzersSharedKernel Restore, {
-    $project = Resolve-Path -Path 'src/API.SharedKernel/API.SharedKernel.csproj'
-
-    Exec { dotnet format analyzers --severity info --verbosity diagnostic $project }
-}
-
 # Synopsis: Format Style
-Task FormatStyle Restore, FormatStyleSharedKernel, FormatStylePersistence, FormatStyleCore, FormatStyleInfrastructure, FormatStyleWeb, FormatStyleSolution
+Task FormatStyle Restore, FormatStylePersistence, FormatStyleCore, FormatStyleInfrastructure, FormatStyleWeb, FormatStyleSolution
 
 # Synopsis: Format Style Solution
 Task FormatStyleSolution Restore, {
@@ -224,13 +217,6 @@ Task FormatStyleInfrastructure Restore, {
 # Synopsis: Format Style Core
 Task FormatStyleCore Restore, {
     $project = Resolve-Path -Path 'src/API.Core/API.Core.csproj'
-
-    Exec { dotnet format style --severity info --verbosity diagnostic $project }
-}
-
-# Synopsis: Format Style Shared Kernel
-Task FormatStyleSharedKernel Restore, {
-    $project = Resolve-Path -Path 'src/API.SharedKernel/API.SharedKernel.csproj'
 
     Exec { dotnet format style --severity info --verbosity diagnostic $project }
 }
