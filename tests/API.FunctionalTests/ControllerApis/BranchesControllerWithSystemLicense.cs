@@ -268,13 +268,48 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     responseModel.Items.ShouldBeEmpty();
   }
 
+  [Theory]
+  [InlineData("5234 Main St", "Suite 200", "New York", "NY", "62345", "USA")]
+  [InlineData("5234 Main St", "Suite 200", "New York", "NY", "62345", "CA")]
+  [InlineData("5234 Main St", "Suite 200", "New York", "NY", "", "US")]
+  [InlineData("5234 Main St", "Suite 200", "New York", "", "62345", "US")]
+  [InlineData("5234 Main St", "Suite 200", "", "NY", "62345", "US")]
+  [InlineData("", "Suite 200", "New York", "NY", "62345", "US")]
+  public async Task UpdateBranchWithAdministratorAccessWithInvalidAddressTokenAsync(
+    string? line1, string? line2, string? city, string? subdivision, string? postalCode, string? countryCode)
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
+    var creationBranchName = $"Branch-{Random.Shared.Next()}";
+    const string creationTimeZoneId = "America/Los_Angeles";
+    var creationAddress = new AddressModel("1234 Main St", "Suite 100", "Los Angeles", "CA", "12345", "US");
+
+    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(creationBranchName, creationTimeZoneId, creationAddress));
+
+    creationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    var retrievalResponse1 = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
+
+    var response1Model =
+      await retrievalResponse1.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    var creationBranch = response1Model?.Items.Single(x => string.Equals(x.Name, creationBranchName, StringComparison.OrdinalIgnoreCase));
+
+    var modificationBranchName = $"Branch-{Random.Shared.Next()}";
+    const string modificationTimeZoneId = "America/New_York";
+    var modificationAddress = new AddressModel(line1, line2, city, subdivision, postalCode, countryCode);
+
+    var modificationResponse = await client.PutAsJsonAsync($"/api/1.0/Branches/{creationBranch?.Id}", new BranchModificationModel(modificationBranchName, modificationTimeZoneId, modificationAddress));
+
+    modificationResponse.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+  }
+
   [Fact]
   public async Task UpdateBranchWithAdministratorAccessWithLicensedTimeZoneIdTokenAsync()
   {
     var client = _factory.CreateClient();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
     const string creationBranchName = "Branch-753988509";
-    const string creationTimeZoneId = "America/New_York";
+    const string creationTimeZoneId = "America/Los_Angeles";
     var creationAddress = new AddressModel("1234 Main St", "Suite 100", "Los Angeles", "CA", "12345", "US");
 
     var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(creationBranchName, creationTimeZoneId, creationAddress));
@@ -288,8 +323,8 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var creationBranch = response1Model?.Items.Single(x => string.Equals(x.Name, creationBranchName, StringComparison.OrdinalIgnoreCase));
 
     const string modificationBranchName = "Branch-509762905";
-    const string modificationTimeZoneId = "America/Chicago";
-    var modificationAddress = new AddressModel("1234 Main St", "Suite 100", "Los Angeles", "CA", "12345", "US");
+    const string modificationTimeZoneId = "America/New_York";
+    var modificationAddress = new AddressModel("5234 Main St", "Suite 200", "New York", "NY", "62345", "US");
 
     var modificationResponse = await client.PutAsJsonAsync($"/api/1.0/Branches/{creationBranch?.Id}", new BranchModificationModel(modificationBranchName, modificationTimeZoneId, modificationAddress));
 
