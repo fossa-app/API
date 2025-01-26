@@ -4,4 +4,5 @@ public record BranchRetrievalModel(
   long Id,
   long CompanyId,
   string Name,
-  string TimeZoneId);
+  string TimeZoneId,
+  AddressModel? Address);

@@ -2,4 +2,5 @@
 
 public record BranchModificationModel(
   string? Name,
-  string? TimeZoneId);
+  string? TimeZoneId,
+  AddressModel? Address);
