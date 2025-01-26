@@ -1,9 +1,7 @@
 ﻿using Asp.Versioning;
 using Fossa.API.Infrastructure.Messages.Queries;
 using Fossa.API.Infrastructure.Models;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using static LanguageExt.Prelude;
 
 namespace Fossa.API.Web.Api.Identity;
 

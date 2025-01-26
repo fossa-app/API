@@ -1,6 +1,5 @@
 ﻿using Fossa.API.Core.Entities;
 using Fossa.API.Core.Repositories;
-using MediatR;
 
 namespace Fossa.API.Core.Messages.Queries;
 

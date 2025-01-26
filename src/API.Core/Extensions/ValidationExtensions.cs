@@ -1,9 +1,6 @@
 ﻿using System.Globalization;
 using FluentValidation;
 using FluentValidation.Results;
-using LanguageExt;
-using LanguageExt.Common;
-using static LanguageExt.Prelude;
 
 namespace Fossa.API.Core.Extensions;
 

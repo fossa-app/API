@@ -1,9 +1,7 @@
 ﻿using System.Security.Claims;
 using Fossa.API.Core.Tenant;
 using Fossa.API.Core.User;
-using LanguageExt;
 using Microsoft.Identity.Web;
-using static LanguageExt.Prelude;
 
 namespace Fossa.API.Web.Claims;
 

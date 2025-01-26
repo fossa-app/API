@@ -1,11 +1,9 @@
 ﻿using System.Collections.Frozen;
 using System.Reflection;
 using Fossa.API.Core.Repositories;
-using LanguageExt;
 using LanguageExt.ClassInstances.Pred;
 using Microsoft.Extensions.DependencyInjection;
 using TIKSN.Data;
-using static LanguageExt.Prelude;
 
 namespace Fossa.API.Core.Relationship;
 

@@ -1,7 +1,5 @@
 ﻿using Fossa.API.Core.Repositories;
 using Fossa.Licensing;
-using LanguageExt;
-using LanguageExt.Common;
 using Microsoft.Extensions.Hosting;
 using TIKSN.Deployment;
 using TIKSN.Licensing;

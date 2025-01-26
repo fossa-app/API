@@ -1,10 +1,7 @@
 ﻿using Fossa.API.Core.Entities;
 using Fossa.API.Core.Repositories;
 using Fossa.Licensing;
-using LanguageExt;
-using LanguageExt.Common;
 using TIKSN.Licensing;
-using static LanguageExt.Prelude;
 
 namespace Fossa.API.Core.Services;
 

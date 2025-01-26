@@ -1,11 +1,8 @@
 ﻿using FluentValidation;
 using FluentValidation.Results;
 using Fossa.API.Core.Messages.Queries;
-using LanguageExt;
-using MediatR;
 using Microsoft.Extensions.Options;
 using TIKSN.Configuration;
-using static LanguageExt.Prelude;
 
 namespace Fossa.API.Core.Messages;
 

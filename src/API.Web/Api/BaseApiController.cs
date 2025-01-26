@@ -1,6 +1,5 @@
 ﻿// Ignore Spelling: Api
 
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using TIKSN.Mapping;
 

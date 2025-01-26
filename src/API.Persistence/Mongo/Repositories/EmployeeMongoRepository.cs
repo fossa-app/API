@@ -1,10 +1,8 @@
 ﻿using Fossa.API.Core.Repositories;
 using Fossa.API.Persistence.Mongo.Entities;
-using LanguageExt;
 using MongoDB.Driver;
 using TIKSN.Data;
 using TIKSN.Data.Mongo;
-using static LanguageExt.Prelude;
 
 namespace Fossa.API.Persistence.Mongo.Repositories;
 

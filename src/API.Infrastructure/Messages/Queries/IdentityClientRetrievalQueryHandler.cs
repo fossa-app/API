@@ -1,10 +1,7 @@
 ﻿using Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters;
 using Fossa.API.Infrastructure.Models;
 using Fossa.API.Infrastructure.RestClients;
-using LanguageExt;
-using MediatR;
 using TIKSN.Data;
-using static LanguageExt.Prelude;
 
 namespace Fossa.API.Infrastructure.Messages.Queries;
 

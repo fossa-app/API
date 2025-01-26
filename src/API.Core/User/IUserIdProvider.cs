@@ -1,6 +1,4 @@
-﻿using LanguageExt;
-
-namespace Fossa.API.Core.User;
+﻿namespace Fossa.API.Core.User;
 
 public interface IUserIdProvider<T>
 {

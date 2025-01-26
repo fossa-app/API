@@ -3,7 +3,6 @@ using Fossa.API.Core.Extensions;
 using Fossa.API.Core.Repositories;
 using Fossa.API.Core.Services;
 using Fossa.Licensing;
-using MediatR;
 using TIKSN.Identity;
 using TIKSN.Licensing;
 
