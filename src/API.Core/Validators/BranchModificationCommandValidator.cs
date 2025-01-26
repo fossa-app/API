@@ -1,4 +1,6 @@
 ﻿using FluentValidation;
+using Fossa.API.Core.Entities;
+using Fossa.API.Core.Extensions;
 using Fossa.API.Core.Messages.Commands;
 using Fossa.API.Core.Repositories;
 using Fossa.API.Core.Services;
@@ -9,6 +11,7 @@ public class BranchModificationCommandValidator : AbstractValidator<BranchModifi
 {
   public BranchModificationCommandValidator(
     ICompanyQueryRepository companyQueryRepository,
+    IValidator<Address> addressValidator,
     IDateTimeZoneLookup dateTimeZoneLookup)
   {
     RuleFor(x => x.ID).NotEmpty();
@@ -22,5 +25,6 @@ public class BranchModificationCommandValidator : AbstractValidator<BranchModifi
       command.TenantID,
       branchTimeZone,
       cancellationToken));
+    RuleFor(x => x.Address).IfSome(addressValidator);
   }
 }
