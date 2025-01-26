@@ -91,6 +91,7 @@ public class BranchesController : BaseApiController<BranchId>
   public async Task PostAsync(
     [FromBody] BranchModificationModel model,
     [FromServices] IDateTimeZoneProvider dateTimeZoneProvider,
+    [FromServices] IMapper<AddressModel, Address> addressModelToDomainMapper,
     CancellationToken cancellationToken)
   {
     var tenantId = _tenantIdProvider.GetTenantId();
@@ -101,7 +102,8 @@ public class BranchesController : BaseApiController<BranchId>
         tenantId,
         userId,
         model.Name ?? string.Empty,
-        timeZone),
+        timeZone,
+        Optional(model.Address).Map(addressModelToDomainMapper.Map)),
       cancellationToken);
   }
 
@@ -111,6 +113,7 @@ public class BranchesController : BaseApiController<BranchId>
     long id,
     [FromBody] BranchModificationModel model,
     [FromServices] IDateTimeZoneProvider dateTimeZoneProvider,
+    [FromServices] IMapper<AddressModel, Address> addressModelToDomainMapper,
     CancellationToken cancellationToken)
   {
     var tenantId = _tenantIdProvider.GetTenantId();
@@ -122,7 +125,8 @@ public class BranchesController : BaseApiController<BranchId>
         tenantId,
         userId,
         model.Name ?? string.Empty,
-        timeZone),
+        timeZone,
+        Optional(model.Address).Map(addressModelToDomainMapper.Map)),
       cancellationToken);
   }
 }
