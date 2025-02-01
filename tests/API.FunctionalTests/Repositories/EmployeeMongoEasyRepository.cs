@@ -2,9 +2,7 @@
 using Fossa.API.Core.Repositories;
 using Fossa.API.Persistence.Mongo.Entities;
 using Fossa.API.Persistence.Mongo.Repositories;
-using LanguageExt;
 using TIKSN.Data;
-using static LanguageExt.Prelude;
 
 namespace Fossa.API.FunctionalTests.Repositories;
 

@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using TIKSN.Deployment;
 using TIKSN.Licensing;
-using static LanguageExt.Prelude;
 
 namespace Fossa.API.FunctionalTests.Seed;
 
