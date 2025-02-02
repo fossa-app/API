@@ -80,6 +80,11 @@ public class DefaultCoreModule : Module
       .RegisterType<CountryProvider>()
       .AsImplementedInterfaces()
       .SingleInstance();
+
+    builder
+      .RegisterType<PostalCodeParser>()
+      .AsImplementedInterfaces()
+      .SingleInstance();
   }
 
   private static void RegisterStronglyTypedId<TSource, TDestination>(ContainerBuilder builder)
