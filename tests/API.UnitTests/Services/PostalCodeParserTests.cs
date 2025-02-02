@@ -47,6 +47,11 @@ public class PostalCodeParserTests
   [InlineData("001", "abc123", "ABC123")]
   [InlineData("001", "123ABC", "123ABC")]
   [InlineData("001", "123abc", "123ABC")]
+  [InlineData("001", "abc 123", "ABC 123")]
+  [InlineData("001", "abc  123", "ABC 123")]
+  [InlineData("001", "abc   123", "ABC 123")]
+  [InlineData("001", "  ABC  123  DEF  456  ", "ABC 123 DEF 456")]
+  [InlineData("001", "  ABC - 123 DEF - 456  ", "ABC-123 DEF-456")]
   public void ParsePostalCode(string countryCode, string inputPostalCode, string? expectedOutputPostalCode)
   {
     // Arrange
