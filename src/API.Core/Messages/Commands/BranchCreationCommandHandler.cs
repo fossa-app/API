@@ -1,5 +1,7 @@
 ﻿using Fossa.API.Core.Entities;
+using Fossa.API.Core.Extensions;
 using Fossa.API.Core.Repositories;
+using Fossa.API.Core.Services;
 using TIKSN.Identity;
 
 namespace Fossa.API.Core.Messages.Commands;
@@ -9,15 +11,18 @@ public class BranchCreationCommandHandler : IRequestHandler<BranchCreationComman
   private readonly IBranchRepository _branchRepository;
   private readonly ICompanyQueryRepository _companyQueryRepository;
   private readonly IIdentityGenerator<BranchId> _identityGenerator;
+  private readonly IPostalCodeParser _postalCodeParser;
 
   public BranchCreationCommandHandler(
     IIdentityGenerator<BranchId> identityGenerator,
     ICompanyQueryRepository companyQueryRepository,
-    IBranchRepository branchRepository)
+    IBranchRepository branchRepository,
+    IPostalCodeParser postalCodeParser)
   {
     _identityGenerator = identityGenerator ?? throw new ArgumentNullException(nameof(identityGenerator));
     _companyQueryRepository = companyQueryRepository ?? throw new ArgumentNullException(nameof(companyQueryRepository));
     _branchRepository = branchRepository ?? throw new ArgumentNullException(nameof(branchRepository));
+    _postalCodeParser = postalCodeParser ?? throw new ArgumentNullException(nameof(postalCodeParser));
   }
 
   public async Task<Unit> Handle(
@@ -46,7 +51,11 @@ public class BranchCreationCommandHandler : IRequestHandler<BranchCreationComman
       companyEntity.ID,
       request.Name,
       request.TimeZone,
-      request.Address);
+      request.Address.Map(x =>
+      {
+        var postalCode = _postalCodeParser.ParsePostalCode(x.Country, x.PostalCode).GetOrThrow();
+        return x with { PostalCode = postalCode };
+      }));
 
     await _branchRepository.AddAsync(entity, cancellationToken).ConfigureAwait(false);
   }

@@ -2,6 +2,7 @@
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using EasyDoubles;
+using Fossa.API.FunctionalTests.Extensions;
 using Fossa.API.FunctionalTests.Seed;
 using Fossa.API.Persistence.Mongo.Entities;
 using Fossa.API.Web;
@@ -275,7 +276,10 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   [InlineData("5234 Main St", "Suite 200", "New York", "", "62345", "US")]
   [InlineData("5234 Main St", "Suite 200", "", "NY", "62345", "US")]
   [InlineData("", "Suite 200", "New York", "NY", "62345", "US")]
-  public async Task UpdateBranchWithAdministratorAccessWithInvalidAddressTokenAsync(
+  [InlineData("5234 Main St", "Suite 200", "New York", "NY", "62", "US")]
+  [InlineData("5234 Main St", "Suite 200", "New York", "NY", "62345-", "US")]
+  [InlineData("5234 Main St", "Suite 200", "New York", "NY", "62345-12", "US")]
+  public async Task UpdateBranchWithAdministratorAccessTokenWithInvalidAddressAsync(
     string? line1, string? line2, string? city, string? subdivision, string? postalCode, string? countryCode)
   {
     var client = _factory.CreateClient();
@@ -299,6 +303,8 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var modificationAddress = new AddressModel(line1, line2, city, subdivision, postalCode, countryCode);
 
     var modificationResponse = await client.PutAsJsonAsync($"/api/1.0/Branches/{creationBranch?.Id}", new BranchModificationModel(modificationBranchName, modificationTimeZoneId, modificationAddress));
+
+    await _testOutputHelper.WriteAsync(modificationResponse);
 
     modificationResponse.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
   }

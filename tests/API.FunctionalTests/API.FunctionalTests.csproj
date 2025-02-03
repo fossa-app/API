@@ -26,4 +26,25 @@
     <ProjectReference Include="..\..\src\API.Web\API.Web.csproj" />
     <ProjectReference Include="..\API.UnitTests\API.UnitTests.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Using Include="LanguageExt" />
+    <Using Include="LanguageExt.Common" />
+    <Using Include="LanguageExt.Effects" />
+    <Using Include="LanguageExt.Parsec" />
+    <Using Include="LanguageExt.Parsec.Char">
+      <Static>True</Static>
+    </Using>
+    <Using Include="LanguageExt.Parsec.Prim">
+      <Static>True</Static>
+    </Using>
+    <Using Include="LanguageExt.Pipes" />
+    <Using Include="LanguageExt.Prelude">
+      <Static>True</Static>
+    </Using>
+    <Using Include="LanguageExt.Pretty" />
+    <!--<Using Include="LanguageExt.Traits" />-->
+    <!--<Using Include="LanguageExt.Traits.Domain" />-->
+    <Using Include="MediatR" />
+    <Using Include="MediatR.Unit" Alias="Unit" />
+  </ItemGroup>
 </Project>

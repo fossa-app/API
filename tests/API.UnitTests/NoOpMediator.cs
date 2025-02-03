@@ -1,5 +1,4 @@
 ﻿using System.Runtime.CompilerServices;
-using MediatR;
 
 namespace Fossa.API.UnitTests;
 

@@ -124,6 +124,10 @@ namespace Fossa.API.Core.Entities
 }
 namespace Fossa.API.Core.Extensions
 {
+    public static class ParserResultExtensions
+    {
+        public static T GetOrThrow<T>(this LanguageExt.Parsec.ParserResult<T> parserResult) { }
+    }
     public static class RelationshipGraphExtensions
     {
         public static System.Threading.Tasks.Task ThrowIfHasDependentEntitiesAsync<T>(this Fossa.API.Core.Relationship.IRelationshipGraph relationshipGraph, T id, System.Threading.CancellationToken cancellationToken)
@@ -243,7 +247,7 @@ namespace Fossa.API.Core.Messages.Commands
     }
     public class BranchCreationCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.BranchCreationCommand, MediatR.Unit>
     {
-        public BranchCreationCommandHandler(TIKSN.Identity.IIdentityGenerator<Fossa.API.Core.Entities.BranchId> identityGenerator, Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, Fossa.API.Core.Repositories.IBranchRepository branchRepository) { }
+        public BranchCreationCommandHandler(TIKSN.Identity.IIdentityGenerator<Fossa.API.Core.Entities.BranchId> identityGenerator, Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, Fossa.API.Core.Repositories.IBranchRepository branchRepository, Fossa.API.Core.Services.IPostalCodeParser postalCodeParser) { }
         public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.BranchCreationCommand request, System.Threading.CancellationToken cancellationToken) { }
     }
     public class BranchDeletionCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Core.Entities.BranchId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.BranchDeletionCommand>
@@ -271,7 +275,7 @@ namespace Fossa.API.Core.Messages.Commands
     }
     public class BranchModificationCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.BranchModificationCommand, MediatR.Unit>
     {
-        public BranchModificationCommandHandler(Fossa.API.Core.Repositories.IBranchQueryRepository branchQueryRepository, Fossa.API.Core.Repositories.IBranchRepository branchRepository) { }
+        public BranchModificationCommandHandler(Fossa.API.Core.Repositories.IBranchQueryRepository branchQueryRepository, Fossa.API.Core.Repositories.IBranchRepository branchRepository, Fossa.API.Core.Services.IPostalCodeParser postalCodeParser) { }
         public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.BranchModificationCommand request, System.Threading.CancellationToken cancellationToken) { }
     }
     public class CompanyCreationCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Core.Entities.CompanyId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.CompanyCreationCommand>
@@ -658,6 +662,10 @@ namespace Fossa.API.Core.Services
         LanguageExt.Seq<NodaTime.DateTimeZone> ListRegionalTimeZones(System.Globalization.RegionInfo region);
         System.Globalization.RegionInfo ResolveTimeZoneRegion(NodaTime.DateTimeZone timeZone);
     }
+    public interface IPostalCodeParser
+    {
+        LanguageExt.Parsec.ParserResult<string> ParsePostalCode(System.Globalization.RegionInfo country, string inputPostalCode);
+    }
     public interface ISystemInitializer
     {
         System.Threading.Tasks.Task InitializeAsync(System.Threading.CancellationToken cancellationToken);
@@ -678,6 +686,11 @@ namespace Fossa.API.Core.Services
     {
         public const string SystemLicensePath = "System";
         public static readonly System.Text.CompositeFormat CompanyLicensePathFormat;
+    }
+    public class PostalCodeParser : Fossa.API.Core.Services.IPostalCodeParser
+    {
+        public PostalCodeParser() { }
+        public LanguageExt.Parsec.ParserResult<string> ParsePostalCode(System.Globalization.RegionInfo country, string inputPostalCode) { }
     }
     public class SystemInitializer : Fossa.API.Core.Services.ISystemInitializer
     {
@@ -736,7 +749,7 @@ namespace Fossa.API.Core.Validators
 {
     public class AddressValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Entities.Address>
     {
-        public AddressValidator() { }
+        public AddressValidator(Fossa.API.Core.Services.IPostalCodeParser postalCodeParser) { }
     }
     public static class BranchCommandValidatorHelper
     {
@@ -798,6 +811,7 @@ namespace Fossa.API.Core.Validators
     {
         public OptionValidator(FluentValidation.IValidator<TProperty> validator) { }
         public override string Name { get; }
+        protected override string GetDefaultMessageTemplate(string errorCode) { }
         public override bool IsValid(FluentValidation.ValidationContext<T> context, LanguageExt.Option<TProperty> value) { }
     }
 }
