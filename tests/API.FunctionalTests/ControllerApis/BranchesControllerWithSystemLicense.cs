@@ -275,7 +275,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   [InlineData("5234 Main St", "Suite 200", "New York", "", "62345", "US")]
   [InlineData("5234 Main St", "Suite 200", "", "NY", "62345", "US")]
   [InlineData("", "Suite 200", "New York", "NY", "62345", "US")]
-  public async Task UpdateBranchWithAdministratorAccessWithInvalidAddressTokenAsync(
+  public async Task UpdateBranchWithAdministratorAccessTokenWithInvalidAddressAsync(
     string? line1, string? line2, string? city, string? subdivision, string? postalCode, string? countryCode)
   {
     var client = _factory.CreateClient();
@@ -299,6 +299,11 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var modificationAddress = new AddressModel(line1, line2, city, subdivision, postalCode, countryCode);
 
     var modificationResponse = await client.PutAsJsonAsync($"/api/1.0/Branches/{creationBranch?.Id}", new BranchModificationModel(modificationBranchName, modificationTimeZoneId, modificationAddress));
+
+    if (modificationResponse.StatusCode != HttpStatusCode.OK)
+    {
+      _testOutputHelper.WriteLine(await modificationResponse.Content.ReadAsStringAsync());
+    }
 
     modificationResponse.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
   }
