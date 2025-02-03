@@ -1,4 +1,7 @@
-﻿using System.Net.Http.Headers;
+﻿using System.Diagnostics;
+using System.Diagnostics.Metrics;
+using System.Net.Http.Headers;
+using System.Reflection.PortableExecutable;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using FluentValidation;
@@ -16,6 +19,11 @@ using Hellang.Middleware.ProblemDetails;
 using Hellang.Middleware.ProblemDetails.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
+using OpenTelemetry;
+using OpenTelemetry.Exporter;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 using Serilog;
 using TIKSN.DependencyInjection;
 using TIKSN.Deployment;
@@ -131,7 +139,26 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
   containerBuilder.RegisterModule<DefaultWebModule>();
 });
 
-//builder.Logging.AddAzureWebAppDiagnostics(); add this if deploying to Azure
+builder.Services.AddOpenTelemetry()
+  .ConfigureResource(rb => rb
+    .AddService(serviceName: "Fossa-API", serviceNamespace: "Fossa")
+    .AddAttributes(
+    [
+        new KeyValuePair<string, object>("deployment.environment", builder.Environment.EnvironmentName),
+        new KeyValuePair<string, object>("env", builder.Environment.EnvironmentName),
+    ])
+  )
+  .UseOtlpExporter()
+  .WithTracing(tracing => tracing
+    .AddSource("*")
+    .AddAspNetCoreInstrumentation()
+    .AddHttpClientInstrumentation()
+  )
+  .WithMetrics(metrics => metrics
+    .AddMeter("*")
+    .AddAspNetCoreInstrumentation()
+    .AddHttpClientInstrumentation()
+  );
 
 var app = builder.Build();
 
