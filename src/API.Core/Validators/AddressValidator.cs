@@ -36,6 +36,6 @@ public class AddressValidator : AbstractValidator<Address>
   private static string BranchAddressPostalCodeMustBeValidForCounpanyAddressCountryErrorMessage(
     Address address, string postalCode)
   {
-    return $"Postal Code '{postalCode}' for Country `{address.Country.TwoLetterISORegionName} - `{address.Country.EnglishName}` is invalid.";
+    return $"Postal Code '{postalCode}' for Country '{address.Country.TwoLetterISORegionName} - [{address.Country.EnglishName}]' is invalid.";
   }
 }
