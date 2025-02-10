@@ -17,6 +17,8 @@ public class EmployeeMongoEntity : IEntity<long>
 
   public long CompanyId { get; set; }
 
+  public long? AssignedBranchId { get; set; }
+
   public string? FirstName { get; set; }
 
   public string? LastName { get; set; }
