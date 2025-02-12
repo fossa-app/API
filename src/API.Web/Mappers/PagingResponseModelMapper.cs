@@ -17,7 +17,7 @@ public class PagingResponseModelMapper<TEntity, TModel> : IMapper<PageResult<TEn
   {
     return new PagingResponseModel<TModel>(
       source.Page.Number, source.Page.Size,
-      source.Items.Select(_itemMapper.Map).ToArray(),
+      [.. source.Items.Select(_itemMapper.Map)],
       source.TotalItems.ToNullable(),
       source.TotalPages.ToNullable());
   }

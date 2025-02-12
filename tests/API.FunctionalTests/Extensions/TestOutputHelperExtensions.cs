@@ -14,7 +14,7 @@ public static class TestOutputHelperExtensions
 
     var options = new JsonSerializerOptions
     {
-      WriteIndented = true
+      WriteIndented = true,
     };
 
     string indentedContentString = JsonSerializer.Serialize(jsonDocument.RootElement, options);

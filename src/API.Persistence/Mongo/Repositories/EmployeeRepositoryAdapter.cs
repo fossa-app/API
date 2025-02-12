@@ -77,7 +77,7 @@ public class EmployeeRepositoryAdapter
 
     return new PageResult<EmployeeEntity>(
       pageResult.Page,
-      pageResult.Items.Select(Map).ToArray(),
+      [.. pageResult.Items.Select(Map)],
       pageResult.TotalItems);
   }
 }

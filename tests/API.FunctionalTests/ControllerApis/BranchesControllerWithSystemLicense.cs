@@ -53,7 +53,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     const string branchName = "Branch-392136901";
     const string timeZoneId = "America/New_York";
 
-    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId, null));
+    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId, Address: null));
 
     creationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 
@@ -75,7 +75,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     const string branchName = "Branch-392136901";
     const string timeZoneId = "Australia/Perth";
 
-    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId, null));
+    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId, Address: null));
 
     if (creationResponse.StatusCode != HttpStatusCode.OK)
     {
@@ -90,7 +90,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     var client = _factory.CreateClient();
 
-    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel("Branch X", "America/New_York", null));
+    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel("Branch X", "America/New_York", Address: null));
 
     response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
   }
@@ -101,7 +101,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var client = _factory.CreateClient();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.User1");
     const string branchName = "Branch-826076795";
-    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, "USZone", null));
+    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, "USZone", Address: null));
 
     response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
   }
@@ -112,7 +112,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var client = _factory.CreateClient();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.User1");
     const string branchName = "Branch-826076795";
-    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, "America/Detroit", null));
+    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, "America/Detroit", Address: null));
 
     response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
   }
@@ -123,7 +123,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var client = _factory.CreateClient();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.User1");
     const string branchName = "Branch-826076795";
-    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, "Australia/Perth", null));
+    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, "Australia/Perth", Address: null));
 
     response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
   }
@@ -137,7 +137,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     const string branchName = "Branch-832159009";
     const string timeZoneId = "America/New_York";
 
-    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId, null));
+    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId, Address: null));
 
     creationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 
@@ -195,7 +195,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JKXHHECNDQ6BYNA6CQQ2S59P.Tenant1.ADMIN1");
 
-    var branchCreationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId, null));
+    var branchCreationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId, Address: null));
 
     branchCreationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 

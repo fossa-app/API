@@ -19,7 +19,7 @@ public class OptionValidator<T, TProperty> : PropertyValidator<T, Option<TProper
   {
     return value.Match(
       v => ValidateProperty(context, v),
-      true);
+      None: true);
   }
 
   protected override string GetDefaultMessageTemplate(string errorCode) => "Value is provided however is not valid";
