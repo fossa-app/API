@@ -12,6 +12,7 @@ public class EmployeeRepositoryAdapter
     , IEmployeeRepository, IEmployeeQueryRepository, IEmployeeIndexRepository
 {
   private readonly IMapper<CompanyId, long> _companyDomainIdentityToDataIdentityMapper;
+  private readonly IMapper<BranchId, long> _branchDomainIdentityToDataIdentityMapper;
   private readonly IEmployeeMongoRepository _dataRepository;
 
   public EmployeeRepositoryAdapter(
@@ -20,6 +21,7 @@ public class EmployeeRepositoryAdapter
     IMapper<EmployeeId, long> domainIdentityToDataIdentityMapper,
     IMapper<long, EmployeeId> dataIdentityToDomainIdentityMapper,
     IMapper<CompanyId, long> companyDomainIdentityToDataIdentityMapper,
+    IMapper<BranchId, long> branchDomainIdentityToDataIdentityMapper,
     IEmployeeMongoRepository dataRepository) : base(
     domainEntityToDataEntityMapper,
     dataEntityToDomainEntityMapper,
@@ -28,6 +30,7 @@ public class EmployeeRepositoryAdapter
     dataRepository)
   {
     _companyDomainIdentityToDataIdentityMapper = companyDomainIdentityToDataIdentityMapper ?? throw new ArgumentNullException(nameof(companyDomainIdentityToDataIdentityMapper));
+    _branchDomainIdentityToDataIdentityMapper = branchDomainIdentityToDataIdentityMapper ?? throw new ArgumentNullException(nameof(branchDomainIdentityToDataIdentityMapper));
     _dataRepository = dataRepository ?? throw new ArgumentNullException(nameof(dataRepository));
   }
 
@@ -59,6 +62,11 @@ public class EmployeeRepositoryAdapter
   public Task<bool> HasDependencyAsync(CompanyId id, CancellationToken cancellationToken)
   {
     return _dataRepository.HasDependencyOnCompanyAsync(_companyDomainIdentityToDataIdentityMapper.Map(id), cancellationToken);
+  }
+
+  public Task<bool> HasDependencyAsync(BranchId id, CancellationToken cancellationToken)
+  {
+    return _dataRepository.HasDependencyOnBranchAsync(_branchDomainIdentityToDataIdentityMapper.Map(id), cancellationToken);
   }
 
   public async Task<PageResult<EmployeeEntity>> PageAsync(
