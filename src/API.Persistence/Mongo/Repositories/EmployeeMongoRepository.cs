@@ -29,7 +29,11 @@ public class EmployeeMongoRepository
       .Text(x => x.FirstName)
       .Text(x => x.LastName)
       .Text(x => x.FullName);
-    var indexOptions = new CreateIndexOptions { Name = "text_index" };
+    var indexOptions = new CreateIndexOptions
+    {
+      Name = "text_index",
+      Collation = MongoRepositoryHelper.CreateDefaultCollation(),
+    };
     var indexModel = new CreateIndexModel<EmployeeMongoEntity>(indexKeysDefinition, indexOptions);
     return Collection.Indexes.CreateOneAsync(indexModel, cancellationToken: cancellationToken);
   }

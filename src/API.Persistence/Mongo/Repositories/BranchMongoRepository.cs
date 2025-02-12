@@ -27,7 +27,11 @@ public class BranchMongoRepository
       Builders<BranchMongoEntity>
       .IndexKeys
       .Text(x => x.Name);
-    var indexOptions = new CreateIndexOptions { Name = "text_index" };
+    var indexOptions = new CreateIndexOptions
+    {
+      Name = "text_index",
+      Collation = MongoRepositoryHelper.CreateDefaultCollation(),
+    };
     var indexModel = new CreateIndexModel<BranchMongoEntity>(indexKeysDefinition, indexOptions);
     return Collection.Indexes.CreateOneAsync(indexModel, cancellationToken: cancellationToken);
   }
