@@ -35,6 +35,11 @@ public class EmployeeMongoEasyRepository :
     return Task.FromResult(entity);
   }
 
+  public Task<bool> HasDependencyOnBranchAsync(long branchId, CancellationToken cancellationToken)
+  {
+    return Task.FromResult(EasyStore.Entities.Values.Any(x => x.AssignedBranchId == branchId));
+  }
+
   public Task<bool> HasDependencyOnCompanyAsync(long companyId, CancellationToken cancellationToken)
   {
     return Task.FromResult(EasyStore.Entities.Values.Any(x => x.CompanyId == companyId));

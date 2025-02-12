@@ -7,6 +7,7 @@ public record EmployeeEntity(
     Guid TenantID,
     Guid UserID,
     CompanyId CompanyId,
+    Option<BranchId> AssignedBranchId,
     string FirstName,
     string LastName,
     string FullName)

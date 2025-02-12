@@ -15,7 +15,7 @@ public class PostalCodeParser : IPostalCodeParser
     {
           ("CA", CanadianPostalCode),
           ("US", USZipCode),
-          (GenericCountryCode, GenericPostalCode)
+          (GenericCountryCode, GenericPostalCode),
         }.ToFrozenDictionary(k => k.Item1, v => CreateFinalParser(v.Item2), StringComparer.OrdinalIgnoreCase);
   }
 
@@ -111,7 +111,7 @@ public class PostalCodeParser : IPostalCodeParser
     var finalPostalCodeParser =
             from code in between(spaces, spaces, postalCodeParser)
             from _ in eof
-            select new string(code.ToArray()).ToUpperInvariant();
+            select new string([.. code]).ToUpperInvariant();
 
     return finalPostalCodeParser;
   }

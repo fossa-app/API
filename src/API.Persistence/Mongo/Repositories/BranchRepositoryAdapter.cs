@@ -49,7 +49,7 @@ public class BranchRepositoryAdapter
 
     return new PageResult<BranchEntity>(
       pageResult.Page,
-      pageResult.Items.Select(Map).ToArray(),
+      [.. pageResult.Items.Select(Map)],
       pageResult.TotalItems);
   }
 }

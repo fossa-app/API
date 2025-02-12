@@ -34,7 +34,7 @@ public static class BranchExtensions
       var client = factory.CreateClient();
       client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-      var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId, null), cancellationToken).ConfigureAwait(false);
+      var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId, Address: null), cancellationToken).ConfigureAwait(false);
 
       creationResponse.EnsureSuccessStatusCode();
     }
