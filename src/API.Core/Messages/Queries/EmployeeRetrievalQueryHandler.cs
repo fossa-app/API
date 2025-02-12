@@ -17,8 +17,8 @@ public class EmployeeRetrievalQueryHandler : IRequestHandler<EmployeeRetrievalQu
     EmployeeRetrievalQuery request,
     CancellationToken cancellationToken)
   {
-    return await _employeeQueryRepository.GetByUserIdAsync(
-        request.UserID, cancellationToken)
+    return await _employeeQueryRepository.GetAsync(
+        request.ID, cancellationToken)
       .ConfigureAwait(false);
   }
 }
