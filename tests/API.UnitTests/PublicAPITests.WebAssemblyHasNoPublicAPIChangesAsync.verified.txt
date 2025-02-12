@@ -83,6 +83,9 @@
         public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.EmployeeRetrievalModel> GetAsync([Microsoft.AspNetCore.Mvc.FromRoute] long id, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Web.ApiModels.EmployeeRetrievalModel> mapper, System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Mvc.HttpGet]
         public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>> PageAsync([Microsoft.AspNetCore.Mvc.FromQuery] Fossa.API.Web.ApiModels.EmployeePagingRequestModel requestModel, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<TIKSN.Data.PageResult<Fossa.API.Core.Entities.EmployeeEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>> mapper, System.Threading.CancellationToken cancellationToken) { }
+        [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
+        [Microsoft.AspNetCore.Mvc.HttpPut("{id}")]
+        public System.Threading.Tasks.Task PutAsync([Microsoft.AspNetCore.Mvc.FromRoute] long id, [Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.EmployeeManagementModel model, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.BranchId> branchDataIdentityToDomainIdentityMapper, System.Threading.CancellationToken cancellationToken) { }
     }
 }
 namespace Fossa.API.Web.Api.Identity
@@ -189,6 +192,11 @@ namespace Fossa.API.Web.ApiModels
         public string Code { get; init; }
         public string Name { get; init; }
     }
+    public class EmployeeManagementModel : System.IEquatable<Fossa.API.Web.ApiModels.EmployeeManagementModel>
+    {
+        public EmployeeManagementModel(long? AssignedBranchId) { }
+        public long? AssignedBranchId { get; init; }
+    }
     public class EmployeeModificationModel : System.IEquatable<Fossa.API.Web.ApiModels.EmployeeModificationModel>
     {
         public EmployeeModificationModel(string? FirstName, string? LastName, string? FullName) { }
@@ -205,7 +213,8 @@ namespace Fossa.API.Web.ApiModels
     }
     public class EmployeeRetrievalModel : System.IEquatable<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>
     {
-        public EmployeeRetrievalModel(long Id, long CompanyId, string FirstName, string LastName, string FullName) { }
+        public EmployeeRetrievalModel(long Id, long CompanyId, long? AssignedBranchId, string FirstName, string LastName, string FullName) { }
+        public long? AssignedBranchId { get; init; }
         public long CompanyId { get; init; }
         public string FirstName { get; init; }
         public string FullName { get; init; }
@@ -345,7 +354,7 @@ namespace Fossa.API.Web.Mappers
     }
     public class EmployeeRetrievalModelMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Web.ApiModels.EmployeeRetrievalModel>
     {
-        public EmployeeRetrievalModelMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> companyDomainIdentityToDataIdentityMapper) { }
+        public EmployeeRetrievalModelMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> companyDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchId, long> branchDomainIdentityToDataIdentityMapper) { }
         public Fossa.API.Web.ApiModels.EmployeeRetrievalModel Map(Fossa.API.Core.Entities.EmployeeEntity source) { }
     }
     public class LicenseResponseModelMapper<TEntitlements, TEntitlementsModel> : TIKSN.Mapping.IMapper<TIKSN.Licensing.License<TEntitlements>, Fossa.API.Web.ApiModels.LicenseResponseModel<TEntitlementsModel>>

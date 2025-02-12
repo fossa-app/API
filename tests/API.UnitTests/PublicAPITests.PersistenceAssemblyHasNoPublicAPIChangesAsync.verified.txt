@@ -43,6 +43,7 @@ namespace Fossa.API.Persistence.Mongo.Entities
     public class EmployeeMongoEntity : TIKSN.Data.IEntity<long>
     {
         public EmployeeMongoEntity() { }
+        public long? AssignedBranchId { get; set; }
         public long CompanyId { get; set; }
         public string? FirstName { get; set; }
         public string? FullName { get; set; }
@@ -84,7 +85,7 @@ namespace Fossa.API.Persistence.Mongo.Mappers
     }
     public class EmployeeMongoMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity>, TIKSN.Mapping.IMapper<Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity, Fossa.API.Core.Entities.EmployeeEntity>
     {
-        public EmployeeMongoMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId> dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> companyDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId> companyDataIdentityToDomainIdentityMapper) { }
+        public EmployeeMongoMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId> dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> companyDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId> companyDataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchId, long> branchDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.BranchId> branchDataIdentityToDomainIdentityMapper) { }
         public Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity Map(Fossa.API.Core.Entities.EmployeeEntity source) { }
         public Fossa.API.Core.Entities.EmployeeEntity Map(Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity source) { }
     }
