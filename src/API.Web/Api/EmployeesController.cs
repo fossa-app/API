@@ -70,9 +70,10 @@ public class EmployeesController : BaseApiController<EmployeeId>
     return mapper.Map(result);
   }
 
-  [HttpPut]
+  [HttpPut("{id}")]
   [Authorize(Roles = Roles.Administrator)]
   public async Task PutAsync(
+    [FromRoute] long id,
     [FromBody] EmployeeManagementModel model,
     [FromServices] IMapper<long, BranchId> branchDataIdentityToDomainIdentityMapper,
     CancellationToken cancellationToken)
@@ -81,6 +82,7 @@ public class EmployeesController : BaseApiController<EmployeeId>
     var userId = _userIdProvider.GetUserId();
     await _sender.Send(
       new EmployeeManagementCommand(
+        _dataIdentityToDomainIdentityMapper.Map(id),
         tenantId,
         userId,
         Optional(model.AssignedBranchId).Map(branchDataIdentityToDomainIdentityMapper.Map)),
