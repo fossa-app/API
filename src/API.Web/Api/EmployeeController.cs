@@ -54,7 +54,7 @@ public class EmployeeController : BaseApiController<EmployeeId>
     var tenantId = _tenantIdProvider.GetTenantId();
     var userId = _userIdProvider.GetUserId();
     var entity = await _sender.Send(
-      new EmployeeRetrievalQuery(tenantId, userId),
+      new CurrentEmployeeRetrievalQuery(tenantId, userId),
       cancellationToken);
 
     return mapper.Map(entity);

@@ -9,5 +9,5 @@ public record BranchRetrievalQuery(
   : EntityTenantQuery<BranchEntity, BranchId, Guid, BranchEntity>(TenantID)
 {
   public override IEnumerable<BranchId> AffectingTenantEntitiesIdentities
-    => [];
+    => [ID];
 }

@@ -33,6 +33,24 @@ public class EmployeesController : BaseApiController<EmployeeId>
     _userIdProvider = userIdProvider ?? throw new ArgumentNullException(nameof(userIdProvider));
   }
 
+  [HttpGet("{id}")]
+  public async Task<EmployeeRetrievalModel> GetAsync(
+    [FromRoute] long id,
+    [FromServices] IMapper<EmployeeEntity, EmployeeRetrievalModel> mapper,
+    CancellationToken cancellationToken)
+  {
+    var tenantId = _tenantIdProvider.GetTenantId();
+    var userId = _userIdProvider.GetUserId();
+    var entity = await _sender.Send(
+      new EmployeeRetrievalQuery(
+        _dataIdentityToDomainIdentityMapper.Map(id),
+        tenantId,
+        userId),
+      cancellationToken);
+
+    return mapper.Map(entity);
+  }
+
   [HttpGet]
   public async Task<PagingResponseModel<EmployeeRetrievalModel>> PageAsync(
     [FromQuery] EmployeePagingRequestModel requestModel,
