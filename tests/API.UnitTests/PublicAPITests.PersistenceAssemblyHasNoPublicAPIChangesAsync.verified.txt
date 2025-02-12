@@ -184,6 +184,10 @@ namespace Fossa.API.Persistence.Mongo.Repositories
     {
         public MongoDatabaseProvider(TIKSN.Data.Mongo.IMongoClientProvider mongoClientProvider, Microsoft.Extensions.Configuration.IConfiguration configuration) { }
     }
+    public static class MongoRepositoryHelper
+    {
+        public static MongoDB.Driver.Collation CreateDefaultCollation() { }
+    }
     public class SystemPropertiesMongoRepository : TIKSN.Data.Mongo.MongoRepository<Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity, long>, Fossa.API.Persistence.Mongo.Repositories.ISystemPropertiesMongoRepository, TIKSN.Data.IQueryRepository<Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity, long>, TIKSN.Data.IRepository<Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity>, TIKSN.Data.IStreamRepository<Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity>, TIKSN.Data.Mongo.IMongoRepository<Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity, long>
     {
         public SystemPropertiesMongoRepository(TIKSN.Data.Mongo.IMongoClientSessionProvider mongoClientSessionProvider, TIKSN.Data.Mongo.IMongoDatabaseProvider mongoDatabaseProvider) { }
