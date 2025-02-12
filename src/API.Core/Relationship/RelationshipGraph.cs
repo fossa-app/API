@@ -17,7 +17,7 @@ public partial class RelationshipGraph : IRelationshipGraph
   private static readonly Lazy<FrozenDictionary<Type, Lst<NonEmpty, TypeInfo>>> _entityTypeToQueryRepositoryTypesMap = new(CreateEntityTypeToQueryRepositoryTypesMap, LazyThreadSafetyMode.ExecutionAndPublication);
   private static readonly Type _genericDependencyQueryRepositoryInterfaceType = typeof(IDependencyQueryRepository<>);
   private static readonly Type _genericQueryRepositoryInterfaceType = typeof(IQueryRepository<,>);
-
+  private static readonly Type _optionGenericType = typeof(Option<>);
   private readonly IServiceProvider _serviceProvider;
 
   public RelationshipGraph(IServiceProvider serviceProvider)
@@ -57,8 +57,8 @@ public partial class RelationshipGraph : IRelationshipGraph
   {
     return _entityTypes.Value
       .SelectMany(x => x.DeclaredProperties)
-      .Where(p => !p.Name.Equals(_entityIdName, StringComparison.Ordinal) && _entityIdTypeToOwnerEntityTypeMap.Value.ContainsKey(p.PropertyType))
-      .GroupBy(x => x.PropertyType)
+      .Where(p => !p.Name.Equals(_entityIdName, StringComparison.Ordinal) && _entityIdTypeToOwnerEntityTypeMap.Value.ContainsKey(ResolveLogicalPropertyType(p.PropertyType)))
+      .GroupBy(x => ResolveLogicalPropertyType(x.PropertyType))
       .ToFrozenDictionary(k => k.Key, v => v.ToSeq());
   }
 
@@ -90,5 +90,14 @@ public partial class RelationshipGraph : IRelationshipGraph
     }
 
     return Seq<PropertyInfo>();
+  }
+
+  private static Type ResolveLogicalPropertyType(Type propertyType)
+  {
+    if (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition().Equals(_optionGenericType))
+    {
+      return propertyType.GetGenericArguments().Single();
+    }
+    return propertyType;
   }
 }
