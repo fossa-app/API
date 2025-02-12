@@ -167,6 +167,63 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   }
 
   [Fact]
+  public async Task DeleteExistingBranchWithDependenciesWithAdministratorAccessTokenAsync()
+  {
+    // Arrange
+
+    const string firstName = "First35292075";
+    const string lastName = "Last35292075";
+    const string fullName = "Full35292075";
+
+    const string branchName = "Branch-35291729";
+    const string timeZoneId = "America/New_York";
+
+    var client = _factory.CreateClient();
+
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JKXJVFFPWRP9E7YNBQE8KMRB.Tenant1.User35292075");
+
+    var employeeCreationResponse = await client.PostAsJsonAsync("/api/1.0/Employee", new EmployeeModificationModel(firstName, lastName, fullName));
+
+    employeeCreationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    var employeeRetrievalResponse = await client.GetAsync("/api/1.0/Employee");
+
+    var employeeResponseModel =
+      await employeeRetrievalResponse.Content.ReadFromJsonAsync<EmployeeRetrievalModel>();
+
+    employeeResponseModel.ShouldNotBeNull();
+
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JKXHHECNDQ6BYNA6CQQ2S59P.Tenant1.ADMIN1");
+
+    var branchCreationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId, null));
+
+    branchCreationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    var branchCetrievalResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
+
+    var branchResponseModel =
+      await branchCetrievalResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+
+    branchResponseModel.ShouldNotBeNull();
+
+    var createdBranchModel = branchResponseModel.Items.Single(x => string.Equals(x.Name, branchName, StringComparison.OrdinalIgnoreCase));
+
+    var employeeManagementResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employeeResponseModel?.Id}", new EmployeeManagementModel(createdBranchModel.Id));
+
+    employeeManagementResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    // Act
+
+    var response = await client.DeleteAsync($"/api/1.0/Branches/{createdBranchModel.Id}");
+
+    // Assert
+
+    await _testOutputHelper.WriteAsync(response);
+
+    response.StatusCode.ShouldBe(HttpStatusCode.FailedDependency);
+  }
+
+  [Fact]
   public async Task DeleteExistingBranchWithoutDependenciesWithAdministratorAccessTokenAsync()
   {
     var client = _factory.CreateClient();
