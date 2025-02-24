@@ -60,11 +60,13 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var retrievalResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
 
     var responseModel =
-      await retrievalResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+      await retrievalResponse.Content.ReadFromJsonAsync<QueryResponseModel<BranchRetrievalModel>>();
 
     responseModel.ShouldNotBeNull();
-    responseModel.Items.Select(x => x.Name).ShouldContain(branchName);
-    responseModel.Items.Single(x => string.Equals(x.Name, branchName, StringComparison.OrdinalIgnoreCase)).TimeZoneId.ShouldBe(timeZoneId);
+    responseModel.List.ShouldBeNull();
+    responseModel.Page.ShouldNotBeNull();
+    responseModel.Page.Items.Select(x => x.Name).ShouldContain(branchName);
+    responseModel.Page.Items.Single(x => string.Equals(x.Name, branchName, StringComparison.OrdinalIgnoreCase)).TimeZoneId.ShouldBe(timeZoneId);
   }
 
   [Fact]
@@ -144,10 +146,12 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var retrievalResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
 
     var responseModel =
-      await retrievalResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+      await retrievalResponse.Content.ReadFromJsonAsync<QueryResponseModel<BranchRetrievalModel>>();
 
     responseModel.ShouldNotBeNull();
-    var branchRetrievalModel = responseModel.Items.Single(x => string.Equals(x.Name, branchName, StringComparison.OrdinalIgnoreCase));
+    responseModel.List.ShouldBeNull();
+    responseModel.Page.ShouldNotBeNull();
+    var branchRetrievalModel = responseModel.Page.Items.Single(x => string.Equals(x.Name, branchName, StringComparison.OrdinalIgnoreCase));
     branchRetrievalModel.Name.ShouldBe(branchName);
 
     branchEasyStore.Entities.ContainsKey(branchRetrievalModel.Id).ShouldBeTrue();
@@ -202,11 +206,13 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var branchRetrievalResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
 
     var branchResponseModel =
-      await branchRetrievalResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+      await branchRetrievalResponse.Content.ReadFromJsonAsync<QueryResponseModel<BranchRetrievalModel>>();
 
     branchResponseModel.ShouldNotBeNull();
+    branchResponseModel.List.ShouldBeNull();
+    branchResponseModel.Page.ShouldNotBeNull();
 
-    var createdBranchModel = branchResponseModel.Items.Single(x => string.Equals(x.Name, branchName, StringComparison.OrdinalIgnoreCase));
+    var createdBranchModel = branchResponseModel.Page.Items.Single(x => string.Equals(x.Name, branchName, StringComparison.OrdinalIgnoreCase));
 
     var employeeManagementResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employeeResponseModel?.Id}", new EmployeeManagementModel(createdBranchModel.Id));
 
@@ -372,13 +378,15 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     response.EnsureSuccessStatusCode();
 
     var responseModel =
-      await response.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+      await response.Content.ReadFromJsonAsync<QueryResponseModel<BranchRetrievalModel>>();
 
     responseModel.ShouldNotBeNull();
-    responseModel.PageNumber.ShouldBe(1);
-    responseModel.PageSize.ShouldBe(5);
-    responseModel.Items.ShouldNotBeNull();
-    responseModel.Items.ShouldNotBeEmpty();
+    responseModel.List.ShouldBeNull();
+    responseModel.Page.ShouldNotBeNull();
+    responseModel.Page.PageNumber.ShouldBe(1);
+    responseModel.Page.PageSize.ShouldBe(5);
+    responseModel.Page.Items.ShouldNotBeNull();
+    responseModel.Page.Items.ShouldNotBeEmpty();
   }
 
   [Fact]
@@ -391,13 +399,15 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     response.EnsureSuccessStatusCode();
 
     var responseModel =
-      await response.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+      await response.Content.ReadFromJsonAsync<QueryResponseModel<BranchRetrievalModel>>();
 
     responseModel.ShouldNotBeNull();
-    responseModel.PageNumber.ShouldBe(1);
-    responseModel.PageSize.ShouldBe(5);
-    responseModel.Items.ShouldNotBeNull();
-    responseModel.Items.ShouldBeEmpty();
+    responseModel.List.ShouldBeNull();
+    responseModel.Page.ShouldNotBeNull();
+    responseModel.Page.PageNumber.ShouldBe(1);
+    responseModel.Page.PageSize.ShouldBe(5);
+    responseModel.Page.Items.ShouldNotBeNull();
+    responseModel.Page.Items.ShouldBeEmpty();
   }
 
   [Theory]
@@ -426,8 +436,11 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var retrievalResponse1 = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
 
     var response1Model =
-      await retrievalResponse1.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
-    var creationBranch = response1Model?.Items.Single(x => string.Equals(x.Name, creationBranchName, StringComparison.OrdinalIgnoreCase));
+      await retrievalResponse1.Content.ReadFromJsonAsync<QueryResponseModel<BranchRetrievalModel>>();
+    response1Model.ShouldNotBeNull();
+    response1Model.List.ShouldBeNull();
+    response1Model.Page.ShouldNotBeNull();
+    var creationBranch = response1Model.Page.Items.Single(x => string.Equals(x.Name, creationBranchName, StringComparison.OrdinalIgnoreCase));
 
     var modificationBranchName = $"Branch-{Random.Shared.Next()}";
     const string modificationTimeZoneId = "America/New_York";
@@ -456,8 +469,11 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var retrievalResponse1 = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
 
     var response1Model =
-      await retrievalResponse1.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
-    var creationBranch = response1Model?.Items.Single(x => string.Equals(x.Name, creationBranchName, StringComparison.OrdinalIgnoreCase));
+      await retrievalResponse1.Content.ReadFromJsonAsync<QueryResponseModel<BranchRetrievalModel>>();
+    response1Model.ShouldNotBeNull();
+    response1Model.List.ShouldBeNull();
+    response1Model.Page.ShouldNotBeNull();
+    var creationBranch = response1Model.Page.Items.Single(x => string.Equals(x.Name, creationBranchName, StringComparison.OrdinalIgnoreCase));
 
     const string modificationBranchName = "Branch-509762905";
     const string modificationTimeZoneId = "America/New_York";
@@ -470,17 +486,19 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var retrievalResponse2 = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
 
     var response2Model =
-      await retrievalResponse2.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+      await retrievalResponse2.Content.ReadFromJsonAsync<QueryResponseModel<BranchRetrievalModel>>();
 
     response2Model.ShouldNotBeNull();
-    response2Model.Items.Select(x => x.Name).ShouldContain(modificationBranchName);
-    response2Model.Items.Single(x => string.Equals(x.Name, modificationBranchName, StringComparison.OrdinalIgnoreCase)).TimeZoneId.ShouldBe(modificationTimeZoneId);
-    response2Model.Items.Single(x => string.Equals(x.Name, modificationBranchName, StringComparison.OrdinalIgnoreCase)).Address.ShouldNotBeNull();
-    response2Model.Items.Single(x => string.Equals(x.Name, modificationBranchName, StringComparison.OrdinalIgnoreCase)).Address?.Line1.ShouldBe(modificationAddress.Line1);
-    response2Model.Items.Single(x => string.Equals(x.Name, modificationBranchName, StringComparison.OrdinalIgnoreCase)).Address?.Line2.ShouldBe(modificationAddress.Line2);
-    response2Model.Items.Single(x => string.Equals(x.Name, modificationBranchName, StringComparison.OrdinalIgnoreCase)).Address?.City.ShouldBe(modificationAddress.City);
-    response2Model.Items.Single(x => string.Equals(x.Name, modificationBranchName, StringComparison.OrdinalIgnoreCase)).Address?.Subdivision.ShouldBe(modificationAddress.Subdivision);
-    response2Model.Items.Single(x => string.Equals(x.Name, modificationBranchName, StringComparison.OrdinalIgnoreCase)).Address?.PostalCode.ShouldBe(modificationAddress.PostalCode);
-    response2Model.Items.Single(x => string.Equals(x.Name, modificationBranchName, StringComparison.OrdinalIgnoreCase)).Address?.CountryCode.ShouldBe(modificationAddress.CountryCode);
+    response2Model.List.ShouldBeNull();
+    response2Model.Page.ShouldNotBeNull();
+    response2Model.Page.Items.Select(x => x.Name).ShouldContain(modificationBranchName);
+    response2Model.Page.Items.Single(x => string.Equals(x.Name, modificationBranchName, StringComparison.OrdinalIgnoreCase)).TimeZoneId.ShouldBe(modificationTimeZoneId);
+    response2Model.Page.Items.Single(x => string.Equals(x.Name, modificationBranchName, StringComparison.OrdinalIgnoreCase)).Address.ShouldNotBeNull();
+    response2Model.Page.Items.Single(x => string.Equals(x.Name, modificationBranchName, StringComparison.OrdinalIgnoreCase)).Address?.Line1.ShouldBe(modificationAddress.Line1);
+    response2Model.Page.Items.Single(x => string.Equals(x.Name, modificationBranchName, StringComparison.OrdinalIgnoreCase)).Address?.Line2.ShouldBe(modificationAddress.Line2);
+    response2Model.Page.Items.Single(x => string.Equals(x.Name, modificationBranchName, StringComparison.OrdinalIgnoreCase)).Address?.City.ShouldBe(modificationAddress.City);
+    response2Model.Page.Items.Single(x => string.Equals(x.Name, modificationBranchName, StringComparison.OrdinalIgnoreCase)).Address?.Subdivision.ShouldBe(modificationAddress.Subdivision);
+    response2Model.Page.Items.Single(x => string.Equals(x.Name, modificationBranchName, StringComparison.OrdinalIgnoreCase)).Address?.PostalCode.ShouldBe(modificationAddress.PostalCode);
+    response2Model.Page.Items.Single(x => string.Equals(x.Name, modificationBranchName, StringComparison.OrdinalIgnoreCase)).Address?.CountryCode.ShouldBe(modificationAddress.CountryCode);
   }
 }
