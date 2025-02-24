@@ -199,10 +199,10 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     branchCreationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-    var branchCetrievalResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
+    var branchRetrievalResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
 
     var branchResponseModel =
-      await branchCetrievalResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+      await branchRetrievalResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
 
     branchResponseModel.ShouldNotBeNull();
 
@@ -278,6 +278,80 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     await _factory.SeedSystemLicenseAsync(default).ConfigureAwait(false);
     await _factory.SeedAllEntitiesAsync(default).ConfigureAwait(false);
+  }
+
+  [Fact]
+  public async Task ListCreatedBranchesAsync()
+  {
+    // Arrange
+
+    const string branch1Name = "Branch-1832333622";
+    const string branch2Name = "Branch-806632548";
+    const string branch3Name = "Branch-637183497";
+    const string timeZoneId = "America/New_York";
+
+    var client = _factory.CreateClient();
+
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JMV0X5W7N908QW69WVVDPFAW.Tenant1.ADMIN1");
+
+    var branch1CreationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branch1Name, timeZoneId, Address: null));
+    var branch2CreationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branch2Name, timeZoneId, Address: null));
+    var branch3CreationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branch3Name, timeZoneId, Address: null));
+
+    branch1CreationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+    branch2CreationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+    branch3CreationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JMV0XC70JH9GC8P9M6SYYYAK.Tenant1.User1");
+
+    var retrievalResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
+
+    if (retrievalResponse.StatusCode != HttpStatusCode.OK)
+    {
+      _testOutputHelper.WriteLine(await retrievalResponse.Content.ReadAsStringAsync());
+    }
+    retrievalResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    var retrievalResponseModel =
+      await retrievalResponse.Content.ReadFromJsonAsync<QueryResponseModel<BranchRetrievalModel>>();
+
+    retrievalResponseModel.ShouldNotBeNull();
+    retrievalResponseModel.List.ShouldBeNull();
+    retrievalResponseModel.Page.ShouldNotBeNull();
+
+    var branch1CreationResponseModel = retrievalResponseModel?.Page.Items.Single(x => string.Equals(x.Name, branch1Name, StringComparison.OrdinalIgnoreCase));
+    var branch2CreationResponseModel = retrievalResponseModel?.Page.Items.Single(x => string.Equals(x.Name, branch2Name, StringComparison.OrdinalIgnoreCase));
+    var branch3CreationResponseModel = retrievalResponseModel?.Page.Items.Single(x => string.Equals(x.Name, branch3Name, StringComparison.OrdinalIgnoreCase));
+
+    var branch1Id = branch1CreationResponseModel?.Id;
+    var branch2Id = branch2CreationResponseModel?.Id;
+    var branch3Id = branch3CreationResponseModel?.Id;
+    const int branch4Id = 204298046; // Missing branch
+
+    // Act
+
+    var branchRetrievalResponse = await client.GetAsync($"/api/1.0/Branches?Id={branch1Id}&Id={branch2Id}&Id={branch3Id}&Id={branch4Id}");
+
+    if (branchRetrievalResponse.StatusCode != HttpStatusCode.OK)
+    {
+      _testOutputHelper.WriteLine(await branchRetrievalResponse.Content.ReadAsStringAsync());
+    }
+    branchRetrievalResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    var branchResponseModel =
+      await branchRetrievalResponse.Content.ReadFromJsonAsync<QueryResponseModel<BranchRetrievalModel>>();
+
+    // Assert
+
+    branchResponseModel.ShouldNotBeNull();
+    branchResponseModel.List.ShouldNotBeNull();
+    branchResponseModel.Page.ShouldBeNull();
+
+    branchResponseModel.List.Count().ShouldBe(3);
+    branchResponseModel.List.ShouldContain(x => x.Id == branch1Id);
+    branchResponseModel.List.ShouldContain(x => x.Id == branch2Id);
+    branchResponseModel.List.ShouldContain(x => x.Id == branch3Id);
+    branchResponseModel.List.ShouldNotContain(x => x.Id == branch4Id);
   }
 
   [Fact]
