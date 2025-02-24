@@ -123,9 +123,9 @@ public class BranchesController : BaseApiController<BranchId>
     var tenantId = _tenantIdProvider.GetTenantId();
     var userId = _userIdProvider.GetUserId();
 
-    Either<BranchListingQuery, BranchPagingQuery> command = requestModel.Id.Count switch
+    Either<BranchListingQuery, BranchPagingQuery> command = requestModel.Id?.Count switch
     {
-      0 => new BranchPagingQuery(
+      null or 0 => new BranchPagingQuery(
         tenantId,
         userId,
         requestModel.Search ?? string.Empty,
