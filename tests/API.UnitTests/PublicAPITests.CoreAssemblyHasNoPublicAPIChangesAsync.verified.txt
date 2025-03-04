@@ -240,8 +240,8 @@ namespace Fossa.API.Core.Messages.Commands
     public class BranchCreationCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Core.Entities.BranchId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.BranchCreationCommand>
     {
         public BranchCreationCommand(System.Guid TenantID, System.Guid UserID, string Name, NodaTime.DateTimeZone TimeZone, LanguageExt.Option<Fossa.API.Core.Entities.Address> Address) { }
-        public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.BranchId> AffectingTenantEntitiesIdentities { get; }
         public LanguageExt.Option<Fossa.API.Core.Entities.Address> Address { get; init; }
+        public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.BranchId> AffectingTenantEntitiesIdentities { get; }
         public string Name { get; init; }
         public NodaTime.DateTimeZone TimeZone { get; init; }
         public System.Guid UserID { get; init; }
@@ -267,8 +267,8 @@ namespace Fossa.API.Core.Messages.Commands
     public class BranchModificationCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Core.Entities.BranchId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.BranchModificationCommand>
     {
         public BranchModificationCommand(Fossa.API.Core.Entities.BranchId ID, System.Guid TenantID, System.Guid UserID, string Name, NodaTime.DateTimeZone TimeZone, LanguageExt.Option<Fossa.API.Core.Entities.Address> Address) { }
-        public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.BranchId> AffectingTenantEntitiesIdentities { get; }
         public LanguageExt.Option<Fossa.API.Core.Entities.Address> Address { get; init; }
+        public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.BranchId> AffectingTenantEntitiesIdentities { get; }
         public Fossa.API.Core.Entities.BranchId ID { get; init; }
         public string Name { get; init; }
         public NodaTime.DateTimeZone TimeZone { get; init; }
