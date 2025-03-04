@@ -72,36 +72,34 @@ public class EmployeesController : BaseApiController<EmployeeId>
   }
 
   [HttpGet]
-  public async Task<QueryResponseModel<EmployeeRetrievalModel>> QueryAsync(
+  public Task<PagingResponseModel<EmployeeRetrievalModel>> QueryAsync(
     [FromQuery] EmployeeQueryRequestModel requestModel,
     [FromServices] IMapper<PageResult<EmployeeEntity>, PagingResponseModel<EmployeeRetrievalModel>> pagingMapper,
-    [FromServices] IMapper<EmployeeEntity, EmployeeRetrievalModel> itemMapper,
+    [FromServices] IMapper<Seq<EmployeeEntity>, PagingResponseModel<EmployeeRetrievalModel>> listingMapper,
     CancellationToken cancellationToken)
   {
     var tenantId = _tenantIdProvider.GetTenantId();
     var userId = _userIdProvider.GetUserId();
 
-    Either<EmployeeListingQuery, EmployeePagingQuery> command = requestModel.Id?.Count switch
-    {
-      null or 0 => new EmployeePagingQuery(
-        tenantId,
-        userId,
-        requestModel.Search ?? string.Empty,
-        new Page(
-          requestModel.PageNumber ?? 0,
-          requestModel.PageSize ?? 0)),
-      _ => new EmployeeListingQuery(
-        requestModel.Id.Select(_dataIdentityToDomainIdentityMapper.Map).ToSeq(),
-        tenantId,
-        userId),
-    };
-
-    var result = await command.Match<EitherAsync<Seq<EmployeeEntity>, PageResult<EmployeeEntity>>>(
-      query => _sender.Send(query, cancellationToken),
-      query => _sender.Send(query, cancellationToken))
-      .BiMap(pagingMapper.Map, x => x.Map(itemMapper.Map))
-      .Match(x => new QueryResponseModel<EmployeeRetrievalModel>(List: null, x), x => new QueryResponseModel<EmployeeRetrievalModel>(x, Page: null));
-
-    return result;
+    return (requestModel.Id ?? [])
+      .ToSeq()
+      .Map(_dataIdentityToDomainIdentityMapper.Map)
+      .Match<Either<EmployeeListingQuery, EmployeePagingQuery>>(
+        () => new EmployeePagingQuery(
+          tenantId,
+          userId,
+          requestModel.Search ?? string.Empty,
+          new Page(
+            requestModel.PageNumber ?? 0,
+            requestModel.PageSize ?? 0)),
+        ids => new EmployeeListingQuery(
+          ids,
+          tenantId,
+          userId))
+      .Match<EitherAsync<Seq<EmployeeEntity>, PageResult<EmployeeEntity>>>(
+        query => _sender.Send(query, cancellationToken),
+        query => _sender.Send(query, cancellationToken))
+      .BiMap(pagingMapper.Map, listingMapper.Map)
+      .Match(x => x, x => x);
   }
 }
