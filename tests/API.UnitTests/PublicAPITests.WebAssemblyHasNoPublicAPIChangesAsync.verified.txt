@@ -28,14 +28,14 @@
         public System.Threading.Tasks.Task DeleteAsync(long id, System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Mvc.HttpGet("{id}")]
         public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.BranchRetrievalModel> GetAsync([Microsoft.AspNetCore.Mvc.FromRoute] long id, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Web.ApiModels.BranchRetrievalModel> mapper, System.Threading.CancellationToken cancellationToken) { }
-        [Microsoft.AspNetCore.Mvc.HttpGet]
-        public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.BranchRetrievalModel>> PageAsync([Microsoft.AspNetCore.Mvc.FromQuery] Fossa.API.Web.ApiModels.BranchPagingRequestModel requestModel, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<TIKSN.Data.PageResult<Fossa.API.Core.Entities.BranchEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.BranchRetrievalModel>> mapper, System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
         [Microsoft.AspNetCore.Mvc.HttpPost]
         public System.Threading.Tasks.Task PostAsync([Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.BranchModificationModel model, [Microsoft.AspNetCore.Mvc.FromServices] Fossa.API.Core.TimeZone.IDateTimeZoneProvider dateTimeZoneProvider, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<Fossa.API.Web.ApiModels.AddressModel, Fossa.API.Core.Entities.Address> addressModelToDomainMapper, System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
         [Microsoft.AspNetCore.Mvc.HttpPut("{id}")]
         public System.Threading.Tasks.Task PutAsync(long id, [Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.BranchModificationModel model, [Microsoft.AspNetCore.Mvc.FromServices] Fossa.API.Core.TimeZone.IDateTimeZoneProvider dateTimeZoneProvider, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<Fossa.API.Web.ApiModels.AddressModel, Fossa.API.Core.Entities.Address> addressModelToDomainMapper, System.Threading.CancellationToken cancellationToken) { }
+        [Microsoft.AspNetCore.Mvc.HttpGet]
+        public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.QueryResponseModel<Fossa.API.Web.ApiModels.BranchRetrievalModel>> QueryAsync([Microsoft.AspNetCore.Mvc.FromQuery] Fossa.API.Web.ApiModels.BranchQueryRequestModel requestModel, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<TIKSN.Data.PageResult<Fossa.API.Core.Entities.BranchEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.BranchRetrievalModel>> pagingMapper, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Web.ApiModels.BranchRetrievalModel> itemMapper, System.Threading.CancellationToken cancellationToken) { }
     }
     [Asp.Versioning.ApiVersion(1D, null)]
     [Microsoft.AspNetCore.Authorization.Authorize]
@@ -81,11 +81,11 @@
         public EmployeesController(Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, MediatR.ISender sender, MediatR.IPublisher publisher, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId> dataIdentityToDomainIdentityMapper) { }
         [Microsoft.AspNetCore.Mvc.HttpGet("{id}")]
         public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.EmployeeRetrievalModel> GetAsync([Microsoft.AspNetCore.Mvc.FromRoute] long id, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Web.ApiModels.EmployeeRetrievalModel> mapper, System.Threading.CancellationToken cancellationToken) { }
-        [Microsoft.AspNetCore.Mvc.HttpGet]
-        public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>> PageAsync([Microsoft.AspNetCore.Mvc.FromQuery] Fossa.API.Web.ApiModels.EmployeePagingRequestModel requestModel, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<TIKSN.Data.PageResult<Fossa.API.Core.Entities.EmployeeEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>> mapper, System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
         [Microsoft.AspNetCore.Mvc.HttpPut("{id}")]
         public System.Threading.Tasks.Task PutAsync([Microsoft.AspNetCore.Mvc.FromRoute] long id, [Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.EmployeeManagementModel model, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.BranchId> branchDataIdentityToDomainIdentityMapper, System.Threading.CancellationToken cancellationToken) { }
+        [Microsoft.AspNetCore.Mvc.HttpGet]
+        public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.QueryResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>> QueryAsync([Microsoft.AspNetCore.Mvc.FromQuery] Fossa.API.Web.ApiModels.EmployeeQueryRequestModel requestModel, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<TIKSN.Data.PageResult<Fossa.API.Core.Entities.EmployeeEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>> pagingMapper, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Web.ApiModels.EmployeeRetrievalModel> itemMapper, System.Threading.CancellationToken cancellationToken) { }
     }
 }
 namespace Fossa.API.Web.Api.Identity
@@ -150,9 +150,10 @@ namespace Fossa.API.Web.ApiModels
         public string? Name { get; init; }
         public string? TimeZoneId { get; init; }
     }
-    public class BranchPagingRequestModel : System.IEquatable<Fossa.API.Web.ApiModels.BranchPagingRequestModel>
+    public class BranchQueryRequestModel : System.IEquatable<Fossa.API.Web.ApiModels.BranchQueryRequestModel>
     {
-        public BranchPagingRequestModel(string? Search, int? PageNumber, int? PageSize) { }
+        public BranchQueryRequestModel(System.Collections.Generic.IReadOnlyList<long>? Id, string? Search, int? PageNumber, int? PageSize) { }
+        public System.Collections.Generic.IReadOnlyList<long>? Id { get; init; }
         public int? PageNumber { get; init; }
         public int? PageSize { get; init; }
         public string? Search { get; init; }
@@ -211,6 +212,14 @@ namespace Fossa.API.Web.ApiModels
         public int? PageSize { get; init; }
         public string? Search { get; init; }
     }
+    public class EmployeeQueryRequestModel : System.IEquatable<Fossa.API.Web.ApiModels.EmployeeQueryRequestModel>
+    {
+        public EmployeeQueryRequestModel(System.Collections.Generic.IReadOnlyList<long>? Id, string? Search, int? PageNumber, int? PageSize) { }
+        public System.Collections.Generic.IReadOnlyList<long>? Id { get; init; }
+        public int? PageNumber { get; init; }
+        public int? PageSize { get; init; }
+        public string? Search { get; init; }
+    }
     public class EmployeeRetrievalModel : System.IEquatable<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>
     {
         public EmployeeRetrievalModel(long Id, long CompanyId, long? AssignedBranchId, string FirstName, string LastName, string FullName) { }
@@ -235,6 +244,12 @@ namespace Fossa.API.Web.ApiModels
         public int PageSize { get; init; }
         public long? TotalItems { get; init; }
         public long? TotalPages { get; init; }
+    }
+    public class QueryResponseModel<T> : System.IEquatable<Fossa.API.Web.ApiModels.QueryResponseModel<T>>
+    {
+        public QueryResponseModel(System.Collections.Generic.IEnumerable<T>? List, Fossa.API.Web.ApiModels.PagingResponseModel<T>? Page) { }
+        public System.Collections.Generic.IEnumerable<T>? List { get; init; }
+        public Fossa.API.Web.ApiModels.PagingResponseModel<T>? Page { get; init; }
     }
     public class SystemEntitlementsModel : System.IEquatable<Fossa.API.Web.ApiModels.SystemEntitlementsModel>
     {

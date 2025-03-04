@@ -8,16 +8,21 @@ using Fossa.API.Web;
 using Fossa.API.Web.ApiModels;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
+using Xunit.Abstractions;
 
 namespace Fossa.API.FunctionalTests.ControllerApis;
 
 public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplicationFactory<DefaultWebModule>>, IAsyncLifetime
 {
   private readonly CustomWebApplicationFactory<DefaultWebModule> _factory;
+  private readonly ITestOutputHelper _testOutputHelper;
 
-  public EmployeeControllerWithSystemLicense(CustomWebApplicationFactory<DefaultWebModule> factory)
+  public EmployeeControllerWithSystemLicense(
+    CustomWebApplicationFactory<DefaultWebModule> factory,
+    ITestOutputHelper testOutputHelper)
   {
     _factory = factory ?? throw new ArgumentNullException(nameof(factory));
+    _testOutputHelper = testOutputHelper ?? throw new ArgumentNullException(nameof(testOutputHelper));
   }
 
   [Fact]
@@ -126,6 +131,65 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     await _factory.SeedSystemLicenseAsync(default).ConfigureAwait(false);
     await _factory.SeedAllEntitiesAsync(default).ConfigureAwait(false);
+  }
+
+  [Fact]
+  public async Task ListCreatedEmployeesAsync()
+  {
+    // Arrange
+
+    var client = _factory.CreateClient();
+    var employeeIds = new List<long>();
+
+    foreach (var x in Seq(36883136, 36883144, 36883148))
+    {
+      client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", $"01JND081MJRM7Q0CHWEY1038EF.Tenant1.User{x}");
+
+      var firstName = $"First{x}";
+      var lastName = $"Last{x}";
+      var fullName = $"Full{x}";
+
+      var employeeCreationResponse = await client.PostAsJsonAsync("/api/1.0/Employee", new EmployeeModificationModel(firstName, lastName, fullName));
+
+      employeeCreationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+      var employeeRetrievalResponse = await client.GetAsync("/api/1.0/Employee");
+
+      var employeeResponseModel =
+        await employeeRetrievalResponse.Content.ReadFromJsonAsync<EmployeeRetrievalModel>();
+
+      employeeIds.Add(employeeResponseModel?.Id ?? 0);
+    }
+
+    var employee1Id = employeeIds[0];
+    var employee2Id = employeeIds[1];
+    var employee3Id = employeeIds[2];
+    const int employee4Id = 204298046; // Missing employee
+
+    // Act
+
+    var branchRetrievalResponse = await client.GetAsync($"/api/1.0/Employees?Id={employee1Id}&Id={employee2Id}&Id={employee3Id}&Id={employee4Id}");
+
+    if (branchRetrievalResponse.StatusCode != HttpStatusCode.OK)
+    {
+      _testOutputHelper.WriteLine(await branchRetrievalResponse.Content.ReadAsStringAsync());
+    }
+    branchRetrievalResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    var branchResponseModel =
+      await branchRetrievalResponse.Content.ReadFromJsonAsync<QueryResponseModel<EmployeeRetrievalModel>>();
+
+    // Assert
+
+    branchResponseModel.ShouldNotBeNull();
+    branchResponseModel.List.ShouldNotBeNull();
+    branchResponseModel.Page.ShouldBeNull();
+
+    branchResponseModel.List.Count().ShouldBe(3);
+    branchResponseModel.List.ShouldContain(x => x.Id == employee1Id);
+    branchResponseModel.List.ShouldContain(x => x.Id == employee2Id);
+    branchResponseModel.List.ShouldContain(x => x.Id == employee3Id);
+    branchResponseModel.List.ShouldNotContain(x => x.Id == employee4Id);
   }
 
   [Fact]

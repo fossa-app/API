@@ -1,6 +1,7 @@
 ﻿namespace Fossa.API.Web.ApiModels;
 
-public record BranchPagingRequestModel(
+public record EmployeeQueryRequestModel(
+  IReadOnlyList<long>? Id,
   string? Search,
   int? PageNumber,
   int? PageSize);
