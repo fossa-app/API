@@ -177,19 +177,21 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     branchRetrievalResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 
     var branchResponseModel =
-      await branchRetrievalResponse.Content.ReadFromJsonAsync<QueryResponseModel<EmployeeRetrievalModel>>();
+      await branchRetrievalResponse.Content.ReadFromJsonAsync<PagingResponseModel<EmployeeRetrievalModel>>();
 
     // Assert
 
     branchResponseModel.ShouldNotBeNull();
-    branchResponseModel.List.ShouldNotBeNull();
-    branchResponseModel.Page.ShouldBeNull();
 
-    branchResponseModel.List.Count().ShouldBe(3);
-    branchResponseModel.List.ShouldContain(x => x.Id == employee1Id);
-    branchResponseModel.List.ShouldContain(x => x.Id == employee2Id);
-    branchResponseModel.List.ShouldContain(x => x.Id == employee3Id);
-    branchResponseModel.List.ShouldNotContain(x => x.Id == employee4Id);
+    branchResponseModel.PageNumber.ShouldBeNull();
+    branchResponseModel.PageSize.ShouldBeNull();
+    branchResponseModel.TotalItems.ShouldBeNull();
+    branchResponseModel.TotalPages.ShouldBeNull();
+    branchResponseModel.Items.Count.ShouldBe(3);
+    branchResponseModel.Items.ShouldContain(x => x.Id == employee1Id);
+    branchResponseModel.Items.ShouldContain(x => x.Id == employee2Id);
+    branchResponseModel.Items.ShouldContain(x => x.Id == employee3Id);
+    branchResponseModel.Items.ShouldNotContain(x => x.Id == employee4Id);
   }
 
   [Fact]
