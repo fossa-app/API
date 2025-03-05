@@ -35,7 +35,7 @@
         [Microsoft.AspNetCore.Mvc.HttpPut("{id}")]
         public System.Threading.Tasks.Task PutAsync(long id, [Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.BranchModificationModel model, [Microsoft.AspNetCore.Mvc.FromServices] Fossa.API.Core.TimeZone.IDateTimeZoneProvider dateTimeZoneProvider, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<Fossa.API.Web.ApiModels.AddressModel, Fossa.API.Core.Entities.Address> addressModelToDomainMapper, System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Mvc.HttpGet]
-        public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.QueryResponseModel<Fossa.API.Web.ApiModels.BranchRetrievalModel>> QueryAsync([Microsoft.AspNetCore.Mvc.FromQuery] Fossa.API.Web.ApiModels.BranchQueryRequestModel requestModel, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<TIKSN.Data.PageResult<Fossa.API.Core.Entities.BranchEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.BranchRetrievalModel>> pagingMapper, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Web.ApiModels.BranchRetrievalModel> itemMapper, System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.BranchRetrievalModel>> QueryAsync([Microsoft.AspNetCore.Mvc.FromQuery] Fossa.API.Web.ApiModels.BranchQueryRequestModel requestModel, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<TIKSN.Data.PageResult<Fossa.API.Core.Entities.BranchEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.BranchRetrievalModel>> pagingMapper, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<LanguageExt.Seq<Fossa.API.Core.Entities.BranchEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.BranchRetrievalModel>> listingMapper, System.Threading.CancellationToken cancellationToken) { }
     }
     [Asp.Versioning.ApiVersion(1D, null)]
     [Microsoft.AspNetCore.Authorization.Authorize]
@@ -85,7 +85,7 @@
         [Microsoft.AspNetCore.Mvc.HttpPut("{id}")]
         public System.Threading.Tasks.Task PutAsync([Microsoft.AspNetCore.Mvc.FromRoute] long id, [Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.EmployeeManagementModel model, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.BranchId> branchDataIdentityToDomainIdentityMapper, System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Mvc.HttpGet]
-        public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.QueryResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>> QueryAsync([Microsoft.AspNetCore.Mvc.FromQuery] Fossa.API.Web.ApiModels.EmployeeQueryRequestModel requestModel, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<TIKSN.Data.PageResult<Fossa.API.Core.Entities.EmployeeEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>> pagingMapper, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Web.ApiModels.EmployeeRetrievalModel> itemMapper, System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>> QueryAsync([Microsoft.AspNetCore.Mvc.FromQuery] Fossa.API.Web.ApiModels.EmployeeQueryRequestModel requestModel, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<TIKSN.Data.PageResult<Fossa.API.Core.Entities.EmployeeEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>> pagingMapper, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<LanguageExt.Seq<Fossa.API.Core.Entities.EmployeeEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>> listingMapper, System.Threading.CancellationToken cancellationToken) { }
     }
 }
 namespace Fossa.API.Web.Api.Identity
@@ -238,18 +238,12 @@ namespace Fossa.API.Web.ApiModels
     }
     public class PagingResponseModel<T> : System.IEquatable<Fossa.API.Web.ApiModels.PagingResponseModel<T>>
     {
-        public PagingResponseModel(int PageNumber, int PageSize, System.Collections.Generic.IReadOnlyCollection<T> Items, long? TotalItems, long? TotalPages) { }
+        public PagingResponseModel(int? PageNumber, int? PageSize, System.Collections.Generic.IReadOnlyCollection<T> Items, long? TotalItems, long? TotalPages) { }
         public System.Collections.Generic.IReadOnlyCollection<T> Items { get; init; }
-        public int PageNumber { get; init; }
-        public int PageSize { get; init; }
+        public int? PageNumber { get; init; }
+        public int? PageSize { get; init; }
         public long? TotalItems { get; init; }
         public long? TotalPages { get; init; }
-    }
-    public class QueryResponseModel<T> : System.IEquatable<Fossa.API.Web.ApiModels.QueryResponseModel<T>>
-    {
-        public QueryResponseModel(System.Collections.Generic.IEnumerable<T>? List, Fossa.API.Web.ApiModels.PagingResponseModel<T>? Page) { }
-        public System.Collections.Generic.IEnumerable<T>? List { get; init; }
-        public Fossa.API.Web.ApiModels.PagingResponseModel<T>? Page { get; init; }
     }
     public class SystemEntitlementsModel : System.IEquatable<Fossa.API.Web.ApiModels.SystemEntitlementsModel>
     {
@@ -390,9 +384,10 @@ namespace Fossa.API.Web.Mappers
         public LicenseTermsModelMapper(TIKSN.Mapping.IMapper<TIKSN.Licensing.Party, Fossa.API.Web.Mappers.PartyModel> partyModelMapper) { }
         public Fossa.API.Web.Mappers.LicenseTermsModel Map(TIKSN.Licensing.LicenseTerms source) { }
     }
-    public class PagingResponseModelMapper<TEntity, TModel> : TIKSN.Mapping.IMapper<TIKSN.Data.PageResult<TEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<TModel>>
+    public class PagingResponseModelMapper<TEntity, TModel> : TIKSN.Mapping.IMapper<LanguageExt.Seq<TEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<TModel>>, TIKSN.Mapping.IMapper<TIKSN.Data.PageResult<TEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<TModel>>
     {
         public PagingResponseModelMapper(TIKSN.Mapping.IMapper<TEntity, TModel> itemMapper) { }
+        public Fossa.API.Web.ApiModels.PagingResponseModel<TModel> Map(LanguageExt.Seq<TEntity> source) { }
         public Fossa.API.Web.ApiModels.PagingResponseModel<TModel> Map(TIKSN.Data.PageResult<TEntity> source) { }
     }
     public class PartyModel : System.IEquatable<Fossa.API.Web.Mappers.PartyModel>

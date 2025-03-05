@@ -114,36 +114,34 @@ public class BranchesController : BaseApiController<BranchId>
   }
 
   [HttpGet]
-  public async Task<QueryResponseModel<BranchRetrievalModel>> QueryAsync(
+  public Task<PagingResponseModel<BranchRetrievalModel>> QueryAsync(
     [FromQuery] BranchQueryRequestModel requestModel,
     [FromServices] IMapper<PageResult<BranchEntity>, PagingResponseModel<BranchRetrievalModel>> pagingMapper,
-    [FromServices] IMapper<BranchEntity, BranchRetrievalModel> itemMapper,
+    [FromServices] IMapper<Seq<BranchEntity>, PagingResponseModel<BranchRetrievalModel>> listingMapper,
     CancellationToken cancellationToken)
   {
     var tenantId = _tenantIdProvider.GetTenantId();
     var userId = _userIdProvider.GetUserId();
 
-    Either<BranchListingQuery, BranchPagingQuery> command = requestModel.Id?.Count switch
-    {
-      null or 0 => new BranchPagingQuery(
-        tenantId,
-        userId,
-        requestModel.Search ?? string.Empty,
-        new Page(
-          requestModel.PageNumber ?? 0,
-          requestModel.PageSize ?? 0)),
-      _ => new BranchListingQuery(
-        requestModel.Id.Select(_dataIdentityToDomainIdentityMapper.Map).ToSeq(),
-        tenantId,
-        userId),
-    };
-
-    var result = await command.Match<EitherAsync<Seq<BranchEntity>, PageResult<BranchEntity>>>(
-      query => _sender.Send(query, cancellationToken),
-      query => _sender.Send(query, cancellationToken))
-      .BiMap(pagingMapper.Map, x => x.Map(itemMapper.Map))
-      .Match(x => new QueryResponseModel<BranchRetrievalModel>(List: null, x), x => new QueryResponseModel<BranchRetrievalModel>(x, Page: null));
-
-    return result;
+    return (requestModel.Id ?? [])
+      .ToSeq()
+      .Map(_dataIdentityToDomainIdentityMapper.Map)
+      .Match<Either<BranchListingQuery, BranchPagingQuery>>(
+        () => new BranchPagingQuery(
+          tenantId,
+          userId,
+          requestModel.Search ?? string.Empty,
+          new Page(
+            requestModel.PageNumber ?? 0,
+            requestModel.PageSize ?? 0)),
+        ids => new BranchListingQuery(
+          ids,
+          tenantId,
+          userId))
+      .Match<EitherAsync<Seq<BranchEntity>, PageResult<BranchEntity>>>(
+        query => _sender.Send(query, cancellationToken),
+        query => _sender.Send(query, cancellationToken))
+      .BiMap(pagingMapper.Map, listingMapper.Map)
+      .Match(x => x, x => x);
   }
 }
