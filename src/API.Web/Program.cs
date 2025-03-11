@@ -144,7 +144,6 @@ builder.Services.AddOpenTelemetry()
         new KeyValuePair<string, object>("env", builder.Environment.EnvironmentName),
     ])
   )
-  .UseOtlpExporter()
   .WithTracing(tracing => tracing
     .AddSource("*")
     .AddAspNetCoreInstrumentation()
@@ -154,7 +153,8 @@ builder.Services.AddOpenTelemetry()
     .AddMeter("*")
     .AddAspNetCoreInstrumentation()
     .AddHttpClientInstrumentation()
-  );
+  )
+  .UseOtlpExporter();
 
 var app = builder.Build();
 
