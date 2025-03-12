@@ -17,6 +17,8 @@ using Hellang.Middleware.ProblemDetails.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using OpenTelemetry;
+using OpenTelemetry.Exporter;
+using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -154,6 +156,7 @@ builder.Services.AddOpenTelemetry()
     .AddAspNetCoreInstrumentation()
     .AddHttpClientInstrumentation()
   )
+  .WithLogging()
   .UseOtlpExporter();
 
 var app = builder.Build();
