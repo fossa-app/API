@@ -16,7 +16,7 @@
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.3" />
     <PackageVersion Include="Microsoft.Extensions.Hosting" Version="9.0.3" />
     <PackageVersion Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.3" />
-    <PackageVersion Include="Microsoft.Identity.Web" Version="3.8.0" />
+    <PackageVersion Include="Microsoft.Identity.Web" Version="3.8.1" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
     <PackageVersion Include="MongoDB.Driver.Core.Extensions.DiagnosticSources" Version="2.0.0" />
     <PackageVersion Include="OpenTelemetry" Version="1.11.2" />
