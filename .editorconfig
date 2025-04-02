@@ -7,7 +7,7 @@ root = true
 indent_style = space
 trim_trailing_whitespace = true
 vsspell_section_id = cb4a4387061549238f01a4c2739f296e
-vsspell_ignored_keywords_cb4a4387061549238f01a4c2739f296e = Mongo|Validator|validators|Oauth|Auth
+vsspell_ignored_keywords_cb4a4387061549238f01a4c2739f296e = Mongo|Validator|validators|Oauth|Auth|Api
 
 # XML project files
 [*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,projitems,shproj}]
