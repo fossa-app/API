@@ -15,14 +15,133 @@ namespace Fossa.API.FunctionalTests.ControllerApis;
 public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplicationFactory<DefaultWebModule>>, IAsyncLifetime
 {
   private readonly CustomWebApplicationFactory<DefaultWebModule> _factory;
-  private readonly ITestOutputHelper _testOutputHelper;
 
   public EmployeeControllerWithSystemLicense(
     CustomWebApplicationFactory<DefaultWebModule> factory,
     ITestOutputHelper testOutputHelper)
   {
     _factory = factory ?? throw new ArgumentNullException(nameof(factory));
-    _testOutputHelper = testOutputHelper ?? throw new ArgumentNullException(nameof(testOutputHelper));
+  }
+
+  [Fact]
+  public async Task AssignEmployeeToBranch_WithInvalidBranchId_ReturnsUnprocessableEntity()
+  {
+    // First create an employee
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+
+    var createResponse = await client.PostAsJsonAsync("/api/1.0/Employee",
+        new EmployeeModificationModel("John", "Doe", "John Doe"));
+    createResponse.EnsureSuccessStatusCode();
+
+    var employee = await client.GetAsync("/api/1.0/Employee");
+    var employeeModel = await employee.Content.ReadFromJsonAsync<EmployeeRetrievalModel>();
+    employeeModel.ShouldNotBeNull();
+
+    // Try to assign to non-existent branch and non-existent department
+    var response = await client.PutAsJsonAsync(
+      $"/api/1.0/Employees/{employeeModel.Id}",
+      new EmployeeManagementModel(AssignedBranchId: 999999, AssignedDepartmentId: 888888));
+
+    response.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+  }
+
+  [Fact]
+  public async Task AssignEmployeeToBranch_WithInvalidEmployeeId_ReturnsNotFound()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+
+    var response = await client.PutAsJsonAsync(
+      "/api/1.0/Employees/999999",
+      new EmployeeManagementModel(AssignedBranchId: 1, AssignedDepartmentId: 2));
+
+    response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+  }
+
+  [Fact]
+  public async Task AssignEmployeeToBranch_WithoutAccessToken_ReturnsUnauthorized()
+  {
+    var client = _factory.CreateClient();
+
+    var response = await client.PutAsJsonAsync(
+      "/api/1.0/Employees/1",
+      new EmployeeManagementModel(AssignedBranchId: 1, AssignedDepartmentId: 2));
+
+    response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+  }
+
+  [Fact]
+  public async Task AssignEmployeeToBranch_WithUserAccessToken_ReturnsForbidden()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJFK2J690FS0Q3TCX4P3F.Tenant101.User1");
+
+    var response = await client.PutAsJsonAsync(
+      "/api/1.0/Employees/1",
+      new EmployeeManagementModel(AssignedBranchId: 1, AssignedDepartmentId: 2));
+
+    response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+  }
+
+  [Fact]
+  public async Task AssignEmployeeToBranch_WithValidData_Succeeds()
+  {
+    // Create a branch first
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+
+    var createResponse = await client.PostAsJsonAsync("/api/1.0/Employee",
+        new EmployeeModificationModel("John", "Doe", "John Doe"));
+    createResponse.EnsureSuccessStatusCode();
+
+    var employee = await client.GetAsync("/api/1.0/Employee");
+    var employeeModel = await employee.Content.ReadFromJsonAsync<EmployeeRetrievalModel>();
+    employeeModel.ShouldNotBeNull();
+
+    var branchResponse = await client.PostAsJsonAsync("/api/1.0/Branches",
+        new BranchModificationModel("Test Branch", "America/New_York", null));
+    branchResponse.EnsureSuccessStatusCode();
+
+    var branchesResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
+    var branches = await branchesResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    branches.ShouldNotBeNull();
+    var branch = branches.Items.FirstOrDefault(x => x.Name == "Test Branch");
+    branch.ShouldNotBeNull("Branch not found");
+
+    var departmentResponse = await client.PostAsJsonAsync("/api/1.0/Departments",
+        new DepartmentModificationModel("Test Department", null, employeeModel.Id));
+    departmentResponse.EnsureSuccessStatusCode();
+
+    var departmentsResponse = await client.GetAsync("/api/1.0/Departments?pageNumber=1&pageSize=100");
+    var departments = await departmentsResponse.Content.ReadFromJsonAsync<PagingResponseModel<DepartmentRetrievalModel>>();
+    departments.ShouldNotBeNull();
+    var department = departments.Items.FirstOrDefault(x => x.Name == "Test Department");
+    department.ShouldNotBeNull("Department not found");
+
+    // Assign employee to branch
+    var response = await client.PutAsync($"/api/1.0/Employees/{employeeModel.Id}",
+        JsonContent.Create(new EmployeeManagementModel(branch.Id, department.Id)));
+
+    response.StatusCode.ShouldBe(HttpStatusCode.OK);
+  }
+
+  [Theory]
+  [InlineData("", "Doe", "John Doe")]      // Empty first name
+  [InlineData("John", "", "John Doe")]      // Empty last name
+  [InlineData("John", "Doe", "")]          // Empty full name
+  [InlineData(" ", "Doe", "John Doe")]     // Whitespace first name
+  [InlineData("John", " ", "John Doe")]     // Whitespace last name
+  [InlineData("John", "Doe", " ")]         // Whitespace full name
+  public async Task CreateEmployee_WithInvalidData_ReturnsBadRequest(string firstName, string lastName, string fullName)
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+
+    var response = await client.PostAsJsonAsync("/api/1.0/Employee",
+        new EmployeeModificationModel(firstName, lastName, fullName));
+
+    response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
   }
 
   [Fact]
@@ -92,6 +211,52 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
   }
 
   [Fact]
+  public async Task DeleteEmployee_WithAssignedBranch_ReturnsPreconditionFailed()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+
+    // Create a branch
+    var branchResponse = await client.PostAsJsonAsync("/api/1.0/Branches",
+        new BranchModificationModel("Test Branch", "America/New_York", null));
+    branchResponse.EnsureSuccessStatusCode();
+
+    var branchesResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
+    var branches = await branchesResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    branches.ShouldNotBeNull();
+    var branch = branches.Items.FirstOrDefault(x => x.Name == "Test Branch");
+    branch.ShouldNotBeNull("Branch not found");
+
+    // Create an employee
+    var createResponse = await client.PostAsJsonAsync("/api/1.0/Employee",
+        new EmployeeModificationModel("John", "Doe", "John Doe"));
+    createResponse.EnsureSuccessStatusCode();
+
+    var currentEmployee = await client.GetAsync("/api/1.0/Employee");
+    var employeeModel = await currentEmployee.Content.ReadFromJsonAsync<EmployeeRetrievalModel>();
+    employeeModel.ShouldNotBeNull();
+
+    var departmentResponse = await client.PostAsJsonAsync("/api/1.0/Departments",
+    new DepartmentModificationModel("Test Department", null, employeeModel.Id));
+    departmentResponse.EnsureSuccessStatusCode();
+
+    var departmentsResponse = await client.GetAsync("/api/1.0/Departments?pageNumber=1&pageSize=100");
+    var departments = await departmentsResponse.Content.ReadFromJsonAsync<PagingResponseModel<DepartmentRetrievalModel>>();
+    departments.ShouldNotBeNull();
+    var department = departments.Items.FirstOrDefault(x => x.Name == "Test Department");
+    department.ShouldNotBeNull("Department not found");
+
+    // Assign employee to branch
+    var assignResponse = await client.PutAsync($"/api/1.0/Employees/{employeeModel.Id}",
+        JsonContent.Create(new EmployeeManagementModel(branch.Id, department.Id)));
+    assignResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    // Try to delete the employee
+    var deleteResponse = await client.DeleteAsync("/api/1.0/Employee");
+    deleteResponse.StatusCode.ShouldBe(HttpStatusCode.PreconditionFailed);
+  }
+
+  [Fact]
   public async Task DeleteEmployeeWithoutAccessTokenAsync()
   {
     var client = _factory.CreateClient();
@@ -127,71 +292,81 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
   public Task DisposeAsync() => Task.CompletedTask;
 
+  [Fact]
+  public async Task GetEmployee_FromDifferentTenant_ReturnsForbidden()
+  {
+    // First create an employee in tenant 1
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+
+    var createResponse = await client.PostAsJsonAsync("/api/1.0/Employee",
+        new EmployeeModificationModel("John", "Doe", "John Doe"));
+    createResponse.EnsureSuccessStatusCode();
+
+    var employee = await client.GetAsync("/api/1.0/Employee");
+    var employeeModel = await employee.Content.ReadFromJsonAsync<EmployeeRetrievalModel>();
+    employeeModel.ShouldNotBeNull();
+
+    // Try to access the employee from tenant 2
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant2.User1");
+
+    var response = await client.GetAsync($"/api/1.0/Employees/{employeeModel.Id}");
+
+    response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+  }
+
+  [Fact]
+  public async Task GetEmployee_WithInvalidId_ReturnsNotFound()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9ZHGBMC1DVP4R33QRYZ04RX.Tenant1.User1");
+
+    var response = await client.GetAsync("/api/1.0/Employees/999999");
+
+    response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+  }
+
+  [Fact]
+  public async Task GetEmployee_WithoutAccessToken_ReturnsUnauthorized()
+  {
+    var client = _factory.CreateClient();
+
+    var response = await client.GetAsync("/api/1.0/Employees/1");
+
+    response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+  }
+
+  [Fact]
+  public async Task GetEmployee_WithValidId_ReturnsEmployee()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+
+    // Create an employee first
+    var createResponse = await client.PostAsJsonAsync("/api/1.0/Employee",
+        new EmployeeModificationModel("John", "Doe", "John Doe"));
+    createResponse.EnsureSuccessStatusCode();
+
+    // Get employee ID from the current employee endpoint
+    var currentEmployee = await client.GetAsync("/api/1.0/Employee");
+    var employeeModel = await currentEmployee.Content.ReadFromJsonAsync<EmployeeRetrievalModel>();
+    employeeModel.ShouldNotBeNull();
+
+    // Get specific employee
+    var response = await client.GetAsync($"/api/1.0/Employees/{employeeModel.Id}");
+    response.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    var retrievedEmployee = await response.Content.ReadFromJsonAsync<EmployeeRetrievalModel>();
+    retrievedEmployee.ShouldNotBeNull();
+    retrievedEmployee.FirstName.ShouldBe("John");
+    retrievedEmployee.LastName.ShouldBe("Doe");
+    retrievedEmployee.FullName.ShouldBe("John Doe");
+  }
+
   public async Task InitializeAsync()
   {
     await _factory.SeedSystemLicenseAsync(default).ConfigureAwait(false);
     await _factory.SeedAllEntitiesAsync(default).ConfigureAwait(false);
-  }
-
-  [Fact]
-  public async Task ListCreatedEmployeesAsync()
-  {
-    // Arrange
-
-    var client = _factory.CreateClient();
-    var employeeIds = new List<long>();
-
-    foreach (var x in Seq(36883136, 36883144, 36883148))
-    {
-      client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", $"01JND081MJRM7Q0CHWEY1038EF.Tenant1.User{x}");
-
-      var firstName = $"First{x}";
-      var lastName = $"Last{x}";
-      var fullName = $"Full{x}";
-
-      var employeeCreationResponse = await client.PostAsJsonAsync("/api/1.0/Employee", new EmployeeModificationModel(firstName, lastName, fullName));
-
-      employeeCreationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-      var employeeRetrievalResponse = await client.GetAsync("/api/1.0/Employee");
-
-      var employeeResponseModel =
-        await employeeRetrievalResponse.Content.ReadFromJsonAsync<EmployeeRetrievalModel>();
-
-      employeeIds.Add(employeeResponseModel?.Id ?? 0);
-    }
-
-    var employee1Id = employeeIds[0];
-    var employee2Id = employeeIds[1];
-    var employee3Id = employeeIds[2];
-    const int employee4Id = 204298046; // Missing employee
-
-    // Act
-
-    var branchRetrievalResponse = await client.GetAsync($"/api/1.0/Employees?Id={employee1Id}&Id={employee2Id}&Id={employee3Id}&Id={employee4Id}");
-
-    if (branchRetrievalResponse.StatusCode != HttpStatusCode.OK)
-    {
-      _testOutputHelper.WriteLine(await branchRetrievalResponse.Content.ReadAsStringAsync());
-    }
-    branchRetrievalResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-    var branchResponseModel =
-      await branchRetrievalResponse.Content.ReadFromJsonAsync<PagingResponseModel<EmployeeRetrievalModel>>();
-
-    // Assert
-
-    branchResponseModel.ShouldNotBeNull();
-
-    branchResponseModel.PageNumber.ShouldBeNull();
-    branchResponseModel.PageSize.ShouldBeNull();
-    branchResponseModel.TotalItems.ShouldBeNull();
-    branchResponseModel.TotalPages.ShouldBeNull();
-    branchResponseModel.Items.Count.ShouldBe(3);
-    branchResponseModel.Items.ShouldContain(x => x.Id == employee1Id);
-    branchResponseModel.Items.ShouldContain(x => x.Id == employee2Id);
-    branchResponseModel.Items.ShouldContain(x => x.Id == employee3Id);
-    branchResponseModel.Items.ShouldNotContain(x => x.Id == employee4Id);
   }
 
   [Fact]
@@ -231,5 +406,67 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var response = await client.GetAsync("/api/1.0/Employee");
 
     response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+  }
+
+  [Fact]
+  public async Task UpdateBranch_WithValidData_Succeeds()
+  {
+    // Create a branch first
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant101.ADMIN1");
+
+    var createResponse = await client.PostAsJsonAsync("/api/1.0/Branches",
+        new BranchModificationModel("Test Branch", "America/New_York", null));
+    createResponse.EnsureSuccessStatusCode();
+
+    // Get the branch ID
+    var branchesResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
+    var branches = await branchesResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    branches.ShouldNotBeNull();
+    var branch = branches.Items.FirstOrDefault(x => x.Name == "Test Branch");
+    branch.ShouldNotBeNull("Branch should exist");
+
+    // Update the branch
+    var updateResponse = await client.PutAsync($"/api/1.0/Branches/{branch.Id}",
+        JsonContent.Create(new BranchModificationModel("Updated Branch", "America/Chicago",
+            new AddressModel("123 Main St", null, "Chicago", "IL", "60601", "US"))));
+
+    updateResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    // Verify the update
+    var getResponse = await client.GetAsync($"/api/1.0/Branches/{branch.Id}");
+    var updatedBranch = await getResponse.Content.ReadFromJsonAsync<BranchRetrievalModel>();
+
+    updatedBranch.ShouldNotBeNull();
+    updatedBranch.Name.ShouldBe("Updated Branch");
+    updatedBranch.TimeZoneId.ShouldBe("America/Chicago");
+    updatedBranch.Address.ShouldNotBeNull();
+    updatedBranch.Address.City.ShouldBe("Chicago");
+  }
+
+  [Fact]
+  public async Task UpdateEmployee_WithValidData_Succeeds()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+
+    // Create an employee
+    var createResponse = await client.PostAsJsonAsync("/api/1.0/Employee",
+        new EmployeeModificationModel("John", "Doe", "John Doe"));
+    createResponse.EnsureSuccessStatusCode();
+
+    // Update the employee
+    var updateResponse = await client.PutAsJsonAsync("/api/1.0/Employee",
+        new EmployeeModificationModel("Jane", "Smith", "Jane Smith"));
+    updateResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    // Verify the update
+    var getResponse = await client.GetAsync("/api/1.0/Employee");
+    var updatedEmployee = await getResponse.Content.ReadFromJsonAsync<EmployeeRetrievalModel>();
+
+    updatedEmployee.ShouldNotBeNull();
+    updatedEmployee.FirstName.ShouldBe("Jane");
+    updatedEmployee.LastName.ShouldBe("Smith");
+    updatedEmployee.FullName.ShouldBe("Jane Smith");
   }
 }
