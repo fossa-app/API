@@ -273,4 +273,36 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
     // Assert
     updateResponse.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
   }
+
+  [Fact]
+  public async Task UpdateCompanyWithAdministratorAccessTokenAndUnlicensedCountryAsync()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant102.ADMIN1");
+
+    var response = await client.PutAsync("/api/1.0/Company",
+        JsonContent.Create(new CompanyModificationModel("UpdatedCompany", "KZ")));
+
+    response.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+  }
+
+  [Fact]
+  public async Task UpdateCompanyWithAdministratorAccessTokenWithLicensedCountryAsync()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant101.ADMIN1");
+    const string updatedCompanyName = "Company-Updated-40264474";
+
+    var response = await client.PutAsync("/api/1.0/Company",
+        JsonContent.Create(new CompanyModificationModel(updatedCompanyName, "US")));
+
+    response.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    var retrievalResponse = await client.GetAsync("/api/1.0/Company");
+
+    var responseModel = await retrievalResponse.Content.ReadFromJsonAsync<CompanyRetrievalModel>();
+    responseModel.ShouldNotBeNull();
+    responseModel.Name.ShouldBe(updatedCompanyName);
+    responseModel.CountryCode.ShouldBe("US");
+  }
 }
