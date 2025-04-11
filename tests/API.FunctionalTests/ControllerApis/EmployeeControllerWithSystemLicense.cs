@@ -26,6 +26,99 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
   }
 
   [Fact]
+  public async Task AssignEmployeeToBranch_WithInvalidBranchId_ReturnsUnprocessableEntity()
+  {
+    // First create an employee
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+
+    var createResponse = await client.PostAsJsonAsync("/api/1.0/Employee",
+        new EmployeeModificationModel("John", "Doe", "John Doe"));
+    createResponse.EnsureSuccessStatusCode();
+
+    var employee = await client.GetAsync("/api/1.0/Employee");
+    var employeeModel = await employee.Content.ReadFromJsonAsync<EmployeeRetrievalModel>();
+    employeeModel.ShouldNotBeNull();
+
+    // Try to assign to non-existent branch
+    var response = await client.PutAsJsonAsync(
+      $"/api/1.0/Employees/{employeeModel.Id}",
+      new EmployeeManagementModel(AssignedBranchId: 999999));
+
+    response.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+  }
+
+  [Fact]
+  public async Task AssignEmployeeToBranch_WithInvalidEmployeeId_ReturnsNotFound()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+
+    var response = await client.PutAsJsonAsync(
+      "/api/1.0/Employees/999999",
+      new EmployeeManagementModel(AssignedBranchId: 1));
+
+    response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+  }
+
+  [Fact]
+  public async Task AssignEmployeeToBranch_WithoutAccessToken_ReturnsUnauthorized()
+  {
+    var client = _factory.CreateClient();
+
+    var response = await client.PutAsJsonAsync(
+      "/api/1.0/Employees/1",
+      new EmployeeManagementModel(AssignedBranchId: 1));
+
+    response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+  }
+
+  [Fact]
+  public async Task AssignEmployeeToBranch_WithUserAccessToken_ReturnsForbidden()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJFK2J690FS0Q3TCX4P3F.Tenant101.User1");
+
+    var response = await client.PutAsJsonAsync(
+      "/api/1.0/Employees/1",
+      new EmployeeManagementModel(AssignedBranchId: 1));
+
+    response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+  }
+
+  [Fact]
+  public async Task AssignEmployeeToBranch_WithValidData_Succeeds()
+  {
+    // Create a branch first
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+
+    var branchResponse = await client.PostAsJsonAsync("/api/1.0/Branches",
+        new BranchModificationModel("Test Branch", "America/New_York", null));
+    branchResponse.EnsureSuccessStatusCode();
+
+    var branchesResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
+    var branches = await branchesResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    branches.ShouldNotBeNull();
+    var branch = branches.Items.First(x => x.Name == "Test Branch");
+
+    // Create an employee
+    var createResponse = await client.PostAsJsonAsync("/api/1.0/Employee",
+        new EmployeeModificationModel("John", "Doe", "John Doe"));
+    createResponse.EnsureSuccessStatusCode();
+
+    var employee = await client.GetAsync("/api/1.0/Employee");
+    var employeeModel = await employee.Content.ReadFromJsonAsync<EmployeeRetrievalModel>();
+    employeeModel.ShouldNotBeNull();
+
+    // Assign employee to branch
+    var response = await client.PutAsync($"/api/1.0/Employees/{employeeModel.Id}",
+        JsonContent.Create(new EmployeeManagementModel(branch.Id)));
+
+    response.StatusCode.ShouldBe(HttpStatusCode.OK);
+  }
+
+  [Fact]
   public async Task CreateEmployeeWithoutAccessTokenAsync()
   {
     var client = _factory.CreateClient();
@@ -126,6 +219,50 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
   }
 
   public Task DisposeAsync() => Task.CompletedTask;
+
+  [Fact]
+  public async Task GetEmployee_FromDifferentTenant_ReturnsForbidden()
+  {
+    // First create an employee in tenant 1
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+
+    var createResponse = await client.PostAsJsonAsync("/api/1.0/Employee",
+        new EmployeeModificationModel("John", "Doe", "John Doe"));
+    createResponse.EnsureSuccessStatusCode();
+
+    var employee = await client.GetAsync("/api/1.0/Employee");
+    var employeeModel = await employee.Content.ReadFromJsonAsync<EmployeeRetrievalModel>();
+    employeeModel.ShouldNotBeNull();
+
+    // Try to access the employee from tenant 2
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant2.User1");
+
+    var response = await client.GetAsync($"/api/1.0/Employees/{employeeModel.Id}");
+
+    response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+  }
+
+  [Fact]
+  public async Task GetEmployee_WithInvalidId_ReturnsNotFound()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9ZHGBMC1DVP4R33QRYZ04RX.Tenant1.User1");
+
+    var response = await client.GetAsync("/api/1.0/Employees/999999");
+
+    response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+  }
+
+  [Fact]
+  public async Task GetEmployee_WithoutAccessToken_ReturnsUnauthorized()
+  {
+    var client = _factory.CreateClient();
+
+    var response = await client.GetAsync("/api/1.0/Employees/1");
+
+    response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+  }
 
   public async Task InitializeAsync()
   {
