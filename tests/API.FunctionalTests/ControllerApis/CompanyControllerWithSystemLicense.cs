@@ -185,4 +185,92 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
 
     response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
   }
+
+  [Fact]
+  public async Task UpdateCompanyWithAdministratorAccessTokenWithValidDataAsync()
+  {
+    // Arrange
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant101.ADMIN1");
+    const string modifiedName = "Modified Company Name";
+    const string modifiedCountryCode = "US";
+
+    // Act
+    var updateResponse = await client.PutAsJsonAsync("/api/1.0/Company", new CompanyModificationModel(modifiedName, modifiedCountryCode));
+
+    // Assert
+    updateResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    var retrievalResponse = await client.GetAsync("/api/1.0/Company");
+    var responseModel = await retrievalResponse.Content.ReadFromJsonAsync<CompanyRetrievalModel>();
+
+    responseModel.ShouldNotBeNull();
+    responseModel.Name.ShouldBe(modifiedName);
+    responseModel.CountryCode.ShouldBe(modifiedCountryCode);
+  }
+
+  [Fact]
+  public async Task UpdateCompanyWithAdministratorAccessTokenWithInvalidCountryAsync()
+  {
+    // Arrange
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant101.ADMIN1");
+    const string modifiedName = "Modified Company Name";
+    const string invalidCountryCode = "XX"; // Invalid country code
+
+    // Act
+    var updateResponse = await client.PutAsJsonAsync("/api/1.0/Company", new CompanyModificationModel(modifiedName, invalidCountryCode));
+
+    // Assert
+    updateResponse.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+  }
+
+  [Fact]
+  public async Task UpdateCompanyWithUserAccessTokenAsync()
+  {
+    // Arrange
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJFK2J690FS0Q3TCX4P3F.Tenant101.User1");
+    const string modifiedName = "Modified Company Name";
+    const string modifiedCountryCode = "US";
+
+    // Act
+    var response = await client.PutAsJsonAsync("/api/1.0/Company", new CompanyModificationModel(modifiedName, modifiedCountryCode));
+
+    // Assert
+    response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+  }
+
+  [Fact]
+  public async Task UpdateCompanyWithoutAccessTokenAsync()
+  {
+    // Arrange
+    var client = _factory.CreateClient();
+    const string modifiedName = "Modified Company Name";
+    const string modifiedCountryCode = "US";
+
+    // Act
+    var response = await client.PutAsJsonAsync("/api/1.0/Company", new CompanyModificationModel(modifiedName, modifiedCountryCode));
+
+    // Assert
+    response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+  }
+
+  [Theory]
+  [InlineData(null, "US")]
+  [InlineData("", "US")]
+  [InlineData("Test Company", null)]
+  [InlineData("Test Company", "")]
+  public async Task UpdateCompanyWithAdministratorAccessTokenWithEmptyValuesAsync(string? name, string? countryCode)
+  {
+    // Arrange
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant101.ADMIN1");
+
+    // Act
+    var updateResponse = await client.PutAsJsonAsync("/api/1.0/Company", new CompanyModificationModel(name, countryCode));
+
+    // Assert
+    updateResponse.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+  }
 }
