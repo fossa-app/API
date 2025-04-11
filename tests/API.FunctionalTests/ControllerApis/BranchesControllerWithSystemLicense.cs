@@ -281,6 +281,94 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   }
 
   [Fact]
+  public async Task ListBranches_WithSearchTerm_ReturnsFilteredResultsAsync()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+
+    // Create branches with distinct names
+    await client.PostAsJsonAsync("/api/1.0/Branches",
+        new BranchModificationModel("NYC Downtown Branch", "America/New_York", null));
+    await client.PostAsJsonAsync("/api/1.0/Branches",
+        new BranchModificationModel("LA Downtown Branch", "America/Los_Angeles", null));
+    await client.PostAsJsonAsync("/api/1.0/Branches",
+        new BranchModificationModel("NYC Uptown Branch", "America/New_York", null));
+
+    // Search for NYC branches
+    var response = await client.GetAsync("/api/1.0/Branches?search=NYC&pageNumber=1&pageSize=10");
+
+    response.StatusCode.ShouldBe(HttpStatusCode.OK);
+    var result = await response.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+
+    result.ShouldNotBeNull();
+    result.Items.Count.ShouldBe(2);
+    result.Items.All(x => x.Name.Contains("NYC")).ShouldBeTrue();
+  }
+
+  [Fact]
+  public async Task ListBranches_WithSpecificIds_ReturnsRequestedBranchesAsync()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+
+    // Create branches and collect their IDs
+    var branchIds = new List<long>();
+    for (int i = 1; i <= 3; i++)
+    {
+      var response1 = await client.PostAsJsonAsync("/api/1.0/Branches",
+          new BranchModificationModel($"Test Branch {i}", "America/New_York", null));
+      response1.EnsureSuccessStatusCode();
+
+      var branchesResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
+      var branches = await branchesResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+      branches.ShouldNotBeNull();
+      var branch = branches.Items.First(x => x.Name == $"Test Branch {i}");
+      branchIds.Add(branch.Id);
+    }
+
+    // Request specific branches by ID
+    var response2 = await client.GetAsync($"/api/1.0/Branches?id={branchIds[0]}&id={branchIds[1]}");
+
+    response2.StatusCode.ShouldBe(HttpStatusCode.OK);
+    var result = await response2.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+
+    result.ShouldNotBeNull();
+    result.Items.Count.ShouldBe(2);
+    result.Items.Select(x => x.Id).ShouldContain(branchIds[0]);
+    result.Items.Select(x => x.Id).ShouldContain(branchIds[1]);
+    result.Items.Select(x => x.Id).ShouldNotContain(branchIds[2]);
+  }
+
+  [Theory]
+  [InlineData(1, 5)]
+  [InlineData(2, 3)]
+  [InlineData(1, 10)]
+  public async Task ListBranches_WithValidPaging_ReturnsPaginatedResultsAsync(int pageNumber, int pageSize)
+  {
+    // Create multiple branches
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+
+    for (int i = 1; i <= 12; i++)
+    {
+      var response1 = await client.PostAsJsonAsync("/api/1.0/Branches",
+          new BranchModificationModel($"Test Branch {i}", "America/New_York", null));
+      response1.EnsureSuccessStatusCode();
+    }
+
+    // Get paginated results
+    var response2 = await client.GetAsync($"/api/1.0/Branches?pageNumber={pageNumber}&pageSize={pageSize}");
+
+    response2.StatusCode.ShouldBe(HttpStatusCode.OK);
+    var result = await response2.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+
+    result.ShouldNotBeNull();
+    result.PageNumber.ShouldBe(pageNumber);
+    result.PageSize.ShouldBe(pageSize);
+    result.Items.Count.ShouldBeLessThanOrEqualTo(pageSize);
+  }
+
+  [Fact]
   public async Task ListCreatedBranchesAsync()
   {
     // Arrange
@@ -480,6 +568,105 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     response2Model.Items.Single(x => string.Equals(x.Name, modificationBranchName, StringComparison.OrdinalIgnoreCase)).Address?.Subdivision.ShouldBe(modificationAddress.Subdivision);
     response2Model.Items.Single(x => string.Equals(x.Name, modificationBranchName, StringComparison.OrdinalIgnoreCase)).Address?.PostalCode.ShouldBe(modificationAddress.PostalCode);
     response2Model.Items.Single(x => string.Equals(x.Name, modificationBranchName, StringComparison.OrdinalIgnoreCase)).Address?.CountryCode.ShouldBe(modificationAddress.CountryCode);
+  }
+
+  [Theory]
+  [InlineData(0, 10)]   // Invalid page number
+  [InlineData(1, 0)]    // Invalid page size
+  [InlineData(-1, 10)]  // Negative page number
+  [InlineData(1, -1)]   // Negative page size
+  [InlineData(1, 1001)] // Page size too large
+  public async Task ListBranches_WithInvalidPaging_ReturnsUnprocessableEntityAsync(int pageNumber, int pageSize)
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant101.ADMIN1");
+
+    var response = await client.GetAsync($"/api/1.0/Branches?pageNumber={pageNumber}&pageSize={pageSize}");
+
+    response.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+  }
+
+  [Fact]
+  public async Task UpdateBranch_WithValidData_SucceedsAsync()
+  {
+    // Create a branch first
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+
+    const string branchName = "Test Branch 647834591";
+    var createResponse = await client.PostAsJsonAsync("/api/1.0/Branches",
+        new BranchModificationModel(branchName, "America/New_York", null));
+    createResponse.EnsureSuccessStatusCode();
+
+    // Get the branch ID
+    var branchesResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
+    var branches = await branchesResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    branches.ShouldNotBeNull();
+    var branch = branches.Items.First(x => x.Name == branchName);
+
+    // Update the branch
+    var updateResponse = await client.PutAsync($"/api/1.0/Branches/{branch.Id}",
+        JsonContent.Create(new BranchModificationModel("Updated Branch", "America/Chicago",
+            new AddressModel("123 Main St", null, "Chicago", "IL", "60601", "US"))));
+
+    updateResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    // Verify the update
+    var getResponse = await client.GetAsync($"/api/1.0/Branches/{branch.Id}");
+    var updatedBranch = await getResponse.Content.ReadFromJsonAsync<BranchRetrievalModel>();
+
+    updatedBranch.ShouldNotBeNull();
+    updatedBranch.Name.ShouldBe("Updated Branch");
+    updatedBranch.TimeZoneId.ShouldBe("America/Chicago");
+    updatedBranch.Address.ShouldNotBeNull();
+    updatedBranch.Address.City.ShouldBe("Chicago");
+  }
+
+  [Fact]
+  public async Task UpdateBranch_WithInvalidTimeZone_ReturnsUnprocessableEntityAsync()
+  {
+    // Create a branch first
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+
+    const string branchName = "Test Branch 984679490";
+    var createResponse = await client.PostAsJsonAsync("/api/1.0/Branches",
+        new BranchModificationModel(branchName, "America/New_York", null));
+    createResponse.EnsureSuccessStatusCode();
+
+    var branchesResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
+    var branches = await branchesResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    branches.ShouldNotBeNull();
+    var branch = branches.Items.First(x => x.Name == branchName);
+
+    // Try to update with invalid timezone
+    var updateResponse = await client.PutAsync($"/api/1.0/Branches/{branch.Id}",
+        JsonContent.Create(new BranchModificationModel("Updated Branch", "Invalid/TimeZone", null)));
+
+    updateResponse.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+  }
+
+  [Fact]
+  public async Task UpdateBranch_WithInvalidBranchId_ReturnsNotFoundAsync()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant101.ADMIN1");
+
+    var updateResponse = await client.PutAsync("/api/1.0/Branches/999999",
+        JsonContent.Create(new BranchModificationModel("Updated Branch", "America/Chicago", null)));
+
+    updateResponse.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+  }
+
+  [Fact]
+  public async Task UpdateBranch_WithoutAuthorization_ReturnsUnauthorizedAsync()
+  {
+    var client = _factory.CreateClient();
+
+    var updateResponse = await client.PutAsync("/api/1.0/Branches/1",
+        JsonContent.Create(new BranchModificationModel("Updated Branch", "America/Chicago", null)));
+
+    updateResponse.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
   }
 
   [Fact]
