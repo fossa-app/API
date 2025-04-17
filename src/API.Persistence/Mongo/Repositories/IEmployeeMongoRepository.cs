@@ -26,6 +26,10 @@ public interface IEmployeeMongoRepository : IMongoRepository<EmployeeMongoEntity
     long companyId,
     CancellationToken cancellationToken);
 
+  Task<bool> HasDependencyOnDepartmentAsync(
+    long departmentId,
+    CancellationToken cancellationToken);
+
   Task<PageResult<EmployeeMongoEntity>> PageAsync(
     TenantEmployeePageQuery pageQuery,
     CancellationToken cancellationToken);
