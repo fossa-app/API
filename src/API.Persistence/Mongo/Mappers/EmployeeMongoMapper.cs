@@ -7,18 +7,22 @@ namespace Fossa.API.Persistence.Mongo.Mappers;
 public class EmployeeMongoMapper : IMapper<EmployeeMongoEntity, EmployeeEntity>,
   IMapper<EmployeeEntity, EmployeeMongoEntity>
 {
-  private readonly IMapper<EmployeeId, long> _domainIdentityToDataIdentityMapper;
-  private readonly IMapper<long, EmployeeId> _dataIdentityToDomainIdentityMapper;
-  private readonly IMapper<CompanyId, long> _companyDomainIdentityToDataIdentityMapper;
-  private readonly IMapper<long, CompanyId> _companyDataIdentityToDomainIdentityMapper;
-  private readonly IMapper<BranchId, long> _branchDomainIdentityToDataIdentityMapper;
   private readonly IMapper<long, BranchId> _branchDataIdentityToDomainIdentityMapper;
+  private readonly IMapper<BranchId, long> _branchDomainIdentityToDataIdentityMapper;
+  private readonly IMapper<long, CompanyId> _companyDataIdentityToDomainIdentityMapper;
+  private readonly IMapper<CompanyId, long> _companyDomainIdentityToDataIdentityMapper;
+  private readonly IMapper<long, EmployeeId> _dataIdentityToDomainIdentityMapper;
+  private readonly IMapper<long, DepartmentId> _departmentDataToDomainIdentityMapper;
+  private readonly IMapper<DepartmentId, long> _departmentDomainToDataIdentityMapper;
+  private readonly IMapper<EmployeeId, long> _domainIdentityToDataIdentityMapper;
 
   public EmployeeMongoMapper(
     IMapper<EmployeeId, long> domainIdentityToDataIdentityMapper,
     IMapper<long, EmployeeId> dataIdentityToDomainIdentityMapper,
     IMapper<CompanyId, long> companyDomainIdentityToDataIdentityMapper,
     IMapper<long, CompanyId> companyDataIdentityToDomainIdentityMapper,
+    IMapper<DepartmentId, long> departmentDomainToDataIdentityMapper,
+    IMapper<long, DepartmentId> departmentDataToDomainIdentityMapper,
     IMapper<BranchId, long> branchDomainIdentityToDataIdentityMapper,
     IMapper<long, BranchId> branchDataIdentityToDomainIdentityMapper)
   {
@@ -27,6 +31,8 @@ public class EmployeeMongoMapper : IMapper<EmployeeMongoEntity, EmployeeEntity>,
     _companyDomainIdentityToDataIdentityMapper = companyDomainIdentityToDataIdentityMapper ?? throw new ArgumentNullException(nameof(companyDomainIdentityToDataIdentityMapper));
     _companyDataIdentityToDomainIdentityMapper = companyDataIdentityToDomainIdentityMapper ?? throw new ArgumentNullException(nameof(companyDataIdentityToDomainIdentityMapper));
     _branchDomainIdentityToDataIdentityMapper = branchDomainIdentityToDataIdentityMapper ?? throw new ArgumentNullException(nameof(branchDomainIdentityToDataIdentityMapper));
+    _departmentDomainToDataIdentityMapper = departmentDomainToDataIdentityMapper ?? throw new ArgumentNullException(nameof(departmentDomainToDataIdentityMapper));
+    _departmentDataToDomainIdentityMapper = departmentDataToDomainIdentityMapper ?? throw new ArgumentNullException(nameof(departmentDataToDomainIdentityMapper));
     _branchDataIdentityToDomainIdentityMapper = branchDataIdentityToDomainIdentityMapper ?? throw new ArgumentNullException(nameof(branchDataIdentityToDomainIdentityMapper));
   }
 
@@ -38,6 +44,7 @@ public class EmployeeMongoMapper : IMapper<EmployeeMongoEntity, EmployeeEntity>,
       source.UserID,
       _companyDataIdentityToDomainIdentityMapper.Map(source.CompanyId),
       Optional(source.AssignedBranchId).Map(_branchDataIdentityToDomainIdentityMapper.Map),
+      Optional(source.AssignedDepartmentId).Map(_departmentDataToDomainIdentityMapper.Map),
       source.FirstName ?? string.Empty,
       source.LastName ?? string.Empty,
       source.FullName ?? string.Empty);
@@ -52,6 +59,7 @@ public class EmployeeMongoMapper : IMapper<EmployeeMongoEntity, EmployeeEntity>,
       UserID = source.UserID,
       CompanyId = _companyDomainIdentityToDataIdentityMapper.Map(source.CompanyId),
       AssignedBranchId = source.AssignedBranchId.Map(_branchDomainIdentityToDataIdentityMapper.Map).MatchUnsafe(s => s, (long?)null),
+      AssignedDepartmentId = source.AssignedDepartmentId.Map(_departmentDomainToDataIdentityMapper.Map).MatchUnsafe(s => s, (long?)null),
       FirstName = source.FirstName,
       LastName = source.LastName,
       FullName = source.FullName,

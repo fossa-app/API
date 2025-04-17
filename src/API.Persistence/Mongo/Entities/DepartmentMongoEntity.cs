@@ -12,6 +12,8 @@ public class DepartmentMongoEntity : IEntity<long>
   [BsonGuidRepresentation(GuidRepresentation.Standard)]
   public Guid TenantID { get; set; }
 
+  public long CompanyId { get; set; }
+
   public string? Name { get; set; }
 
   public long? ParentDepartmentId { get; set; }
