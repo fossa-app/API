@@ -100,5 +100,6 @@ public class DefaultCoreModule : Module
     RegisterStronglyTypedId<long, CompanyId>(builder);
     RegisterStronglyTypedId<long, EmployeeId>(builder);
     RegisterStronglyTypedId<long, BranchId>(builder);
+    RegisterStronglyTypedId<long, DepartmentId>(builder);
   }
 }
