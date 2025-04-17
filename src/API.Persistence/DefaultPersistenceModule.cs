@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Fossa.API.Core.Repositories;
 using Fossa.API.Persistence.Mongo.Repositories;
 using TIKSN.Data.Mongo;
 
@@ -65,6 +66,14 @@ public class DefaultPersistenceModule : Module
 
     builder
       .RegisterType<LicenseMongoFileRepository>()
+      .AsImplementedInterfaces()
+      .InstancePerLifetimeScope();
+
+    builder.RegisterType<DepartmentMongoRepository>()
+      .AsImplementedInterfaces()
+      .InstancePerLifetimeScope();
+
+    builder.RegisterType<DepartmentRepositoryAdapter>()
       .AsImplementedInterfaces()
       .InstancePerLifetimeScope();
   }
