@@ -8,6 +8,7 @@ public record EmployeeEntity(
     Guid UserID,
     CompanyId CompanyId,
     Option<BranchId> AssignedBranchId,
+    Option<DepartmentId> AssignedDepartmentId,
     string FirstName,
     string LastName,
     string FullName)
