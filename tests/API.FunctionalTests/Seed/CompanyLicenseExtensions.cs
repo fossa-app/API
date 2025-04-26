@@ -20,6 +20,7 @@ public static class CompanyLicenseExtensions
     string accessToken,
     int maximumBranchCount,
     int maximumEmployeeCount,
+    int maximumDepartmentCount,
     CancellationToken cancellationToken)
     where TEntryPoint : class
   {
@@ -42,7 +43,8 @@ public static class CompanyLicenseExtensions
       new Ulid(systemPropertiesEntity.SystemID),
       companyRetrievalModel.Id,
       maximumBranchCount,
-      maximumEmployeeCount);
+      maximumEmployeeCount,
+      maximumDepartmentCount);
 
     var license = licenseFactory.Create(licenseTerms, companyEntitlements, testCertificateProvider.Certificate)
       .GetOrThrow();
