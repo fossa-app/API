@@ -6,26 +6,30 @@ namespace Fossa.API.Web.Mappers;
 
 public class EmployeeRetrievalModelMapper : IMapper<EmployeeEntity, EmployeeRetrievalModel>
 {
-  private readonly IMapper<EmployeeId, long> _domainIdentityToDataIdentityMapper;
-  private readonly IMapper<CompanyId, long> _companyDomainIdentityToDataIdentityMapper;
-  private readonly IMapper<BranchId, long> _branchDomainIdentityToDataIdentityMapper;
+  private readonly IMapper<BranchId, long> _branchDomainToDataIdentityMapper;
+  private readonly IMapper<CompanyId, long> _companyDomainToDataIdentityMapper;
+  private readonly IMapper<DepartmentId, long> _departmentDomainToDataIdentityMapper;
+  private readonly IMapper<EmployeeId, long> _employeeDomainToDataIdentityMapper;
 
   public EmployeeRetrievalModelMapper(
-    IMapper<EmployeeId, long> domainIdentityToDataIdentityMapper,
-    IMapper<CompanyId, long> companyDomainIdentityToDataIdentityMapper,
-    IMapper<BranchId, long> branchDomainIdentityToDataIdentityMapper)
+      IMapper<EmployeeId, long> employeeDomainToDataIdentityMapper,
+      IMapper<CompanyId, long> companyDomainToDataIdentityMapper,
+      IMapper<BranchId, long> branchDomainToDataIdentityMapper,
+      IMapper<DepartmentId, long> departmentDomainToDataIdentityMapper)
   {
-    _domainIdentityToDataIdentityMapper = domainIdentityToDataIdentityMapper ?? throw new ArgumentNullException(nameof(domainIdentityToDataIdentityMapper));
-    _companyDomainIdentityToDataIdentityMapper = companyDomainIdentityToDataIdentityMapper ?? throw new ArgumentNullException(nameof(companyDomainIdentityToDataIdentityMapper));
-    _branchDomainIdentityToDataIdentityMapper = branchDomainIdentityToDataIdentityMapper ?? throw new ArgumentNullException(nameof(branchDomainIdentityToDataIdentityMapper));
+    _employeeDomainToDataIdentityMapper = employeeDomainToDataIdentityMapper ?? throw new ArgumentNullException(nameof(employeeDomainToDataIdentityMapper));
+    _companyDomainToDataIdentityMapper = companyDomainToDataIdentityMapper ?? throw new ArgumentNullException(nameof(companyDomainToDataIdentityMapper));
+    _branchDomainToDataIdentityMapper = branchDomainToDataIdentityMapper ?? throw new ArgumentNullException(nameof(branchDomainToDataIdentityMapper));
+    _departmentDomainToDataIdentityMapper = departmentDomainToDataIdentityMapper ?? throw new ArgumentNullException(nameof(departmentDomainToDataIdentityMapper));
   }
 
   public EmployeeRetrievalModel Map(EmployeeEntity source)
   {
     return new EmployeeRetrievalModel(
-      _domainIdentityToDataIdentityMapper.Map(source.ID),
-      _companyDomainIdentityToDataIdentityMapper.Map(source.CompanyId),
-      source.AssignedBranchId.Map(_branchDomainIdentityToDataIdentityMapper.Map).MatchUnsafe(s => s, (long?)null),
-      source.FirstName, source.LastName, source.FullName);
+        _employeeDomainToDataIdentityMapper.Map(source.ID),
+        _companyDomainToDataIdentityMapper.Map(source.CompanyId),
+        source.AssignedBranchId.Map(_branchDomainToDataIdentityMapper.Map).MatchUnsafe(s => s, (long?)null),
+        source.AssignedDepartmentId.Map(_departmentDomainToDataIdentityMapper.Map).MatchUnsafe(x => x, () => (long?)null),
+        source.FirstName, source.LastName, source.FullName);
   }
 }

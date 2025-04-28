@@ -35,7 +35,7 @@ public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, T
   {
     await InspectRequestAsync(request, cancellationToken).ConfigureAwait(false);
 
-    var response = await next().ConfigureAwait(false);
+    var response = await next(cancellationToken).ConfigureAwait(false);
 
     await InspectResponseAsync(response, cancellationToken).ConfigureAwait(false);
 

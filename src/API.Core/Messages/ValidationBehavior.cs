@@ -23,7 +23,7 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
   {
     await EnsureValidityAsync(_requestValidators, request, cancellationToken).ConfigureAwait(false);
 
-    var response = await next().ConfigureAwait(false);
+    var response = await next(cancellationToken).ConfigureAwait(false);
 
     await EnsureValidityAsync(_responseValidators, response, cancellationToken).ConfigureAwait(false);
 

@@ -70,10 +70,38 @@ namespace Fossa.API.Core.Entities
         public static bool operator !=(Fossa.API.Core.Entities.CompanyId x, Fossa.API.Core.Entities.CompanyId y) { }
         public static bool operator ==(Fossa.API.Core.Entities.CompanyId x, Fossa.API.Core.Entities.CompanyId y) { }
     }
+    public class DepartmentEntity : System.IEquatable<Fossa.API.Core.Entities.DepartmentEntity>, TIKSN.Data.IEntity<Fossa.API.Core.Entities.DepartmentId>, TIKSN.Data.ITenantEntity<Fossa.API.Core.Entities.DepartmentId, System.Guid>
+    {
+        public DepartmentEntity(Fossa.API.Core.Entities.DepartmentId ID, System.Guid TenantID, Fossa.API.Core.Entities.CompanyId CompanyId, string Name, Fossa.API.Core.Entities.EmployeeId ManagerId, LanguageExt.Option<Fossa.API.Core.Entities.DepartmentId> ParentDepartmentId) { }
+        public Fossa.API.Core.Entities.CompanyId CompanyId { get; init; }
+        public Fossa.API.Core.Entities.DepartmentId ID { get; init; }
+        public Fossa.API.Core.Entities.EmployeeId ManagerId { get; init; }
+        public string Name { get; init; }
+        public LanguageExt.Option<Fossa.API.Core.Entities.DepartmentId> ParentDepartmentId { get; init; }
+        public System.Guid TenantID { get; init; }
+    }
+    [System.ComponentModel.TypeConverter(typeof(Fossa.API.Core.Entities.DepartmentId.DepartmentIdTypeConverter))]
+    public readonly struct DepartmentId : System.IEquatable<Fossa.API.Core.Entities.DepartmentId>, System.IFormattable, System.ISpanFormattable, System.IUtf8SpanFormattable, System.Numerics.IEqualityOperators<Fossa.API.Core.Entities.DepartmentId, Fossa.API.Core.Entities.DepartmentId, bool>
+    {
+        public DepartmentId(long value) { }
+        public long AsPrimitive() { }
+        public bool Equals(Fossa.API.Core.Entities.DepartmentId other) { }
+        public override bool Equals(object obj) { }
+        public override int GetHashCode() { }
+        public override string ToString() { }
+        public string ToString(string? format, System.IFormatProvider? formatProvider) { }
+        public bool TryFormat(System.Span<byte> utf8Destination, out int bytesWritten, System.ReadOnlySpan<char> format, System.IFormatProvider? provider) { }
+        public bool TryFormat(System.Span<char> destination, out int charsWritten, System.ReadOnlySpan<char> format, System.IFormatProvider? provider) { }
+        public static long op_Explicit(Fossa.API.Core.Entities.DepartmentId value) { }
+        public static Fossa.API.Core.Entities.DepartmentId op_Explicit(long value) { }
+        public static bool operator !=(Fossa.API.Core.Entities.DepartmentId x, Fossa.API.Core.Entities.DepartmentId y) { }
+        public static bool operator ==(Fossa.API.Core.Entities.DepartmentId x, Fossa.API.Core.Entities.DepartmentId y) { }
+    }
     public class EmployeeEntity : System.IEquatable<Fossa.API.Core.Entities.EmployeeEntity>, TIKSN.Data.IEntity<Fossa.API.Core.Entities.EmployeeId>, TIKSN.Data.ITenantEntity<Fossa.API.Core.Entities.EmployeeId, System.Guid>, TIKSN.Data.IUserEntity<Fossa.API.Core.Entities.EmployeeId, System.Guid>
     {
-        public EmployeeEntity(Fossa.API.Core.Entities.EmployeeId ID, System.Guid TenantID, System.Guid UserID, Fossa.API.Core.Entities.CompanyId CompanyId, LanguageExt.Option<Fossa.API.Core.Entities.BranchId> AssignedBranchId, string FirstName, string LastName, string FullName) { }
+        public EmployeeEntity(Fossa.API.Core.Entities.EmployeeId ID, System.Guid TenantID, System.Guid UserID, Fossa.API.Core.Entities.CompanyId CompanyId, LanguageExt.Option<Fossa.API.Core.Entities.BranchId> AssignedBranchId, LanguageExt.Option<Fossa.API.Core.Entities.DepartmentId> AssignedDepartmentId, string FirstName, string LastName, string FullName) { }
         public LanguageExt.Option<Fossa.API.Core.Entities.BranchId> AssignedBranchId { get; init; }
+        public LanguageExt.Option<Fossa.API.Core.Entities.DepartmentId> AssignedDepartmentId { get; init; }
         public Fossa.API.Core.Entities.CompanyId CompanyId { get; init; }
         public string FirstName { get; init; }
         public string FullName { get; init; }
@@ -156,6 +184,12 @@ namespace Fossa.API.Core.Mappers
         public CompanyIdMapper() { }
         public long Map(Fossa.API.Core.Entities.CompanyId source) { }
         public Fossa.API.Core.Entities.CompanyId Map(long source) { }
+    }
+    public class DepartmentIdMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentId, long>, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.DepartmentId>
+    {
+        public DepartmentIdMapper() { }
+        public long Map(Fossa.API.Core.Entities.DepartmentId source) { }
+        public Fossa.API.Core.Entities.DepartmentId Map(long source) { }
     }
     public class EmployeeIdMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long>, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId>
     {
@@ -325,6 +359,48 @@ namespace Fossa.API.Core.Messages.Commands
         public CompanyModificationCommandHandler(Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, Fossa.API.Core.Repositories.ICompanyRepository companyRepository) { }
         public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.CompanyModificationCommand request, System.Threading.CancellationToken cancellationToken) { }
     }
+    public class DepartmentCreationCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.DepartmentEntity, Fossa.API.Core.Entities.DepartmentId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.DepartmentCreationCommand>
+    {
+        public DepartmentCreationCommand(System.Guid TenantID, System.Guid UserID, string Name, LanguageExt.Option<Fossa.API.Core.Entities.DepartmentId> ParentDepartmentId, Fossa.API.Core.Entities.EmployeeId ManagerId) { }
+        public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.DepartmentId> AffectingTenantEntitiesIdentities { get; }
+        public Fossa.API.Core.Entities.EmployeeId ManagerId { get; init; }
+        public string Name { get; init; }
+        public LanguageExt.Option<Fossa.API.Core.Entities.DepartmentId> ParentDepartmentId { get; init; }
+        public System.Guid UserID { get; init; }
+    }
+    public class DepartmentCreationCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.DepartmentCreationCommand, MediatR.Unit>
+    {
+        public DepartmentCreationCommandHandler(TIKSN.Identity.IIdentityGenerator<Fossa.API.Core.Entities.DepartmentId> identityGenerator, Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, Fossa.API.Core.Repositories.IDepartmentRepository departmentRepository) { }
+        public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.DepartmentCreationCommand request, System.Threading.CancellationToken cancellationToken) { }
+    }
+    public class DepartmentDeletionCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.DepartmentEntity, Fossa.API.Core.Entities.DepartmentId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.DepartmentDeletionCommand>
+    {
+        public DepartmentDeletionCommand(Fossa.API.Core.Entities.DepartmentId ID, System.Guid TenantID, System.Guid UserID) { }
+        public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.DepartmentId> AffectingTenantEntitiesIdentities { get; }
+        public Fossa.API.Core.Entities.DepartmentId ID { get; init; }
+        public System.Guid UserID { get; init; }
+    }
+    public class DepartmentDeletionCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.DepartmentDeletionCommand, MediatR.Unit>
+    {
+        public DepartmentDeletionCommandHandler(Fossa.API.Core.Repositories.IDepartmentQueryRepository departmentQueryRepository, Fossa.API.Core.Repositories.IDepartmentRepository departmentRepository, Fossa.API.Core.Relationship.IRelationshipGraph relationshipGraph) { }
+        public System.Threading.Tasks.Task DeleteDepartmentAsync(Fossa.API.Core.Entities.DepartmentEntity entity, System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.DepartmentDeletionCommand request, System.Threading.CancellationToken cancellationToken) { }
+    }
+    public class DepartmentModificationCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.DepartmentEntity, Fossa.API.Core.Entities.DepartmentId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.DepartmentModificationCommand>
+    {
+        public DepartmentModificationCommand(Fossa.API.Core.Entities.DepartmentId ID, System.Guid TenantID, System.Guid UserID, string Name, LanguageExt.Option<Fossa.API.Core.Entities.DepartmentId> ParentDepartmentId, Fossa.API.Core.Entities.EmployeeId ManagerId) { }
+        public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.DepartmentId> AffectingTenantEntitiesIdentities { get; }
+        public Fossa.API.Core.Entities.DepartmentId ID { get; init; }
+        public Fossa.API.Core.Entities.EmployeeId ManagerId { get; init; }
+        public string Name { get; init; }
+        public LanguageExt.Option<Fossa.API.Core.Entities.DepartmentId> ParentDepartmentId { get; init; }
+        public System.Guid UserID { get; init; }
+    }
+    public class DepartmentModificationCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.DepartmentModificationCommand, MediatR.Unit>
+    {
+        public DepartmentModificationCommandHandler(Fossa.API.Core.Repositories.IDepartmentQueryRepository departmentQueryRepository, Fossa.API.Core.Repositories.IDepartmentRepository departmentRepository) { }
+        public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.DepartmentModificationCommand request, System.Threading.CancellationToken cancellationToken) { }
+    }
     public class EmployeeCreationCommand : Fossa.API.Core.Messages.Commands.EntityTenantUserCommand<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Core.Entities.EmployeeId, System.Guid, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.EmployeeCreationCommand>
     {
         public EmployeeCreationCommand(System.Guid TenantID, System.Guid UserID, string FirstName, string LastName, string FullName) { }
@@ -351,9 +427,10 @@ namespace Fossa.API.Core.Messages.Commands
     }
     public class EmployeeManagementCommand : Fossa.API.Core.Messages.Commands.EntityTenantUserCommand<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Core.Entities.EmployeeId, System.Guid, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.EmployeeManagementCommand>
     {
-        public EmployeeManagementCommand(Fossa.API.Core.Entities.EmployeeId ID, System.Guid TenantID, System.Guid UserID, LanguageExt.Option<Fossa.API.Core.Entities.BranchId> AssignedBranchId) { }
+        public EmployeeManagementCommand(Fossa.API.Core.Entities.EmployeeId ID, System.Guid TenantID, System.Guid UserID, LanguageExt.Option<Fossa.API.Core.Entities.BranchId> AssignedBranchId, LanguageExt.Option<Fossa.API.Core.Entities.DepartmentId> AssignedDepartmentId) { }
         public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.EmployeeId> AffectingTenantEntitiesIdentities { get; }
         public LanguageExt.Option<Fossa.API.Core.Entities.BranchId> AssignedBranchId { get; init; }
+        public LanguageExt.Option<Fossa.API.Core.Entities.DepartmentId> AssignedDepartmentId { get; init; }
         public Fossa.API.Core.Entities.EmployeeId ID { get; init; }
     }
     public class EmployeeManagementCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.EmployeeManagementCommand, MediatR.Unit>
@@ -500,6 +577,43 @@ namespace Fossa.API.Core.Messages.Queries
         public CurrentEmployeeRetrievalQueryHandler(Fossa.API.Core.Repositories.IEmployeeQueryRepository employeeQueryRepository) { }
         public System.Threading.Tasks.Task<Fossa.API.Core.Entities.EmployeeEntity> Handle(Fossa.API.Core.Messages.Queries.CurrentEmployeeRetrievalQuery request, System.Threading.CancellationToken cancellationToken) { }
     }
+    public class DepartmentListingQuery : Fossa.API.Core.Messages.Queries.EntityTenantQuery<Fossa.API.Core.Entities.DepartmentEntity, Fossa.API.Core.Entities.DepartmentId, System.Guid, LanguageExt.Seq<Fossa.API.Core.Entities.DepartmentEntity>>, System.IEquatable<Fossa.API.Core.Messages.Queries.DepartmentListingQuery>
+    {
+        public DepartmentListingQuery(LanguageExt.Seq<Fossa.API.Core.Entities.DepartmentId> Ids, System.Guid TenantID, System.Guid UserID) { }
+        public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.DepartmentId> AffectingTenantEntitiesIdentities { get; }
+        public LanguageExt.Seq<Fossa.API.Core.Entities.DepartmentId> Ids { get; init; }
+        public System.Guid UserID { get; init; }
+    }
+    public class DepartmentListingQueryHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Queries.DepartmentListingQuery, LanguageExt.Seq<Fossa.API.Core.Entities.DepartmentEntity>>
+    {
+        public DepartmentListingQueryHandler(Fossa.API.Core.Repositories.IDepartmentQueryRepository departmentQueryRepository) { }
+        public System.Threading.Tasks.Task<LanguageExt.Seq<Fossa.API.Core.Entities.DepartmentEntity>> Handle(Fossa.API.Core.Messages.Queries.DepartmentListingQuery request, System.Threading.CancellationToken cancellationToken) { }
+    }
+    public class DepartmentPagingQuery : Fossa.API.Core.Messages.Queries.EntityTenantQuery<Fossa.API.Core.Entities.DepartmentEntity, Fossa.API.Core.Entities.DepartmentId, System.Guid, TIKSN.Data.PageResult<Fossa.API.Core.Entities.DepartmentEntity>>, Fossa.API.Core.Messages.Queries.IPagingQuery, Fossa.API.Core.Messages.Queries.IPagingQuery<Fossa.API.Core.Entities.DepartmentEntity>, Fossa.API.Core.Messages.Queries.IQuery<TIKSN.Data.PageResult<Fossa.API.Core.Entities.DepartmentEntity>>, MediatR.IBaseRequest, MediatR.IRequest<TIKSN.Data.PageResult<Fossa.API.Core.Entities.DepartmentEntity>>, System.IEquatable<Fossa.API.Core.Messages.Queries.DepartmentPagingQuery>
+    {
+        public DepartmentPagingQuery(System.Guid TenantID, System.Guid UserID, string Search, TIKSN.Data.Page Page) { }
+        public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.DepartmentId> AffectingTenantEntitiesIdentities { get; }
+        public TIKSN.Data.Page Page { get; init; }
+        public string Search { get; init; }
+        public System.Guid UserID { get; init; }
+    }
+    public class DepartmentPagingQueryHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Queries.DepartmentPagingQuery, TIKSN.Data.PageResult<Fossa.API.Core.Entities.DepartmentEntity>>
+    {
+        public DepartmentPagingQueryHandler(Fossa.API.Core.Repositories.IDepartmentQueryRepository departmentQueryRepository) { }
+        public System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Core.Entities.DepartmentEntity>> Handle(Fossa.API.Core.Messages.Queries.DepartmentPagingQuery request, System.Threading.CancellationToken cancellationToken) { }
+    }
+    public class DepartmentRetrievalQuery : Fossa.API.Core.Messages.Queries.EntityTenantQuery<Fossa.API.Core.Entities.DepartmentEntity, Fossa.API.Core.Entities.DepartmentId, System.Guid, Fossa.API.Core.Entities.DepartmentEntity>, System.IEquatable<Fossa.API.Core.Messages.Queries.DepartmentRetrievalQuery>
+    {
+        public DepartmentRetrievalQuery(Fossa.API.Core.Entities.DepartmentId ID, System.Guid TenantID, System.Guid UserID) { }
+        public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.DepartmentId> AffectingTenantEntitiesIdentities { get; }
+        public Fossa.API.Core.Entities.DepartmentId ID { get; init; }
+        public System.Guid UserID { get; init; }
+    }
+    public class DepartmentRetrievalQueryHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Queries.DepartmentRetrievalQuery, Fossa.API.Core.Entities.DepartmentEntity>
+    {
+        public DepartmentRetrievalQueryHandler(Fossa.API.Core.Repositories.IDepartmentQueryRepository departmentQueryRepository) { }
+        public System.Threading.Tasks.Task<Fossa.API.Core.Entities.DepartmentEntity> Handle(Fossa.API.Core.Messages.Queries.DepartmentRetrievalQuery request, System.Threading.CancellationToken cancellationToken) { }
+    }
     public class EmployeeListingQuery : Fossa.API.Core.Messages.Queries.EntityTenantQuery<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Core.Entities.EmployeeId, System.Guid, LanguageExt.Seq<Fossa.API.Core.Entities.EmployeeEntity>>, System.IEquatable<Fossa.API.Core.Messages.Queries.EmployeeListingQuery>
     {
         public EmployeeListingQuery(LanguageExt.Seq<Fossa.API.Core.Entities.EmployeeId> Ids, System.Guid TenantID, System.Guid UserID) { }
@@ -610,6 +724,11 @@ namespace Fossa.API.Core.Repositories
         System.Threading.Tasks.Task<Fossa.API.Core.Entities.CompanyEntity> GetByTenantIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken);
     }
     public interface ICompanyRepository : TIKSN.Data.IRepository<Fossa.API.Core.Entities.CompanyEntity> { }
+    public interface IDepartmentQueryRepository : Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.CompanyId>, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.DepartmentId>, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.EmployeeId>, TIKSN.Data.IQueryRepository<Fossa.API.Core.Entities.DepartmentEntity, Fossa.API.Core.Entities.DepartmentId>
+    {
+        System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Core.Entities.DepartmentEntity>> PageAsync(Fossa.API.Core.Repositories.TenantDepartmentPageQuery pageQuery, System.Threading.CancellationToken cancellationToken);
+    }
+    public interface IDepartmentRepository : TIKSN.Data.IRepository<Fossa.API.Core.Entities.DepartmentEntity> { }
     public interface IDependencyQueryRepository<T>
         where T : System.IEquatable<T>
     {
@@ -619,7 +738,7 @@ namespace Fossa.API.Core.Repositories
     {
         System.Threading.Tasks.Task EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken);
     }
-    public interface IEmployeeQueryRepository : Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.BranchId>, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.CompanyId>, TIKSN.Data.IQueryRepository<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Core.Entities.EmployeeId>
+    public interface IEmployeeQueryRepository : Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.BranchId>, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.CompanyId>, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.DepartmentId>, TIKSN.Data.IQueryRepository<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Core.Entities.EmployeeId>
     {
         System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Core.Entities.EmployeeEntity>> FindByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken);
         System.Threading.Tasks.Task<Fossa.API.Core.Entities.EmployeeEntity> GetByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken);
@@ -632,6 +751,12 @@ namespace Fossa.API.Core.Repositories
     public class TenantBranchPageQuery : TIKSN.Data.PageQuery
     {
         public TenantBranchPageQuery(System.Guid tenantId, string search, TIKSN.Data.Page page) { }
+        public string Search { get; }
+        public System.Guid TenantId { get; }
+    }
+    public class TenantDepartmentPageQuery : TIKSN.Data.PageQuery
+    {
+        public TenantDepartmentPageQuery(System.Guid tenantId, string search, TIKSN.Data.Page page) { }
         public string Search { get; }
         public System.Guid TenantId { get; }
     }
@@ -844,6 +969,18 @@ namespace Fossa.API.Core.Validators
     {
         public CompanyRetrievalQueryValidator() { }
     }
+    public class DepartmentCreationCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.DepartmentCreationCommand>
+    {
+        public DepartmentCreationCommandValidator(Fossa.API.Core.Repositories.IDepartmentQueryRepository departmentQueryRepository, Fossa.API.Core.Repositories.IEmployeeQueryRepository employeeQueryRepository) { }
+    }
+    public class DepartmentDeletionCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.DepartmentDeletionCommand>
+    {
+        public DepartmentDeletionCommandValidator() { }
+    }
+    public class DepartmentModificationCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.DepartmentModificationCommand>
+    {
+        public DepartmentModificationCommandValidator(Fossa.API.Core.Repositories.IDepartmentQueryRepository departmentQueryRepository, Fossa.API.Core.Repositories.IEmployeeQueryRepository employeeQueryRepository) { }
+    }
     public class EmployeeCreationCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.EmployeeCreationCommand>
     {
         public EmployeeCreationCommandValidator() { }
@@ -851,6 +988,10 @@ namespace Fossa.API.Core.Validators
     public class EmployeeDeletionCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.EmployeeDeletionCommand>
     {
         public EmployeeDeletionCommandValidator() { }
+    }
+    public class EmployeeManagementCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.EmployeeManagementCommand>
+    {
+        public EmployeeManagementCommandValidator(Fossa.API.Core.Repositories.IBranchQueryRepository branchQueryRepository, Fossa.API.Core.Repositories.IDepartmentQueryRepository departmentQueryRepository) { }
     }
     public class EmployeeModificationCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.EmployeeModificationCommand>
     {

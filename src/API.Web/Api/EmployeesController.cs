@@ -58,6 +58,7 @@ public class EmployeesController : BaseApiController<EmployeeId>
     [FromRoute] long id,
     [FromBody] EmployeeManagementModel model,
     [FromServices] IMapper<long, BranchId> branchDataIdentityToDomainIdentityMapper,
+    [FromServices] IMapper<long, DepartmentId> departmentDataIdentityToDomainIdentityMapper,
     CancellationToken cancellationToken)
   {
     var tenantId = _tenantIdProvider.GetTenantId();
@@ -67,7 +68,8 @@ public class EmployeesController : BaseApiController<EmployeeId>
         _dataIdentityToDomainIdentityMapper.Map(id),
         tenantId,
         userId,
-        Optional(model.AssignedBranchId).Map(branchDataIdentityToDomainIdentityMapper.Map)),
+        Optional(model.AssignedBranchId).Map(branchDataIdentityToDomainIdentityMapper.Map),
+        Optional(model.AssignedDepartmentId).Map(departmentDataIdentityToDomainIdentityMapper.Map)),
       cancellationToken);
   }
 

@@ -44,6 +44,6 @@ public class PagingQueryBehavior<TRequest, TResponse>
         },
         () => throw new ConfigurationValidationException("Maximum Page Size for Paging Query is missing"));
 
-    return await next().ConfigureAwait(false);
+    return await next(cancellationToken).ConfigureAwait(false);
   }
 }
