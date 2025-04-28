@@ -50,7 +50,7 @@ public class DepartmentMongoMapper :
       TenantID = source.TenantID,
       CompanyId = _companyDomainIdentityToDataIdentityMapper.Map(source.CompanyId),
       Name = source.Name,
-      ParentDepartmentId = source.ParentDepartmentId.Map(_domainIdentityToDataIdentityMapper.Map).MatchUnsafe(x => x, () => null),
+      ParentDepartmentId = source.ParentDepartmentId.Map(_domainIdentityToDataIdentityMapper.Map).MatchUnsafe(x => x, () => (long?)null),
       ManagerId = _employeeDomainIdentityToDataIdentityMapper.Map(source.ManagerId)
     };
   }
