@@ -93,28 +93,28 @@ public class DepartmentsController : BaseApiController<DepartmentId>
 
   [HttpPut("{id}")]
   [Authorize(Roles = Roles.Administrator)]
-    public async Task PutAsync(
+  public async Task PutAsync(
         long id,
         [FromBody] DepartmentModificationModel model,
         [FromServices] IMapper<long, EmployeeId> employeeDataIdentityToDomainIdentityMapper,
         CancellationToken cancellationToken)
+  {
+    if (model.ManagerId == null)
     {
-        if (model.ManagerId == null)
-        {
-            throw new ArgumentNullException(nameof(model), "ManagerId cannot be null.");
-        }
-        var tenantId = _tenantIdProvider.GetTenantId();
-        var userId = _userIdProvider.GetUserId();
-        await _sender.Send(
-            new DepartmentModificationCommand(
-                _dataIdentityToDomainIdentityMapper.Map(id),
-                tenantId,
-                userId,
-                model.Name ?? string.Empty,
-                Optional(model.ParentDepartmentId).Map(_dataIdentityToDomainIdentityMapper.Map),
-                employeeDataIdentityToDomainIdentityMapper.Map(model.ManagerId.Value)),
-            cancellationToken);
+      throw new ArgumentNullException(nameof(model), "ManagerId cannot be null.");
     }
+    var tenantId = _tenantIdProvider.GetTenantId();
+    var userId = _userIdProvider.GetUserId();
+    await _sender.Send(
+        new DepartmentModificationCommand(
+            _dataIdentityToDomainIdentityMapper.Map(id),
+            tenantId,
+            userId,
+            model.Name ?? string.Empty,
+            Optional(model.ParentDepartmentId).Map(_dataIdentityToDomainIdentityMapper.Map),
+            employeeDataIdentityToDomainIdentityMapper.Map(model.ManagerId.Value)),
+        cancellationToken);
+  }
 
   [HttpGet]
   public Task<PagingResponseModel<DepartmentRetrievalModel>> QueryAsync(
