@@ -11,6 +11,7 @@ public class CompanyEntitlementsModelMapper : IMapper<CompanyEntitlements, Compa
     return new CompanyEntitlementsModel(
       source.CompanyId,
       source.MaximumBranchCount,
-      source.MaximumEmployeeCount);
+      source.MaximumEmployeeCount,
+      source.MaximumDepartmentCount);
   }
 }

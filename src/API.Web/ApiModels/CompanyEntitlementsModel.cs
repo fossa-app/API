@@ -3,4 +3,5 @@
 public record CompanyEntitlementsModel(
   long CompanyId,
   int MaximumBranchCount,
-  int MaximumEmployeeCount);
+  int MaximumEmployeeCount,
+  int MaximumDepartmentCount);
