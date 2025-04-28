@@ -1,5 +1,5 @@
 ﻿using Fossa.API.Core.Entities;
-using Fossa.API.Persistence.Mongo.Repositories;
+using Fossa.API.Persistence.Mongo.Entities;
 using TIKSN.Mapping;
 
 namespace Fossa.API.Persistence.Mongo.Mappers;

@@ -2,7 +2,7 @@
 using MongoDB.Bson.Serialization.Attributes;
 using TIKSN.Data;
 
-namespace Fossa.API.Persistence.Mongo.Repositories;
+namespace Fossa.API.Persistence.Mongo.Entities;
 
 public class DepartmentMongoEntity : IEntity<long>
 {

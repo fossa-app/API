@@ -40,6 +40,18 @@ namespace Fossa.API.Persistence.Mongo.Entities
         [MongoDB.Bson.Serialization.Attributes.BsonGuidRepresentation(MongoDB.Bson.GuidRepresentation.Standard)]
         public System.Guid TenantID { get; set; }
     }
+    public class DepartmentMongoEntity : TIKSN.Data.IEntity<long>
+    {
+        public DepartmentMongoEntity() { }
+        public long CompanyId { get; set; }
+        [MongoDB.Bson.Serialization.Attributes.BsonId]
+        public long ID { get; set; }
+        public long ManagerId { get; set; }
+        public string? Name { get; set; }
+        public long? ParentDepartmentId { get; set; }
+        [MongoDB.Bson.Serialization.Attributes.BsonGuidRepresentation(MongoDB.Bson.GuidRepresentation.Standard)]
+        public System.Guid TenantID { get; set; }
+    }
     public class EmployeeMongoEntity : TIKSN.Data.IEntity<long>
     {
         public EmployeeMongoEntity() { }
@@ -84,11 +96,11 @@ namespace Fossa.API.Persistence.Mongo.Mappers
         public Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity Map(Fossa.API.Core.Entities.CompanyEntity source) { }
         public Fossa.API.Core.Entities.CompanyEntity Map(Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity source) { }
     }
-    public class DepartmentMongoMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentEntity, Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoEntity>, TIKSN.Mapping.IMapper<Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoEntity, Fossa.API.Core.Entities.DepartmentEntity>
+    public class DepartmentMongoMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentEntity, Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity>, TIKSN.Mapping.IMapper<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity, Fossa.API.Core.Entities.DepartmentEntity>
     {
         public DepartmentMongoMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.DepartmentId> dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> companyDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId> companyDataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> employeeDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId> employeeDataIdentityToDomainIdentityMapper) { }
-        public Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoEntity Map(Fossa.API.Core.Entities.DepartmentEntity source) { }
-        public Fossa.API.Core.Entities.DepartmentEntity Map(Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoEntity source) { }
+        public Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity Map(Fossa.API.Core.Entities.DepartmentEntity source) { }
+        public Fossa.API.Core.Entities.DepartmentEntity Map(Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity source) { }
     }
     public class EmployeeMongoMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity>, TIKSN.Mapping.IMapper<Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity, Fossa.API.Core.Entities.EmployeeEntity>
     {
@@ -135,31 +147,19 @@ namespace Fossa.API.Persistence.Mongo.Repositories
         public System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Core.Entities.CompanyEntity>> FindByTenantIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<Fossa.API.Core.Entities.CompanyEntity> GetByTenantIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken) { }
     }
-    public class DepartmentMongoEntity : TIKSN.Data.IEntity<long>
-    {
-        public DepartmentMongoEntity() { }
-        public long CompanyId { get; set; }
-        [MongoDB.Bson.Serialization.Attributes.BsonId]
-        public long ID { get; set; }
-        public long ManagerId { get; set; }
-        public string? Name { get; set; }
-        public long? ParentDepartmentId { get; set; }
-        [MongoDB.Bson.Serialization.Attributes.BsonGuidRepresentation(MongoDB.Bson.GuidRepresentation.Standard)]
-        public System.Guid TenantID { get; set; }
-    }
-    public class DepartmentMongoRepository : TIKSN.Data.Mongo.MongoRepository<Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoEntity, long>, Fossa.API.Persistence.Mongo.Repositories.IDepartmentMongoRepository, TIKSN.Data.IQueryRepository<Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoEntity, long>, TIKSN.Data.IRepository<Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoEntity>, TIKSN.Data.IStreamRepository<Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoEntity>, TIKSN.Data.Mongo.IMongoRepository<Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoEntity, long>
+    public class DepartmentMongoRepository : TIKSN.Data.Mongo.MongoRepository<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity, long>, Fossa.API.Persistence.Mongo.Repositories.IDepartmentMongoRepository, TIKSN.Data.IQueryRepository<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity, long>, TIKSN.Data.IRepository<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity>, TIKSN.Data.IStreamRepository<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity>, TIKSN.Data.Mongo.IMongoRepository<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity, long>
     {
         public DepartmentMongoRepository(TIKSN.Data.Mongo.IMongoClientSessionProvider mongoClientSessionProvider, TIKSN.Data.Mongo.IMongoDatabaseProvider mongoDatabaseProvider) { }
-        protected override MongoDB.Driver.SortDefinition<Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoEntity> PageSortDefinition { get; }
+        protected override MongoDB.Driver.SortDefinition<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity> PageSortDefinition { get; }
         public System.Threading.Tasks.Task EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<bool> HasDependencyOnCompanyAsync(long companyId, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<bool> HasDependencyOnManagerAsync(long managerId, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<bool> HasDependencyOnParentAsync(long parentId, System.Threading.CancellationToken cancellationToken) { }
-        public System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoEntity>> PageAsync(Fossa.API.Core.Repositories.TenantDepartmentPageQuery pageQuery, System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity>> PageAsync(Fossa.API.Core.Repositories.TenantDepartmentPageQuery pageQuery, System.Threading.CancellationToken cancellationToken) { }
     }
-    public class DepartmentRepositoryAdapter : TIKSN.Data.Mongo.MongoRepositoryAdapter<Fossa.API.Core.Entities.DepartmentEntity, Fossa.API.Core.Entities.DepartmentId, Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoEntity, long>, Fossa.API.Core.Repositories.IDepartmentQueryRepository, Fossa.API.Core.Repositories.IDepartmentRepository, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.CompanyId>, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.DepartmentId>, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.EmployeeId>, TIKSN.Data.IQueryRepository<Fossa.API.Core.Entities.DepartmentEntity, Fossa.API.Core.Entities.DepartmentId>, TIKSN.Data.IRepository<Fossa.API.Core.Entities.DepartmentEntity>
+    public class DepartmentRepositoryAdapter : TIKSN.Data.Mongo.MongoRepositoryAdapter<Fossa.API.Core.Entities.DepartmentEntity, Fossa.API.Core.Entities.DepartmentId, Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity, long>, Fossa.API.Core.Repositories.IDepartmentQueryRepository, Fossa.API.Core.Repositories.IDepartmentRepository, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.CompanyId>, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.DepartmentId>, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.EmployeeId>, TIKSN.Data.IQueryRepository<Fossa.API.Core.Entities.DepartmentEntity, Fossa.API.Core.Entities.DepartmentId>, TIKSN.Data.IRepository<Fossa.API.Core.Entities.DepartmentEntity>
     {
-        public DepartmentRepositoryAdapter(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentEntity, Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoEntity> domainEntityToDataEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoEntity, Fossa.API.Core.Entities.DepartmentEntity> dataEntityToDomainEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.DepartmentId> dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> companyDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> employeeDomainIdentityToDataIdentityMapper, Fossa.API.Persistence.Mongo.Repositories.IDepartmentMongoRepository dataRepository) { }
+        public DepartmentRepositoryAdapter(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentEntity, Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity> domainEntityToDataEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity, Fossa.API.Core.Entities.DepartmentEntity> dataEntityToDomainEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.DepartmentId> dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> companyDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> employeeDomainIdentityToDataIdentityMapper, Fossa.API.Persistence.Mongo.Repositories.IDepartmentMongoRepository dataRepository) { }
         public System.Threading.Tasks.Task<bool> HasDependencyAsync(Fossa.API.Core.Entities.CompanyId id, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<bool> HasDependencyAsync(Fossa.API.Core.Entities.DepartmentId id, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<bool> HasDependencyAsync(Fossa.API.Core.Entities.EmployeeId id, System.Threading.CancellationToken cancellationToken) { }
@@ -200,13 +200,13 @@ namespace Fossa.API.Persistence.Mongo.Repositories
         System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity>> FindByTenantIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken);
         System.Threading.Tasks.Task<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity> GetByTenantIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken);
     }
-    public interface IDepartmentMongoRepository : TIKSN.Data.IQueryRepository<Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoEntity, long>, TIKSN.Data.IRepository<Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoEntity>, TIKSN.Data.IStreamRepository<Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoEntity>, TIKSN.Data.Mongo.IMongoRepository<Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoEntity, long>
+    public interface IDepartmentMongoRepository : TIKSN.Data.IQueryRepository<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity, long>, TIKSN.Data.IRepository<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity>, TIKSN.Data.IStreamRepository<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity>, TIKSN.Data.Mongo.IMongoRepository<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity, long>
     {
         System.Threading.Tasks.Task EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken);
         System.Threading.Tasks.Task<bool> HasDependencyOnCompanyAsync(long companyId, System.Threading.CancellationToken cancellationToken);
         System.Threading.Tasks.Task<bool> HasDependencyOnManagerAsync(long managerId, System.Threading.CancellationToken cancellationToken);
         System.Threading.Tasks.Task<bool> HasDependencyOnParentAsync(long parentId, System.Threading.CancellationToken cancellationToken);
-        System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoEntity>> PageAsync(Fossa.API.Core.Repositories.TenantDepartmentPageQuery pageQuery, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity>> PageAsync(Fossa.API.Core.Repositories.TenantDepartmentPageQuery pageQuery, System.Threading.CancellationToken cancellationToken);
     }
     public interface IEmployeeMongoRepository : TIKSN.Data.IQueryRepository<Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity, long>, TIKSN.Data.IRepository<Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity>, TIKSN.Data.IStreamRepository<Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity>, TIKSN.Data.Mongo.IMongoRepository<Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity, long>
     {

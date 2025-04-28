@@ -1,5 +1,6 @@
 ﻿using EasyDoubles;
 using Fossa.API.Core.Repositories;
+using Fossa.API.Persistence.Mongo.Entities;
 using Fossa.API.Persistence.Mongo.Repositories;
 using MongoDB.Driver;
 using TIKSN.Data;
