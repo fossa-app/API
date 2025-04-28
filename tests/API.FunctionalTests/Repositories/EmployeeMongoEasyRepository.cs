@@ -6,9 +6,9 @@ using TIKSN.Data;
 
 namespace Fossa.API.FunctionalTests.Repositories;
 
-public class EmployeeMongoEasyRepository :
-  EasyRepository<EmployeeMongoEntity, long>,
-  IEmployeeMongoRepository
+public class EmployeeMongoEasyRepository
+  : EasyRepository<EmployeeMongoEntity, long>
+  , IEmployeeMongoRepository
 {
   public EmployeeMongoEasyRepository(IEasyStores easyStores) : base(easyStores)
   {
@@ -43,6 +43,11 @@ public class EmployeeMongoEasyRepository :
   public Task<bool> HasDependencyOnCompanyAsync(long companyId, CancellationToken cancellationToken)
   {
     return Task.FromResult(EasyStore.Entities.Values.Any(x => x.CompanyId == companyId));
+  }
+
+  public Task<bool> HasDependencyOnDepartmentAsync(long departmentId, CancellationToken cancellationToken)
+  {
+    return Task.FromResult(EasyStore.Entities.Values.Any(x => x.AssignedDepartmentId == departmentId));
   }
 
   public Task<PageResult<EmployeeMongoEntity>> PageAsync(TenantEmployeePageQuery pageQuery, CancellationToken cancellationToken)
