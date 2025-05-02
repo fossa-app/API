@@ -9,7 +9,7 @@ namespace Fossa.API.Persistence.Mongo.Repositories;
 
 public class DepartmentRepositoryAdapter
     : MongoRepositoryAdapter<DepartmentEntity, DepartmentId, DepartmentMongoEntity, long>
-    , IDepartmentRepository, IDepartmentQueryRepository
+    , IDepartmentRepository, IDepartmentQueryRepository, IDepartmentIndexRepository
 {
   private readonly IMapper<CompanyId, long> _companyDomainIdentityToDataIdentityMapper;
   private readonly IDepartmentMongoRepository _dataRepository;
@@ -61,5 +61,10 @@ public class DepartmentRepositoryAdapter
         pageResult.Page,
         [.. pageResult.Items.Select(Map)],
         pageResult.TotalItems);
+  }
+
+  public Task EnsureIndexesCreatedAsync(CancellationToken cancellationToken)
+  {
+    return _dataRepository.EnsureIndexesCreatedAsync(cancellationToken);
   }
 }
