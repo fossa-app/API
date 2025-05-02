@@ -724,6 +724,10 @@ namespace Fossa.API.Core.Repositories
         System.Threading.Tasks.Task<Fossa.API.Core.Entities.CompanyEntity> GetByTenantIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken);
     }
     public interface ICompanyRepository : TIKSN.Data.IRepository<Fossa.API.Core.Entities.CompanyEntity> { }
+    public interface IDepartmentIndexRepository
+    {
+        System.Threading.Tasks.Task EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken);
+    }
     public interface IDepartmentQueryRepository : Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.CompanyId>, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.DepartmentId>, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.EmployeeId>, TIKSN.Data.IQueryRepository<Fossa.API.Core.Entities.DepartmentEntity, Fossa.API.Core.Entities.DepartmentId>
     {
         System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Core.Entities.DepartmentEntity>> PageAsync(Fossa.API.Core.Repositories.TenantDepartmentPageQuery pageQuery, System.Threading.CancellationToken cancellationToken);
@@ -868,7 +872,7 @@ namespace Fossa.API.Core.Services
     }
     public class SystemInitializer : Fossa.API.Core.Services.ISystemInitializer
     {
-        public SystemInitializer(Fossa.API.Core.Services.ISystemPropertiesInitializer systemPropertiesInitializer, Fossa.API.Core.Services.ISystemLicenseInitializer systemLicenseInitializer, Fossa.API.Core.Repositories.IBranchIndexRepository branchIndexRepository, Fossa.API.Core.Repositories.IEmployeeIndexRepository employeeIndexRepository, Microsoft.Extensions.Logging.ILogger<Fossa.API.Core.Services.SystemInitializer> logger) { }
+        public SystemInitializer(Fossa.API.Core.Services.ISystemPropertiesInitializer systemPropertiesInitializer, Fossa.API.Core.Services.ISystemLicenseInitializer systemLicenseInitializer, Fossa.API.Core.Repositories.IBranchIndexRepository branchIndexRepository, Fossa.API.Core.Repositories.IEmployeeIndexRepository employeeIndexRepository, Fossa.API.Core.Repositories.IDepartmentIndexRepository departmentIndexRepository, Microsoft.Extensions.Logging.ILogger<Fossa.API.Core.Services.SystemInitializer> logger) { }
         public System.Threading.Tasks.Task InitializeAsync(System.Threading.CancellationToken cancellationToken) { }
     }
     public class SystemLicenseInitializer : Fossa.API.Core.Services.ISystemLicenseInitializer

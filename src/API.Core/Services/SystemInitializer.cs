@@ -9,6 +9,7 @@ public class SystemInitializer : ISystemInitializer
   private readonly ISystemLicenseInitializer _systemLicenseInitializer;
   private readonly IBranchIndexRepository _branchIndexRepository;
   private readonly IEmployeeIndexRepository _employeeIndexRepository;
+  private readonly IDepartmentIndexRepository _departmentIndexRepository;
   private readonly ILogger<SystemInitializer> _logger;
 
   public SystemInitializer(
@@ -16,12 +17,14 @@ public class SystemInitializer : ISystemInitializer
     ISystemLicenseInitializer systemLicenseInitializer,
     IBranchIndexRepository branchIndexRepository,
     IEmployeeIndexRepository employeeIndexRepository,
+    IDepartmentIndexRepository departmentIndexRepository,
     ILogger<SystemInitializer> logger)
   {
     _systemPropertiesInitializer = systemPropertiesInitializer ?? throw new ArgumentNullException(nameof(systemPropertiesInitializer));
     _systemLicenseInitializer = systemLicenseInitializer ?? throw new ArgumentNullException(nameof(systemLicenseInitializer));
     _branchIndexRepository = branchIndexRepository ?? throw new ArgumentNullException(nameof(branchIndexRepository));
     _employeeIndexRepository = employeeIndexRepository ?? throw new ArgumentNullException(nameof(employeeIndexRepository));
+    _departmentIndexRepository = departmentIndexRepository ?? throw new ArgumentNullException(nameof(departmentIndexRepository));
     _logger = logger ?? throw new ArgumentNullException(nameof(logger));
   }
 
@@ -34,5 +37,6 @@ public class SystemInitializer : ISystemInitializer
 
     await _branchIndexRepository.EnsureIndexesCreatedAsync(cancellationToken).ConfigureAwait(false);
     await _employeeIndexRepository.EnsureIndexesCreatedAsync(cancellationToken).ConfigureAwait(false);
+    await _departmentIndexRepository.EnsureIndexesCreatedAsync(cancellationToken).ConfigureAwait(false);
   }
 }
