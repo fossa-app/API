@@ -1,13 +1,9 @@
 ﻿using Asp.Versioning;
-using Fossa.API.Core.Entities;
-using Fossa.API.Core.Messages.Commands;
-using Fossa.API.Core.Messages.Queries;
-using Fossa.API.Core.Tenant;
 using Fossa.API.Web.ApiModels;
+using Fossa.API.Web.Messages.Commands;
+using Fossa.API.Web.Messages.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TIKSN.Globalization;
-using TIKSN.Mapping;
 
 namespace Fossa.API.Web.Api;
 
@@ -15,19 +11,13 @@ namespace Fossa.API.Web.Api;
 [ApiVersion(1.0)]
 [Route("api/{version:apiVersion}/[controller]")]
 [ApiController]
-public class CompanyController : BaseApiController<CompanyId>
+public class CompanyController : BaseApiController
 {
-  private readonly ITenantIdProvider<Guid> _tenantIdProvider;
-
   public CompanyController(
-    ITenantIdProvider<Guid> tenantIdProvider,
     ISender sender,
-    IPublisher publisher,
-    IMapper<CompanyId, long> domainIdentityToDataIdentityMapper,
-    IMapper<long, CompanyId> dataIdentityToDomainIdentityMapper)
-    : base(sender, publisher, domainIdentityToDataIdentityMapper, dataIdentityToDomainIdentityMapper)
+    IPublisher publisher)
+    : base(sender, publisher)
   {
-    _tenantIdProvider = tenantIdProvider ?? throw new ArgumentNullException(nameof(tenantIdProvider));
   }
 
   [HttpDelete]
@@ -35,36 +25,28 @@ public class CompanyController : BaseApiController<CompanyId>
   public async Task DeleteAsync(
     CancellationToken cancellationToken)
   {
-    var tenantId = _tenantIdProvider.GetTenantId();
     await _sender.Send(
-      new CompanyDeletionCommand(tenantId),
+      new CompanyDeletionApiCommand(),
       cancellationToken);
   }
 
   [HttpGet]
   public async Task<CompanyRetrievalModel> GetAsync(
-    [FromServices] IMapper<CompanyEntity, CompanyRetrievalModel> mapper,
     CancellationToken cancellationToken)
   {
-    var tenantId = _tenantIdProvider.GetTenantId();
-    var entity = await _sender.Send(
-      new CompanyRetrievalQuery(tenantId),
+    return await _sender.Send(
+      new CompanyRetrievalApiQuery(),
       cancellationToken);
-
-    return mapper.Map(entity);
   }
 
   [HttpPost]
   [Authorize(Roles = Roles.Administrator)]
   public async Task PostAsync(
     [FromBody] CompanyModificationModel model,
-    [FromServices] IRegionFactory regionFactory,
     CancellationToken cancellationToken)
   {
-    var tenantId = _tenantIdProvider.GetTenantId();
     await _sender.Send(
-      new CompanyCreationCommand(tenantId, model.Name ?? string.Empty,
-      regionFactory.Create(model.CountryCode ?? string.Empty)),
+      new CompanyCreationApiCommand(model.Name, model.CountryCode),
       cancellationToken);
   }
 
@@ -72,15 +54,12 @@ public class CompanyController : BaseApiController<CompanyId>
   [Authorize(Roles = Roles.Administrator)]
   public async Task PutAsync(
     [FromBody] CompanyModificationModel model,
-    [FromServices] IRegionFactory regionFactory,
     CancellationToken cancellationToken)
   {
-    var tenantId = _tenantIdProvider.GetTenantId();
     await _sender.Send(
-      new CompanyModificationCommand(
-        tenantId,
-        model.Name ?? string.Empty,
-        regionFactory.Create(model.CountryCode ?? string.Empty)),
+      new CompanyModificationApiCommand(
+        model.Name,
+        model.CountryCode),
       cancellationToken);
   }
 }
