@@ -5,6 +5,7 @@ using Fossa.API.Core.Messages.Queries;
 using Fossa.API.Core.Tenant;
 using Fossa.API.Core.User;
 using Fossa.API.Web.ApiModels;
+using Fossa.API.Web.Messages.Commands;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TIKSN.Data;
@@ -57,19 +58,13 @@ public class EmployeesController : BaseApiController<EmployeeId>
   public async Task PutAsync(
     [FromRoute] long id,
     [FromBody] EmployeeManagementModel model,
-    [FromServices] IMapper<long, BranchId> branchDataIdentityToDomainIdentityMapper,
-    [FromServices] IMapper<long, DepartmentId> departmentDataIdentityToDomainIdentityMapper,
     CancellationToken cancellationToken)
   {
-    var tenantId = _tenantIdProvider.GetTenantId();
-    var userId = _userIdProvider.GetUserId();
     await _sender.Send(
-      new EmployeeManagementCommand(
-        _dataIdentityToDomainIdentityMapper.Map(id),
-        tenantId,
-        userId,
-        Optional(model.AssignedBranchId).Map(branchDataIdentityToDomainIdentityMapper.Map),
-        Optional(model.AssignedDepartmentId).Map(departmentDataIdentityToDomainIdentityMapper.Map)),
+      new EmployeeManagementApiCommand(
+        id,
+        model.AssignedBranchId,
+        model.AssignedDepartmentId),
       cancellationToken);
   }
 
