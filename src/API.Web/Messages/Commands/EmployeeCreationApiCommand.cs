@@ -3,6 +3,6 @@
 namespace Fossa.API.Web.Messages.Commands;
 
 public record EmployeeCreationApiCommand(
-    string FirstName,
-    string LastName,
-    string FullName) : ICommand;
+    string? FirstName,
+    string? LastName,
+    string? FullName) : ICommand;
