@@ -1,6 +1,7 @@
 ﻿using Fossa.API.Core.Entities;
 using Fossa.API.Core.Messages.Queries;
 using Fossa.API.Core.Tenant;
+using Fossa.API.Core.User;
 using Fossa.API.Web.ApiModels;
 using TIKSN.Mapping;
 
@@ -14,10 +15,12 @@ public class CompanyRetrievalApiQueryHandler : ApiMessageHandler<CompanyId, Comp
     IMapper<CompanyEntity, CompanyRetrievalModel> domainResponseToApiResponseMapper,
     ISender sender,
     ITenantIdProvider<Guid> tenantIdProvider,
+    IUserIdProvider<Guid> userIdProvider,
     IMapper<CompanyId, long> domainIdentityToDataIdentityMapper,
     IMapper<long, CompanyId> dataIdentityToDomainIdentityMapper) : base(
       sender,
       tenantIdProvider,
+      userIdProvider,
       domainIdentityToDataIdentityMapper,
       dataIdentityToDomainIdentityMapper)
   {
