@@ -1,5 +1,4 @@
 ﻿using Asp.Versioning;
-using Fossa.API.Core.Messages.Commands;
 using Fossa.API.Web.ApiModels;
 using Fossa.API.Web.Messages.Commands;
 using Fossa.API.Web.Messages.Queries;
@@ -23,17 +22,12 @@ public class BranchesController : BaseApiController
 
   [HttpDelete("{id}")]
   [Authorize(Roles = Roles.Administrator)]
-  public async Task DeleteAsync(
+  public Task DeleteAsync(
     long id,
     CancellationToken cancellationToken)
   {
-    var tenantId = _tenantIdProvider.GetTenantId();
-    var userId = _userIdProvider.GetUserId();
-    await _sender.Send(
-      new BranchDeletionCommand(
-        _dataIdentityToDomainIdentityMapper.Map(id),
-        tenantId,
-        userId),
+    return _sender.Send(
+      new BranchDeletionApiCommand(id),
       cancellationToken);
   }
 
