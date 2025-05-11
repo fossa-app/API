@@ -2,7 +2,6 @@
 using System.Net.Http.Json;
 using EasyDoubles;
 using Fossa.API.Persistence.Mongo.Entities;
-using Fossa.API.Persistence.Mongo.Repositories;
 using Fossa.API.Web.ApiModels;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;

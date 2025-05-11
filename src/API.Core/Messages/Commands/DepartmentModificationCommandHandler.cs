@@ -1,5 +1,4 @@
-﻿using Fossa.API.Core.Entities;
-using Fossa.API.Core.Repositories;
+﻿using Fossa.API.Core.Repositories;
 
 namespace Fossa.API.Core.Messages.Commands;
 

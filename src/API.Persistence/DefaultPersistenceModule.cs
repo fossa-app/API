@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using Fossa.API.Core.Repositories;
 using Fossa.API.Persistence.Mongo.Repositories;
 using TIKSN.Data.Mongo;
 

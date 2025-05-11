@@ -1,4 +1,4 @@
-using Fossa.API.Core.Messages.Queries;
+﻿using Fossa.API.Core.Messages.Queries;
 using Fossa.API.Web.ApiModels;
 
 namespace Fossa.API.Web.Messages.Queries;
