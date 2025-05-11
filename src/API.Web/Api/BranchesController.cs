@@ -1,15 +1,10 @@
 ﻿using Asp.Versioning;
-using Fossa.API.Core.Entities;
 using Fossa.API.Core.Messages.Commands;
-using Fossa.API.Core.Messages.Queries;
-using Fossa.API.Core.Tenant;
-using Fossa.API.Core.TimeZone;
-using Fossa.API.Core.User;
 using Fossa.API.Web.ApiModels;
+using Fossa.API.Web.Messages.Commands;
+using Fossa.API.Web.Messages.Queries;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TIKSN.Data;
-using TIKSN.Mapping;
 
 namespace Fossa.API.Web.Api;
 
@@ -17,22 +12,13 @@ namespace Fossa.API.Web.Api;
 [ApiVersion(1.0)]
 [Route("api/{version:apiVersion}/[controller]")]
 [ApiController]
-public class BranchesController : BaseApiController<BranchId>
+public class BranchesController : BaseApiController
 {
-  private readonly ITenantIdProvider<Guid> _tenantIdProvider;
-  private readonly IUserIdProvider<Guid> _userIdProvider;
-
   public BranchesController(
-    ITenantIdProvider<Guid> tenantIdProvider,
-    IUserIdProvider<Guid> userIdProvider,
     ISender sender,
-    IPublisher publisher,
-    IMapper<BranchId, long> domainIdentityToDataIdentityMapper,
-    IMapper<long, BranchId> dataIdentityToDomainIdentityMapper)
-    : base(sender, publisher, domainIdentityToDataIdentityMapper, dataIdentityToDomainIdentityMapper)
+    IPublisher publisher)
+    : base(sender, publisher)
   {
-    _tenantIdProvider = tenantIdProvider ?? throw new ArgumentNullException(nameof(tenantIdProvider));
-    _userIdProvider = userIdProvider ?? throw new ArgumentNullException(nameof(userIdProvider));
   }
 
   [HttpDelete("{id}")]
@@ -54,94 +40,54 @@ public class BranchesController : BaseApiController<BranchId>
   [HttpGet("{id}")]
   public async Task<BranchRetrievalModel> GetAsync(
     [FromRoute] long id,
-    [FromServices] IMapper<BranchEntity, BranchRetrievalModel> mapper,
     CancellationToken cancellationToken)
   {
-    var tenantId = _tenantIdProvider.GetTenantId();
-    var userId = _userIdProvider.GetUserId();
-    var entity = await _sender.Send(
-      new BranchRetrievalQuery(
-        _dataIdentityToDomainIdentityMapper.Map(id),
-        tenantId,
-        userId),
+    return await _sender.Send(
+      new BranchRetrievalApiQuery(id),
       cancellationToken);
-
-    return mapper.Map(entity);
   }
 
   [HttpPost]
   [Authorize(Roles = Roles.Administrator)]
-  public async Task PostAsync(
+  public Task PostAsync(
     [FromBody] BranchModificationModel model,
-    [FromServices] IDateTimeZoneProvider dateTimeZoneProvider,
-    [FromServices] IMapper<AddressModel, Address> addressModelToDomainMapper,
     CancellationToken cancellationToken)
   {
-    var tenantId = _tenantIdProvider.GetTenantId();
-    var userId = _userIdProvider.GetUserId();
-    var timeZone = dateTimeZoneProvider.GetDateTimeZoneById(model.TimeZoneId ?? string.Empty);
-    await _sender.Send(
-      new BranchCreationCommand(
-        tenantId,
-        userId,
-        model.Name ?? string.Empty,
-        timeZone,
-        Optional(model.Address).Map(addressModelToDomainMapper.Map)),
+    return _sender.Send(
+      new BranchCreationApiCommand(
+        model.Name,
+        model.TimeZoneId,
+        model.Address),
       cancellationToken);
   }
 
   [HttpPut("{id}")]
   [Authorize(Roles = Roles.Administrator)]
-  public async Task PutAsync(
+  public Task PutAsync(
     long id,
     [FromBody] BranchModificationModel model,
-    [FromServices] IDateTimeZoneProvider dateTimeZoneProvider,
-    [FromServices] IMapper<AddressModel, Address> addressModelToDomainMapper,
     CancellationToken cancellationToken)
   {
-    var tenantId = _tenantIdProvider.GetTenantId();
-    var userId = _userIdProvider.GetUserId();
-    var timeZone = dateTimeZoneProvider.GetDateTimeZoneById(model.TimeZoneId ?? string.Empty);
-    await _sender.Send(
-      new BranchModificationCommand(
-        _dataIdentityToDomainIdentityMapper.Map(id),
-        tenantId,
-        userId,
-        model.Name ?? string.Empty,
-        timeZone,
-        Optional(model.Address).Map(addressModelToDomainMapper.Map)),
+    return _sender.Send(
+      new BranchModificationApiCommand(
+        id,
+        model.Name,
+        model.TimeZoneId,
+        model.Address),
       cancellationToken);
   }
 
   [HttpGet]
   public Task<PagingResponseModel<BranchRetrievalModel>> QueryAsync(
     [FromQuery] BranchQueryRequestModel requestModel,
-    [FromServices] IMapper<PageResult<BranchEntity>, PagingResponseModel<BranchRetrievalModel>> pagingMapper,
-    [FromServices] IMapper<Seq<BranchEntity>, PagingResponseModel<BranchRetrievalModel>> listingMapper,
     CancellationToken cancellationToken)
   {
-    var tenantId = _tenantIdProvider.GetTenantId();
-    var userId = _userIdProvider.GetUserId();
-
-    return (requestModel.Id ?? [])
-      .ToSeq()
-      .Map(_dataIdentityToDomainIdentityMapper.Map)
-      .Match<Either<BranchListingQuery, BranchPagingQuery>>(
-        () => new BranchPagingQuery(
-          tenantId,
-          userId,
-          requestModel.Search ?? string.Empty,
-          new Page(
-            requestModel.PageNumber ?? 0,
-            requestModel.PageSize ?? 0)),
-        ids => new BranchListingQuery(
-          ids,
-          tenantId,
-          userId))
-      .Match<EitherAsync<Seq<BranchEntity>, PageResult<BranchEntity>>>(
-        query => _sender.Send(query, cancellationToken),
-        query => _sender.Send(query, cancellationToken))
-      .BiMap(pagingMapper.Map, listingMapper.Map)
-      .Match(x => x, x => x);
+    return _sender.Send(
+      new BranchPagingApiQuery(
+        requestModel.Id,
+        requestModel.Search,
+        requestModel.PageNumber,
+        requestModel.PageSize),
+      cancellationToken);
   }
 }
