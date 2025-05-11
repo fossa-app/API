@@ -49,3 +49,50 @@ public abstract class ApiMessageHandler<TEntityIdentity, TApiRequest, TApiRespon
 
   protected abstract TDomainRequest MapToDomainRequest(TApiRequest apiRequest);
 }
+
+public abstract class ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse, TDomainRequest1, TDomainResponse1, TDomainRequest2, TDomainResponse2> : IRequestHandler<TApiRequest, TApiResponse>
+  where TApiRequest : IRequest<TApiResponse>
+  where TDomainRequest1 : IRequest<TDomainResponse1>
+  where TDomainRequest2 : IRequest<TDomainResponse2>
+{
+  protected readonly IMapper<long, TEntityIdentity> _dataIdentityToDomainIdentityMapper;
+  protected readonly IMapper<TEntityIdentity, long> _domainIdentityToDataIdentityMapper;
+  protected readonly ISender _sender;
+  protected readonly ITenantIdProvider<Guid> _tenantIdProvider;
+  protected readonly IUserIdProvider<Guid> _userIdProvider;
+
+  protected ApiMessageHandler(
+    ISender sender,
+    ITenantIdProvider<Guid> tenantIdProvider,
+    IUserIdProvider<Guid> userIdProvider,
+    IMapper<TEntityIdentity, long> domainIdentityToDataIdentityMapper,
+    IMapper<long, TEntityIdentity> dataIdentityToDomainIdentityMapper)
+  {
+    _sender = sender ?? throw new ArgumentNullException(nameof(sender));
+    _tenantIdProvider = tenantIdProvider ?? throw new ArgumentNullException(nameof(tenantIdProvider));
+    _userIdProvider = userIdProvider ?? throw new ArgumentNullException(nameof(userIdProvider));
+    _domainIdentityToDataIdentityMapper = domainIdentityToDataIdentityMapper ?? throw new ArgumentNullException(nameof(domainIdentityToDataIdentityMapper));
+    _dataIdentityToDomainIdentityMapper = dataIdentityToDomainIdentityMapper ?? throw new ArgumentNullException(nameof(dataIdentityToDomainIdentityMapper));
+  }
+
+  public Task<TApiResponse> Handle(TApiRequest request, CancellationToken cancellationToken)
+  {
+    if (request is null)
+    {
+      throw new ArgumentNullException(nameof(request));
+    }
+
+    return MapToDomainRequest(request)
+      .Match<EitherAsync<TDomainResponse1, TDomainResponse2>>(
+        query => _sender.Send(query, cancellationToken),
+        query => _sender.Send(query, cancellationToken))
+      .BiMap(MapToApiResponse, MapToApiResponse)
+      .Match(x => x, x => x);
+  }
+
+  protected abstract TApiResponse MapToApiResponse(TDomainResponse1 domainResponse);
+
+  protected abstract TApiResponse MapToApiResponse(TDomainResponse2 domainResponse);
+
+  protected abstract Either<TDomainRequest1, TDomainRequest2> MapToDomainRequest(TApiRequest apiRequest);
+}
