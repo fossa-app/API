@@ -97,16 +97,16 @@
     [Microsoft.AspNetCore.Authorization.Authorize]
     [Microsoft.AspNetCore.Mvc.ApiController]
     [Microsoft.AspNetCore.Mvc.Route("api/{version:apiVersion}/[controller]")]
-    public class EmployeesController : Fossa.API.Web.Api.BaseApiController<Fossa.API.Core.Entities.EmployeeId>
+    public class EmployeesController : Fossa.API.Web.Api.BaseApiController
     {
-        public EmployeesController(Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, MediatR.ISender sender, MediatR.IPublisher publisher, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId> dataIdentityToDomainIdentityMapper) { }
+        public EmployeesController(MediatR.ISender sender, MediatR.IPublisher publisher) { }
         [Microsoft.AspNetCore.Mvc.HttpGet("{id}")]
-        public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.EmployeeRetrievalModel> GetAsync([Microsoft.AspNetCore.Mvc.FromRoute] long id, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Web.ApiModels.EmployeeRetrievalModel> mapper, System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.EmployeeRetrievalModel> GetAsync([Microsoft.AspNetCore.Mvc.FromRoute] long id, System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
         [Microsoft.AspNetCore.Mvc.HttpPut("{id}")]
         public System.Threading.Tasks.Task PutAsync([Microsoft.AspNetCore.Mvc.FromRoute] long id, [Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.EmployeeManagementModel model, System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Mvc.HttpGet]
-        public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>> QueryAsync([Microsoft.AspNetCore.Mvc.FromQuery] Fossa.API.Web.ApiModels.EmployeeQueryRequestModel requestModel, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<TIKSN.Data.PageResult<Fossa.API.Core.Entities.EmployeeEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>> pagingMapper, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<LanguageExt.Seq<Fossa.API.Core.Entities.EmployeeEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>> listingMapper, System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>> QueryAsync([Microsoft.AspNetCore.Mvc.FromQuery] Fossa.API.Web.ApiModels.EmployeeQueryRequestModel requestModel, System.Threading.CancellationToken cancellationToken) { }
     }
 }
 namespace Fossa.API.Web.Api.Identity
@@ -480,6 +480,22 @@ namespace Fossa.API.Web.Messages
         protected abstract TApiResponse MapToApiResponse(TDomainResponse domainResponse);
         protected abstract TDomainRequest MapToDomainRequest(TApiRequest apiRequest);
     }
+    public abstract class ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse, TDomainRequest1, TDomainResponse1, TDomainRequest2, TDomainResponse2> : MediatR.IRequestHandler<TApiRequest, TApiResponse>
+        where TApiRequest : MediatR.IRequest<TApiResponse>
+        where TDomainRequest1 : MediatR.IRequest<TDomainResponse1>
+        where TDomainRequest2 : MediatR.IRequest<TDomainResponse2>
+    {
+        protected readonly TIKSN.Mapping.IMapper<long, TEntityIdentity> _dataIdentityToDomainIdentityMapper;
+        protected readonly TIKSN.Mapping.IMapper<TEntityIdentity, long> _domainIdentityToDataIdentityMapper;
+        protected readonly MediatR.ISender _sender;
+        protected readonly Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> _tenantIdProvider;
+        protected readonly Fossa.API.Core.User.IUserIdProvider<System.Guid> _userIdProvider;
+        protected ApiMessageHandler(MediatR.ISender sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, TIKSN.Mapping.IMapper<TEntityIdentity, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, TEntityIdentity> dataIdentityToDomainIdentityMapper) { }
+        public System.Threading.Tasks.Task<TApiResponse> Handle(TApiRequest request, System.Threading.CancellationToken cancellationToken) { }
+        protected abstract TApiResponse MapToApiResponse(TDomainResponse1 domainResponse);
+        protected abstract TApiResponse MapToApiResponse(TDomainResponse2 domainResponse);
+        protected abstract LanguageExt.Either<TDomainRequest1, TDomainRequest2> MapToDomainRequest(TApiRequest apiRequest);
+    }
 }
 namespace Fossa.API.Web.Messages.Commands
 {
@@ -591,10 +607,18 @@ namespace Fossa.API.Web.Messages.Queries
     }
     public class EmployeePagingApiQuery : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>>, System.IEquatable<Fossa.API.Web.Messages.Queries.EmployeePagingApiQuery>
     {
-        public EmployeePagingApiQuery(string Search, int? PageNumber, int? PageSize) { }
+        public EmployeePagingApiQuery(System.Collections.Generic.IReadOnlyList<long>? Id, string? Search, int? PageNumber, int? PageSize) { }
+        public System.Collections.Generic.IReadOnlyList<long>? Id { get; init; }
         public int? PageNumber { get; init; }
         public int? PageSize { get; init; }
-        public string Search { get; init; }
+        public string? Search { get; init; }
+    }
+    public class EmployeePagingApiQueryHandler : Fossa.API.Web.Messages.ApiMessageHandler<Fossa.API.Core.Entities.EmployeeId, Fossa.API.Web.Messages.Queries.EmployeePagingApiQuery, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>, Fossa.API.Core.Messages.Queries.EmployeeListingQuery, LanguageExt.Seq<Fossa.API.Core.Entities.EmployeeEntity>, Fossa.API.Core.Messages.Queries.EmployeePagingQuery, TIKSN.Data.PageResult<Fossa.API.Core.Entities.EmployeeEntity>>
+    {
+        public EmployeePagingApiQueryHandler(TIKSN.Mapping.IMapper<TIKSN.Data.PageResult<Fossa.API.Core.Entities.EmployeeEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>> pagingMapper, TIKSN.Mapping.IMapper<LanguageExt.Seq<Fossa.API.Core.Entities.EmployeeEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>> listingMapper, MediatR.ISender sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId> dataIdentityToDomainIdentityMapper) { }
+        protected override Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel> MapToApiResponse(LanguageExt.Seq<Fossa.API.Core.Entities.EmployeeEntity> domainResponse) { }
+        protected override Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel> MapToApiResponse(TIKSN.Data.PageResult<Fossa.API.Core.Entities.EmployeeEntity> domainResponse) { }
+        protected override LanguageExt.Either<Fossa.API.Core.Messages.Queries.EmployeeListingQuery, Fossa.API.Core.Messages.Queries.EmployeePagingQuery> MapToDomainRequest(Fossa.API.Web.Messages.Queries.EmployeePagingApiQuery apiRequest) { }
     }
     public class EmployeeRetrievalApiQuery : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>, System.IEquatable<Fossa.API.Web.Messages.Queries.EmployeeRetrievalApiQuery>
     {
