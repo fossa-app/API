@@ -17,10 +17,10 @@ using Hellang.Middleware.ProblemDetails.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using OpenTelemetry;
+using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
-using Serilog;
 using TIKSN.DependencyInjection;
 using TIKSN.Deployment;
 using TIKSN.Mapping;
@@ -30,8 +30,6 @@ var initialReleaseDate = new DateOnly(1957, 01, 01);
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-
-builder.Host.UseSerilog((_, config) => config.ReadFrom.Configuration(builder.Configuration));
 
 builder.Services.Configure<PagingQueryOptions>(builder.Configuration.GetSection("Paging"));
 builder.Services.AddIdGen(builder.Configuration, initialReleaseDate);
@@ -144,7 +142,6 @@ builder.Services.AddOpenTelemetry()
         new KeyValuePair<string, object>("env", builder.Environment.EnvironmentName),
     ])
   )
-  .UseOtlpExporter()
   .WithTracing(tracing => tracing
     .AddSource("*")
     .AddAspNetCoreInstrumentation()
@@ -154,7 +151,13 @@ builder.Services.AddOpenTelemetry()
     .AddMeter("*")
     .AddAspNetCoreInstrumentation()
     .AddHttpClientInstrumentation()
-  );
+  )
+  .WithLogging(logging => { }, options =>
+  {
+    options.IncludeFormattedMessage = true;
+    options.IncludeScopes = true;
+  })
+  .UseOtlpExporter();
 
 var app = builder.Build();
 
