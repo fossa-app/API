@@ -60,22 +60,22 @@
     [Microsoft.AspNetCore.Authorization.Authorize]
     [Microsoft.AspNetCore.Mvc.ApiController]
     [Microsoft.AspNetCore.Mvc.Route("api/{version:apiVersion}/[controller]")]
-    public class DepartmentsController : Fossa.API.Web.Api.BaseApiController<Fossa.API.Core.Entities.DepartmentId>
+    public class DepartmentsController : Fossa.API.Web.Api.BaseApiController
     {
-        public DepartmentsController(Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, MediatR.ISender sender, MediatR.IPublisher publisher, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.DepartmentId> dataIdentityToDomainIdentityMapper) { }
+        public DepartmentsController(MediatR.ISender sender, MediatR.IPublisher publisher) { }
         [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
         [Microsoft.AspNetCore.Mvc.HttpDelete("{id}")]
         public System.Threading.Tasks.Task DeleteAsync(long id, System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Mvc.HttpGet("{id}")]
-        public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.DepartmentRetrievalModel> GetAsync([Microsoft.AspNetCore.Mvc.FromRoute] long id, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentEntity, Fossa.API.Web.ApiModels.DepartmentRetrievalModel> mapper, System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.DepartmentRetrievalModel> GetAsync([Microsoft.AspNetCore.Mvc.FromRoute] long id, System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
         [Microsoft.AspNetCore.Mvc.HttpPost]
-        public System.Threading.Tasks.Task PostAsync([Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.DepartmentModificationModel model, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId> employeeDataIdentityToDomainIdentityMapper, System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task PostAsync([Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.DepartmentModificationModel model, System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
         [Microsoft.AspNetCore.Mvc.HttpPut("{id}")]
-        public System.Threading.Tasks.Task PutAsync(long id, [Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.DepartmentModificationModel model, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId> employeeDataIdentityToDomainIdentityMapper, System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task PutAsync(long id, [Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.DepartmentModificationModel model, System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Mvc.HttpGet]
-        public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.DepartmentRetrievalModel>> QueryAsync([Microsoft.AspNetCore.Mvc.FromQuery] Fossa.API.Web.ApiModels.DepartmentQueryRequestModel requestModel, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<TIKSN.Data.PageResult<Fossa.API.Core.Entities.DepartmentEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.DepartmentRetrievalModel>> pagingMapper, [Microsoft.AspNetCore.Mvc.FromServices] TIKSN.Mapping.IMapper<LanguageExt.Seq<Fossa.API.Core.Entities.DepartmentEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.DepartmentRetrievalModel>> listingMapper, System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.DepartmentRetrievalModel>> QueryAsync([Microsoft.AspNetCore.Mvc.FromQuery] Fossa.API.Web.ApiModels.DepartmentQueryRequestModel requestModel, System.Threading.CancellationToken cancellationToken) { }
     }
     [Asp.Versioning.ApiVersion(1D, null)]
     [Microsoft.AspNetCore.Authorization.Authorize]
@@ -571,6 +571,44 @@ namespace Fossa.API.Web.Messages.Commands
         protected override MediatR.Unit MapToApiResponse(MediatR.Unit domainResponse) { }
         protected override Fossa.API.Core.Messages.Commands.CompanyModificationCommand MapToDomainRequest(Fossa.API.Web.Messages.Commands.CompanyModificationApiCommand apiRequest) { }
     }
+    public class DepartmentCreationApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.DepartmentCreationApiCommand>
+    {
+        public DepartmentCreationApiCommand(string? Name, long? ParentDepartmentId, long? ManagerId) { }
+        public long? ManagerId { get; init; }
+        public string? Name { get; init; }
+        public long? ParentDepartmentId { get; init; }
+    }
+    public class DepartmentCreationApiCommandHandler : Fossa.API.Web.Messages.ApiMessageHandler<Fossa.API.Core.Entities.DepartmentId, Fossa.API.Web.Messages.Commands.DepartmentCreationApiCommand, MediatR.Unit, Fossa.API.Core.Messages.Commands.DepartmentCreationCommand, MediatR.Unit>
+    {
+        public DepartmentCreationApiCommandHandler(MediatR.ISender sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.DepartmentId> departmentDataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId> employeeDataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentId, long> domainIdentityToDataIdentityMapper) { }
+        protected override MediatR.Unit MapToApiResponse(MediatR.Unit domainResponse) { }
+        protected override Fossa.API.Core.Messages.Commands.DepartmentCreationCommand MapToDomainRequest(Fossa.API.Web.Messages.Commands.DepartmentCreationApiCommand apiRequest) { }
+    }
+    public class DepartmentDeletionApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.DepartmentDeletionApiCommand>
+    {
+        public DepartmentDeletionApiCommand(long Id) { }
+        public long Id { get; init; }
+    }
+    public class DepartmentDeletionApiCommandHandler : Fossa.API.Web.Messages.ApiMessageHandler<Fossa.API.Core.Entities.DepartmentId, Fossa.API.Web.Messages.Commands.DepartmentDeletionApiCommand, MediatR.Unit, Fossa.API.Core.Messages.Commands.DepartmentDeletionCommand, MediatR.Unit>
+    {
+        public DepartmentDeletionApiCommandHandler(MediatR.ISender sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.DepartmentId> dataIdentityToDomainIdentityMapper) { }
+        protected override MediatR.Unit MapToApiResponse(MediatR.Unit domainResponse) { }
+        protected override Fossa.API.Core.Messages.Commands.DepartmentDeletionCommand MapToDomainRequest(Fossa.API.Web.Messages.Commands.DepartmentDeletionApiCommand apiRequest) { }
+    }
+    public class DepartmentModificationApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.DepartmentModificationApiCommand>
+    {
+        public DepartmentModificationApiCommand(long Id, string? Name, long? ParentDepartmentId, long? ManagerId) { }
+        public long Id { get; init; }
+        public long? ManagerId { get; init; }
+        public string? Name { get; init; }
+        public long? ParentDepartmentId { get; init; }
+    }
+    public class DepartmentModificationApiCommandHandler : Fossa.API.Web.Messages.ApiMessageHandler<Fossa.API.Core.Entities.DepartmentId, Fossa.API.Web.Messages.Commands.DepartmentModificationApiCommand, MediatR.Unit, Fossa.API.Core.Messages.Commands.DepartmentModificationCommand, MediatR.Unit>
+    {
+        public DepartmentModificationApiCommandHandler(MediatR.ISender sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.DepartmentId> departmentDataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId> employeeDataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentId, long> domainIdentityToDataIdentityMapper) { }
+        protected override MediatR.Unit MapToApiResponse(MediatR.Unit domainResponse) { }
+        protected override Fossa.API.Core.Messages.Commands.DepartmentModificationCommand MapToDomainRequest(Fossa.API.Web.Messages.Commands.DepartmentModificationApiCommand apiRequest) { }
+    }
     public class EmployeeCreationApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.EmployeeCreationApiCommand>
     {
         public EmployeeCreationApiCommand(string? FirstName, string? LastName, string? FullName) { }
@@ -668,6 +706,32 @@ namespace Fossa.API.Web.Messages.Queries
         public CurrentEmployeeRetrievalApiQueryHandler(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Web.ApiModels.EmployeeRetrievalModel> domainResponseToApiResponseMapper, MediatR.ISender sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId> dataIdentityToDomainIdentityMapper) { }
         protected override Fossa.API.Web.ApiModels.EmployeeRetrievalModel MapToApiResponse(Fossa.API.Core.Entities.EmployeeEntity domainResponse) { }
         protected override Fossa.API.Core.Messages.Queries.CurrentEmployeeRetrievalQuery MapToDomainRequest(Fossa.API.Web.Messages.Queries.CurrentEmployeeRetrievalApiQuery apiRequest) { }
+    }
+    public class DepartmentPagingApiQuery : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.DepartmentRetrievalModel>>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.DepartmentRetrievalModel>>, System.IEquatable<Fossa.API.Web.Messages.Queries.DepartmentPagingApiQuery>
+    {
+        public DepartmentPagingApiQuery(System.Collections.Generic.IReadOnlyList<long>? Id, string? Search, int? PageNumber, int? PageSize) { }
+        public System.Collections.Generic.IReadOnlyList<long>? Id { get; init; }
+        public int? PageNumber { get; init; }
+        public int? PageSize { get; init; }
+        public string? Search { get; init; }
+    }
+    public class DepartmentPagingApiQueryHandler : Fossa.API.Web.Messages.ApiMessageHandler<Fossa.API.Core.Entities.DepartmentId, Fossa.API.Web.Messages.Queries.DepartmentPagingApiQuery, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.DepartmentRetrievalModel>, Fossa.API.Core.Messages.Queries.DepartmentListingQuery, LanguageExt.Seq<Fossa.API.Core.Entities.DepartmentEntity>, Fossa.API.Core.Messages.Queries.DepartmentPagingQuery, TIKSN.Data.PageResult<Fossa.API.Core.Entities.DepartmentEntity>>
+    {
+        public DepartmentPagingApiQueryHandler(TIKSN.Mapping.IMapper<TIKSN.Data.PageResult<Fossa.API.Core.Entities.DepartmentEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.DepartmentRetrievalModel>> pagingMapper, TIKSN.Mapping.IMapper<LanguageExt.Seq<Fossa.API.Core.Entities.DepartmentEntity>, Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.DepartmentRetrievalModel>> listingMapper, MediatR.ISender sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.DepartmentId> dataIdentityToDomainIdentityMapper) { }
+        protected override Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.DepartmentRetrievalModel> MapToApiResponse(LanguageExt.Seq<Fossa.API.Core.Entities.DepartmentEntity> domainResponse) { }
+        protected override Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.DepartmentRetrievalModel> MapToApiResponse(TIKSN.Data.PageResult<Fossa.API.Core.Entities.DepartmentEntity> domainResponse) { }
+        protected override LanguageExt.Either<Fossa.API.Core.Messages.Queries.DepartmentListingQuery, Fossa.API.Core.Messages.Queries.DepartmentPagingQuery> MapToDomainRequest(Fossa.API.Web.Messages.Queries.DepartmentPagingApiQuery apiRequest) { }
+    }
+    public class DepartmentRetrievalApiQuery : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.DepartmentRetrievalModel>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.DepartmentRetrievalModel>, System.IEquatable<Fossa.API.Web.Messages.Queries.DepartmentRetrievalApiQuery>
+    {
+        public DepartmentRetrievalApiQuery(long Id) { }
+        public long Id { get; init; }
+    }
+    public class DepartmentRetrievalApiQueryHandler : Fossa.API.Web.Messages.ApiMessageHandler<Fossa.API.Core.Entities.DepartmentId, Fossa.API.Web.Messages.Queries.DepartmentRetrievalApiQuery, Fossa.API.Web.ApiModels.DepartmentRetrievalModel, Fossa.API.Core.Messages.Queries.DepartmentRetrievalQuery, Fossa.API.Core.Entities.DepartmentEntity>
+    {
+        public DepartmentRetrievalApiQueryHandler(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentEntity, Fossa.API.Web.ApiModels.DepartmentRetrievalModel> domainResponseToApiResponseMapper, MediatR.ISender sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.DepartmentId> dataIdentityToDomainIdentityMapper) { }
+        protected override Fossa.API.Web.ApiModels.DepartmentRetrievalModel MapToApiResponse(Fossa.API.Core.Entities.DepartmentEntity domainResponse) { }
+        protected override Fossa.API.Core.Messages.Queries.DepartmentRetrievalQuery MapToDomainRequest(Fossa.API.Web.Messages.Queries.DepartmentRetrievalApiQuery apiRequest) { }
     }
     public class EmployeePagingApiQuery : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>>, System.IEquatable<Fossa.API.Web.Messages.Queries.EmployeePagingApiQuery>
     {
