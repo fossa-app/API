@@ -1,7 +1,4 @@
-﻿using System.Diagnostics;
-using System.Diagnostics.Metrics;
-using System.Net.Http.Headers;
-using System.Reflection.PortableExecutable;
+﻿using System.Net.Http.Headers;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using FluentValidation;
@@ -20,7 +17,6 @@ using Hellang.Middleware.ProblemDetails.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using OpenTelemetry;
-using OpenTelemetry.Exporter;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -29,7 +25,7 @@ using TIKSN.DependencyInjection;
 using TIKSN.Deployment;
 using TIKSN.Mapping;
 
-var initialReleaseDate = new DateOnly(1970, 01, 01);
+var initialReleaseDate = new DateOnly(1957, 01, 01);
 
 var builder = WebApplication.CreateBuilder(args);
 

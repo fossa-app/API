@@ -8,14 +8,6 @@
         protected readonly MediatR.ISender _sender;
         protected BaseApiController(MediatR.ISender sender, MediatR.IPublisher publisher) { }
     }
-    [Microsoft.AspNetCore.Mvc.ApiController]
-    [Microsoft.AspNetCore.Mvc.Route("api/[controller]")]
-    public abstract class BaseApiController<TEntityIdentity> : Fossa.API.Web.Api.BaseApiController
-    {
-        protected readonly TIKSN.Mapping.IMapper<long, TEntityIdentity> _dataIdentityToDomainIdentityMapper;
-        protected readonly TIKSN.Mapping.IMapper<TEntityIdentity, long> _domainIdentityToDataIdentityMapper;
-        protected BaseApiController(MediatR.ISender sender, MediatR.IPublisher publisher, TIKSN.Mapping.IMapper<TEntityIdentity, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, TEntityIdentity> dataIdentityToDomainIdentityMapper) { }
-    }
     [Asp.Versioning.ApiVersion(1D, null)]
     [Microsoft.AspNetCore.Authorization.Authorize]
     [Microsoft.AspNetCore.Mvc.ApiController]
