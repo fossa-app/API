@@ -4,6 +4,7 @@ using Fossa.API.Web.ApiModels;
 namespace Fossa.API.Web.Messages.Queries;
 
 public record EmployeePagingApiQuery(
-    string Search,
+    IReadOnlyList<long>? Id,
+    string? Search,
     int? PageNumber,
     int? PageSize) : IQuery<PagingResponseModel<EmployeeRetrievalModel>>;
