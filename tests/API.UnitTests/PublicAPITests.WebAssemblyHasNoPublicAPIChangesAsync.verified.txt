@@ -745,4 +745,10 @@ namespace Fossa.API.Web.Messages.Queries
         public EmployeeRetrievalApiQuery(long Id) { }
         public long Id { get; init; }
     }
+    public class EmployeeRetrievalApiQueryHandler : Fossa.API.Web.Messages.ApiMessageHandler<Fossa.API.Core.Entities.EmployeeId, Fossa.API.Web.Messages.Queries.EmployeeRetrievalApiQuery, Fossa.API.Web.ApiModels.EmployeeRetrievalModel, Fossa.API.Core.Messages.Queries.EmployeeRetrievalQuery, Fossa.API.Core.Entities.EmployeeEntity>
+    {
+        public EmployeeRetrievalApiQueryHandler(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Web.ApiModels.EmployeeRetrievalModel> domainResponseToApiResponseMapper, MediatR.ISender sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId> dataIdentityToDomainIdentityMapper) { }
+        protected override Fossa.API.Web.ApiModels.EmployeeRetrievalModel MapToApiResponse(Fossa.API.Core.Entities.EmployeeEntity domainResponse) { }
+        protected override Fossa.API.Core.Messages.Queries.EmployeeRetrievalQuery MapToDomainRequest(Fossa.API.Web.Messages.Queries.EmployeeRetrievalApiQuery apiRequest) { }
+    }
 }
