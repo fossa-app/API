@@ -339,6 +339,14 @@ namespace Fossa.API.Web.DependencyInjection
         public static Microsoft.Extensions.DependencyInjection.IServiceCollection AddIdGen(this Microsoft.Extensions.DependencyInjection.IServiceCollection services, Microsoft.Extensions.Configuration.IConfiguration configuration, System.DateOnly initialReleaseDate) { }
     }
 }
+namespace Fossa.API.Web.Filters
+{
+    public class EnrichLogRecordWithEventIdProcessor : OpenTelemetry.BaseProcessor<OpenTelemetry.Logs.LogRecord>
+    {
+        public EnrichLogRecordWithEventIdProcessor() { }
+        public override void OnEnd(OpenTelemetry.Logs.LogRecord data) { }
+    }
+}
 namespace Fossa.API.Web.HealthChecks.DependencyInjection
 {
     public static class MongoDbHealthCheckBuilderExtensions
