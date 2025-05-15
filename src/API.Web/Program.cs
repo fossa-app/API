@@ -15,9 +15,9 @@ using Fossa.Licensing;
 using Hellang.Middleware.ProblemDetails;
 using Hellang.Middleware.ProblemDetails.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.OpenApi.Models;
 using OpenTelemetry;
-using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -159,7 +159,21 @@ builder.Services.AddOpenTelemetry()
   })
   .UseOtlpExporter();
 
+if (builder.Environment.MatchesDevelopment())
+{
+  builder.Services.AddHttpLogging(options =>
+  {
+    options.LoggingFields = HttpLoggingFields.All;
+    options.CombineLogs = true;
+  });
+}
+
 var app = builder.Build();
+
+if (builder.Environment.MatchesDevelopment())
+{
+  app.UseHttpLogging();
+}
 
 app.UseProblemDetails();
 app.UseRouting();
