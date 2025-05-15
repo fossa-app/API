@@ -481,4 +481,43 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     response2Model.Items.Single(x => string.Equals(x.Name, modificationBranchName, StringComparison.OrdinalIgnoreCase)).Address?.PostalCode.ShouldBe(modificationAddress.PostalCode);
     response2Model.Items.Single(x => string.Equals(x.Name, modificationBranchName, StringComparison.OrdinalIgnoreCase)).Address?.CountryCode.ShouldBe(modificationAddress.CountryCode);
   }
+
+  [Fact]
+  public async Task UpdateBranchWithDifferentCountryCodeShouldFailAsync()
+  {
+    // Arrange
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
+
+    // Create initial branch with US address
+    const string branchName = "Branch-CountryValidation";
+    const string timeZoneId = "America/New_York";
+    var initialAddress = new AddressModel("1234 Main St", "Suite 100", "New York", "NY", "10001", "US");
+
+    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches",
+        new BranchModificationModel(branchName, timeZoneId, initialAddress));
+
+    creationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    // Get the created branch ID
+    var retrievalResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
+    var responseModel = await retrievalResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    responseModel.ShouldNotBeNull();
+    var createdBranch = responseModel.Items.Single(x => string.Equals(x.Name, branchName, StringComparison.OrdinalIgnoreCase));
+
+    // Attempt to update with Canadian address
+    var canadianAddress = new AddressModel("456 Maple St", null, "Toronto", "ON", "M5V 2H1", "CA");
+    var modificationResponse = await client.PutAsJsonAsync($"/api/1.0/Branches/{createdBranch.Id}",
+        new BranchModificationModel(branchName, timeZoneId, canadianAddress));
+
+    // Assert
+    modificationResponse.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+
+    // Verify the branch still has US address
+    var verificationResponse = await client.GetAsync($"/api/1.0/Branches/{createdBranch.Id}");
+    var verificationModel = await verificationResponse.Content.ReadFromJsonAsync<BranchRetrievalModel>();
+    verificationModel.ShouldNotBeNull();
+    verificationModel.Address.ShouldNotBeNull();
+    verificationModel.Address?.CountryCode.ShouldBe("US");
+  }
 }
