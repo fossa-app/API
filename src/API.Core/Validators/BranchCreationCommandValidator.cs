@@ -32,6 +32,7 @@ public class BranchCreationCommandValidator : AbstractValidator<BranchCreationCo
         command.TenantID,
         branchTimeZone,
         cancellationToken))
-        .WithMessage(BranchCommandValidatorHelper.BranchAddressCountryMustBeCompanyCountryErrorMessage);
+        .WithMessage(BranchCommandValidatorHelper.BranchAddressCountryMustBeCompanyCountryErrorMessage)
+        .OverridePropertyName(BranchCommandValidatorHelper.BranchAddressCountryMustBeCompanyCountryPropertyName);
   }
 }

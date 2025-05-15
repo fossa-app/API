@@ -7,6 +7,8 @@ namespace Fossa.API.Core.Validators;
 
 public static class BranchCommandValidatorHelper
 {
+  public static string BranchAddressCountryMustBeCompanyCountryPropertyName => $"{nameof(Address)}.{nameof(Address.Country)}";
+
   public static Task<bool> BranchAddressCountryMustBeCompanyCountryAsync(
     ICompanyQueryRepository companyQueryRepository,
     Guid tenantId,
@@ -29,7 +31,7 @@ public static class BranchCommandValidatorHelper
 
   public static string BranchAddressCountryMustBeCompanyCountryErrorMessage<T>(T command, Option<Address> property)
   {
-    return $"Address Country '{property.Map(x => x.Country.TwoLetterISORegionName)}' is same as Company Country.";
+    return $"Address Country '{property.Map(x => x.Country.TwoLetterISORegionName).Match(x => x, string.Empty)}' must be same as Company Country.";
   }
 
   public static async Task<bool> BranchTimeZoneCountryMustBeCompanyCountryAsync(
