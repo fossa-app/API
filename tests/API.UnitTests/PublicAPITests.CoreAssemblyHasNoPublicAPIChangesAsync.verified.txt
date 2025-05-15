@@ -931,6 +931,7 @@ namespace Fossa.API.Core.Validators
     }
     public static class BranchCommandValidatorHelper
     {
+        public static string BranchAddressCountryMustBeCompanyCountryPropertyName { get; }
         public static System.Threading.Tasks.Task<bool> BranchAddressCountryMustBeCompanyCountryAsync(Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, System.Guid tenantId, LanguageExt.Option<Fossa.API.Core.Entities.Address> address, System.Threading.CancellationToken cancellationToken) { }
         public static string BranchAddressCountryMustBeCompanyCountryErrorMessage<T>(T command, LanguageExt.Option<Fossa.API.Core.Entities.Address> property) { }
         public static System.Threading.Tasks.Task<bool> BranchTimeZoneCountryMustBeCompanyCountryAsync(Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, Fossa.API.Core.Services.IDateTimeZoneLookup dateTimeZoneLookup, System.Guid tenantId, NodaTime.DateTimeZone branchTimeZone, System.Threading.CancellationToken cancellationToken) { }
