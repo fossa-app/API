@@ -10,6 +10,7 @@ using Fossa.API.Infrastructure.RestClients;
 using Fossa.API.Persistence;
 using Fossa.API.Web;
 using Fossa.API.Web.DependencyInjection;
+using Fossa.API.Web.Filters;
 using Fossa.API.Web.HealthChecks.DependencyInjection;
 using Fossa.Licensing;
 using Hellang.Middleware.ProblemDetails;
@@ -18,6 +19,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.OpenApi.Models;
 using OpenTelemetry;
+using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -152,7 +154,7 @@ builder.Services.AddOpenTelemetry()
     .AddAspNetCoreInstrumentation()
     .AddHttpClientInstrumentation()
   )
-  .WithLogging(logging => { }, options =>
+  .WithLogging(logging => logging.AddProcessor(new EnrichLogRecordWithEventIdProcessor()), options =>
   {
     options.IncludeFormattedMessage = true;
     options.IncludeScopes = true;
