@@ -31,7 +31,12 @@ public static class BranchCommandValidatorHelper
 
   public static string BranchAddressCountryMustBeCompanyCountryErrorMessage<T>(T command, Option<Address> property)
   {
-    return $"Address Country '{property.Map(x => x.Country.TwoLetterISORegionName).Match(x => x, string.Empty)}' must be same as Company Country.";
+    return $"Address Country '{property.Match(GetAddressCountryCodeAndName, string.Empty)}' must be same as Company Country.";
+
+    static string GetAddressCountryCodeAndName(Address address)
+    {
+      return $"{address.Country.TwoLetterISORegionName} - [{address.Country.EnglishName}]";
+    }
   }
 
   public static async Task<bool> BranchTimeZoneCountryMustBeCompanyCountryAsync(
