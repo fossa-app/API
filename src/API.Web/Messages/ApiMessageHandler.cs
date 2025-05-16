@@ -28,6 +28,35 @@ public abstract class ApiMessageHandler<TEntityIdentity, TApiRequest, TApiRespon
   }
 
   public abstract Task<TApiResponse> Handle(TApiRequest request, CancellationToken cancellationToken);
+
+  protected async Task<TApiResponse> SendAsync<TDomainRequest, TDomainResponse>(
+    TDomainRequest domainRequest,
+    Func<TDomainResponse, TApiResponse> mapToApiResponse,
+    CancellationToken cancellationToken)
+    where TDomainRequest : IRequest<TDomainResponse>
+  {
+    ArgumentNullException.ThrowIfNull(request);
+    ArgumentNullException.ThrowIfNull(mapToDomainRequest);
+    ArgumentNullException.ThrowIfNull(mapToApiResponse);
+
+    try
+    {
+      var domainRequest = mapToDomainRequest(request)
+        ?? throw new InvalidOperationException("Domain request cannot be null.");
+
+      var domainResponse = await _sender.Send(domainRequest, cancellationToken)
+        ?? throw new InvalidOperationException("Domain response cannot be null.");
+
+      var apiResponse = mapToApiResponse(domainResponse)
+        ?? throw new InvalidOperationException("API response cannot be null.");
+
+      return apiResponse;
+    }
+    catch (Exception ex)
+    {
+      throw;
+    }
+  }
 }
 
 public abstract class ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse, TDomainRequest, TDomainResponse>
@@ -45,21 +74,17 @@ public abstract class ApiMessageHandler<TEntityIdentity, TApiRequest, TApiRespon
   {
   }
 
-  public override async Task<TApiResponse> Handle(TApiRequest request, CancellationToken cancellationToken)
+  public override Task<TApiResponse> Handle(TApiRequest request, CancellationToken cancellationToken)
   {
-    if (request is null)
-    {
-      throw new ArgumentNullException(nameof(request));
-    }
-    var domainRequest = MapToDomainRequest(request);
+    ArgumentNullException.ThrowIfNull(request);
 
-    var domainResponse = await _sender.Send(domainRequest, cancellationToken)
-      ?? throw new InvalidOperationException("Domain response cannot be null.");
+    var domainRequest = MapToDomainRequest(request)
+      ?? throw new InvalidOperationException("Domain request cannot be null.");
 
-    var apiResponse = MapToApiResponse(domainResponse)
-      ?? throw new InvalidOperationException("API response cannot be null.");
-
-    return apiResponse;
+    return SendAsync<TDomainRequest, TDomainResponse>(
+      domainRequest,
+      MapToApiResponse,
+      cancellationToken);
   }
 
   protected abstract TApiResponse MapToApiResponse(TDomainResponse domainResponse);
@@ -85,17 +110,12 @@ public abstract class ApiMessageHandler<TEntityIdentity, TApiRequest, TApiRespon
 
   public override Task<TApiResponse> Handle(TApiRequest request, CancellationToken cancellationToken)
   {
-    if (request is null)
-    {
-      throw new ArgumentNullException(nameof(request));
-    }
+    ArgumentNullException.ThrowIfNull(request);
 
     return MapToDomainRequest(request)
-      .Match<EitherAsync<TDomainResponse1, TDomainResponse2>>(
-        query => _sender.Send(query, cancellationToken),
-        query => _sender.Send(query, cancellationToken))
-      .BiMap(MapToApiResponse, MapToApiResponse)
-      .Match(x => x, x => x);
+      .MatchAsync(
+        query => SendAsync<TDomainRequest2, TDomainResponse2>(query, MapToApiResponse, cancellationToken),
+        query => SendAsync<TDomainRequest1, TDomainResponse1>(query, MapToApiResponse, cancellationToken));
   }
 
   protected abstract TApiResponse MapToApiResponse(TDomainResponse1 domainResponse);
