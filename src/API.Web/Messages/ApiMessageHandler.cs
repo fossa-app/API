@@ -1,4 +1,8 @@
-﻿using Fossa.API.Core.Tenant;
+﻿using System.Collections.Concurrent;
+using System.Reflection;
+using FluentValidation;
+using FluentValidation.Results;
+using Fossa.API.Core.Tenant;
 using Fossa.API.Core.User;
 using TIKSN.Mapping;
 
@@ -12,6 +16,8 @@ public abstract class ApiMessageHandler<TEntityIdentity, TApiRequest, TApiRespon
   protected readonly ISender _sender;
   protected readonly ITenantIdProvider<Guid> _tenantIdProvider;
   protected readonly IUserIdProvider<Guid> _userIdProvider;
+
+  private static readonly ApiTypeMap _apiResponseMap = new();
 
   protected ApiMessageHandler(
     ISender sender,
@@ -35,15 +41,10 @@ public abstract class ApiMessageHandler<TEntityIdentity, TApiRequest, TApiRespon
     CancellationToken cancellationToken)
     where TDomainRequest : IRequest<TDomainResponse>
   {
-    ArgumentNullException.ThrowIfNull(request);
-    ArgumentNullException.ThrowIfNull(mapToDomainRequest);
     ArgumentNullException.ThrowIfNull(mapToApiResponse);
 
     try
     {
-      var domainRequest = mapToDomainRequest(request)
-        ?? throw new InvalidOperationException("Domain request cannot be null.");
-
       var domainResponse = await _sender.Send(domainRequest, cancellationToken)
         ?? throw new InvalidOperationException("Domain response cannot be null.");
 
@@ -52,9 +53,106 @@ public abstract class ApiMessageHandler<TEntityIdentity, TApiRequest, TApiRespon
 
       return apiResponse;
     }
-    catch (Exception ex)
+    catch (ValidationException ex)
     {
-      throw;
+      throw MapValidationException<TDomainRequest>(ex);
+    }
+  }
+
+  private static Type? FindPropertyType(Type type, string propertyName)
+  {
+    if (type.IsGenericType &&
+      (type.GetGenericTypeDefinition() == typeof(Nullable<>) ||
+      type.GetGenericTypeDefinition() == typeof(Option<>)))
+    {
+      type = type.GetGenericArguments()[0];
+    }
+
+    var propertyInfo = type.GetProperty(propertyName, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+
+    return propertyInfo?.PropertyType;
+  }
+
+  private static Type GetPropertyType(Type type, string propertyName)
+  {
+    return FindPropertyType(type, propertyName)
+      ?? throw new InvalidOperationException($"Property '{propertyName}' not found in type '{type.Name}'.");
+  }
+
+  private static string MapPropertyName(
+    string domainPropertyPath,
+    Type domainType,
+    Type apiType)
+  {
+    var propertyPathSegments = domainPropertyPath.Split('.') ?? [];
+    var parentPathSegments = propertyPathSegments[..^1];
+    var domainPropertyName = propertyPathSegments[^1];
+
+    var (domainPropertyType, apiPropertyType) =
+      parentPathSegments.Aggregate((domainType, apiType), (current, parentPathSegment) =>
+      {
+        var nextDomainTypePropertyType = GetPropertyType(domainType, parentPathSegment);
+        var nextApiTypePropertyType = GetPropertyType(apiType, parentPathSegment);
+
+        return (nextDomainTypePropertyType, nextApiTypePropertyType);
+      });
+
+    _ = GetPropertyType(domainPropertyType, domainPropertyName);
+    var apiChildPropertyType = FindPropertyType(apiPropertyType, domainPropertyName);
+
+    if (apiChildPropertyType is not null)
+    {
+      return domainPropertyPath;
+    }
+
+    var apiChildIdPropertyType = FindPropertyType(apiPropertyType, $"{domainPropertyName}Id");
+
+    if (apiChildIdPropertyType is not null)
+    {
+      return string.Join('.', parentPathSegments.Append($"{domainPropertyName}Id"));
+    }
+
+    var apiChildCodePropertyType = FindPropertyType(apiPropertyType, $"{domainPropertyName}Code");
+
+    if (apiChildCodePropertyType is not null)
+    {
+      return string.Join('.', parentPathSegments.Append($"{domainPropertyName}Code"));
+    }
+
+    throw new InvalidOperationException($"Property '{domainPropertyName}' or its equivalent not found in type '{apiType.Name}'.");
+  }
+
+  private static ValidationException MapValidationException<TDomainRequest>(ValidationException ex)
+  {
+    var apiRequestType = typeof(TApiRequest);
+    var domainRequestType = typeof(TDomainRequest);
+
+    return new ValidationException(ex.Errors.Map(x => new ValidationFailure
+    {
+      PropertyName = _apiResponseMap
+          .GetOrAdd(apiRequestType, _ => new DomainTypeMap())
+          .GetOrAdd(domainRequestType, _ => new PropertyNameMap())
+          .GetOrAdd(x.PropertyName, x => MapPropertyName(x, domainRequestType, apiRequestType)),
+      ErrorMessage = x.ErrorMessage,
+      AttemptedValue = x.AttemptedValue,
+      Severity = x.Severity,
+      CustomState = x.CustomState,
+      ErrorCode = x.ErrorCode,
+    }));
+  }
+
+  public class ApiTypeMap : ConcurrentDictionary<Type, DomainTypeMap>
+  {
+  }
+
+  public class DomainTypeMap : ConcurrentDictionary<Type, PropertyNameMap>
+  {
+  }
+
+  public class PropertyNameMap : ConcurrentDictionary<string, string>
+  {
+    public PropertyNameMap() : base(StringComparer.OrdinalIgnoreCase)
+    {
     }
   }
 }
