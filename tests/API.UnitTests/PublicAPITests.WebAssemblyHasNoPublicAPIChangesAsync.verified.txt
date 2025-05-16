@@ -466,9 +466,8 @@ namespace Fossa.API.Web.Mappers
 }
 namespace Fossa.API.Web.Messages
 {
-    public abstract class ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse, TDomainRequest, TDomainResponse> : MediatR.IRequestHandler<TApiRequest, TApiResponse>
+    public abstract class ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse> : MediatR.IRequestHandler<TApiRequest, TApiResponse>
         where TApiRequest : MediatR.IRequest<TApiResponse>
-        where TDomainRequest : MediatR.IRequest<TDomainResponse>
     {
         protected readonly TIKSN.Mapping.IMapper<long, TEntityIdentity> _dataIdentityToDomainIdentityMapper;
         protected readonly TIKSN.Mapping.IMapper<TEntityIdentity, long> _domainIdentityToDataIdentityMapper;
@@ -476,22 +475,38 @@ namespace Fossa.API.Web.Messages
         protected readonly Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> _tenantIdProvider;
         protected readonly Fossa.API.Core.User.IUserIdProvider<System.Guid> _userIdProvider;
         protected ApiMessageHandler(MediatR.ISender sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, TIKSN.Mapping.IMapper<TEntityIdentity, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, TEntityIdentity> dataIdentityToDomainIdentityMapper) { }
-        public System.Threading.Tasks.Task<TApiResponse> Handle(TApiRequest request, System.Threading.CancellationToken cancellationToken) { }
+        public abstract System.Threading.Tasks.Task<TApiResponse> Handle(TApiRequest request, System.Threading.CancellationToken cancellationToken);
+        protected System.Threading.Tasks.Task<TApiResponse> SendAsync<TDomainRequest, TDomainResponse>(TDomainRequest domainRequest, System.Func<TDomainResponse, TApiResponse> mapToApiResponse, System.Threading.CancellationToken cancellationToken)
+            where TDomainRequest : MediatR.IRequest<TDomainResponse> { }
+        public class ApiTypeMap : System.Collections.Concurrent.ConcurrentDictionary<System.Type, Fossa.API.Web.Messages.ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse>.DomainTypeMap>
+        {
+            public ApiTypeMap() { }
+        }
+        public class DomainTypeMap : System.Collections.Concurrent.ConcurrentDictionary<System.Type, Fossa.API.Web.Messages.ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse>.PropertyNameMap>
+        {
+            public DomainTypeMap() { }
+        }
+        public class PropertyNameMap : System.Collections.Concurrent.ConcurrentDictionary<string, string>
+        {
+            public PropertyNameMap() { }
+        }
+    }
+    public abstract class ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse, TDomainRequest, TDomainResponse> : Fossa.API.Web.Messages.ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse>
+        where TApiRequest : MediatR.IRequest<TApiResponse>
+        where TDomainRequest : MediatR.IRequest<TDomainResponse>
+    {
+        protected ApiMessageHandler(MediatR.ISender sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, TIKSN.Mapping.IMapper<TEntityIdentity, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, TEntityIdentity> dataIdentityToDomainIdentityMapper) { }
+        public override System.Threading.Tasks.Task<TApiResponse> Handle(TApiRequest request, System.Threading.CancellationToken cancellationToken) { }
         protected abstract TApiResponse MapToApiResponse(TDomainResponse domainResponse);
         protected abstract TDomainRequest MapToDomainRequest(TApiRequest apiRequest);
     }
-    public abstract class ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse, TDomainRequest1, TDomainResponse1, TDomainRequest2, TDomainResponse2> : MediatR.IRequestHandler<TApiRequest, TApiResponse>
+    public abstract class ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse, TDomainRequest1, TDomainResponse1, TDomainRequest2, TDomainResponse2> : Fossa.API.Web.Messages.ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse>
         where TApiRequest : MediatR.IRequest<TApiResponse>
         where TDomainRequest1 : MediatR.IRequest<TDomainResponse1>
         where TDomainRequest2 : MediatR.IRequest<TDomainResponse2>
     {
-        protected readonly TIKSN.Mapping.IMapper<long, TEntityIdentity> _dataIdentityToDomainIdentityMapper;
-        protected readonly TIKSN.Mapping.IMapper<TEntityIdentity, long> _domainIdentityToDataIdentityMapper;
-        protected readonly MediatR.ISender _sender;
-        protected readonly Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> _tenantIdProvider;
-        protected readonly Fossa.API.Core.User.IUserIdProvider<System.Guid> _userIdProvider;
         protected ApiMessageHandler(MediatR.ISender sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, TIKSN.Mapping.IMapper<TEntityIdentity, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, TEntityIdentity> dataIdentityToDomainIdentityMapper) { }
-        public System.Threading.Tasks.Task<TApiResponse> Handle(TApiRequest request, System.Threading.CancellationToken cancellationToken) { }
+        public override System.Threading.Tasks.Task<TApiResponse> Handle(TApiRequest request, System.Threading.CancellationToken cancellationToken) { }
         protected abstract TApiResponse MapToApiResponse(TDomainResponse1 domainResponse);
         protected abstract TApiResponse MapToApiResponse(TDomainResponse2 domainResponse);
         protected abstract LanguageExt.Either<TDomainRequest1, TDomainRequest2> MapToDomainRequest(TApiRequest apiRequest);
