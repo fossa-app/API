@@ -676,7 +676,7 @@ namespace Fossa.API.Web.Messages.Commands
 }
 namespace Fossa.API.Web.Messages.Queries
 {
-    public class BranchPagingApiQuery : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.BranchRetrievalModel>>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.BranchRetrievalModel>>, System.IEquatable<Fossa.API.Web.Messages.Queries.BranchPagingApiQuery>
+    public class BranchPagingApiQuery : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.BranchRetrievalModel>>, Fossa.API.Web.Messages.Queries.IPagingApiQuery, Fossa.API.Web.Messages.Queries.IPagingApiQuery<Fossa.API.Web.ApiModels.BranchRetrievalModel>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.BranchRetrievalModel>>, System.IEquatable<Fossa.API.Web.Messages.Queries.BranchPagingApiQuery>
     {
         public BranchPagingApiQuery(System.Collections.Generic.IReadOnlyList<long>? Id, string? Search, int? PageNumber, int? PageSize) { }
         public System.Collections.Generic.IReadOnlyList<long>? Id { get; init; }
@@ -722,7 +722,7 @@ namespace Fossa.API.Web.Messages.Queries
         protected override Fossa.API.Web.ApiModels.EmployeeRetrievalModel MapToApiResponse(Fossa.API.Core.Entities.EmployeeEntity domainResponse) { }
         protected override Fossa.API.Core.Messages.Queries.CurrentEmployeeRetrievalQuery MapToDomainRequest(Fossa.API.Web.Messages.Queries.CurrentEmployeeRetrievalApiQuery apiRequest) { }
     }
-    public class DepartmentPagingApiQuery : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.DepartmentRetrievalModel>>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.DepartmentRetrievalModel>>, System.IEquatable<Fossa.API.Web.Messages.Queries.DepartmentPagingApiQuery>
+    public class DepartmentPagingApiQuery : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.DepartmentRetrievalModel>>, Fossa.API.Web.Messages.Queries.IPagingApiQuery, Fossa.API.Web.Messages.Queries.IPagingApiQuery<Fossa.API.Web.ApiModels.DepartmentRetrievalModel>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.DepartmentRetrievalModel>>, System.IEquatable<Fossa.API.Web.Messages.Queries.DepartmentPagingApiQuery>
     {
         public DepartmentPagingApiQuery(System.Collections.Generic.IReadOnlyList<long>? Id, string? Search, int? PageNumber, int? PageSize) { }
         public System.Collections.Generic.IReadOnlyList<long>? Id { get; init; }
@@ -748,7 +748,7 @@ namespace Fossa.API.Web.Messages.Queries
         protected override Fossa.API.Web.ApiModels.DepartmentRetrievalModel MapToApiResponse(Fossa.API.Core.Entities.DepartmentEntity domainResponse) { }
         protected override Fossa.API.Core.Messages.Queries.DepartmentRetrievalQuery MapToDomainRequest(Fossa.API.Web.Messages.Queries.DepartmentRetrievalApiQuery apiRequest) { }
     }
-    public class EmployeePagingApiQuery : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>>, System.IEquatable<Fossa.API.Web.Messages.Queries.EmployeePagingApiQuery>
+    public class EmployeePagingApiQuery : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>>, Fossa.API.Web.Messages.Queries.IPagingApiQuery, Fossa.API.Web.Messages.Queries.IPagingApiQuery<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>>, System.IEquatable<Fossa.API.Web.Messages.Queries.EmployeePagingApiQuery>
     {
         public EmployeePagingApiQuery(System.Collections.Generic.IReadOnlyList<long>? Id, string? Search, int? PageNumber, int? PageSize) { }
         public System.Collections.Generic.IReadOnlyList<long>? Id { get; init; }
@@ -773,5 +773,18 @@ namespace Fossa.API.Web.Messages.Queries
         public EmployeeRetrievalApiQueryHandler(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Web.ApiModels.EmployeeRetrievalModel> domainResponseToApiResponseMapper, MediatR.ISender sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId> dataIdentityToDomainIdentityMapper) { }
         protected override Fossa.API.Web.ApiModels.EmployeeRetrievalModel MapToApiResponse(Fossa.API.Core.Entities.EmployeeEntity domainResponse) { }
         protected override Fossa.API.Core.Messages.Queries.EmployeeRetrievalQuery MapToDomainRequest(Fossa.API.Web.Messages.Queries.EmployeeRetrievalApiQuery apiRequest) { }
+    }
+    public interface IPagingApiQuery
+    {
+        int? PageNumber { get; }
+        int? PageSize { get; }
+    }
+    public interface IPagingApiQuery<TRetrievalModel> : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.PagingResponseModel<TRetrievalModel>>, Fossa.API.Web.Messages.Queries.IPagingApiQuery, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.PagingResponseModel<TRetrievalModel>> { }
+}
+namespace Fossa.API.Web.Validators
+{
+    public class PagingApiQueryValidator : FluentValidation.AbstractValidator<Fossa.API.Web.Messages.Queries.IPagingApiQuery>
+    {
+        public PagingApiQueryValidator() { }
     }
 }
