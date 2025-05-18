@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.Internal;
+using FluentValidation.Results;
 using FluentValidation.Validators;
 
 namespace Fossa.API.Core.Validators;
@@ -17,14 +18,15 @@ public class OptionValidator<T, TProperty> : PropertyValidator<T, Option<TProper
 
   public override bool IsValid(ValidationContext<T> context, Option<TProperty> value)
   {
-    return value.Match(
-      v => ValidateProperty(context, v),
-      None: true);
+    _ = value.IfSome(
+      v => ValidateProperty(context, v));
+
+    return true;
   }
 
   protected override string GetDefaultMessageTemplate(string errorCode) => "Value is provided however is not valid";
 
-  private bool ValidateProperty(ValidationContext<T> context, TProperty value)
+  private void ValidateProperty(ValidationContext<T> context, TProperty value)
   {
     var validationResult = _validator.Validate(value);
     var chain = new PropertyChain(context.PropertyChain);
@@ -32,8 +34,7 @@ public class OptionValidator<T, TProperty> : PropertyValidator<T, Option<TProper
     foreach (var error in validationResult.Errors)
     {
       var propertyPath = chain.BuildPropertyPath(error.PropertyName);
-      context.AddFailure(new FluentValidation.Results.ValidationFailure(propertyPath, error.ErrorMessage, error.AttemptedValue));
+      context.AddFailure(new ValidationFailure(propertyPath, error.ErrorMessage, error.AttemptedValue));
     }
-    return validationResult.IsValid;
   }
 }
