@@ -1,5 +1,4 @@
-﻿using Fossa.API.Core.Messages.Queries;
-using Fossa.API.Web.ApiModels;
+﻿using Fossa.API.Web.ApiModels;
 
 namespace Fossa.API.Web.Messages.Queries;
 
@@ -7,4 +6,4 @@ public record BranchPagingApiQuery(
     IReadOnlyList<long>? Id,
     string? Search,
     int? PageNumber,
-    int? PageSize) : IQuery<PagingResponseModel<BranchRetrievalModel>>;
+    int? PageSize) : IPagingApiQuery<BranchRetrievalModel>;
