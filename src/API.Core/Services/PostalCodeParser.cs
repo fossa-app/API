@@ -39,28 +39,27 @@ public class PostalCodeParser : IPostalCodeParser
   {
     get
     {
-      var codePart =
+      var codeToken =
           from chars in many1(AlphaNumeric)
           select chars;
 
-      var hyphenSep =
-          from _1 in spaces
+      var hyphenSeparator =
+          from _1 in many(attempt(space))
           from h in ch('-')
-          from _2 in spaces
+          from _2 in many(attempt(space))
           select Seq1(h);
 
-      var spaceSep =
-          from _ in many1(space)
+      var spaceSeparator =
+          from _1 in space
+          from _2 in many(attempt(space))
           select Seq1(' ');
 
-      var hyphenOrSpaceSep = either(hyphenSep, spaceSep);
-
-      var element = either(hyphenOrSpaceSep, codePart);
+      var separator = either(hyphenSeparator, spaceSeparator);
 
       var parser =
-          from firstPart in codePart
-          from restParts in optional(flatten(many(chain(hyphenOrSpaceSep, codePart))))
-          select restParts.Match(rest => firstPart.Concat(rest.Flatten()), firstPart);
+          from first in codeToken
+          from rest in many(flatten(attempt(chain(separator, codeToken))))
+          select rest.Aggregate(first, (acc, next) => acc.Concat(next));
 
       return parser;
     }
