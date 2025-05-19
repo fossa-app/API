@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using FluentValidation.Results;
 using Fossa.API.Core.Messages.Queries;
 using Microsoft.Extensions.Options;
 using TIKSN.Configuration;
@@ -36,10 +35,7 @@ public class PagingQueryBehavior<TRequest, TResponse>
           if (request.Page.Size > maxPageSize)
           {
             throw new ValidationException(
-              Seq1(new ValidationFailure(
-                "Page.Size",
-                "Page Size should be less than or equal to Maximum Page Size",
-                request.Page.Size)));
+                "Page Size should be less than or equal to Maximum Page Size");
           }
         },
         () => throw new ConfigurationValidationException("Maximum Page Size for Paging Query is missing"));

@@ -8,20 +8,13 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
   where TRequest : IRequest<TResponse>
 {
   private static readonly Type _validationBehaviorType = typeof(ValidationBehavior<,>);
-  private static readonly Type _validatorType = typeof(IValidator<>);
 
   private readonly IServiceProvider _serviceProvider;
-  private readonly Seq<IValidator<TRequest>> _requestValidators;
-  private readonly Seq<IValidator<TResponse>> _responseValidators;
 
   public ValidationBehavior(
-    IEnumerable<IValidator<TRequest>> requestValidators,
-    IEnumerable<IValidator<TResponse>> responseValidators,
     IServiceProvider serviceProvider)
   {
     _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
-    _requestValidators = requestValidators?.ToSeq() ?? throw new ArgumentNullException(nameof(requestValidators));
-    _responseValidators = responseValidators?.ToSeq() ?? throw new ArgumentNullException(nameof(responseValidators));
   }
 
   public async Task<TResponse> Handle(
@@ -34,61 +27,56 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
       await EnsureValidityAsync(request, requestInterfaceType, _serviceProvider, cancellationToken).ConfigureAwait(false);
     }
 
-    await EnsureValidityAsync(_requestValidators, request, cancellationToken).ConfigureAwait(false);
+    await EnsureValidityAsync<TRequest, TRequest>(request, _serviceProvider, cancellationToken).ConfigureAwait(false);
 
     var response = await next(cancellationToken).ConfigureAwait(false);
 
-    await EnsureValidityAsync(_responseValidators, response, cancellationToken).ConfigureAwait(false);
-
-    foreach (var responseInterfaceType in request.GetType().GetInterfaces())
+    if (response is not null)
     {
-      await EnsureValidityAsync(response, responseInterfaceType, _serviceProvider, cancellationToken).ConfigureAwait(false);
+      await EnsureValidityAsync<TResponse, TResponse>(response, _serviceProvider, cancellationToken).ConfigureAwait(false);
+
+      foreach (var responseInterfaceType in response.GetType().GetInterfaces())
+      {
+        await EnsureValidityAsync(response, responseInterfaceType, _serviceProvider, cancellationToken).ConfigureAwait(false);
+      }
     }
 
     return response;
   }
 
-  private static Task EnsureValidityAsync<TR>(
+  private static async Task EnsureValidityAsync<TR>(
     TR instanceToValidate,
     Type interfaceType,
     IServiceProvider serviceProvider,
     CancellationToken cancellationToken)
   {
+    var validationBehaviorConcreteType = _validationBehaviorType.MakeGenericType(typeof(TRequest), typeof(TResponse));
 #pragma warning disable S3011
-    var ensureValidityMethod = _validationBehaviorType.GetMethods(BindingFlags.NonPublic | BindingFlags.Static)
+    var ensureValidityMethod = validationBehaviorConcreteType.GetMethods(BindingFlags.NonPublic | BindingFlags.Static)
 #pragma warning restore S3011
       .Single(x => x.Name == nameof(EnsureValidityAsync) && x.GetGenericArguments().Length == 2);
 
     var genericEnsureValidityMethod = ensureValidityMethod.MakeGenericMethod(typeof(TR), interfaceType);
 
-    if (genericEnsureValidityMethod.ContainsGenericParameters)
-    {
-      return Task.CompletedTask;
-    }
-
-    var validatorType = _validatorType.MakeGenericType(interfaceType);
-    var validators = serviceProvider.GetServices(validatorType).ToSeq();
-
-    var validationResult = genericEnsureValidityMethod.Invoke(null, new object?[]
-    {
-      validators,
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+    await ((Task)genericEnsureValidityMethod.Invoke(null,
+   [
       instanceToValidate,
+      serviceProvider,
       cancellationToken
-    });
-
-    if (validationResult is Task task)
-    {
-      return task;
-    }
-
-    throw new InvalidOperationException("Validation result is not Task");
-
+    ])).ConfigureAwait(false);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
   }
+
   private static async Task EnsureValidityAsync<TR, TV>(
-    Seq<IValidator<TV>> validators,
     TR instanceToValidate,
+    IServiceProvider serviceProvider,
     CancellationToken cancellationToken)
   {
+    var validators = serviceProvider.GetServices<IValidator<TV>>().ToSeq();
+
     if (validators.Any())
     {
       var context = new ValidationContext<TR>(instanceToValidate);
