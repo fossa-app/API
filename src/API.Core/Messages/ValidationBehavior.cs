@@ -1,19 +1,20 @@
-﻿using FluentValidation;
+﻿using System.Reflection;
+using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Fossa.API.Core.Messages;
 
 public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
   where TRequest : IRequest<TResponse>
 {
-  private readonly Seq<IValidator<TRequest>> _requestValidators;
-  private readonly Seq<IValidator<TResponse>> _responseValidators;
+  private static readonly Type _validationBehaviorType = typeof(ValidationBehavior<,>);
+
+  private readonly IServiceProvider _serviceProvider;
 
   public ValidationBehavior(
-    IEnumerable<IValidator<TRequest>> requestValidators,
-    IEnumerable<IValidator<TResponse>> responseValidators)
+    IServiceProvider serviceProvider)
   {
-    _requestValidators = requestValidators?.ToSeq() ?? throw new ArgumentNullException(nameof(requestValidators));
-    _responseValidators = responseValidators?.ToSeq() ?? throw new ArgumentNullException(nameof(responseValidators));
+    _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
   }
 
   public async Task<TResponse> Handle(
@@ -21,23 +22,64 @@ public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TReques
     RequestHandlerDelegate<TResponse> next,
     CancellationToken cancellationToken)
   {
-    await EnsureValidityAsync(_requestValidators, request, cancellationToken).ConfigureAwait(false);
+    foreach (var requestInterfaceType in request.GetType().GetInterfaces())
+    {
+      await EnsureValidityAsync(request, requestInterfaceType, _serviceProvider, cancellationToken).ConfigureAwait(false);
+    }
+
+    await EnsureValidityAsync<TRequest, TRequest>(request, _serviceProvider, cancellationToken).ConfigureAwait(false);
 
     var response = await next(cancellationToken).ConfigureAwait(false);
 
-    await EnsureValidityAsync(_responseValidators, response, cancellationToken).ConfigureAwait(false);
+    if (response is not null)
+    {
+      await EnsureValidityAsync<TResponse, TResponse>(response, _serviceProvider, cancellationToken).ConfigureAwait(false);
+
+      foreach (var responseInterfaceType in response.GetType().GetInterfaces())
+      {
+        await EnsureValidityAsync(response, responseInterfaceType, _serviceProvider, cancellationToken).ConfigureAwait(false);
+      }
+    }
 
     return response;
   }
 
-  private static async Task EnsureValidityAsync<T>(
-    Seq<IValidator<T>> validators,
-    T instanceToValidate,
+  private static async Task EnsureValidityAsync<TR>(
+    TR instanceToValidate,
+    Type interfaceType,
+    IServiceProvider serviceProvider,
     CancellationToken cancellationToken)
   {
+    var validationBehaviorConcreteType = _validationBehaviorType.MakeGenericType(typeof(TRequest), typeof(TResponse));
+#pragma warning disable S3011
+    var ensureValidityMethod = validationBehaviorConcreteType.GetMethods(BindingFlags.NonPublic | BindingFlags.Static)
+#pragma warning restore S3011
+      .Single(x => x.Name == nameof(EnsureValidityAsync) && x.GetGenericArguments().Length == 2);
+
+    var genericEnsureValidityMethod = ensureValidityMethod.MakeGenericMethod(typeof(TR), interfaceType);
+
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+    await ((Task)genericEnsureValidityMethod.Invoke(null,
+   [
+      instanceToValidate,
+      serviceProvider,
+      cancellationToken
+    ])).ConfigureAwait(false);
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+  }
+
+  private static async Task EnsureValidityAsync<TR, TV>(
+    TR instanceToValidate,
+    IServiceProvider serviceProvider,
+    CancellationToken cancellationToken)
+  {
+    var validators = serviceProvider.GetServices<IValidator<TV>>().ToSeq();
+
     if (validators.Any())
     {
-      var context = new ValidationContext<T>(instanceToValidate);
+      var context = new ValidationContext<TR>(instanceToValidate);
       var validationResults = await Task
         .WhenAll(validators.Select(v => v.ValidateAsync(context, cancellationToken))).ConfigureAwait(false);
       var failures = validationResults.SelectMany(r => r.Errors).Where(f => f != null).ToList();

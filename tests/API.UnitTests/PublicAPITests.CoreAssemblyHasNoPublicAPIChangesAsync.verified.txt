@@ -265,7 +265,7 @@ namespace Fossa.API.Core.Messages
     public class ValidationBehavior<TRequest, TResponse> : MediatR.IPipelineBehavior<TRequest, TResponse>
         where TRequest : MediatR.IRequest<TResponse>
     {
-        public ValidationBehavior(System.Collections.Generic.IEnumerable<FluentValidation.IValidator<TRequest>> requestValidators, System.Collections.Generic.IEnumerable<FluentValidation.IValidator<TResponse>> responseValidators) { }
+        public ValidationBehavior(System.IServiceProvider serviceProvider) { }
         public System.Threading.Tasks.Task<TResponse> Handle(TRequest request, MediatR.RequestHandlerDelegate<TResponse> next, System.Threading.CancellationToken cancellationToken) { }
     }
 }

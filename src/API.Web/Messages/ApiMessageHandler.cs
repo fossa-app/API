@@ -141,13 +141,9 @@ public abstract class ApiMessageHandler<TEntityIdentity, TApiRequest, TApiRespon
     }));
   }
 
-  public class ApiTypeMap : ConcurrentDictionary<Type, DomainTypeMap>
-  {
-  }
+  public class ApiTypeMap : ConcurrentDictionary<Type, DomainTypeMap>;
 
-  public class DomainTypeMap : ConcurrentDictionary<Type, PropertyNameMap>
-  {
-  }
+  public class DomainTypeMap : ConcurrentDictionary<Type, PropertyNameMap>;
 
   public class PropertyNameMap : ConcurrentDictionary<string, string>
   {
