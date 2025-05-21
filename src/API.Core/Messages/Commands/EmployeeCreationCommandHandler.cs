@@ -75,9 +75,9 @@ public class EmployeeCreationCommandHandler : IRequestHandler<EmployeeCreationCo
   }
 
   private static bool EnsureMaximumEmployeeCountWillNotExceed(
-    License<CompanyEntitlements> license, int currentEmployeeCount)
+    int maximumEmployeeCount, int currentEmployeeCount)
   {
-    return license.Entitlements.MaximumEmployeeCount > currentEmployeeCount;
+    return maximumEmployeeCount > currentEmployeeCount;
   }
 
   private async Task ValidateEntitlementsAsync(CompanyId companyId, CancellationToken cancellationToken)
@@ -86,12 +86,20 @@ public class EmployeeCreationCommandHandler : IRequestHandler<EmployeeCreationCo
 
     var currentEmployeeCount = await _employeeQueryRepository.CountAllAsync(companyId, cancellationToken).ConfigureAwait(false);
 
-    licenseValidation = licenseValidation
-      .Validate(
-        license => EnsureMaximumEmployeeCountWillNotExceed(license, currentEmployeeCount),
-        43705651,
-        "The current company license entitlements limit the number of employees that can be created, and this limit has been reached");
-
-    _ = licenseValidation.GetOrThrow();
+    _ = licenseValidation.Match(
+        license =>
+          Success<Error, License<CompanyEntitlements>>(license)
+            .Validate(
+              x => EnsureMaximumEmployeeCountWillNotExceed(x.Entitlements.MaximumEmployeeCount, currentEmployeeCount),
+                43705651,
+                "The current company license entitlements limit the number of employees that can be created, and this limit has been reached")
+              .Map(_ => unit),
+        _ =>
+          EnsureMaximumEmployeeCountWillNotExceed(2, currentEmployeeCount)
+            ? Success<Error, LanguageExt.Unit>(unit)
+            : Fail<Error, LanguageExt.Unit>(Error.New(
+              43722466,
+              "The current company unlicensed and the maximum number of employees that can be created, and this limit has been reached. Please contact your system administrator to obtain a license for this company.")))
+      .GetOrThrow();
   }
 }
