@@ -11,6 +11,7 @@ public interface IDepartmentMongoRepository : IMongoRepository<DepartmentMongoEn
   Task<bool> HasDependencyOnCompanyAsync(long companyId, CancellationToken cancellationToken);
   Task<bool> HasDependencyOnManagerAsync(long managerId, CancellationToken cancellationToken);
   Task<bool> HasDependencyOnParentAsync(long parentId, CancellationToken cancellationToken);
+  Task<int> CountAllAsync(long companyId, CancellationToken cancellationToken);
   Task<PageResult<DepartmentMongoEntity>> PageAsync(
       TenantDepartmentPageQuery pageQuery,
       CancellationToken cancellationToken);
