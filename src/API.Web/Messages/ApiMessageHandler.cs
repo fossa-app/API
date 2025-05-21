@@ -84,6 +84,11 @@ public abstract class ApiMessageHandler<TEntityIdentity, TApiRequest, TApiRespon
     Type domainType,
     Type apiType)
   {
+    if (string.IsNullOrWhiteSpace(domainPropertyPath))
+    {
+      return domainPropertyPath;
+    }
+
     var propertyPathSegments = domainPropertyPath.Split('.') ?? [];
     var parentPathSegments = propertyPathSegments[..^1];
     var domainPropertyName = propertyPathSegments[^1];

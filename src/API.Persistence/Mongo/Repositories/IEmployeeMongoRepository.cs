@@ -33,4 +33,8 @@ public interface IEmployeeMongoRepository : IMongoRepository<EmployeeMongoEntity
   Task<PageResult<EmployeeMongoEntity>> PageAsync(
     TenantEmployeePageQuery pageQuery,
     CancellationToken cancellationToken);
+
+  Task<int> CountAllAsync(
+    long companyId,
+    CancellationToken cancellationToken);
 }

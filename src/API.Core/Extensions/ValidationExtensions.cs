@@ -27,18 +27,18 @@ public static class ValidationExtensions
     ArgumentNullException.ThrowIfNull(error);
 
     return CreateValidationFailures(error, parentPropertyName);
-    IEnumerable<ValidationFailure> CreateValidationFailures(Error error, Option<string> parentPropertyName)
+    static IEnumerable<ValidationFailure> CreateValidationFailures(Error error, Option<string> parentErrorCodePath)
     {
       var errorCode = error.Code.ToString(CultureInfo.InvariantCulture);
-      var propertyName = parentPropertyName.Match(
+      var errorCodePath = parentErrorCodePath.Match(
         p => $"{p}.E{errorCode}", $"E{errorCode}");
-      var errorMessage = error.Message;
-      yield return new ValidationFailure(propertyName, errorMessage) { ErrorCode = errorCode };
+      var errorMessage = $"{errorCodePath}: {error.Message}";
+      yield return new ValidationFailure(string.Empty, errorMessage) { ErrorCode = errorCode };
 
       if (error is ManyErrors manyErrors)
       {
         foreach (var oneValidationFailure in manyErrors.Errors
-          .Map(e => CreateValidationFailures(e, Some(propertyName)))
+          .Map(e => CreateValidationFailures(e, Some(errorCodePath)))
           .SelectMany(x => x))
         {
           yield return oneValidationFailure;
@@ -46,7 +46,7 @@ public static class ValidationExtensions
       }
 
       foreach (var innerValidationFailure in error.Inner
-        .Map(e => CreateValidationFailures(e, Some(propertyName)))
+        .Map(e => CreateValidationFailures(e, Some(errorCodePath)))
         .SelectMany(x => x))
       {
         yield return innerValidationFailure;
