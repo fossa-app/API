@@ -153,6 +153,7 @@ namespace Fossa.API.Persistence.Mongo.Repositories
     {
         public DepartmentMongoRepository(TIKSN.Data.Mongo.IMongoClientSessionProvider mongoClientSessionProvider, TIKSN.Data.Mongo.IMongoDatabaseProvider mongoDatabaseProvider) { }
         protected override MongoDB.Driver.SortDefinition<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity> PageSortDefinition { get; }
+        public System.Threading.Tasks.Task<int> CountAllAsync(long companyId, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<bool> HasDependencyOnCompanyAsync(long companyId, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<bool> HasDependencyOnManagerAsync(long managerId, System.Threading.CancellationToken cancellationToken) { }
@@ -162,6 +163,7 @@ namespace Fossa.API.Persistence.Mongo.Repositories
     public class DepartmentRepositoryAdapter : TIKSN.Data.Mongo.MongoRepositoryAdapter<Fossa.API.Core.Entities.DepartmentEntity, Fossa.API.Core.Entities.DepartmentId, Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity, long>, Fossa.API.Core.Repositories.IDepartmentIndexRepository, Fossa.API.Core.Repositories.IDepartmentQueryRepository, Fossa.API.Core.Repositories.IDepartmentRepository, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.CompanyId>, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.DepartmentId>, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.EmployeeId>, TIKSN.Data.IQueryRepository<Fossa.API.Core.Entities.DepartmentEntity, Fossa.API.Core.Entities.DepartmentId>, TIKSN.Data.IRepository<Fossa.API.Core.Entities.DepartmentEntity>
     {
         public DepartmentRepositoryAdapter(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentEntity, Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity> domainEntityToDataEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity, Fossa.API.Core.Entities.DepartmentEntity> dataEntityToDomainEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.DepartmentId> dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> companyDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> employeeDomainIdentityToDataIdentityMapper, Fossa.API.Persistence.Mongo.Repositories.IDepartmentMongoRepository dataRepository) { }
+        public System.Threading.Tasks.Task<int> CountAllAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<bool> HasDependencyAsync(Fossa.API.Core.Entities.CompanyId id, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<bool> HasDependencyAsync(Fossa.API.Core.Entities.DepartmentId id, System.Threading.CancellationToken cancellationToken) { }
@@ -208,6 +210,7 @@ namespace Fossa.API.Persistence.Mongo.Repositories
     }
     public interface IDepartmentMongoRepository : TIKSN.Data.IQueryRepository<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity, long>, TIKSN.Data.IRepository<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity>, TIKSN.Data.IStreamRepository<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity>, TIKSN.Data.Mongo.IMongoRepository<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity, long>
     {
+        System.Threading.Tasks.Task<int> CountAllAsync(long companyId, System.Threading.CancellationToken cancellationToken);
         System.Threading.Tasks.Task EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken);
         System.Threading.Tasks.Task<bool> HasDependencyOnCompanyAsync(long companyId, System.Threading.CancellationToken cancellationToken);
         System.Threading.Tasks.Task<bool> HasDependencyOnManagerAsync(long managerId, System.Threading.CancellationToken cancellationToken);
