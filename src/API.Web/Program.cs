@@ -27,7 +27,7 @@ using TIKSN.DependencyInjection;
 using TIKSN.Deployment;
 using TIKSN.Mapping;
 
-var initialReleaseDate = new DateOnly(1957, 01, 01);
+var initialReleaseDate = new DateOnly(1956, 05, 01);
 
 var builder = WebApplication.CreateBuilder(args);
 

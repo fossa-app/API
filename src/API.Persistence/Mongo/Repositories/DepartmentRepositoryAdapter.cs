@@ -67,4 +67,9 @@ public class DepartmentRepositoryAdapter
   {
     return _dataRepository.EnsureIndexesCreatedAsync(cancellationToken);
   }
+
+  public Task<int> CountAllAsync(CompanyId companyId, CancellationToken cancellationToken)
+  {
+    return _dataRepository.CountAllAsync(_companyDomainIdentityToDataIdentityMapper.Map(companyId), cancellationToken);
+  }
 }

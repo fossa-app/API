@@ -1,5 +1,6 @@
 ﻿using Fossa.API.Core.Entities;
 using Fossa.API.Core.Extensions;
+using Fossa.API.Core.Licensing;
 using Fossa.API.Core.Repositories;
 using Fossa.API.Core.Services;
 using Fossa.Licensing;
@@ -95,7 +96,7 @@ public class EmployeeCreationCommandHandler : IRequestHandler<EmployeeCreationCo
                 "The current company license entitlements limit the number of employees that can be created, and this limit has been reached")
               .Map(_ => unit),
         _ =>
-          EnsureMaximumEmployeeCountWillNotExceed(2, currentEmployeeCount)
+          EnsureMaximumEmployeeCountWillNotExceed(UnlicensedCompanyEntitlements.MaximumEmployeeCount, currentEmployeeCount)
             ? Success<Error, LanguageExt.Unit>(unit)
             : Fail<Error, LanguageExt.Unit>(Error.New(
               43722466,

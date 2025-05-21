@@ -41,4 +41,9 @@ public class DepartmentMongoEasyRepository : EasyRepository<DepartmentMongoEntit
 
     return Task.FromResult(new PageResult<DepartmentMongoEntity>(pageQuery.Page, pageItems, allItems.Length()));
   }
+
+  public Task<int> CountAllAsync(long companyId, CancellationToken cancellationToken)
+  {
+    return Task.FromResult(EasyStore.Entities.Values.Count(x => x.CompanyId == companyId));
+  }
 }

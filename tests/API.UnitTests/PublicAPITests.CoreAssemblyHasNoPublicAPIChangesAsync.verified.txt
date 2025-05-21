@@ -370,7 +370,7 @@ namespace Fossa.API.Core.Messages.Commands
     }
     public class DepartmentCreationCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.DepartmentCreationCommand, MediatR.Unit>
     {
-        public DepartmentCreationCommandHandler(TIKSN.Identity.IIdentityGenerator<Fossa.API.Core.Entities.DepartmentId> identityGenerator, Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, Fossa.API.Core.Repositories.IDepartmentRepository departmentRepository) { }
+        public DepartmentCreationCommandHandler(TIKSN.Identity.IIdentityGenerator<Fossa.API.Core.Entities.DepartmentId> identityGenerator, Fossa.API.Core.Repositories.IDepartmentRepository departmentRepository, Fossa.API.Core.Services.ICompanyLicenseRetriever companyLicenseRetriever, Fossa.API.Core.Repositories.IDepartmentQueryRepository departmentQueryRepository, Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository) { }
         public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.DepartmentCreationCommand request, System.Threading.CancellationToken cancellationToken) { }
     }
     public class DepartmentDeletionCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.DepartmentEntity, Fossa.API.Core.Entities.DepartmentId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.DepartmentDeletionCommand>
@@ -731,6 +731,7 @@ namespace Fossa.API.Core.Repositories
     }
     public interface IDepartmentQueryRepository : Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.CompanyId>, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.DepartmentId>, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.EmployeeId>, TIKSN.Data.IQueryRepository<Fossa.API.Core.Entities.DepartmentEntity, Fossa.API.Core.Entities.DepartmentId>
     {
+        System.Threading.Tasks.Task<int> CountAllAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken);
         System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Core.Entities.DepartmentEntity>> PageAsync(Fossa.API.Core.Repositories.TenantDepartmentPageQuery pageQuery, System.Threading.CancellationToken cancellationToken);
     }
     public interface IDepartmentRepository : TIKSN.Data.IRepository<Fossa.API.Core.Entities.DepartmentEntity> { }

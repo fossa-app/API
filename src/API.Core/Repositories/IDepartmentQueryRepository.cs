@@ -9,6 +9,10 @@ public interface IDepartmentQueryRepository
   , IDependencyQueryRepository<DepartmentId>
   , IDependencyQueryRepository<EmployeeId>
 {
+  Task<int> CountAllAsync(
+    CompanyId companyId,
+    CancellationToken cancellationToken);
+
   Task<PageResult<DepartmentEntity>> PageAsync(
       TenantDepartmentPageQuery pageQuery,
       CancellationToken cancellationToken);

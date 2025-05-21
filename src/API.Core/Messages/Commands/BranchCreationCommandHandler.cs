@@ -1,5 +1,6 @@
-using Fossa.API.Core.Entities;
+﻿using Fossa.API.Core.Entities;
 using Fossa.API.Core.Extensions;
+using Fossa.API.Core.Licensing;
 using Fossa.API.Core.Repositories;
 using Fossa.API.Core.Services;
 using Fossa.Licensing;
@@ -90,7 +91,7 @@ public class BranchCreationCommandHandler : IRequestHandler<BranchCreationComman
                 "The current company license entitlements limit the number of branches that can be created, and this limit has been reached")
               .Map(_ => unit),
         _ =>
-          EnsureMaximumBranchCountWillNotExceed(1, currentBranchCount)
+          EnsureMaximumBranchCountWillNotExceed(UnlicensedCompanyEntitlements.MaximumBranchCount, currentBranchCount)
             ? Success<Error, LanguageExt.Unit>(unit)
             : Fail<Error, LanguageExt.Unit>(Error.New(
               43722467,
