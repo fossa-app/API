@@ -411,7 +411,7 @@ namespace Fossa.API.Core.Messages.Commands
     }
     public class EmployeeCreationCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.EmployeeCreationCommand, MediatR.Unit>
     {
-        public EmployeeCreationCommandHandler(TIKSN.Identity.IIdentityGenerator<Fossa.API.Core.Entities.EmployeeId> identityGenerator, Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, Fossa.API.Core.Repositories.IEmployeeQueryRepository employeeQueryRepository, Fossa.API.Core.Repositories.IEmployeeRepository employeeRepository) { }
+        public EmployeeCreationCommandHandler(TIKSN.Identity.IIdentityGenerator<Fossa.API.Core.Entities.EmployeeId> identityGenerator, Fossa.API.Core.Services.ICompanyLicenseRetriever companyLicenseRetriever, Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, Fossa.API.Core.Repositories.IEmployeeQueryRepository employeeQueryRepository, Fossa.API.Core.Repositories.IEmployeeRepository employeeRepository) { }
         public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.EmployeeCreationCommand request, System.Threading.CancellationToken cancellationToken) { }
     }
     public class EmployeeDeletionCommand : Fossa.API.Core.Messages.Commands.EntityTenantUserCommand<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Core.Entities.EmployeeId, System.Guid, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.EmployeeDeletionCommand>
@@ -744,6 +744,7 @@ namespace Fossa.API.Core.Repositories
     }
     public interface IEmployeeQueryRepository : Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.BranchId>, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.CompanyId>, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.DepartmentId>, TIKSN.Data.IQueryRepository<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Core.Entities.EmployeeId>
     {
+        System.Threading.Tasks.Task<int> CountAllAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken);
         System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Core.Entities.EmployeeEntity>> FindByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken);
         System.Threading.Tasks.Task<Fossa.API.Core.Entities.EmployeeEntity> GetByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken);
         System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Core.Entities.EmployeeEntity>> PageAsync(Fossa.API.Core.Repositories.TenantEmployeePageQuery pageQuery, System.Threading.CancellationToken cancellationToken);
