@@ -10,6 +10,10 @@ public interface IBranchMongoRepository : IMongoRepository<BranchMongoEntity, lo
   Task EnsureIndexesCreatedAsync(CancellationToken cancellationToken);
   Task<bool> HasDependencyOnCompanyAsync(long companyId, CancellationToken cancellationToken);
 
+  Task<int> CountAllAsync(
+    long companyId,
+    CancellationToken cancellationToken);
+
   Task<PageResult<BranchMongoEntity>> PageAsync(
     TenantBranchPageQuery pageQuery,
     CancellationToken cancellationToken);

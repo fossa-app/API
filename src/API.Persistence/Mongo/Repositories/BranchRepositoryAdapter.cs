@@ -40,7 +40,6 @@ public class BranchRepositoryAdapter
   {
     return _dataRepository.HasDependencyOnCompanyAsync(_companyDomainIdentityToDataIdentityMapper.Map(id), cancellationToken);
   }
-
   public async Task<PageResult<BranchEntity>> PageAsync(
     TenantBranchPageQuery pageQuery,
     CancellationToken cancellationToken)
@@ -51,5 +50,10 @@ public class BranchRepositoryAdapter
       pageResult.Page,
       [.. pageResult.Items.Select(Map)],
       pageResult.TotalItems);
+  }
+
+  public Task<int> CountAllAsync(CompanyId companyId, CancellationToken cancellationToken)
+  {
+    return _dataRepository.CountAllAsync(_companyDomainIdentityToDataIdentityMapper.Map(companyId), cancellationToken);
   }
 }
