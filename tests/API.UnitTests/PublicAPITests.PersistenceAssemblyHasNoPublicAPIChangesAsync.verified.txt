@@ -121,6 +121,7 @@ namespace Fossa.API.Persistence.Mongo.Repositories
     {
         public BranchMongoRepository(TIKSN.Data.Mongo.IMongoClientSessionProvider mongoClientSessionProvider, TIKSN.Data.Mongo.IMongoDatabaseProvider mongoDatabaseProvider) { }
         protected override MongoDB.Driver.SortDefinition<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity> PageSortDefinition { get; }
+        public System.Threading.Tasks.Task<int> CountAllAsync(long companyId, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<bool> HasDependencyOnCompanyAsync(long companyId, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity>> PageAsync(Fossa.API.Core.Repositories.TenantBranchPageQuery pageQuery, System.Threading.CancellationToken cancellationToken) { }
@@ -128,6 +129,7 @@ namespace Fossa.API.Persistence.Mongo.Repositories
     public class BranchRepositoryAdapter : TIKSN.Data.Mongo.MongoRepositoryAdapter<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Core.Entities.BranchId, Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity, long>, Fossa.API.Core.Repositories.IBranchIndexRepository, Fossa.API.Core.Repositories.IBranchQueryRepository, Fossa.API.Core.Repositories.IBranchRepository, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.CompanyId>, TIKSN.Data.IQueryRepository<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Core.Entities.BranchId>, TIKSN.Data.IRepository<Fossa.API.Core.Entities.BranchEntity>
     {
         public BranchRepositoryAdapter(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchEntity, Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity> domainEntityToDataEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity, Fossa.API.Core.Entities.BranchEntity> dataEntityToDomainEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.BranchId> dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> companyDomainIdentityToDataIdentityMapper, Fossa.API.Persistence.Mongo.Repositories.IBranchMongoRepository dataRepository) { }
+        public System.Threading.Tasks.Task<int> CountAllAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<bool> HasDependencyAsync(Fossa.API.Core.Entities.CompanyId id, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Core.Entities.BranchEntity>> PageAsync(Fossa.API.Core.Repositories.TenantBranchPageQuery pageQuery, System.Threading.CancellationToken cancellationToken) { }
@@ -193,6 +195,7 @@ namespace Fossa.API.Persistence.Mongo.Repositories
     }
     public interface IBranchMongoRepository : TIKSN.Data.IQueryRepository<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity, long>, TIKSN.Data.IRepository<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity>, TIKSN.Data.IStreamRepository<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity>, TIKSN.Data.Mongo.IMongoRepository<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity, long>
     {
+        System.Threading.Tasks.Task<int> CountAllAsync(long companyId, System.Threading.CancellationToken cancellationToken);
         System.Threading.Tasks.Task EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken);
         System.Threading.Tasks.Task<bool> HasDependencyOnCompanyAsync(long companyId, System.Threading.CancellationToken cancellationToken);
         System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity>> PageAsync(Fossa.API.Core.Repositories.TenantBranchPageQuery pageQuery, System.Threading.CancellationToken cancellationToken);

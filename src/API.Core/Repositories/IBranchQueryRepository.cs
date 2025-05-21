@@ -8,4 +8,8 @@ public interface IBranchQueryRepository : IQueryRepository<BranchEntity, BranchI
   Task<PageResult<BranchEntity>> PageAsync(
     TenantBranchPageQuery pageQuery,
     CancellationToken cancellationToken);
+
+  Task<int> CountAllAsync(
+    CompanyId companyId,
+    CancellationToken cancellationToken);
 }
