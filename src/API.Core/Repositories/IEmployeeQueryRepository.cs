@@ -20,4 +20,8 @@ public interface IEmployeeQueryRepository
   Task<PageResult<EmployeeEntity>> PageAsync(
     TenantEmployeePageQuery pageQuery,
     CancellationToken cancellationToken);
+
+  Task<int> CountAllAsync(
+    CompanyId companyId,
+    CancellationToken cancellationToken);
 }
