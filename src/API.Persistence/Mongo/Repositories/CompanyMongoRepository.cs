@@ -42,7 +42,7 @@ public class CompanyMongoRepository
   }
 
   public async Task<Option<CompanyMongoEntity>> FindByTenantIdAsync(
-        Guid tenantId,
+    Guid tenantId,
     CancellationToken cancellationToken)
   {
     var filter =
