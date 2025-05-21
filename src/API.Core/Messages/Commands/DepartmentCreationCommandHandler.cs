@@ -1,21 +1,21 @@
 ﻿using Fossa.API.Core.Entities;
 using Fossa.API.Core.Extensions;
+using Fossa.API.Core.Licensing;
 using Fossa.API.Core.Repositories;
 using Fossa.API.Core.Services;
 using Fossa.Licensing;
 using TIKSN.Identity;
 using TIKSN.Licensing;
-using static LanguageExt.Prelude;
 
 namespace Fossa.API.Core.Messages.Commands;
 
 public class DepartmentCreationCommandHandler : IRequestHandler<DepartmentCreationCommand, Unit>
 {
-  private readonly IIdentityGenerator<DepartmentId> _identityGenerator;
-  private readonly IDepartmentRepository _departmentRepository;
   private readonly ICompanyLicenseRetriever _companyLicenseRetriever;
-  private readonly IDepartmentQueryRepository _departmentQueryRepository;
   private readonly ICompanyQueryRepository _companyQueryRepository;
+  private readonly IDepartmentQueryRepository _departmentQueryRepository;
+  private readonly IDepartmentRepository _departmentRepository;
+  private readonly IIdentityGenerator<DepartmentId> _identityGenerator;
 
   public DepartmentCreationCommandHandler(
       IIdentityGenerator<DepartmentId> identityGenerator,
@@ -66,7 +66,7 @@ public class DepartmentCreationCommandHandler : IRequestHandler<DepartmentCreati
                     "The current company license entitlements limit the number of departments that can be created, and this limit has been reached")
                 .Map(_ => unit),
         _ =>
-            EnsureMaximumDepartmentCountWillNotExceed(1, currentDepartmentCount)
+            EnsureMaximumDepartmentCountWillNotExceed(UnlicensedCompanyEntitlements.MaximumDepartmentCount, currentDepartmentCount)
                 ? Success<Error, LanguageExt.Unit>(unit)
                 : Fail<Error, LanguageExt.Unit>(Error.New(
                     43722468,
