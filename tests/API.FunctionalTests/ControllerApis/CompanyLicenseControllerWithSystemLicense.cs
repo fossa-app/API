@@ -38,7 +38,7 @@ public class CompanyLicenseControllerWithSystemLicense : IClassFixture<CustomWeb
   [Fact]
   public async Task CreateCompanyLicenseWithUserAccessTokenAsync()
   {
-    Func<Task> tryToCreateCompanyLicense = () => _factory.SeedCompanyLicenseAsync("01JBV0GR968WJ25BKJVT8NDXEY.Tenant1.User1", 4, 10, 2, default);
+    Func<Task> tryToCreateCompanyLicense = () => _factory.SeedCompanyLicenseAsync("01JBV0GR968WJ25BKJVT8NDXEY.Tenant2.User1", 4, 10, 2, default);
 
     await tryToCreateCompanyLicense.ShouldThrowAsync<HttpRequestException>();
   }

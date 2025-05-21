@@ -10,6 +10,7 @@ public static class AllEntitiesExtensions
     where TEntryPoint : class
   {
     await factory.SeedCompaniesAsync(cancellationToken).ConfigureAwait(false);
+    await factory.SeedCompanyLicensesAsync(cancellationToken).ConfigureAwait(false);
     await factory.SeedBranchesAsync(cancellationToken).ConfigureAwait(false);
     await factory.SeedEmployeesAsync(cancellationToken).ConfigureAwait(false);
   }
