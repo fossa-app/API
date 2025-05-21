@@ -108,4 +108,26 @@ public class EmployeeMongoRepository
 
     return this.PageAsync(filter, pageQuery, cancellationToken);
   }
+
+  public async Task<int> CountAllAsync(long companyId, CancellationToken cancellationToken)
+  {
+    var filter =
+      Builders<EmployeeMongoEntity>.Filter.Eq(item => item.CompanyId, companyId);
+
+    var count = await MongoClientSessionProvider.GetClientSessionHandle().Match(SomeAsync, NoneAsync).ConfigureAwait(false);
+
+    return (int)count;
+
+    Task<long> SomeAsync(IClientSessionHandle clientSessionHandle)
+    {
+      return Collection
+        .CountDocumentsAsync(clientSessionHandle, filter, options: null, cancellationToken);
+    }
+
+    Task<long> NoneAsync()
+    {
+      return Collection
+        .CountDocumentsAsync(filter, options: null, cancellationToken);
+    }
+  }
 }

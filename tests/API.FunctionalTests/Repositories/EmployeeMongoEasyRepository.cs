@@ -63,4 +63,11 @@ public class EmployeeMongoEasyRepository
 
     return Task.FromResult(new PageResult<EmployeeMongoEntity>(pageQuery.Page, pageItems, allItems.Length()));
   }
+
+  public Task<int> CountAllAsync(long companyId, CancellationToken cancellationToken)
+  {
+    return Task.FromResult(
+      EasyStore.Entities
+        .Count(x => x.Value.CompanyId == companyId));
+  }
 }
