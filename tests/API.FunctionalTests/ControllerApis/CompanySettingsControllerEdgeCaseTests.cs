@@ -35,7 +35,30 @@ public class CompanySettingsControllerEdgeCaseTests : IClassFixture<CustomWebApp
       new CompanySettingsModificationModel("test-theme"));
 
     // Should fail because there's no company for this tenant
-    response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+    response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+
+    var content = await response.Content.ReadAsStringAsync();
+    content.ShouldContain("A company must exist for this tenant before creating company settings");
+  }
+
+  [Fact]
+  public async Task CreateCompanySettingsWhenAlreadyExistShouldFailAsync()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JB0QS2K6SA4KYD8S920W7DMG.Tenant1.ADMIN1");
+
+    // First creation should succeed
+    var firstResponse = await client.PostAsJsonAsync("/api/1.0/CompanySettings",
+      new CompanySettingsModificationModel("first-theme"));
+    firstResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    // Second creation should fail with validation error
+    var secondResponse = await client.PostAsJsonAsync("/api/1.0/CompanySettings",
+      new CompanySettingsModificationModel("second-theme"));
+    secondResponse.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+
+    var content = await secondResponse.Content.ReadAsStringAsync();
+    content.ShouldContain("Company settings for this company have already been created");
   }
 
   [Fact]
@@ -161,6 +184,59 @@ public class CompanySettingsControllerEdgeCaseTests : IClassFixture<CustomWebApp
     adminSettings.Id.ShouldBe(userSettings.Id);
     adminSettings.CompanyId.ShouldBe(userSettings.CompanyId);
     adminSettings.ColorSchemeId.ShouldBe(userSettings.ColorSchemeId);
+  }
+
+  [Fact]
+  public async Task UpdateCompanySettingsFromDifferentTenantShouldFailAsync()
+  {
+    var tenant1Client = _factory.CreateClient();
+    var tenant2Client = _factory.CreateClient();
+
+    tenant1Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JB0QS2K6SA4KYD8S920W7DMG.Tenant1.ADMIN1");
+    tenant2Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JB0QS2K6SA4KYD8S920W7DMG.Tenant2.ADMIN1");
+
+    // Tenant 1 creates settings
+    var createResponse = await tenant1Client.PostAsJsonAsync("/api/1.0/CompanySettings",
+      new CompanySettingsModificationModel("tenant1-theme"));
+    createResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    // Get the created settings ID
+    var getResponse = await tenant1Client.GetAsync("/api/1.0/CompanySettings");
+    var settings = await getResponse.Content.ReadFromJsonAsync<CompanySettingsRetrievalModel>();
+
+    // Tenant 2 tries to update Tenant 1's settings - should fail
+    var updateResponse = await tenant2Client.PutAsJsonAsync($"/api/1.0/CompanySettings/{settings!.Id}",
+      new CompanySettingsModificationModel("malicious-theme"));
+
+    updateResponse.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+    var content = await updateResponse.Content.ReadAsStringAsync();
+    content.ShouldContain("Company settings must exist and belong to a company in the same tenant");
+  }
+
+  [Fact]
+  public async Task DeleteCompanySettingsFromDifferentTenantShouldFailAsync()
+  {
+    var tenant1Client = _factory.CreateClient();
+    var tenant2Client = _factory.CreateClient();
+
+    tenant1Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JB0QS2K6SA4KYD8S920W7DMG.Tenant1.ADMIN1");
+    tenant2Client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JB0QS2K6SA4KYD8S920W7DMG.Tenant2.ADMIN1");
+
+    // Tenant 1 creates settings
+    var createResponse = await tenant1Client.PostAsJsonAsync("/api/1.0/CompanySettings",
+      new CompanySettingsModificationModel("tenant1-theme"));
+    createResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    // Get the created settings ID
+    var getResponse = await tenant1Client.GetAsync("/api/1.0/CompanySettings");
+    var settings = await getResponse.Content.ReadFromJsonAsync<CompanySettingsRetrievalModel>();
+
+    // Tenant 2 tries to delete Tenant 1's settings - should fail
+    var deleteResponse = await tenant2Client.DeleteAsync($"/api/1.0/CompanySettings/{settings!.Id}");
+
+    deleteResponse.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+    var content = await deleteResponse.Content.ReadAsStringAsync();
+    content.ShouldContain("Company settings must exist and belong to a company in the same tenant");
   }
 
   public Task DisposeAsync() => Task.CompletedTask;
