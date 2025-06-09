@@ -167,14 +167,18 @@ namespace Fossa.API.Persistence.Mongo.Repositories
     {
         public CompanySettingsMongoRepository(TIKSN.Data.Mongo.IMongoClientSessionProvider mongoClientSessionProvider, TIKSN.Data.Mongo.IMongoDatabaseProvider mongoDatabaseProvider) { }
         protected override MongoDB.Driver.SortDefinition<Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity> PageSortDefinition { get; }
+        public System.Threading.Tasks.Task EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity>> FindByCompanyIdAsync(long companyId, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity> GetByCompanyIdAsync(long companyId, System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task<bool> HasDependencyOnCompanyAsync(long companyId, System.Threading.CancellationToken cancellationToken) { }
     }
-    public class CompanySettingsRepositoryAdapter : TIKSN.Data.Mongo.MongoRepositoryAdapter<Fossa.API.Core.Entities.CompanySettingsEntity, Fossa.API.Core.Entities.CompanySettingsId, Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity, long>, Fossa.API.Core.Repositories.ICompanySettingsQueryRepository, Fossa.API.Core.Repositories.ICompanySettingsRepository, TIKSN.Data.IQueryRepository<Fossa.API.Core.Entities.CompanySettingsEntity, Fossa.API.Core.Entities.CompanySettingsId>, TIKSN.Data.IRepository<Fossa.API.Core.Entities.CompanySettingsEntity>
+    public class CompanySettingsRepositoryAdapter : TIKSN.Data.Mongo.MongoRepositoryAdapter<Fossa.API.Core.Entities.CompanySettingsEntity, Fossa.API.Core.Entities.CompanySettingsId, Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity, long>, Fossa.API.Core.Repositories.ICompanySettingsQueryRepository, Fossa.API.Core.Repositories.ICompanySettingsRepository, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.CompanyId>, TIKSN.Data.IQueryRepository<Fossa.API.Core.Entities.CompanySettingsEntity, Fossa.API.Core.Entities.CompanySettingsId>, TIKSN.Data.IRepository<Fossa.API.Core.Entities.CompanySettingsEntity>
     {
         public CompanySettingsRepositoryAdapter(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanySettingsEntity, Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity> domainEntityToDataEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity, Fossa.API.Core.Entities.CompanySettingsEntity> dataEntityToDomainEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanySettingsId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanySettingsId> dataIdentityToDomainIdentityMapper, Fossa.API.Persistence.Mongo.Repositories.ICompanySettingsMongoRepository dataRepository, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> companyDomainIdentityToDataIdentityMapper) { }
+        public System.Threading.Tasks.Task EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Core.Entities.CompanySettingsEntity>> FindByCompanyIdAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken) { }
         public System.Threading.Tasks.Task<Fossa.API.Core.Entities.CompanySettingsEntity> GetByCompanyIdAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task<bool> HasDependencyAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken) { }
     }
     public class DepartmentMongoRepository : TIKSN.Data.Mongo.MongoRepository<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity, long>, Fossa.API.Persistence.Mongo.Repositories.IDepartmentMongoRepository, TIKSN.Data.IQueryRepository<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity, long>, TIKSN.Data.IRepository<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity>, TIKSN.Data.IStreamRepository<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity>, TIKSN.Data.Mongo.IMongoRepository<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity, long>
     {
@@ -237,8 +241,10 @@ namespace Fossa.API.Persistence.Mongo.Repositories
     }
     public interface ICompanySettingsMongoRepository : TIKSN.Data.IQueryRepository<Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity, long>, TIKSN.Data.IRepository<Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity>, TIKSN.Data.IStreamRepository<Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity>, TIKSN.Data.Mongo.IMongoRepository<Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity, long>
     {
+        System.Threading.Tasks.Task EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken);
         System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity>> FindByCompanyIdAsync(long companyId, System.Threading.CancellationToken cancellationToken);
         System.Threading.Tasks.Task<Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity> GetByCompanyIdAsync(long companyId, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<bool> HasDependencyOnCompanyAsync(long companyId, System.Threading.CancellationToken cancellationToken);
     }
     public interface IDepartmentMongoRepository : TIKSN.Data.IQueryRepository<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity, long>, TIKSN.Data.IRepository<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity>, TIKSN.Data.IStreamRepository<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity>, TIKSN.Data.Mongo.IMongoRepository<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity, long>
     {

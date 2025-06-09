@@ -819,16 +819,12 @@ namespace Fossa.API.Core.Repositories
         System.Threading.Tasks.Task<Fossa.API.Core.Entities.CompanyEntity> GetByTenantIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken);
     }
     public interface ICompanyRepository : TIKSN.Data.IRepository<Fossa.API.Core.Entities.CompanyEntity> { }
-    public interface ICompanySettingsQueryRepository : TIKSN.Data.IQueryRepository<Fossa.API.Core.Entities.CompanySettingsEntity, Fossa.API.Core.Entities.CompanySettingsId>
+    public interface ICompanySettingsQueryRepository : Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.CompanyId>, TIKSN.Data.IQueryRepository<Fossa.API.Core.Entities.CompanySettingsEntity, Fossa.API.Core.Entities.CompanySettingsId>
     {
         System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Core.Entities.CompanySettingsEntity>> FindByCompanyIdAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken);
         System.Threading.Tasks.Task<Fossa.API.Core.Entities.CompanySettingsEntity> GetByCompanyIdAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken);
     }
-    public interface ICompanySettingsRepository : TIKSN.Data.IRepository<Fossa.API.Core.Entities.CompanySettingsEntity>
-    {
-        System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Core.Entities.CompanySettingsEntity>> FindByCompanyIdAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken);
-        System.Threading.Tasks.Task<Fossa.API.Core.Entities.CompanySettingsEntity> GetByCompanyIdAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken);
-    }
+    public interface ICompanySettingsRepository : TIKSN.Data.IRepository<Fossa.API.Core.Entities.CompanySettingsEntity> { }
     public interface IDepartmentIndexRepository
     {
         System.Threading.Tasks.Task EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken);
