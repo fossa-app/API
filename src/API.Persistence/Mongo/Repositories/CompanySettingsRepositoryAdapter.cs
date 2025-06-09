@@ -52,4 +52,15 @@ public class CompanySettingsRepositoryAdapter
 
     return entity is null ? throw new EntityNotFoundException() : Map(entity);
   }
+
+  public Task EnsureIndexesCreatedAsync(CancellationToken cancellationToken)
+  {
+    return _dataRepository.EnsureIndexesCreatedAsync(cancellationToken);
+  }
+
+  public Task<bool> HasDependencyAsync(CompanyId companyId, CancellationToken cancellationToken)
+  {
+    var dataCompanyId = _companyDomainIdentityToDataIdentityMapper.Map(companyId);
+    return _dataRepository.HasDependencyOnCompanyAsync(dataCompanyId, cancellationToken);
+  }
 }

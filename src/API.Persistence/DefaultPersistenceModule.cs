@@ -34,6 +34,16 @@ public class DefaultPersistenceModule : Module
       .InstancePerLifetimeScope();
 
     builder
+      .RegisterType<CompanySettingsRepositoryAdapter>()
+      .AsImplementedInterfaces()
+      .InstancePerLifetimeScope();
+
+    builder
+      .RegisterType<CompanySettingsMongoRepository>()
+      .AsImplementedInterfaces()
+      .InstancePerLifetimeScope();
+
+    builder
       .RegisterType<BranchMongoRepository>()
       .AsImplementedInterfaces()
       .InstancePerLifetimeScope();

@@ -12,4 +12,10 @@ public interface ICompanySettingsMongoRepository : IMongoRepository<CompanySetti
   Task<CompanySettingsMongoEntity> GetByCompanyIdAsync(
     long companyId,
     CancellationToken cancellationToken);
+
+  Task EnsureIndexesCreatedAsync(CancellationToken cancellationToken);
+
+  Task<bool> HasDependencyOnCompanyAsync(
+    long companyId,
+    CancellationToken cancellationToken);
 }

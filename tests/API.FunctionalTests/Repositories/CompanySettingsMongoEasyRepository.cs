@@ -1,4 +1,4 @@
-using EasyDoubles;
+﻿using EasyDoubles;
 using Fossa.API.Persistence.Mongo.Entities;
 using Fossa.API.Persistence.Mongo.Repositories;
 using TIKSN.Data;
@@ -11,6 +11,11 @@ public class CompanySettingsMongoEasyRepository :
 {
   public CompanySettingsMongoEasyRepository(IEasyStores easyStores) : base(easyStores)
   {
+  }
+
+  public Task EnsureIndexesCreatedAsync(CancellationToken cancellationToken)
+  {
+    return Task.CompletedTask;
   }
 
   public Task<Option<CompanySettingsMongoEntity>> FindByCompanyIdAsync(
@@ -26,5 +31,10 @@ public class CompanySettingsMongoEasyRepository :
   {
     var entity = EasyStore.Entities.Values.FirstOrDefault(x => x.CompanyId == companyId);
     return entity is null ? throw new EntityNotFoundException() : Task.FromResult(entity);
+  }
+
+  public Task<bool> HasDependencyOnCompanyAsync(long companyId, CancellationToken cancellationToken)
+  {
+    return Task.FromResult(EasyStore.Entities.Values.Any(x => x.CompanyId == companyId));
   }
 }
