@@ -70,6 +70,12 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
         .InstancePerLifetimeScope();
 
       containerBuilder
+        .RegisterType<CompanySettingsMongoEasyRepository>()
+        .AsSelf()
+        .AsImplementedInterfaces()
+        .InstancePerLifetimeScope();
+
+      containerBuilder
         .RegisterType<BranchMongoEasyRepository>()
         .AsSelf()
         .AsImplementedInterfaces()
