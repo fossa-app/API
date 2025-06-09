@@ -45,6 +45,20 @@ namespace Fossa.API.Core.Entities
         public static bool operator !=(Fossa.API.Core.Entities.BranchId x, Fossa.API.Core.Entities.BranchId y) { }
         public static bool operator ==(Fossa.API.Core.Entities.BranchId x, Fossa.API.Core.Entities.BranchId y) { }
     }
+    [System.ComponentModel.TypeConverter(typeof(Fossa.API.Core.Entities.ColorSchemeId.ColorSchemeIdTypeConverter))]
+    public readonly struct ColorSchemeId : System.IEquatable<Fossa.API.Core.Entities.ColorSchemeId>, System.Numerics.IEqualityOperators<Fossa.API.Core.Entities.ColorSchemeId, Fossa.API.Core.Entities.ColorSchemeId, bool>
+    {
+        public ColorSchemeId(string value) { }
+        public string AsPrimitive() { }
+        public bool Equals(Fossa.API.Core.Entities.ColorSchemeId other) { }
+        public override bool Equals(object obj) { }
+        public override int GetHashCode() { }
+        public override string ToString() { }
+        public static string op_Explicit(Fossa.API.Core.Entities.ColorSchemeId value) { }
+        public static Fossa.API.Core.Entities.ColorSchemeId op_Explicit(string value) { }
+        public static bool operator !=(Fossa.API.Core.Entities.ColorSchemeId x, Fossa.API.Core.Entities.ColorSchemeId y) { }
+        public static bool operator ==(Fossa.API.Core.Entities.ColorSchemeId x, Fossa.API.Core.Entities.ColorSchemeId y) { }
+    }
     public class CompanyEntity : System.IEquatable<Fossa.API.Core.Entities.CompanyEntity>, TIKSN.Data.IEntity<Fossa.API.Core.Entities.CompanyId>, TIKSN.Data.ITenantEntity<Fossa.API.Core.Entities.CompanyId, System.Guid>
     {
         public CompanyEntity(Fossa.API.Core.Entities.CompanyId ID, System.Guid TenantID, string Name, System.Globalization.RegionInfo Country) { }
@@ -69,6 +83,30 @@ namespace Fossa.API.Core.Entities
         public static Fossa.API.Core.Entities.CompanyId op_Explicit(long value) { }
         public static bool operator !=(Fossa.API.Core.Entities.CompanyId x, Fossa.API.Core.Entities.CompanyId y) { }
         public static bool operator ==(Fossa.API.Core.Entities.CompanyId x, Fossa.API.Core.Entities.CompanyId y) { }
+    }
+    public class CompanySettingsEntity : System.IEquatable<Fossa.API.Core.Entities.CompanySettingsEntity>, TIKSN.Data.IEntity<Fossa.API.Core.Entities.CompanySettingsId>
+    {
+        public CompanySettingsEntity(Fossa.API.Core.Entities.CompanySettingsId ID, Fossa.API.Core.Entities.CompanyId CompanyId, Fossa.API.Core.Entities.ColorSchemeId ColorSchemeId) { }
+        public Fossa.API.Core.Entities.ColorSchemeId ColorSchemeId { get; init; }
+        public Fossa.API.Core.Entities.CompanyId CompanyId { get; init; }
+        public Fossa.API.Core.Entities.CompanySettingsId ID { get; init; }
+    }
+    [System.ComponentModel.TypeConverter(typeof(Fossa.API.Core.Entities.CompanySettingsId.CompanySettingsIdTypeConverter))]
+    public readonly struct CompanySettingsId : System.IEquatable<Fossa.API.Core.Entities.CompanySettingsId>, System.IFormattable, System.ISpanFormattable, System.IUtf8SpanFormattable, System.Numerics.IEqualityOperators<Fossa.API.Core.Entities.CompanySettingsId, Fossa.API.Core.Entities.CompanySettingsId, bool>
+    {
+        public CompanySettingsId(long value) { }
+        public long AsPrimitive() { }
+        public bool Equals(Fossa.API.Core.Entities.CompanySettingsId other) { }
+        public override bool Equals(object obj) { }
+        public override int GetHashCode() { }
+        public override string ToString() { }
+        public string ToString(string? format, System.IFormatProvider? formatProvider) { }
+        public bool TryFormat(System.Span<byte> utf8Destination, out int bytesWritten, System.ReadOnlySpan<char> format, System.IFormatProvider? provider) { }
+        public bool TryFormat(System.Span<char> destination, out int charsWritten, System.ReadOnlySpan<char> format, System.IFormatProvider? provider) { }
+        public static long op_Explicit(Fossa.API.Core.Entities.CompanySettingsId value) { }
+        public static Fossa.API.Core.Entities.CompanySettingsId op_Explicit(long value) { }
+        public static bool operator !=(Fossa.API.Core.Entities.CompanySettingsId x, Fossa.API.Core.Entities.CompanySettingsId y) { }
+        public static bool operator ==(Fossa.API.Core.Entities.CompanySettingsId x, Fossa.API.Core.Entities.CompanySettingsId y) { }
     }
     public class DepartmentEntity : System.IEquatable<Fossa.API.Core.Entities.DepartmentEntity>, TIKSN.Data.IEntity<Fossa.API.Core.Entities.DepartmentId>, TIKSN.Data.ITenantEntity<Fossa.API.Core.Entities.DepartmentId, System.Guid>
     {
@@ -179,11 +217,23 @@ namespace Fossa.API.Core.Mappers
         public long Map(Fossa.API.Core.Entities.BranchId source) { }
         public Fossa.API.Core.Entities.BranchId Map(long source) { }
     }
+    public class ColorSchemeIdMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.ColorSchemeId, string>, TIKSN.Mapping.IMapper<string, Fossa.API.Core.Entities.ColorSchemeId>
+    {
+        public ColorSchemeIdMapper() { }
+        public string Map(Fossa.API.Core.Entities.ColorSchemeId source) { }
+        public Fossa.API.Core.Entities.ColorSchemeId Map(string source) { }
+    }
     public class CompanyIdMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long>, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId>
     {
         public CompanyIdMapper() { }
         public long Map(Fossa.API.Core.Entities.CompanyId source) { }
         public Fossa.API.Core.Entities.CompanyId Map(long source) { }
+    }
+    public class CompanySettingsIdMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanySettingsId, long>, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanySettingsId>
+    {
+        public CompanySettingsIdMapper() { }
+        public long Map(Fossa.API.Core.Entities.CompanySettingsId source) { }
+        public Fossa.API.Core.Entities.CompanySettingsId Map(long source) { }
     }
     public class DepartmentIdMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentId, long>, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.DepartmentId>
     {
@@ -358,6 +408,40 @@ namespace Fossa.API.Core.Messages.Commands
     {
         public CompanyModificationCommandHandler(Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, Fossa.API.Core.Repositories.ICompanyRepository companyRepository) { }
         public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.CompanyModificationCommand request, System.Threading.CancellationToken cancellationToken) { }
+    }
+    public class CompanySettingsCreationCommand : Fossa.API.Core.Messages.Commands.EntityTenantUserCommand<Fossa.API.Core.Entities.CompanySettingsEntity, Fossa.API.Core.Entities.CompanySettingsId, System.Guid, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.CompanySettingsCreationCommand>
+    {
+        public CompanySettingsCreationCommand(System.Guid TenantID, System.Guid UserID, Fossa.API.Core.Entities.ColorSchemeId ColorSchemeId) { }
+        public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.CompanySettingsId> AffectingTenantEntitiesIdentities { get; }
+        public Fossa.API.Core.Entities.ColorSchemeId ColorSchemeId { get; init; }
+    }
+    public class CompanySettingsCreationCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.CompanySettingsCreationCommand, MediatR.Unit>
+    {
+        public CompanySettingsCreationCommandHandler(Fossa.API.Core.Repositories.ICompanySettingsRepository companySettingsRepository, Fossa.API.Core.Repositories.ICompanySettingsQueryRepository companySettingsQueryRepository, Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, TIKSN.Identity.IIdentityGenerator<Fossa.API.Core.Entities.CompanySettingsId> identityGenerator) { }
+        public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.CompanySettingsCreationCommand request, System.Threading.CancellationToken cancellationToken) { }
+    }
+    public class CompanySettingsDeletionCommand : Fossa.API.Core.Messages.Commands.EntityTenantUserCommand<Fossa.API.Core.Entities.CompanySettingsEntity, Fossa.API.Core.Entities.CompanySettingsId, System.Guid, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.CompanySettingsDeletionCommand>
+    {
+        public CompanySettingsDeletionCommand(Fossa.API.Core.Entities.CompanySettingsId ID, System.Guid TenantID, System.Guid UserID) { }
+        public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.CompanySettingsId> AffectingTenantEntitiesIdentities { get; }
+        public Fossa.API.Core.Entities.CompanySettingsId ID { get; init; }
+    }
+    public class CompanySettingsDeletionCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.CompanySettingsDeletionCommand, MediatR.Unit>
+    {
+        public CompanySettingsDeletionCommandHandler(Fossa.API.Core.Repositories.ICompanySettingsRepository companySettingsRepository, Fossa.API.Core.Repositories.ICompanySettingsQueryRepository companySettingsQueryRepository, Fossa.API.Core.Relationship.IRelationshipGraph relationshipGraph) { }
+        public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.CompanySettingsDeletionCommand request, System.Threading.CancellationToken cancellationToken) { }
+    }
+    public class CompanySettingsModificationCommand : Fossa.API.Core.Messages.Commands.EntityTenantUserCommand<Fossa.API.Core.Entities.CompanySettingsEntity, Fossa.API.Core.Entities.CompanySettingsId, System.Guid, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.CompanySettingsModificationCommand>
+    {
+        public CompanySettingsModificationCommand(Fossa.API.Core.Entities.CompanySettingsId ID, System.Guid TenantID, System.Guid UserID, Fossa.API.Core.Entities.ColorSchemeId ColorSchemeId) { }
+        public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.CompanySettingsId> AffectingTenantEntitiesIdentities { get; }
+        public Fossa.API.Core.Entities.ColorSchemeId ColorSchemeId { get; init; }
+        public Fossa.API.Core.Entities.CompanySettingsId ID { get; init; }
+    }
+    public class CompanySettingsModificationCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.CompanySettingsModificationCommand, MediatR.Unit>
+    {
+        public CompanySettingsModificationCommandHandler(Fossa.API.Core.Repositories.ICompanySettingsRepository companySettingsRepository, Fossa.API.Core.Repositories.ICompanySettingsQueryRepository companySettingsQueryRepository) { }
+        public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.CompanySettingsModificationCommand request, System.Threading.CancellationToken cancellationToken) { }
     }
     public class DepartmentCreationCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.DepartmentEntity, Fossa.API.Core.Entities.DepartmentId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.DepartmentCreationCommand>
     {
@@ -566,6 +650,16 @@ namespace Fossa.API.Core.Messages.Queries
         public CompanyRetrievalQueryHandler(Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository) { }
         public System.Threading.Tasks.Task<Fossa.API.Core.Entities.CompanyEntity> Handle(Fossa.API.Core.Messages.Queries.CompanyRetrievalQuery request, System.Threading.CancellationToken cancellationToken) { }
     }
+    public class CompanySettingsRetrievalQuery : Fossa.API.Core.Messages.Queries.EntityTenantQuery<Fossa.API.Core.Entities.CompanySettingsEntity, Fossa.API.Core.Entities.CompanySettingsId, System.Guid, Fossa.API.Core.Entities.CompanySettingsEntity>, System.IEquatable<Fossa.API.Core.Messages.Queries.CompanySettingsRetrievalQuery>
+    {
+        public CompanySettingsRetrievalQuery(System.Guid TenantID) { }
+        public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.CompanySettingsId> AffectingTenantEntitiesIdentities { get; }
+    }
+    public class CompanySettingsRetrievalQueryHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Queries.CompanySettingsRetrievalQuery, Fossa.API.Core.Entities.CompanySettingsEntity>
+    {
+        public CompanySettingsRetrievalQueryHandler(Fossa.API.Core.Repositories.ICompanySettingsQueryRepository companySettingsQueryRepository, Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository) { }
+        public System.Threading.Tasks.Task<Fossa.API.Core.Entities.CompanySettingsEntity> Handle(Fossa.API.Core.Messages.Queries.CompanySettingsRetrievalQuery request, System.Threading.CancellationToken cancellationToken) { }
+    }
     public class CurrentEmployeeRetrievalQuery : Fossa.API.Core.Messages.Queries.EntityTenantQuery<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Core.Entities.EmployeeId, System.Guid, Fossa.API.Core.Entities.EmployeeEntity>, System.IEquatable<Fossa.API.Core.Messages.Queries.CurrentEmployeeRetrievalQuery>
     {
         public CurrentEmployeeRetrievalQuery(System.Guid TenantID, System.Guid UserID) { }
@@ -725,6 +819,16 @@ namespace Fossa.API.Core.Repositories
         System.Threading.Tasks.Task<Fossa.API.Core.Entities.CompanyEntity> GetByTenantIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken);
     }
     public interface ICompanyRepository : TIKSN.Data.IRepository<Fossa.API.Core.Entities.CompanyEntity> { }
+    public interface ICompanySettingsQueryRepository : TIKSN.Data.IQueryRepository<Fossa.API.Core.Entities.CompanySettingsEntity, Fossa.API.Core.Entities.CompanySettingsId>
+    {
+        System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Core.Entities.CompanySettingsEntity>> FindByCompanyIdAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<Fossa.API.Core.Entities.CompanySettingsEntity> GetByCompanyIdAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken);
+    }
+    public interface ICompanySettingsRepository : TIKSN.Data.IRepository<Fossa.API.Core.Entities.CompanySettingsEntity>
+    {
+        System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Core.Entities.CompanySettingsEntity>> FindByCompanyIdAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<Fossa.API.Core.Entities.CompanySettingsEntity> GetByCompanyIdAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken);
+    }
     public interface IDepartmentIndexRepository
     {
         System.Threading.Tasks.Task EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken);
@@ -976,6 +1080,18 @@ namespace Fossa.API.Core.Validators
     public class CompanyRetrievalQueryValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Queries.CompanyRetrievalQuery>
     {
         public CompanyRetrievalQueryValidator() { }
+    }
+    public class CompanySettingsCreationCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.CompanySettingsCreationCommand>
+    {
+        public CompanySettingsCreationCommandValidator() { }
+    }
+    public class CompanySettingsDeletionCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.CompanySettingsDeletionCommand>
+    {
+        public CompanySettingsDeletionCommandValidator() { }
+    }
+    public class CompanySettingsModificationCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.CompanySettingsModificationCommand>
+    {
+        public CompanySettingsModificationCommandValidator() { }
     }
     public class DepartmentCreationCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.DepartmentCreationCommand>
     {

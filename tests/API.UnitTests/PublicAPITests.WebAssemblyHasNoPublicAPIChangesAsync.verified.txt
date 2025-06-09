@@ -52,6 +52,25 @@
     [Microsoft.AspNetCore.Authorization.Authorize]
     [Microsoft.AspNetCore.Mvc.ApiController]
     [Microsoft.AspNetCore.Mvc.Route("api/{version:apiVersion}/[controller]")]
+    public class CompanySettingsController : Fossa.API.Web.Api.BaseApiController
+    {
+        public CompanySettingsController(MediatR.ISender sender, MediatR.IPublisher publisher) { }
+        [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
+        [Microsoft.AspNetCore.Mvc.HttpDelete("{id}")]
+        public System.Threading.Tasks.Task DeleteAsync([Microsoft.AspNetCore.Mvc.FromRoute] long id, System.Threading.CancellationToken cancellationToken) { }
+        [Microsoft.AspNetCore.Mvc.HttpGet]
+        public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.CompanySettingsRetrievalModel> GetAsync(System.Threading.CancellationToken cancellationToken) { }
+        [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
+        [Microsoft.AspNetCore.Mvc.HttpPost]
+        public System.Threading.Tasks.Task PostAsync([Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.CompanySettingsModificationModel model, System.Threading.CancellationToken cancellationToken) { }
+        [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
+        [Microsoft.AspNetCore.Mvc.HttpPut("{id}")]
+        public System.Threading.Tasks.Task PutAsync([Microsoft.AspNetCore.Mvc.FromRoute] long id, [Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.CompanySettingsModificationModel model, System.Threading.CancellationToken cancellationToken) { }
+    }
+    [Asp.Versioning.ApiVersion(1D, null)]
+    [Microsoft.AspNetCore.Authorization.Authorize]
+    [Microsoft.AspNetCore.Mvc.ApiController]
+    [Microsoft.AspNetCore.Mvc.Route("api/{version:apiVersion}/[controller]")]
     public class DepartmentsController : Fossa.API.Web.Api.BaseApiController
     {
         public DepartmentsController(MediatR.ISender sender, MediatR.IPublisher publisher) { }
@@ -200,6 +219,18 @@ namespace Fossa.API.Web.ApiModels
         public string CountryCode { get; init; }
         public long Id { get; init; }
         public string Name { get; init; }
+    }
+    public class CompanySettingsModificationModel : System.IEquatable<Fossa.API.Web.ApiModels.CompanySettingsModificationModel>
+    {
+        public CompanySettingsModificationModel(string? ColorSchemeId) { }
+        public string? ColorSchemeId { get; init; }
+    }
+    public class CompanySettingsRetrievalModel : System.IEquatable<Fossa.API.Web.ApiModels.CompanySettingsRetrievalModel>
+    {
+        public CompanySettingsRetrievalModel(long Id, long CompanyId, string ColorSchemeId) { }
+        public string ColorSchemeId { get; init; }
+        public long CompanyId { get; init; }
+        public long Id { get; init; }
     }
     public class CountryModel : System.IEquatable<Fossa.API.Web.ApiModels.CountryModel>
     {
@@ -403,6 +434,11 @@ namespace Fossa.API.Web.Mappers
         public CompanyRetrievalModelMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> domainIdentityToDataIdentityMapper) { }
         public Fossa.API.Web.ApiModels.CompanyRetrievalModel Map(Fossa.API.Core.Entities.CompanyEntity source) { }
     }
+    public class CompanySettingsRetrievalModelMapper : TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanySettingsEntity, Fossa.API.Web.ApiModels.CompanySettingsRetrievalModel>
+    {
+        public CompanySettingsRetrievalModelMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanySettingsId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> companyDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.ColorSchemeId, string> colorSchemeDomainToDataMapper) { }
+        public Fossa.API.Web.ApiModels.CompanySettingsRetrievalModel Map(Fossa.API.Core.Entities.CompanySettingsEntity source) { }
+    }
     public class CountryModelMapper : TIKSN.Mapping.IMapper<System.Globalization.RegionInfo, Fossa.API.Web.ApiModels.CountryModel>
     {
         public CountryModelMapper() { }
@@ -586,6 +622,40 @@ namespace Fossa.API.Web.Messages.Commands
         protected override MediatR.Unit MapToApiResponse(MediatR.Unit domainResponse) { }
         protected override Fossa.API.Core.Messages.Commands.CompanyModificationCommand MapToDomainRequest(Fossa.API.Web.Messages.Commands.CompanyModificationApiCommand apiRequest) { }
     }
+    public class CompanySettingsCreationApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.CompanySettingsCreationApiCommand>
+    {
+        public CompanySettingsCreationApiCommand(string? ColorSchemeId) { }
+        public string? ColorSchemeId { get; init; }
+    }
+    public class CompanySettingsCreationApiCommandHandler : Fossa.API.Web.Messages.ApiMessageHandler<Fossa.API.Core.Entities.CompanySettingsId, Fossa.API.Web.Messages.Commands.CompanySettingsCreationApiCommand, MediatR.Unit, Fossa.API.Core.Messages.Commands.CompanySettingsCreationCommand, MediatR.Unit>
+    {
+        public CompanySettingsCreationApiCommandHandler(MediatR.ISender sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanySettingsId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanySettingsId> dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<string, Fossa.API.Core.Entities.ColorSchemeId> colorSchemeDataToDomainMapper) { }
+        protected override MediatR.Unit MapToApiResponse(MediatR.Unit domainResponse) { }
+        protected override Fossa.API.Core.Messages.Commands.CompanySettingsCreationCommand MapToDomainRequest(Fossa.API.Web.Messages.Commands.CompanySettingsCreationApiCommand apiRequest) { }
+    }
+    public class CompanySettingsDeletionApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.CompanySettingsDeletionApiCommand>
+    {
+        public CompanySettingsDeletionApiCommand(long ID) { }
+        public long ID { get; init; }
+    }
+    public class CompanySettingsDeletionApiCommandHandler : Fossa.API.Web.Messages.ApiMessageHandler<Fossa.API.Core.Entities.CompanySettingsId, Fossa.API.Web.Messages.Commands.CompanySettingsDeletionApiCommand, MediatR.Unit, Fossa.API.Core.Messages.Commands.CompanySettingsDeletionCommand, MediatR.Unit>
+    {
+        public CompanySettingsDeletionApiCommandHandler(MediatR.ISender sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanySettingsId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanySettingsId> dataIdentityToDomainIdentityMapper) { }
+        protected override MediatR.Unit MapToApiResponse(MediatR.Unit domainResponse) { }
+        protected override Fossa.API.Core.Messages.Commands.CompanySettingsDeletionCommand MapToDomainRequest(Fossa.API.Web.Messages.Commands.CompanySettingsDeletionApiCommand apiRequest) { }
+    }
+    public class CompanySettingsModificationApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.CompanySettingsModificationApiCommand>
+    {
+        public CompanySettingsModificationApiCommand(long ID, string? ColorSchemeId) { }
+        public string? ColorSchemeId { get; init; }
+        public long ID { get; init; }
+    }
+    public class CompanySettingsModificationApiCommandHandler : Fossa.API.Web.Messages.ApiMessageHandler<Fossa.API.Core.Entities.CompanySettingsId, Fossa.API.Web.Messages.Commands.CompanySettingsModificationApiCommand, MediatR.Unit, Fossa.API.Core.Messages.Commands.CompanySettingsModificationCommand, MediatR.Unit>
+    {
+        public CompanySettingsModificationApiCommandHandler(MediatR.ISender sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanySettingsId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanySettingsId> dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<string, Fossa.API.Core.Entities.ColorSchemeId> colorSchemeDataToDomainMapper) { }
+        protected override MediatR.Unit MapToApiResponse(MediatR.Unit domainResponse) { }
+        protected override Fossa.API.Core.Messages.Commands.CompanySettingsModificationCommand MapToDomainRequest(Fossa.API.Web.Messages.Commands.CompanySettingsModificationApiCommand apiRequest) { }
+    }
     public class DepartmentCreationApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.DepartmentCreationApiCommand>
     {
         public DepartmentCreationApiCommand(string? Name, long? ParentDepartmentId, long? ManagerId) { }
@@ -711,6 +781,16 @@ namespace Fossa.API.Web.Messages.Queries
         public CompanyRetrievalApiQueryHandler(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Web.ApiModels.CompanyRetrievalModel> domainResponseToApiResponseMapper, MediatR.ISender sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId> dataIdentityToDomainIdentityMapper) { }
         protected override Fossa.API.Web.ApiModels.CompanyRetrievalModel MapToApiResponse(Fossa.API.Core.Entities.CompanyEntity domainResponse) { }
         protected override Fossa.API.Core.Messages.Queries.CompanyRetrievalQuery MapToDomainRequest(Fossa.API.Web.Messages.Queries.CompanyRetrievalApiQuery apiRequest) { }
+    }
+    public class CompanySettingsRetrievalApiQuery : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.CompanySettingsRetrievalModel>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.CompanySettingsRetrievalModel>, System.IEquatable<Fossa.API.Web.Messages.Queries.CompanySettingsRetrievalApiQuery>
+    {
+        public CompanySettingsRetrievalApiQuery() { }
+    }
+    public class CompanySettingsRetrievalApiQueryHandler : Fossa.API.Web.Messages.ApiMessageHandler<Fossa.API.Core.Entities.CompanySettingsId, Fossa.API.Web.Messages.Queries.CompanySettingsRetrievalApiQuery, Fossa.API.Web.ApiModels.CompanySettingsRetrievalModel, Fossa.API.Core.Messages.Queries.CompanySettingsRetrievalQuery, Fossa.API.Core.Entities.CompanySettingsEntity>
+    {
+        public CompanySettingsRetrievalApiQueryHandler(MediatR.ISender sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid> tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid> userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanySettingsId, long> domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanySettingsId> dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanySettingsEntity, Fossa.API.Web.ApiModels.CompanySettingsRetrievalModel> domainResponseToApiResponseMapper) { }
+        protected override Fossa.API.Web.ApiModels.CompanySettingsRetrievalModel MapToApiResponse(Fossa.API.Core.Entities.CompanySettingsEntity domainResponse) { }
+        protected override Fossa.API.Core.Messages.Queries.CompanySettingsRetrievalQuery MapToDomainRequest(Fossa.API.Web.Messages.Queries.CompanySettingsRetrievalApiQuery apiRequest) { }
     }
     public class CurrentEmployeeRetrievalApiQuery : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>, System.IEquatable<Fossa.API.Web.Messages.Queries.CurrentEmployeeRetrievalApiQuery>
     {
