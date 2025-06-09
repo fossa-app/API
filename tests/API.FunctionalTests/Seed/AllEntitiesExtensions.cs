@@ -11,6 +11,7 @@ public static class AllEntitiesExtensions
   {
     await factory.SeedCompaniesAsync(cancellationToken).ConfigureAwait(false);
     await factory.SeedCompanyLicensesAsync(cancellationToken).ConfigureAwait(false);
+    await factory.SeedCompanySettingsAsync(cancellationToken).ConfigureAwait(false);
     await factory.SeedBranchesAsync(cancellationToken).ConfigureAwait(false);
     await factory.SeedEmployeesAsync(cancellationToken).ConfigureAwait(false);
   }
