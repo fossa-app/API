@@ -10,9 +10,25 @@ public readonly partial struct ColorSchemeId
 
   private static Parser<string> CreateParser()
   {
-    return from first3Letters in count(3, lower)
-           from restOfLetters in many(lower)
-           select new string([.. first3Letters, .. restOfLetters]);
+    // At least 3 characters long, only ASCII lowercase letters,
+    // allow for a hyphen but only one consecutive hyphen in the middle
+    var letterSequence = many1(satisfy(char.IsAsciiLetterLower));
+
+    var withoutHyphen =
+      letterSequence.Bind(letters =>
+        eof.Map(_ => new string([.. letters])));
+
+    var withHyphen =
+      letterSequence.Bind(firstPart =>
+        ch('-').Bind(hyphen =>
+          letterSequence.Bind(secondPart =>
+            eof.Map(_ => new string([.. firstPart, hyphen, .. secondPart])))));
+
+    var parser = either<string>(withHyphen, withoutHyphen);
+
+    return from result in parser
+           where result.Length >= 3
+           select result;
   }
 
   private partial void Validate()
