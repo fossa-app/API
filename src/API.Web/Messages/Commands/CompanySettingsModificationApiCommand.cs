@@ -3,5 +3,4 @@
 namespace Fossa.API.Web.Messages.Commands;
 
 public record CompanySettingsModificationApiCommand(
-    long ID,
     string? ColorSchemeId) : ICommand;

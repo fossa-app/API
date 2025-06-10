@@ -1,18 +1,19 @@
-﻿using Fossa.API.Core.Entities;
-using Fossa.API.Core.Repositories;
-using TIKSN.Data;
+﻿using Fossa.API.Core.Repositories;
 
 namespace Fossa.API.Core.Messages.Commands;
 
 public class CompanySettingsModificationCommandHandler : IRequestHandler<CompanySettingsModificationCommand, Unit>
 {
-  private readonly ICompanySettingsRepository _companySettingsRepository;
+  private readonly ICompanyQueryRepository _companyQueryRepository;
   private readonly ICompanySettingsQueryRepository _companySettingsQueryRepository;
+  private readonly ICompanySettingsRepository _companySettingsRepository;
 
   public CompanySettingsModificationCommandHandler(
+    ICompanyQueryRepository companyQueryRepository,
     ICompanySettingsRepository companySettingsRepository,
     ICompanySettingsQueryRepository companySettingsQueryRepository)
   {
+    _companyQueryRepository = companyQueryRepository ?? throw new ArgumentNullException(nameof(companyQueryRepository));
     _companySettingsRepository = companySettingsRepository ?? throw new ArgumentNullException(nameof(companySettingsRepository));
     _companySettingsQueryRepository = companySettingsQueryRepository ?? throw new ArgumentNullException(nameof(companySettingsQueryRepository));
   }
@@ -21,7 +22,9 @@ public class CompanySettingsModificationCommandHandler : IRequestHandler<Company
     CompanySettingsModificationCommand request,
     CancellationToken cancellationToken)
   {
-    var existingEntity = await _companySettingsQueryRepository.GetAsync(request.ID, cancellationToken)
+    var companyEntity = await _companyQueryRepository.GetByTenantIdAsync(request.TenantID, cancellationToken).ConfigureAwait(false);
+
+    var existingEntity = await _companySettingsQueryRepository.GetByCompanyIdAsync(companyEntity.ID, cancellationToken)
       .ConfigureAwait(false);
 
     var updatedEntity = existingEntity with { ColorSchemeId = request.ColorSchemeId };

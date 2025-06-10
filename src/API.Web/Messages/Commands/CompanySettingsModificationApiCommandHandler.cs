@@ -31,7 +31,6 @@ public class CompanySettingsModificationApiCommandHandler :
   protected override CompanySettingsModificationCommand MapToDomainRequest(CompanySettingsModificationApiCommand apiRequest)
   {
     return new CompanySettingsModificationCommand(
-      _dataIdentityToDomainIdentityMapper.Map(apiRequest.ID),
       _tenantIdProvider.GetTenantId(),
       _userIdProvider.GetUserId(),
       _colorSchemeDataToDomainMapper.Map(apiRequest.ColorSchemeId ?? string.Empty));

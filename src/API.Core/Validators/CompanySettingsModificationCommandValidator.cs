@@ -9,7 +9,6 @@ public class CompanySettingsModificationCommandValidator : AbstractValidator<Com
   {
     RuleFor(x => x.TenantID).NotEmpty();
     RuleFor(x => x.UserID).NotEmpty();
-    RuleFor(x => x.ID).NotEmpty();
     RuleFor(x => x.ColorSchemeId).NotEmpty();
   }
 }

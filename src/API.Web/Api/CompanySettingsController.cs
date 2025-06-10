@@ -20,14 +20,13 @@ public class CompanySettingsController : BaseApiController
   {
   }
 
-  [HttpPost]
+  [HttpDelete]
   [Authorize(Roles = Roles.Administrator)]
-  public async Task PostAsync(
-    [FromBody] CompanySettingsModificationModel model,
+  public async Task DeleteAsync(
     CancellationToken cancellationToken)
   {
     await _sender.Send(
-      new CompanySettingsCreationApiCommand(model.ColorSchemeId),
+      new CompanySettingsDeletionApiCommand(),
       cancellationToken);
   }
 
@@ -40,26 +39,25 @@ public class CompanySettingsController : BaseApiController
       cancellationToken);
   }
 
-  [HttpPut("{id}")]
+  [HttpPost]
   [Authorize(Roles = Roles.Administrator)]
-  public async Task PutAsync(
-    [FromRoute] long id,
+  public async Task PostAsync(
     [FromBody] CompanySettingsModificationModel model,
     CancellationToken cancellationToken)
   {
     await _sender.Send(
-      new CompanySettingsModificationApiCommand(id, model.ColorSchemeId),
+      new CompanySettingsCreationApiCommand(model.ColorSchemeId),
       cancellationToken);
   }
 
-  [HttpDelete("{id}")]
+  [HttpPut]
   [Authorize(Roles = Roles.Administrator)]
-  public async Task DeleteAsync(
-    [FromRoute] long id,
+  public async Task PutAsync(
+    [FromBody] CompanySettingsModificationModel model,
     CancellationToken cancellationToken)
   {
     await _sender.Send(
-      new CompanySettingsDeletionApiCommand(id),
+      new CompanySettingsModificationApiCommand(model.ColorSchemeId),
       cancellationToken);
   }
 }

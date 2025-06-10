@@ -27,7 +27,6 @@ public class CompanySettingsDeletionApiCommandHandler :
   protected override CompanySettingsDeletionCommand MapToDomainRequest(CompanySettingsDeletionApiCommand apiRequest)
   {
     return new CompanySettingsDeletionCommand(
-      _dataIdentityToDomainIdentityMapper.Map(apiRequest.ID),
       _tenantIdProvider.GetTenantId(),
       _userIdProvider.GetUserId());
   }

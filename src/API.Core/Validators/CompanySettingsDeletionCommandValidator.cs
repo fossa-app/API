@@ -9,6 +9,5 @@ public class CompanySettingsDeletionCommandValidator : AbstractValidator<Company
   {
     RuleFor(x => x.TenantID).NotEmpty();
     RuleFor(x => x.UserID).NotEmpty();
-    RuleFor(x => x.ID).NotEmpty();
   }
 }

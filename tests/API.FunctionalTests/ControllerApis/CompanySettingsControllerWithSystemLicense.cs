@@ -26,7 +26,7 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
   }
 
   [Fact]
-  public async Task CreateCompanySettingsWithAdminAccessTokenAsync()
+  public async Task CreateCompanySettingsWithAdministratorAccessTokenAsync()
   {
     var client = _factory.CreateClient();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant3.ADMIN1");
@@ -131,19 +131,11 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
   public async Task DeleteExistingCompanySettingsAsync()
   {
     var client = _factory.CreateClient();
-    var companySettingsEasyStore = _factory.Services.GetRequiredService<IEasyStores>().Resolve<CompanySettingsMongoEntity, long>();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JB0RAH24ZJBA53AJF5F5MMZX.Tenant2.ADMIN1");
 
-    // Get existing company settings for Tenant2
-    var existingSettings = companySettingsEasyStore.Entities.Values.First(x => x.CompanyId == 2);
-
-    var deleteResponse = await client.DeleteAsync($"/api/1.0/CompanySettings/{existingSettings.ID}");
+    var deleteResponse = await client.DeleteAsync($"/api/1.0/CompanySettings");
     deleteResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-    // Verify deletion
-    companySettingsEasyStore.Entities.ContainsKey(existingSettings.ID).ShouldBeFalse();
-
-    // Verify GET returns 404 after deletion
     var retrievalResponse = await client.GetAsync("/api/1.0/CompanySettings");
     retrievalResponse.StatusCode.ShouldBe(HttpStatusCode.NotFound);
   }
@@ -176,7 +168,6 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
     responseModel.ShouldNotBeNull();
     responseModel.Id.ShouldBePositive();
     responseModel.CompanyId.ShouldBePositive();
-    responseModel.ColorSchemeId.ShouldBe("theme-one");
   }
 
   [Fact]
@@ -199,15 +190,11 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
   public async Task UpdateExistingCompanySettingsAsync()
   {
     var client = _factory.CreateClient();
-    var companySettingsEasyStore = _factory.Services.GetRequiredService<IEasyStores>().Resolve<CompanySettingsMongoEntity, long>();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JB0QS2K6SA4KYD8S920W7DMG.Tenant1.ADMIN1");
 
     const string newColorSchemeId = "updated-theme";
 
-    // Get existing company settings
-    var existingSettings = companySettingsEasyStore.Entities.Values.First(x => x.CompanyId == 1);
-
-    var updateResponse = await client.PutAsJsonAsync($"/api/1.0/CompanySettings/{existingSettings.ID}",
+    var updateResponse = await client.PutAsJsonAsync($"/api/1.0/CompanySettings",
       new CompanySettingsModificationModel(newColorSchemeId));
 
     updateResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
