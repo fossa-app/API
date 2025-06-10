@@ -56,16 +56,16 @@
     {
         public CompanySettingsController(MediatR.ISender sender, MediatR.IPublisher publisher) { }
         [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
-        [Microsoft.AspNetCore.Mvc.HttpDelete("{id}")]
-        public System.Threading.Tasks.Task DeleteAsync([Microsoft.AspNetCore.Mvc.FromRoute] long id, System.Threading.CancellationToken cancellationToken) { }
+        [Microsoft.AspNetCore.Mvc.HttpDelete]
+        public System.Threading.Tasks.Task DeleteAsync(System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Mvc.HttpGet]
         public System.Threading.Tasks.Task<Fossa.API.Web.ApiModels.CompanySettingsRetrievalModel> GetAsync(System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
         [Microsoft.AspNetCore.Mvc.HttpPost]
         public System.Threading.Tasks.Task PostAsync([Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.CompanySettingsModificationModel model, System.Threading.CancellationToken cancellationToken) { }
         [Microsoft.AspNetCore.Authorization.Authorize(Roles="administrator")]
-        [Microsoft.AspNetCore.Mvc.HttpPut("{id}")]
-        public System.Threading.Tasks.Task PutAsync([Microsoft.AspNetCore.Mvc.FromRoute] long id, [Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.CompanySettingsModificationModel model, System.Threading.CancellationToken cancellationToken) { }
+        [Microsoft.AspNetCore.Mvc.HttpPut]
+        public System.Threading.Tasks.Task PutAsync([Microsoft.AspNetCore.Mvc.FromBody] Fossa.API.Web.ApiModels.CompanySettingsModificationModel model, System.Threading.CancellationToken cancellationToken) { }
     }
     [Asp.Versioning.ApiVersion(1D, null)]
     [Microsoft.AspNetCore.Authorization.Authorize]
@@ -635,8 +635,7 @@ namespace Fossa.API.Web.Messages.Commands
     }
     public class CompanySettingsDeletionApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.CompanySettingsDeletionApiCommand>
     {
-        public CompanySettingsDeletionApiCommand(long ID) { }
-        public long ID { get; init; }
+        public CompanySettingsDeletionApiCommand() { }
     }
     public class CompanySettingsDeletionApiCommandHandler : Fossa.API.Web.Messages.ApiMessageHandler<Fossa.API.Core.Entities.CompanySettingsId, Fossa.API.Web.Messages.Commands.CompanySettingsDeletionApiCommand, MediatR.Unit, Fossa.API.Core.Messages.Commands.CompanySettingsDeletionCommand, MediatR.Unit>
     {
@@ -646,9 +645,8 @@ namespace Fossa.API.Web.Messages.Commands
     }
     public class CompanySettingsModificationApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.CompanySettingsModificationApiCommand>
     {
-        public CompanySettingsModificationApiCommand(long ID, string? ColorSchemeId) { }
+        public CompanySettingsModificationApiCommand(string? ColorSchemeId) { }
         public string? ColorSchemeId { get; init; }
-        public long ID { get; init; }
     }
     public class CompanySettingsModificationApiCommandHandler : Fossa.API.Web.Messages.ApiMessageHandler<Fossa.API.Core.Entities.CompanySettingsId, Fossa.API.Web.Messages.Commands.CompanySettingsModificationApiCommand, MediatR.Unit, Fossa.API.Core.Messages.Commands.CompanySettingsModificationCommand, MediatR.Unit>
     {

@@ -422,25 +422,23 @@ namespace Fossa.API.Core.Messages.Commands
     }
     public class CompanySettingsDeletionCommand : Fossa.API.Core.Messages.Commands.EntityTenantUserCommand<Fossa.API.Core.Entities.CompanySettingsEntity, Fossa.API.Core.Entities.CompanySettingsId, System.Guid, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.CompanySettingsDeletionCommand>
     {
-        public CompanySettingsDeletionCommand(Fossa.API.Core.Entities.CompanySettingsId ID, System.Guid TenantID, System.Guid UserID) { }
+        public CompanySettingsDeletionCommand(System.Guid TenantID, System.Guid UserID) { }
         public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.CompanySettingsId> AffectingTenantEntitiesIdentities { get; }
-        public Fossa.API.Core.Entities.CompanySettingsId ID { get; init; }
     }
     public class CompanySettingsDeletionCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.CompanySettingsDeletionCommand, MediatR.Unit>
     {
-        public CompanySettingsDeletionCommandHandler(Fossa.API.Core.Repositories.ICompanySettingsRepository companySettingsRepository, Fossa.API.Core.Repositories.ICompanySettingsQueryRepository companySettingsQueryRepository, Fossa.API.Core.Relationship.IRelationshipGraph relationshipGraph) { }
+        public CompanySettingsDeletionCommandHandler(Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, Fossa.API.Core.Repositories.ICompanySettingsRepository companySettingsRepository, Fossa.API.Core.Repositories.ICompanySettingsQueryRepository companySettingsQueryRepository, Fossa.API.Core.Relationship.IRelationshipGraph relationshipGraph) { }
         public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.CompanySettingsDeletionCommand request, System.Threading.CancellationToken cancellationToken) { }
     }
     public class CompanySettingsModificationCommand : Fossa.API.Core.Messages.Commands.EntityTenantUserCommand<Fossa.API.Core.Entities.CompanySettingsEntity, Fossa.API.Core.Entities.CompanySettingsId, System.Guid, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.CompanySettingsModificationCommand>
     {
-        public CompanySettingsModificationCommand(Fossa.API.Core.Entities.CompanySettingsId ID, System.Guid TenantID, System.Guid UserID, Fossa.API.Core.Entities.ColorSchemeId ColorSchemeId) { }
+        public CompanySettingsModificationCommand(System.Guid TenantID, System.Guid UserID, Fossa.API.Core.Entities.ColorSchemeId ColorSchemeId) { }
         public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.CompanySettingsId> AffectingTenantEntitiesIdentities { get; }
         public Fossa.API.Core.Entities.ColorSchemeId ColorSchemeId { get; init; }
-        public Fossa.API.Core.Entities.CompanySettingsId ID { get; init; }
     }
     public class CompanySettingsModificationCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.CompanySettingsModificationCommand, MediatR.Unit>
     {
-        public CompanySettingsModificationCommandHandler(Fossa.API.Core.Repositories.ICompanySettingsRepository companySettingsRepository, Fossa.API.Core.Repositories.ICompanySettingsQueryRepository companySettingsQueryRepository) { }
+        public CompanySettingsModificationCommandHandler(Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, Fossa.API.Core.Repositories.ICompanySettingsRepository companySettingsRepository, Fossa.API.Core.Repositories.ICompanySettingsQueryRepository companySettingsQueryRepository) { }
         public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.CompanySettingsModificationCommand request, System.Threading.CancellationToken cancellationToken) { }
     }
     public class DepartmentCreationCommand : Fossa.API.Core.Messages.Commands.EntityTenantCommand<Fossa.API.Core.Entities.DepartmentEntity, Fossa.API.Core.Entities.DepartmentId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.DepartmentCreationCommand>
