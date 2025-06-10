@@ -98,6 +98,7 @@ public class DefaultCoreModule : Module
   private static void RegisterStronglyTypedIds(ContainerBuilder builder)
   {
     RegisterStronglyTypedId<long, CompanyId>(builder);
+    RegisterStronglyTypedId<long, CompanySettingsId>(builder);
     RegisterStronglyTypedId<long, EmployeeId>(builder);
     RegisterStronglyTypedId<long, BranchId>(builder);
     RegisterStronglyTypedId<long, DepartmentId>(builder);
