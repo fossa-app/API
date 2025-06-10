@@ -12,23 +12,28 @@ public readonly partial struct ColorSchemeId
   {
     // At least 3 characters long, only ASCII lowercase letters,
     // allow for a hyphen but only one consecutive hyphen in the middle
-    var letterSequence = many1(satisfy(char.IsAsciiLetterLower));
+    var lowercaseLetter = satisfy(char.IsAsciiLetterLower);
+    var letterSequence = many1(lowercaseLetter);
 
     var withoutHyphen =
-      letterSequence.Bind(letters =>
-        eof.Map(_ => new string([.. letters])));
+      from letters in letterSequence
+      select letters;
 
     var withHyphen =
-      letterSequence.Bind(firstPart =>
-        ch('-').Bind(hyphen =>
-          letterSequence.Bind(secondPart =>
-            eof.Map(_ => new string([.. firstPart, hyphen, .. secondPart])))));
+      from firstPart in letterSequence
+      from hyphen in ch('-')
+      from secondPart in letterSequence
+      select firstPart.Append(hyphen).Append(secondPart).ToSeq();
 
-    var parser = either<string>(withHyphen, withoutHyphen);
+    var parser = either(attempt(withHyphen), withoutHyphen);
 
-    return from result in parser
-           where result.Length >= 3
-           select result;
+    return
+      from result in parser
+#pragma warning disable S1481
+      from _ in eof
+#pragma warning restore S1481
+      where result.Length >= 3
+      select new string([.. result]);
   }
 
   private partial void Validate()
