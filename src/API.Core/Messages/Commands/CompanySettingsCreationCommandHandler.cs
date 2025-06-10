@@ -1,4 +1,4 @@
-using Fossa.API.Core.Entities;
+﻿using Fossa.API.Core.Entities;
 using Fossa.API.Core.Repositories;
 using TIKSN.Data;
 using TIKSN.Identity;
@@ -33,7 +33,7 @@ public class CompanySettingsCreationCommandHandler : IRequestHandler<CompanySett
 
     var existingSettings = await _companySettingsQueryRepository.FindByCompanyIdAsync(companyEntity.ID, cancellationToken)
       .ConfigureAwait(false);
-    
+
     if (existingSettings.IsSome)
     {
       throw new InvalidOperationException("Company settings for this company have already been created.");

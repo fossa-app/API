@@ -1,4 +1,4 @@
-using FluentValidation;
+﻿using FluentValidation;
 using UnitGenerator;
 
 namespace Fossa.API.Core.Entities;
@@ -6,11 +6,11 @@ namespace Fossa.API.Core.Entities;
 [UnitOf(typeof(long), UnitGenerateOptions.Validate)]
 public readonly partial struct CompanySettingsId
 {
-    private partial void Validate()
+  private partial void Validate()
+  {
+    if (value <= 0)
     {
-        if (value <= 0)
-        {
-            throw new ValidationException("Value should be positive integer.");
-        }
+      throw new ValidationException("Value should be positive integer.");
     }
+  }
 }

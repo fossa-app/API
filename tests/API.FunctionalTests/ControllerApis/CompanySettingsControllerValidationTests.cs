@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Fossa.API.FunctionalTests.Seed;
@@ -42,7 +42,7 @@ public class CompanySettingsControllerValidationTests : IClassFixture<CustomWebA
     var client = _factory.CreateClient();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant10.ADMIN1");
 
-    var response = await client.PostAsJsonAsync("/api/1.0/CompanySettings", 
+    var response = await client.PostAsJsonAsync("/api/1.0/CompanySettings",
       new CompanySettingsModificationModel(invalidColorSchemeId));
 
     if (response.StatusCode != HttpStatusCode.BadRequest)
@@ -51,7 +51,7 @@ public class CompanySettingsControllerValidationTests : IClassFixture<CustomWebA
       _testOutputHelper.WriteLine($"Expected BadRequest for '{invalidColorSchemeId}', got {response.StatusCode}: {content}");
     }
 
-    response.StatusCode.ShouldBe(HttpStatusCode.BadRequest, 
+    response.StatusCode.ShouldBe(HttpStatusCode.BadRequest,
       $"ColorSchemeId '{invalidColorSchemeId}' should be invalid");
   }
 
@@ -69,7 +69,7 @@ public class CompanySettingsControllerValidationTests : IClassFixture<CustomWebA
     var tenantSuffix = validColorSchemeId.GetHashCode().ToString().Replace("-", "");
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", $"01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant{tenantSuffix}.ADMIN1");
 
-    var response = await client.PostAsJsonAsync("/api/1.0/CompanySettings", 
+    var response = await client.PostAsJsonAsync("/api/1.0/CompanySettings",
       new CompanySettingsModificationModel(validColorSchemeId));
 
     if (response.StatusCode != HttpStatusCode.OK)
@@ -78,7 +78,7 @@ public class CompanySettingsControllerValidationTests : IClassFixture<CustomWebA
       _testOutputHelper.WriteLine($"Expected OK for '{validColorSchemeId}', got {response.StatusCode}: {content}");
     }
 
-    response.StatusCode.ShouldBe(HttpStatusCode.OK, 
+    response.StatusCode.ShouldBe(HttpStatusCode.OK,
       $"ColorSchemeId '{validColorSchemeId}' should be valid");
 
     // Verify the created settings
@@ -96,7 +96,7 @@ public class CompanySettingsControllerValidationTests : IClassFixture<CustomWebA
     var client = _factory.CreateClient();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant11.ADMIN1");
 
-    var response = await client.PostAsJsonAsync("/api/1.0/CompanySettings", 
+    var response = await client.PostAsJsonAsync("/api/1.0/CompanySettings",
       new CompanySettingsModificationModel(null));
 
     response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
@@ -109,7 +109,7 @@ public class CompanySettingsControllerValidationTests : IClassFixture<CustomWebA
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JB0QS2K6SA4KYD8S920W7DMG.Tenant1.ADMIN1");
 
     // First create valid settings
-    await client.PostAsJsonAsync("/api/1.0/CompanySettings", 
+    await client.PostAsJsonAsync("/api/1.0/CompanySettings",
       new CompanySettingsModificationModel("valid-theme"));
 
     // Get the created settings ID
@@ -117,7 +117,7 @@ public class CompanySettingsControllerValidationTests : IClassFixture<CustomWebA
     var settings = await getResponse.Content.ReadFromJsonAsync<CompanySettingsRetrievalModel>();
 
     // Try to update with invalid colorSchemeId
-    var updateResponse = await client.PutAsJsonAsync($"/api/1.0/CompanySettings/{settings!.Id}", 
+    var updateResponse = await client.PutAsJsonAsync($"/api/1.0/CompanySettings/{settings!.Id}",
       new CompanySettingsModificationModel("INVALID"));
 
     updateResponse.StatusCode.ShouldBe(HttpStatusCode.BadRequest);

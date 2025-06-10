@@ -1,4 +1,4 @@
-using Fossa.API.Core.Entities;
+﻿using Fossa.API.Core.Entities;
 using Shouldly;
 using Xunit.Abstractions;
 
@@ -222,7 +222,7 @@ public class ColorSchemeIdValidationTests
 
     stopwatch.Stop();
     _testOutputHelper.WriteLine($"Performance test completed: {iterations} iterations in {stopwatch.ElapsedMilliseconds}ms");
-    
+
     // Should complete reasonably quickly (less than 1 second for 1000 iterations)
     stopwatch.ElapsedMilliseconds.ShouldBeLessThan(1000);
   }

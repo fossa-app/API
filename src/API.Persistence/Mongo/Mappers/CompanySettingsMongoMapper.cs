@@ -1,4 +1,4 @@
-using Fossa.API.Core.Entities;
+﻿using Fossa.API.Core.Entities;
 using Fossa.API.Persistence.Mongo.Entities;
 using TIKSN.Mapping;
 

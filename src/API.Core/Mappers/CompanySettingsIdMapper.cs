@@ -1,4 +1,4 @@
-using Fossa.API.Core.Entities;
+﻿using Fossa.API.Core.Entities;
 using TIKSN.Mapping;
 
 namespace Fossa.API.Core.Mappers;

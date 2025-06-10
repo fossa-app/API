@@ -1,4 +1,4 @@
-using Asp.Versioning;
+﻿using Asp.Versioning;
 using Fossa.API.Web.ApiModels;
 using Fossa.API.Web.Messages.Commands;
 using Fossa.API.Web.Messages.Queries;

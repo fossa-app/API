@@ -1,4 +1,4 @@
-namespace Fossa.API.Web.ApiModels;
+﻿namespace Fossa.API.Web.ApiModels;
 
 public record CompanySettingsModificationModel(
   string? ColorSchemeId);

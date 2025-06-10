@@ -1,4 +1,4 @@
-using FluentValidation;
+﻿using FluentValidation;
 using Fossa.API.Core.Messages.Commands;
 
 namespace Fossa.API.Core.Validators;

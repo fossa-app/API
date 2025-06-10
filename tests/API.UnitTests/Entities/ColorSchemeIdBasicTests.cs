@@ -1,4 +1,4 @@
-using Fossa.API.Core.Entities;
+﻿using Fossa.API.Core.Entities;
 using Shouldly;
 
 namespace Fossa.API.UnitTests.Entities;
@@ -13,7 +13,7 @@ public class ColorSchemeIdBasicTests
 
     // Assert
     exception.ShouldBeNull();
-    
+
     var colorSchemeId = new ColorSchemeId("abc");
     colorSchemeId.AsPrimitive().ShouldBe("abc");
   }
@@ -26,7 +26,7 @@ public class ColorSchemeIdBasicTests
 
     // Assert
     exception.ShouldBeNull();
-    
+
     var colorSchemeId = new ColorSchemeId("dark-theme");
     colorSchemeId.AsPrimitive().ShouldBe("dark-theme");
   }
