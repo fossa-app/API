@@ -73,7 +73,7 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
       var response = await client.PostAsJsonAsync("/api/1.0/CompanySettings",
         new CompanySettingsModificationModel(invalidColorSchemeId));
 
-      response.StatusCode.ShouldBe(HttpStatusCode.BadRequest,
+      response.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity,
         $"ColorSchemeId '{invalidColorSchemeId}' should be invalid");
     }
   }
@@ -86,15 +86,19 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
     // Test various valid colorSchemeId formats
     var validTestCases = new[]
     {
-      new { Tenant = "Tenant5", ColorSchemeId = "abc" }, // Minimum length
-      new { Tenant = "Tenant6", ColorSchemeId = "theme" }, // Simple lowercase
-      new { Tenant = "Tenant7", ColorSchemeId = "dark-theme" }, // With hyphen in middle
-      new { Tenant = "Tenant8", ColorSchemeId = "verylongthemename" }, // Long name
+      new { Tenant = "Tenant45442385", ColorSchemeId = "abc" }, // Minimum length
+      new { Tenant = "Tenant45442386", ColorSchemeId = "theme" }, // Simple lowercase
+      new { Tenant = "Tenant45442387", ColorSchemeId = "dark-theme" }, // With hyphen in middle
+      new { Tenant = "Tenant45442388", ColorSchemeId = "verylongthemename" }, // Long name
     };
 
     foreach (var testCase in validTestCases)
     {
       client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", $"01JA1ZJAWF27S0J8Z2VJE7673Y.{testCase.Tenant}.ADMIN1");
+
+      const string companyName = "Company-1412593541";
+
+      _ = await client.PostAsJsonAsync("/api/1.0/Company", new CompanyModificationModel(companyName, "US"));
 
       var response = await client.PostAsJsonAsync("/api/1.0/CompanySettings",
         new CompanySettingsModificationModel(testCase.ColorSchemeId));
@@ -123,13 +127,40 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
     response.StatusCode.ShouldBe(HttpStatusCode.Conflict);
   }
 
-  public Task DisposeAsync() => Task.CompletedTask;
-
-  public async Task InitializeAsync()
+  [Fact]
+  public async Task DeleteExistingCompanySettingsAsync()
   {
-    await _factory.SeedSystemLicenseAsync(default).ConfigureAwait(false);
-    await _factory.SeedAllEntitiesAsync(default).ConfigureAwait(false);
+    var client = _factory.CreateClient();
+    var companySettingsEasyStore = _factory.Services.GetRequiredService<IEasyStores>().Resolve<CompanySettingsMongoEntity, long>();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JB0RAH24ZJBA53AJF5F5MMZX.Tenant2.ADMIN1");
+
+    // Get existing company settings for Tenant2
+    var existingSettings = companySettingsEasyStore.Entities.Values.First(x => x.CompanyId == 2);
+
+    var deleteResponse = await client.DeleteAsync($"/api/1.0/CompanySettings/{existingSettings.ID}");
+    deleteResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    // Verify deletion
+    companySettingsEasyStore.Entities.ContainsKey(existingSettings.ID).ShouldBeFalse();
+
+    // Verify GET returns 404 after deletion
+    var retrievalResponse = await client.GetAsync("/api/1.0/CompanySettings");
+    retrievalResponse.StatusCode.ShouldBe(HttpStatusCode.NotFound);
   }
+
+  [Fact]
+  public async Task DeleteNonExistentCompanySettingsAsync()
+  {
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1000.ADMIN1");
+
+    const long nonExistentId = 999999;
+    var response = await client.DeleteAsync($"/api/1.0/CompanySettings/{nonExistentId}");
+
+    response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+  }
+
+  public Task DisposeAsync() => Task.CompletedTask;
 
   [Fact]
   public async Task GetExistingCompanySettingsAsync()
@@ -156,6 +187,12 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
 
     var response = await client.GetAsync("/api/1.0/CompanySettings");
     response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+  }
+
+  public async Task InitializeAsync()
+  {
+    await _factory.SeedSystemLicenseAsync(default).ConfigureAwait(false);
+    await _factory.SeedAllEntitiesAsync(default).ConfigureAwait(false);
   }
 
   [Fact]
@@ -194,39 +231,6 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
     const long nonExistentId = 999999;
     var response = await client.PutAsJsonAsync($"/api/1.0/CompanySettings/{nonExistentId}",
       new CompanySettingsModificationModel("new-theme"));
-
-    response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
-  }
-
-  [Fact]
-  public async Task DeleteExistingCompanySettingsAsync()
-  {
-    var client = _factory.CreateClient();
-    var companySettingsEasyStore = _factory.Services.GetRequiredService<IEasyStores>().Resolve<CompanySettingsMongoEntity, long>();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JB0RAH24ZJBA53AJF5F5MMZX.Tenant2.ADMIN1");
-
-    // Get existing company settings for Tenant2
-    var existingSettings = companySettingsEasyStore.Entities.Values.First(x => x.CompanyId == 2);
-
-    var deleteResponse = await client.DeleteAsync($"/api/1.0/CompanySettings/{existingSettings.ID}");
-    deleteResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-    // Verify deletion
-    companySettingsEasyStore.Entities.ContainsKey(existingSettings.ID).ShouldBeFalse();
-
-    // Verify GET returns 404 after deletion
-    var retrievalResponse = await client.GetAsync("/api/1.0/CompanySettings");
-    retrievalResponse.StatusCode.ShouldBe(HttpStatusCode.NotFound);
-  }
-
-  [Fact]
-  public async Task DeleteNonExistentCompanySettingsAsync()
-  {
-    var client = _factory.CreateClient();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1000.ADMIN1");
-
-    const long nonExistentId = 999999;
-    var response = await client.DeleteAsync($"/api/1.0/CompanySettings/{nonExistentId}");
 
     response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
   }
