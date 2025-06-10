@@ -45,13 +45,13 @@ public class CompanySettingsControllerValidationTests : IClassFixture<CustomWebA
     var response = await client.PostAsJsonAsync("/api/1.0/CompanySettings",
       new CompanySettingsModificationModel(invalidColorSchemeId));
 
-    if (response.StatusCode != HttpStatusCode.BadRequest)
+    if (response.StatusCode != HttpStatusCode.UnprocessableEntity)
     {
       var content = await response.Content.ReadAsStringAsync();
-      _testOutputHelper.WriteLine($"Expected BadRequest for '{invalidColorSchemeId}', got {response.StatusCode}: {content}");
+      _testOutputHelper.WriteLine($"Expected UnprocessableEntity for '{invalidColorSchemeId}', got {response.StatusCode}: {content}");
     }
 
-    response.StatusCode.ShouldBe(HttpStatusCode.BadRequest,
+    response.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity,
       $"ColorSchemeId '{invalidColorSchemeId}' should be invalid");
   }
 
@@ -99,7 +99,7 @@ public class CompanySettingsControllerValidationTests : IClassFixture<CustomWebA
     var response = await client.PostAsJsonAsync("/api/1.0/CompanySettings",
       new CompanySettingsModificationModel(null));
 
-    response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+    response.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
   }
 
   [Fact]
@@ -120,7 +120,7 @@ public class CompanySettingsControllerValidationTests : IClassFixture<CustomWebA
     var updateResponse = await client.PutAsJsonAsync($"/api/1.0/CompanySettings/{settings!.Id}",
       new CompanySettingsModificationModel("INVALID"));
 
-    updateResponse.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+    updateResponse.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
   }
 
   public Task DisposeAsync() => Task.CompletedTask;
