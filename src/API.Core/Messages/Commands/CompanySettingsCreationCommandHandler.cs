@@ -7,9 +7,9 @@ namespace Fossa.API.Core.Messages.Commands;
 
 public class CompanySettingsCreationCommandHandler : IRequestHandler<CompanySettingsCreationCommand, Unit>
 {
-  private readonly ICompanySettingsRepository _companySettingsRepository;
-  private readonly ICompanySettingsQueryRepository _companySettingsQueryRepository;
   private readonly ICompanyQueryRepository _companyQueryRepository;
+  private readonly ICompanySettingsQueryRepository _companySettingsQueryRepository;
+  private readonly ICompanySettingsRepository _companySettingsRepository;
   private readonly IIdentityGenerator<CompanySettingsId> _identityGenerator;
 
   public CompanySettingsCreationCommandHandler(
@@ -36,7 +36,7 @@ public class CompanySettingsCreationCommandHandler : IRequestHandler<CompanySett
 
     if (existingSettings.IsSome)
     {
-      throw new InvalidOperationException("Company settings for this company have already been created.");
+      throw new EntityExistsException("Company settings for this company have already been created.");
     }
 
     var id = _identityGenerator.Generate();
