@@ -25,11 +25,11 @@
     <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.12.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.12.0" />
     <PackageVersion Include="PublicApiGenerator" Version="11.4.6" />
-    <PackageVersion Include="ReportGenerator" Version="5.4.7" />
+    <PackageVersion Include="ReportGenerator" Version="5.4.8" />
     <PackageVersion Include="Scrutor" Version="6.1.0" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
-    <PackageVersion Include="Swashbuckle.AspNetCore" Version="8.1.4" />
-    <PackageVersion Include="Swashbuckle.AspNetCore.Annotations" Version="8.1.4" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="9.0.1" />
+    <PackageVersion Include="Swashbuckle.AspNetCore.Annotations" Version="9.0.1" />
     <PackageVersion Include="UnitGenerator" Version="2.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
