@@ -8,7 +8,7 @@
     <PackageVersion Include="EasyDoubles" Version="1.1.16" />
     <PackageVersion Include="FluentValidation" Version="12.0.0" />
     <PackageVersion Include="FluentValidation.AspNetCore" Version="11.3.1" />
-    <PackageVersion Include="Fossa.Licensing" Version="1.1.14" />
+    <PackageVersion Include="Fossa.Licensing" Version="1.2.0" />
     <PackageVersion Include="Hellang.Middleware.ProblemDetails" Version="6.5.1" />
     <PackageVersion Include="IdGen.DependencyInjection" Version="3.0.7" />
     <PackageVersion Include="MediatR" Version="12.5.0" />
@@ -37,7 +37,7 @@
     <PackageVersion Include="UUIDNext" Version="4.1.2" />
     <PackageVersion Include="Verify.Xunit" Version="30.4.0" />
     <PackageVersion Include="xunit" Version="2.9.3" />
-    <PackageVersion Include="TIKSN-Framework" Version="5.4.4" />
+    <PackageVersion Include="TIKSN-Framework" Version="5.5.0" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.1" />
   </ItemGroup>
 </Project>
