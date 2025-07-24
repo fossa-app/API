@@ -23,6 +23,7 @@ using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using Scalar.AspNetCore;
 using TIKSN.DependencyInjection;
 using TIKSN.Deployment;
 using TIKSN.Mapping;
@@ -65,6 +66,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddProblemDetails(ProblemDetailsHelper.ConfigureProblemDetails);
 builder.Services.AddControllers()
                 .AddProblemDetailsConventions();
+builder.Services.AddOpenApi();
 builder.Services.AddApiVersioning(
                     options =>
                     {
@@ -188,6 +190,9 @@ app.UseHealthChecks("/healthchecks");
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapOpenApi();
+app.MapScalarApiReference();
+
 // Enable middleware to serve generated Swagger as a JSON endpoint.
 app.UseSwagger();
 
@@ -207,7 +212,7 @@ app.UseSwaggerUI(
 
 app.MapGet("/", context =>
 {
-  context.Response.Redirect("swagger");
+  context.Response.Redirect(Random.Shared.Next() % 2 == 0 ? "swagger" : "scalar");
   return Task.CompletedTask;
 });
 app.MapDefaultControllerRoute();
