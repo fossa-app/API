@@ -133,7 +133,7 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
     var client = _factory.CreateClient();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JB0RAH24ZJBA53AJF5F5MMZX.Tenant2.ADMIN1");
 
-    var deleteResponse = await client.DeleteAsync($"/api/1.0/CompanySettings");
+    var deleteResponse = await client.DeleteAsync("/api/1.0/CompanySettings");
     deleteResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 
     var retrievalResponse = await client.GetAsync("/api/1.0/CompanySettings");
@@ -194,7 +194,7 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
 
     const string newColorSchemeId = "updated-theme";
 
-    var updateResponse = await client.PutAsJsonAsync($"/api/1.0/CompanySettings",
+    var updateResponse = await client.PutAsJsonAsync("/api/1.0/CompanySettings",
       new CompanySettingsModificationModel(newColorSchemeId));
 
     updateResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
