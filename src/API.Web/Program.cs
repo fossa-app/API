@@ -212,7 +212,7 @@ app.UseSwaggerUI(
 
 app.MapGet("/", context =>
 {
-  context.Response.Redirect("swagger");
+  context.Response.Redirect(Random.Shared.Next() % 2 == 0 ? "swagger" : "scalar");
   return Task.CompletedTask;
 });
 app.MapDefaultControllerRoute();
