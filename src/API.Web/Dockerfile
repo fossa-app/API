@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/aspnet:9.0.7
+FROM mcr.microsoft.com/dotnet/aspnet:9.0.8
 RUN apt-get update && apt-get upgrade -y && apt-get install -y curl=7.88.1-10+deb12u12 && apt-get clean
 WORKDIR /App
 COPY . ./
