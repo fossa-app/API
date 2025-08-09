@@ -232,4 +232,44 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
   }
+
+  [Fact]
+  public async Task UpdateEmployeeAssignedDepartmentAsync()
+  {
+    // Arrange
+    var client = _factory.CreateClient();
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JMV0XC70JH9GC8P9M6SYYYAK.Tenant1.ADMIN420425736");
+
+    var employeeResponse = await client.PostAsJsonAsync("/api/1.0/Employee", new EmployeeModificationModel("First", "Last", "Full Name"));
+    employeeResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    var getEmployeeResponse = await client.GetAsync("/api/1.0/Employee");
+    var employee = await getEmployeeResponse.Content.ReadFromJsonAsync<EmployeeRetrievalModel>();
+    employee.ShouldNotBeNull();
+
+    var dept1Response = await client.PostAsJsonAsync("/api/1.0/Departments", new DepartmentModificationModel("Dept1", null, employee.Id));
+    dept1Response.StatusCode.ShouldBe(HttpStatusCode.OK);
+    var dept2Response = await client.PostAsJsonAsync("/api/1.0/Departments", new DepartmentModificationModel("Dept2", null, employee.Id));
+    dept2Response.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    var deptsResponse = await client.GetAsync("/api/1.0/Departments?pageNumber=1&pageSize=10");
+    var depts = await deptsResponse.Content.ReadFromJsonAsync<PagingResponseModel<DepartmentRetrievalModel>>();
+    depts.ShouldNotBeNull();
+    var dept1Id = depts.Items.First(d => d.Name == "Dept1").Id;
+    var dept2Id = depts.Items.First(d => d.Name == "Dept2").Id;
+
+    var manageResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employee.Id}", new EmployeeManagementModel(null, dept1Id));
+    manageResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    // Act
+    var updateResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employee.Id}", new EmployeeManagementModel(null, dept2Id));
+    updateResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    // Assert
+    var verifyResponse = await client.GetAsync($"/api/1.0/Employees/{employee.Id}");
+    verifyResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+    var updatedEmployee = await verifyResponse.Content.ReadFromJsonAsync<EmployeeRetrievalModel>();
+    updatedEmployee.ShouldNotBeNull();
+    updatedEmployee.AssignedDepartmentId.ShouldBe(dept2Id);
+  }
 }
