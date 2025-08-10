@@ -23,6 +23,7 @@ public class EmployeeManagementCommandHandler : IRequestHandler<EmployeeManageme
     entity = entity with
     {
       AssignedBranchId = request.AssignedBranchId,
+      AssignedDepartmentId = request.AssignedDepartmentId
     };
     await _employeeRepository.UpdateAsync(entity, cancellationToken).ConfigureAwait(false);
     return Unit.Value;
