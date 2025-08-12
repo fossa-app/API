@@ -2,6 +2,7 @@
 using Fossa.API.Core.Entities;
 using Fossa.API.Core.Relationship;
 using Fossa.API.Core.Services;
+using Fossa.API.Core.Telemetry;
 using Fossa.API.Core.TimeZone;
 using TIKSN.Data.BareEntityResolvers;
 using TIKSN.Identity;
@@ -50,6 +51,11 @@ public class DefaultCoreModule : Module
       .RegisterType<CompanyLicenseRetriever>()
       .AsImplementedInterfaces()
       .InstancePerLifetimeScope();
+
+    builder
+      .RegisterType<SystemLicenseMetricsRecorder>()
+      .AsImplementedInterfaces()
+      .SingleInstance();
 
     builder
       .RegisterType<CompanyLicenseCreator>()

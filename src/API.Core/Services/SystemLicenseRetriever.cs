@@ -1,4 +1,5 @@
 ﻿using Fossa.API.Core.Repositories;
+using Fossa.API.Core.Telemetry;
 using Fossa.Licensing;
 using Microsoft.Extensions.Hosting;
 using TIKSN.Deployment;
@@ -12,17 +13,20 @@ public class SystemLicenseRetriever : ISystemLicenseRetriever
   private readonly IHostEnvironment _hostEnvironment;
   private readonly ILicenseFactory<SystemEntitlements, SystemLicenseEntitlements> _licenseFactory;
   private readonly ILicenseFileRepository _licenseFileRepository;
+  private readonly ISystemLicenseMetricsRecorder _systemLicenseMetricsRecorder;
   private readonly ISystemPropertiesQueryRepository _systemPropertiesQueryRepository;
 
   public SystemLicenseRetriever(
     ILicenseFileRepository licenseFileRepository,
     ILicenseFactory<SystemEntitlements, SystemLicenseEntitlements> licenseFactory,
+    ISystemLicenseMetricsRecorder systemLicenseMetricsRecorder,
     ICertificateProvider certificateProvider,
     IHostEnvironment hostEnvironment,
     ISystemPropertiesQueryRepository systemPropertiesQueryRepository)
   {
     _licenseFileRepository = licenseFileRepository ?? throw new ArgumentNullException(nameof(licenseFileRepository));
     _licenseFactory = licenseFactory ?? throw new ArgumentNullException(nameof(licenseFactory));
+    _systemLicenseMetricsRecorder = systemLicenseMetricsRecorder ?? throw new ArgumentNullException(nameof(systemLicenseMetricsRecorder));
     _certificateProvider = certificateProvider ?? throw new ArgumentNullException(nameof(certificateProvider));
     _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
     _systemPropertiesQueryRepository = systemPropertiesQueryRepository ?? throw new ArgumentNullException(nameof(systemPropertiesQueryRepository));
@@ -41,12 +45,16 @@ public class SystemLicenseRetriever : ISystemLicenseRetriever
 
     var licenseValidation = _licenseFactory.Create(licenseData, certificate);
 
-    return licenseValidation
+    licenseValidation = licenseValidation
       .Validate(
         license => license.Entitlements.SystemId == systemPropertiesEntity.SystemID,
         11751858, "Current System License is issued to another system.")
       .Validate(
         license => _hostEnvironment.MatchesEnvironment(license.Entitlements.EnvironmentName),
         19509088, "Current System License is issued for another deployment environment.");
+
+    _systemLicenseMetricsRecorder.Record(licenseValidation);
+
+    return licenseValidation;
   }
 }
