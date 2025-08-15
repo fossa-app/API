@@ -58,6 +58,11 @@ public class DefaultCoreModule : Module
       .SingleInstance();
 
     builder
+      .RegisterType<CompanyLicenseMetricsRecorder>()
+      .AsImplementedInterfaces()
+      .SingleInstance();
+
+    builder
       .RegisterType<CompanyLicenseCreator>()
       .AsImplementedInterfaces()
       .InstancePerLifetimeScope();
