@@ -21,23 +21,7 @@ public class SystemLicenseMetricsRecorder : ISystemLicenseMetricsRecorder
   public void Record(Validation<Error, License<SystemEntitlements>> license)
   {
     _daysLeft.Record(
-      license.Match(
-        validLicense => CalculateTimeLeft(validLicense).TotalDays,
-        _ => 0.0),
-      new KeyValuePair<string, object?>("license_status",
-        license.Match(
-          validLicense => "valid",
-          _ => "invalid")));
-  }
-
-  private TimeSpan CalculateTimeLeft(License<SystemEntitlements> validLicense)
-  {
-    var now = _timeProvider.GetUtcNow();
-    if (validLicense.Terms.NotAfter <= now)
-    {
-      return TimeSpan.Zero;
-    }
-
-    return validLicense.Terms.NotAfter.Subtract(now);
+      LicenseMetricsRecorderHelper.CalculateDaysLeft(license, _timeProvider),
+      LicenseMetricsRecorderHelper.CreateLicenseStatusTag(license));
   }
 }
