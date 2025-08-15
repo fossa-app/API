@@ -1,5 +1,6 @@
 ﻿using Fossa.API.Core.Entities;
 using Fossa.API.Core.Repositories;
+using Fossa.API.Core.Telemetry;
 using Fossa.Licensing;
 using TIKSN.Licensing;
 
@@ -7,17 +8,20 @@ namespace Fossa.API.Core.Services;
 
 public class CompanyLicenseRetriever : CompanyLicenseManager, ICompanyLicenseRetriever
 {
+  private readonly ICompanyLicenseMetricsRecorder _companyLicenseMetricsRecorder;
   private readonly ILicenseFileRepository _licenseFileRepository;
   private readonly ISystemLicenseRetriever _systemLicenseRetriever;
 
   public CompanyLicenseRetriever(
     ILicenseFileRepository licenseFileRepository,
     ILicenseFactory<CompanyEntitlements, CompanyLicenseEntitlements> licenseFactory,
+    ICompanyLicenseMetricsRecorder companyLicenseMetricsRecorder,
     ICertificateProvider certificateProvider,
     ISystemLicenseRetriever systemLicenseRetriever)
     : base(certificateProvider, licenseFactory)
   {
     _licenseFileRepository = licenseFileRepository ?? throw new ArgumentNullException(nameof(licenseFileRepository));
+    _companyLicenseMetricsRecorder = companyLicenseMetricsRecorder ?? throw new ArgumentNullException(nameof(companyLicenseMetricsRecorder));
     _systemLicenseRetriever = systemLicenseRetriever ?? throw new ArgumentNullException(nameof(systemLicenseRetriever));
   }
 
@@ -41,11 +45,15 @@ public class CompanyLicenseRetriever : CompanyLicenseManager, ICompanyLicenseRet
 
     var licenseData = licenseFile.Content.ToSeq();
 
-    return await ValidateCompanyLicenseAsync(
+    var licenseValidation = await ValidateCompanyLicenseAsync(
       systemLicense,
       companyId,
       licenseData,
       cancellationToken)
       .ConfigureAwait(false);
+
+    _companyLicenseMetricsRecorder.Record(companyId, licenseValidation);
+
+    return licenseValidation;
   }
 }
