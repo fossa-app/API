@@ -902,7 +902,7 @@ namespace Fossa.API.Core.Services
     }
     public class CompanyLicenseRetriever : Fossa.API.Core.Services.CompanyLicenseManager, Fossa.API.Core.Services.ICompanyLicenseRetriever
     {
-        public CompanyLicenseRetriever(Fossa.API.Core.Repositories.ILicenseFileRepository licenseFileRepository, TIKSN.Licensing.ILicenseFactory<Fossa.Licensing.CompanyEntitlements, Fossa.Licensing.CompanyLicenseEntitlements> licenseFactory, Fossa.API.Core.Services.ICertificateProvider certificateProvider, Fossa.API.Core.Services.ISystemLicenseRetriever systemLicenseRetriever) { }
+        public CompanyLicenseRetriever(Fossa.API.Core.Repositories.ILicenseFileRepository licenseFileRepository, TIKSN.Licensing.ILicenseFactory<Fossa.Licensing.CompanyEntitlements, Fossa.Licensing.CompanyLicenseEntitlements> licenseFactory, Fossa.API.Core.Telemetry.ICompanyLicenseMetricsRecorder companyLicenseMetricsRecorder, Fossa.API.Core.Services.ICertificateProvider certificateProvider, Fossa.API.Core.Services.ISystemLicenseRetriever systemLicenseRetriever) { }
         public System.Threading.Tasks.Task<LanguageExt.Validation<LanguageExt.Common.Error, TIKSN.Licensing.License<Fossa.Licensing.CompanyEntitlements>>> GetAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken) { }
     }
     public class CountryProvider : Fossa.API.Core.Services.ICountryProvider
@@ -998,6 +998,15 @@ namespace Fossa.API.Core.Services
 }
 namespace Fossa.API.Core.Telemetry
 {
+    public class CompanyLicenseMetricsRecorder : Fossa.API.Core.Telemetry.ICompanyLicenseMetricsRecorder
+    {
+        public CompanyLicenseMetricsRecorder(System.TimeProvider timeProvider, System.Diagnostics.Metrics.IMeterFactory meterFactory) { }
+        public void Record(Fossa.API.Core.Entities.CompanyId companyId, LanguageExt.Validation<LanguageExt.Common.Error, TIKSN.Licensing.License<Fossa.Licensing.CompanyEntitlements>> license) { }
+    }
+    public interface ICompanyLicenseMetricsRecorder
+    {
+        void Record(Fossa.API.Core.Entities.CompanyId companyId, LanguageExt.Validation<LanguageExt.Common.Error, TIKSN.Licensing.License<Fossa.Licensing.CompanyEntitlements>> license);
+    }
     public interface ISystemLicenseMetricsRecorder
     {
         void Record(LanguageExt.Validation<LanguageExt.Common.Error, TIKSN.Licensing.License<Fossa.Licensing.SystemEntitlements>> license);
