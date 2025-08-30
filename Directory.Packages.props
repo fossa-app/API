@@ -30,7 +30,7 @@
     <PackageVersion Include="Scalar.AspNetCore" Version="2.7.2" />
     <PackageVersion Include="Scrutor" Version="6.1.0" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
-    <PackageVersion Include="Swashbuckle.AspNetCore" Version="9.0.3" />
+    <PackageVersion Include="Swashbuckle.AspNetCore" Version="9.0.4" />
     <PackageVersion Include="Swashbuckle.AspNetCore.Annotations" Version="9.0.4" />
     <PackageVersion Include="UnitGenerator" Version="2.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
