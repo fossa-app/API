@@ -5,4 +5,5 @@ namespace Fossa.API.Web.Messages.Commands;
 public record EmployeeManagementApiCommand(
     long Id,
     long? AssignedBranchId,
-    long? AssignedDepartmentId) : ICommand;
+    long? AssignedDepartmentId,
+    long? ReportsToId) : ICommand;

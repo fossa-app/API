@@ -4,4 +4,6 @@ public record EmployeeQueryRequestModel(
   IReadOnlyList<long>? Id,
   string? Search,
   int? PageNumber,
-  int? PageSize);
+  int? PageSize,
+  long? ReportsToId,
+  bool? TopLevelOnly);

@@ -7,7 +7,8 @@ public record EmployeeManagementCommand(
   Guid TenantID,
   Guid UserID,
   Option<BranchId> AssignedBranchId,
-  Option<DepartmentId> AssignedDepartmentId)
+  Option<DepartmentId> AssignedDepartmentId,
+  Option<EmployeeId> ReportsToId)
   : EntityTenantUserCommand<EmployeeEntity, EmployeeId, Guid, Guid>(TenantID, UserID)
 {
   public override IEnumerable<EmployeeId> AffectingTenantEntitiesIdentities
