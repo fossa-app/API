@@ -137,7 +137,7 @@ namespace Fossa.API.Core.Entities
     }
     public class EmployeeEntity : System.IEquatable<Fossa.API.Core.Entities.EmployeeEntity>, TIKSN.Data.IEntity<Fossa.API.Core.Entities.EmployeeId>, TIKSN.Data.ITenantEntity<Fossa.API.Core.Entities.EmployeeId, System.Guid>, TIKSN.Data.IUserEntity<Fossa.API.Core.Entities.EmployeeId, System.Guid>
     {
-        public EmployeeEntity(Fossa.API.Core.Entities.EmployeeId ID, System.Guid TenantID, System.Guid UserID, Fossa.API.Core.Entities.CompanyId CompanyId, LanguageExt.Option<Fossa.API.Core.Entities.BranchId> AssignedBranchId, LanguageExt.Option<Fossa.API.Core.Entities.DepartmentId> AssignedDepartmentId, string FirstName, string LastName, string FullName) { }
+        public EmployeeEntity(Fossa.API.Core.Entities.EmployeeId ID, System.Guid TenantID, System.Guid UserID, Fossa.API.Core.Entities.CompanyId CompanyId, LanguageExt.Option<Fossa.API.Core.Entities.BranchId> AssignedBranchId, LanguageExt.Option<Fossa.API.Core.Entities.DepartmentId> AssignedDepartmentId, LanguageExt.Option<Fossa.API.Core.Entities.EmployeeId> ReportsToId, string FirstName, string LastName, string FullName) { }
         public LanguageExt.Option<Fossa.API.Core.Entities.BranchId> AssignedBranchId { get; init; }
         public LanguageExt.Option<Fossa.API.Core.Entities.DepartmentId> AssignedDepartmentId { get; init; }
         public Fossa.API.Core.Entities.CompanyId CompanyId { get; init; }
@@ -145,6 +145,7 @@ namespace Fossa.API.Core.Entities
         public string FullName { get; init; }
         public Fossa.API.Core.Entities.EmployeeId ID { get; init; }
         public string LastName { get; init; }
+        public LanguageExt.Option<Fossa.API.Core.Entities.EmployeeId> ReportsToId { get; init; }
         public System.Guid TenantID { get; init; }
         public System.Guid UserID { get; init; }
     }
@@ -509,11 +510,12 @@ namespace Fossa.API.Core.Messages.Commands
     }
     public class EmployeeManagementCommand : Fossa.API.Core.Messages.Commands.EntityTenantUserCommand<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Core.Entities.EmployeeId, System.Guid, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.EmployeeManagementCommand>
     {
-        public EmployeeManagementCommand(Fossa.API.Core.Entities.EmployeeId ID, System.Guid TenantID, System.Guid UserID, LanguageExt.Option<Fossa.API.Core.Entities.BranchId> AssignedBranchId, LanguageExt.Option<Fossa.API.Core.Entities.DepartmentId> AssignedDepartmentId) { }
+        public EmployeeManagementCommand(Fossa.API.Core.Entities.EmployeeId ID, System.Guid TenantID, System.Guid UserID, LanguageExt.Option<Fossa.API.Core.Entities.BranchId> AssignedBranchId, LanguageExt.Option<Fossa.API.Core.Entities.DepartmentId> AssignedDepartmentId, LanguageExt.Option<Fossa.API.Core.Entities.EmployeeId> ReportsToId) { }
         public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.EmployeeId> AffectingTenantEntitiesIdentities { get; }
         public LanguageExt.Option<Fossa.API.Core.Entities.BranchId> AssignedBranchId { get; init; }
         public LanguageExt.Option<Fossa.API.Core.Entities.DepartmentId> AssignedDepartmentId { get; init; }
         public Fossa.API.Core.Entities.EmployeeId ID { get; init; }
+        public LanguageExt.Option<Fossa.API.Core.Entities.EmployeeId> ReportsToId { get; init; }
     }
     public class EmployeeManagementCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.EmployeeManagementCommand, MediatR.Unit>
     {
@@ -720,15 +722,17 @@ namespace Fossa.API.Core.Messages.Queries
     }
     public class EmployeePagingQuery : Fossa.API.Core.Messages.Queries.EntityTenantQuery<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Core.Entities.EmployeeId, System.Guid, TIKSN.Data.PageResult<Fossa.API.Core.Entities.EmployeeEntity>>, Fossa.API.Core.Messages.Queries.IPagingQuery, Fossa.API.Core.Messages.Queries.IPagingQuery<Fossa.API.Core.Entities.EmployeeEntity>, Fossa.API.Core.Messages.Queries.IQuery<TIKSN.Data.PageResult<Fossa.API.Core.Entities.EmployeeEntity>>, MediatR.IBaseRequest, MediatR.IRequest<TIKSN.Data.PageResult<Fossa.API.Core.Entities.EmployeeEntity>>, System.IEquatable<Fossa.API.Core.Messages.Queries.EmployeePagingQuery>
     {
-        public EmployeePagingQuery(System.Guid TenantID, System.Guid UserID, string Search, TIKSN.Data.Page Page) { }
+        public EmployeePagingQuery(System.Guid TenantID, System.Guid UserID, string Search, LanguageExt.Option<Fossa.API.Core.Entities.EmployeeId> ReportsToId, bool TopLevelOnly, TIKSN.Data.Page Page) { }
         public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.EmployeeId> AffectingTenantEntitiesIdentities { get; }
         public TIKSN.Data.Page Page { get; init; }
+        public LanguageExt.Option<Fossa.API.Core.Entities.EmployeeId> ReportsToId { get; init; }
         public string Search { get; init; }
+        public bool TopLevelOnly { get; init; }
         public System.Guid UserID { get; init; }
     }
     public class EmployeePagingQueryHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Queries.EmployeePagingQuery, TIKSN.Data.PageResult<Fossa.API.Core.Entities.EmployeeEntity>>
     {
-        public EmployeePagingQueryHandler(Fossa.API.Core.Repositories.IEmployeeQueryRepository employeeQueryRepository) { }
+        public EmployeePagingQueryHandler(Fossa.API.Core.Repositories.IEmployeeQueryRepository employeeQueryRepository, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long> employeeModelToDataIdentityMapper) { }
         public System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Core.Entities.EmployeeEntity>> Handle(Fossa.API.Core.Messages.Queries.EmployeePagingQuery request, System.Threading.CancellationToken cancellationToken) { }
     }
     public class EmployeeRetrievalQuery : Fossa.API.Core.Messages.Queries.EntityTenantQuery<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Core.Entities.EmployeeId, System.Guid, Fossa.API.Core.Entities.EmployeeEntity>, System.IEquatable<Fossa.API.Core.Messages.Queries.EmployeeRetrievalQuery>
@@ -842,7 +846,7 @@ namespace Fossa.API.Core.Repositories
     {
         System.Threading.Tasks.Task EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken);
     }
-    public interface IEmployeeQueryRepository : Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.BranchId>, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.CompanyId>, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.DepartmentId>, TIKSN.Data.IQueryRepository<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Core.Entities.EmployeeId>
+    public interface IEmployeeQueryRepository : Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.BranchId>, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.CompanyId>, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.DepartmentId>, Fossa.API.Core.Repositories.IDependencyQueryRepository<Fossa.API.Core.Entities.EmployeeId>, TIKSN.Data.IQueryRepository<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Core.Entities.EmployeeId>
     {
         System.Threading.Tasks.Task<int> CountAllAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken);
         System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Core.Entities.EmployeeEntity>> FindByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken);
@@ -867,9 +871,11 @@ namespace Fossa.API.Core.Repositories
     }
     public class TenantEmployeePageQuery : TIKSN.Data.PageQuery
     {
-        public TenantEmployeePageQuery(System.Guid tenantId, string search, TIKSN.Data.Page page) { }
+        public TenantEmployeePageQuery(System.Guid tenantId, string search, TIKSN.Data.Page page, LanguageExt.Option<long> reportsToId, bool topLevelOnly) { }
+        public LanguageExt.Option<long> ReportsToId { get; }
         public string Search { get; }
         public System.Guid TenantId { get; }
+        public bool TopLevelOnly { get; }
     }
 }
 namespace Fossa.API.Core.Services
@@ -1130,7 +1136,7 @@ namespace Fossa.API.Core.Validators
     }
     public class EmployeeManagementCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.EmployeeManagementCommand>
     {
-        public EmployeeManagementCommandValidator(Fossa.API.Core.Repositories.IBranchQueryRepository branchQueryRepository, Fossa.API.Core.Repositories.IDepartmentQueryRepository departmentQueryRepository) { }
+        public EmployeeManagementCommandValidator(Fossa.API.Core.Repositories.IBranchQueryRepository branchQueryRepository, Fossa.API.Core.Repositories.IDepartmentQueryRepository departmentQueryRepository, Fossa.API.Core.Repositories.IEmployeeQueryRepository employeeQueryRepository) { }
     }
     public class EmployeeModificationCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.EmployeeModificationCommand>
     {

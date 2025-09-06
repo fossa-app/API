@@ -21,6 +21,28 @@ public class EmployeeMongoRepository
   protected override SortDefinition<EmployeeMongoEntity> PageSortDefinition
     => Builders<EmployeeMongoEntity>.Sort.Ascending(x => x.ID);
 
+  public async Task<int> CountAllAsync(long companyId, CancellationToken cancellationToken)
+  {
+    var filter =
+      Builders<EmployeeMongoEntity>.Filter.Eq(item => item.CompanyId, companyId);
+
+    var count = await MongoClientSessionProvider.GetClientSessionHandle().Match(SomeAsync, NoneAsync).ConfigureAwait(false);
+
+    return (int)count;
+
+    Task<long> SomeAsync(IClientSessionHandle clientSessionHandle)
+    {
+      return Collection
+        .CountDocumentsAsync(clientSessionHandle, filter, options: null, cancellationToken);
+    }
+
+    Task<long> NoneAsync()
+    {
+      return Collection
+        .CountDocumentsAsync(filter, options: null, cancellationToken);
+    }
+  }
+
   public Task EnsureIndexesCreatedAsync(CancellationToken cancellationToken)
   {
     var indexKeysDefinition =
@@ -92,42 +114,41 @@ public class EmployeeMongoRepository
     return firstEntity is not null;
   }
 
-  public Task<PageResult<EmployeeMongoEntity>> PageAsync(
+  public async Task<bool> HasDependencyOnEmployeeAsync(long employeeId, CancellationToken cancellationToken)
+  {
+    var filter =
+      Builders<EmployeeMongoEntity>.Filter.Eq(item => item.ReportsToId, employeeId);
+
+    var firstEntity = await FirstOrDefaultAsync(filter, cancellationToken).ConfigureAwait(false);
+
+    return firstEntity is not null;
+  }
+
+  public async Task<PageResult<EmployeeMongoEntity>> PageAsync(
     TenantEmployeePageQuery pageQuery,
     CancellationToken cancellationToken)
   {
-    var filterByTenantId =
-      Builders<EmployeeMongoEntity>.Filter.Eq(item => item.TenantID, pageQuery.TenantId);
-
-    var search = pageQuery.Search.Trim();
-    var filter = string.IsNullOrEmpty(search)
-      ? filterByTenantId
-      : Builders<EmployeeMongoEntity>.Filter.And(
-        filterByTenantId,
-        Builders<EmployeeMongoEntity>.Filter.Text(search));
-
-    return this.PageAsync(filter, pageQuery, cancellationToken);
-  }
-
-  public async Task<int> CountAllAsync(long companyId, CancellationToken cancellationToken)
-  {
-    var filter =
-      Builders<EmployeeMongoEntity>.Filter.Eq(item => item.CompanyId, companyId);
-
-    var count = await MongoClientSessionProvider.GetClientSessionHandle().Match(SomeAsync, NoneAsync).ConfigureAwait(false);
-
-    return (int)count;
-
-    Task<long> SomeAsync(IClientSessionHandle clientSessionHandle)
+    var filters = new List<FilterDefinition<EmployeeMongoEntity>>
     {
-      return Collection
-        .CountDocumentsAsync(clientSessionHandle, filter, options: null, cancellationToken);
+      Builders<EmployeeMongoEntity>.Filter.Eq(item => item.TenantID, pageQuery.TenantId)
+    };
+
+    var search = pageQuery.Search?.Trim();
+    if (!string.IsNullOrEmpty(search))
+    {
+      filters.Add(Builders<EmployeeMongoEntity>.Filter.Text(search));
     }
 
-    Task<long> NoneAsync()
+    if (pageQuery.TopLevelOnly)
     {
-      return Collection
-        .CountDocumentsAsync(filter, options: null, cancellationToken);
+      filters.Add(Builders<EmployeeMongoEntity>.Filter.Eq(item => item.ReportsToId, null));
     }
+
+#pragma warning disable VSTHRD103 // Call async methods when in an async method
+    pageQuery.ReportsToId.IfSome(reportsToId => filters.Add(Builders<EmployeeMongoEntity>.Filter.Eq(item => item.ReportsToId, reportsToId)));
+#pragma warning restore VSTHRD103 // Call async methods when in an async method
+
+    var filter = filters.Count == 1 ? filters[0] : Builders<EmployeeMongoEntity>.Filter.And(filters);
+    return await this.PageAsync(filter, pageQuery, cancellationToken);
   }
 }

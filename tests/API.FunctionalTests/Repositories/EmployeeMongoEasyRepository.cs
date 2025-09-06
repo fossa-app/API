@@ -14,6 +14,13 @@ public class EmployeeMongoEasyRepository
   {
   }
 
+  public Task<int> CountAllAsync(long companyId, CancellationToken cancellationToken)
+  {
+    return Task.FromResult(
+      EasyStore.Entities
+        .Count(x => x.Value.CompanyId == companyId));
+  }
+
   public Task EnsureIndexesCreatedAsync(CancellationToken cancellationToken)
   {
     return Task.CompletedTask;
@@ -50,6 +57,11 @@ public class EmployeeMongoEasyRepository
     return Task.FromResult(EasyStore.Entities.Values.Any(x => x.AssignedDepartmentId == departmentId));
   }
 
+  public Task<bool> HasDependencyOnEmployeeAsync(long employeeId, CancellationToken cancellationToken)
+  {
+    return Task.FromResult(EasyStore.Entities.Values.Any(x => x.ReportsToId == employeeId));
+  }
+
   public Task<PageResult<EmployeeMongoEntity>> PageAsync(TenantEmployeePageQuery pageQuery, CancellationToken cancellationToken)
   {
     var allItems = EasyStore.Entities.Values
@@ -62,12 +74,5 @@ public class EmployeeMongoEasyRepository
     var pageItems = allItems.Skip((pageQuery.Page.Number - 1) * pageQuery.Page.Size).Take(pageQuery.Page.Size).ToList();
 
     return Task.FromResult(new PageResult<EmployeeMongoEntity>(pageQuery.Page, pageItems, allItems.Length()));
-  }
-
-  public Task<int> CountAllAsync(long companyId, CancellationToken cancellationToken)
-  {
-    return Task.FromResult(
-      EasyStore.Entities
-        .Count(x => x.Value.CompanyId == companyId));
   }
 }

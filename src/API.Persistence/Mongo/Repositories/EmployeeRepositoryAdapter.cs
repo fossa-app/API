@@ -77,6 +77,13 @@ public class EmployeeRepositoryAdapter
     return _dataRepository.HasDependencyOnDepartmentAsync(_departmentDomainIdentityToDataIdentityMapper.Map(id), cancellationToken);
   }
 
+  public Task<bool> HasDependencyAsync(EmployeeId id, CancellationToken cancellationToken)
+  {
+    return _dataRepository.HasDependencyOnEmployeeAsync(
+      DomainIdentityToDataIdentityMapper.Map(id),
+      cancellationToken);
+  }
+
   public async Task<PageResult<EmployeeEntity>> PageAsync(
     TenantEmployeePageQuery pageQuery,
     CancellationToken cancellationToken)

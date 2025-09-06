@@ -54,6 +54,8 @@ public class EmployeePagingApiQueryHandler : ApiMessageHandler<EmployeeId, Emplo
           tenantId,
           userId,
           apiRequest.Search ?? string.Empty,
+          Optional(apiRequest.ReportsToId).Map(_dataIdentityToDomainIdentityMapper.Map),
+          apiRequest.TopLevelOnly.GetValueOrDefault(),
           new Page(
             apiRequest.PageNumber ?? 0,
             apiRequest.PageSize ?? 0)),
