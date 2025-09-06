@@ -114,6 +114,16 @@ public class EmployeeMongoRepository
     return firstEntity is not null;
   }
 
+  public async Task<bool> HasDependencyOnEmployeeAsync(long employeeId, CancellationToken cancellationToken)
+  {
+    var filter =
+      Builders<EmployeeMongoEntity>.Filter.Eq(item => item.ReportsToId, employeeId);
+
+    var firstEntity = await FirstOrDefaultAsync(filter, cancellationToken).ConfigureAwait(false);
+
+    return firstEntity is not null;
+  }
+
   public async Task<PageResult<EmployeeMongoEntity>> PageAsync(
     TenantEmployeePageQuery pageQuery,
     CancellationToken cancellationToken)

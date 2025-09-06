@@ -7,8 +7,12 @@ namespace Fossa.API.Persistence.Mongo.Repositories;
 
 public interface IEmployeeMongoRepository : IMongoRepository<EmployeeMongoEntity, long>
 {
-  Task EnsureIndexesCreatedAsync(
+  Task<int> CountAllAsync(
+    long companyId,
     CancellationToken cancellationToken);
+
+  Task EnsureIndexesCreatedAsync(
+      CancellationToken cancellationToken);
 
   Task<Option<EmployeeMongoEntity>> FindByUserIdAsync(
     Guid userId,
@@ -30,11 +34,11 @@ public interface IEmployeeMongoRepository : IMongoRepository<EmployeeMongoEntity
     long departmentId,
     CancellationToken cancellationToken);
 
-  Task<PageResult<EmployeeMongoEntity>> PageAsync(
-    TenantEmployeePageQuery pageQuery,
+  Task<bool> HasDependencyOnEmployeeAsync(
+    long employeeId,
     CancellationToken cancellationToken);
 
-  Task<int> CountAllAsync(
-    long companyId,
+  Task<PageResult<EmployeeMongoEntity>> PageAsync(
+    TenantEmployeePageQuery pageQuery,
     CancellationToken cancellationToken);
 }

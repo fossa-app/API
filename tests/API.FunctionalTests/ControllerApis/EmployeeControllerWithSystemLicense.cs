@@ -258,11 +258,11 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var dept1Id = depts.Items.First(d => d.Name == "Dept1").Id;
     var dept2Id = depts.Items.First(d => d.Name == "Dept2").Id;
 
-    var manageResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employee.Id}", new EmployeeManagementModel(null, dept1Id));
+    var manageResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employee.Id}", new EmployeeManagementModel(null, dept1Id, null));
     manageResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 
     // Act
-    var updateResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employee.Id}", new EmployeeManagementModel(null, dept2Id));
+    var updateResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employee.Id}", new EmployeeManagementModel(null, dept2Id, null));
     updateResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 
     // Assert
