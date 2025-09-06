@@ -36,12 +36,12 @@ public class EmployeeManagementApiCommandHandler : ApiMessageHandler<EmployeeId,
   {
     var tenantId = _tenantIdProvider.GetTenantId();
     var userId = _userIdProvider.GetUserId();
-  return new EmployeeManagementCommand(
-    _dataIdentityToDomainIdentityMapper.Map(apiRequest.Id),
-    tenantId,
-    userId,
-    Optional(apiRequest.AssignedBranchId).Map(_branchDataIdentityToDomainIdentityMapper.Map),
-    Optional(apiRequest.AssignedDepartmentId).Map(_departmentDataIdentityToDomainIdentityMapper.Map),
-    Optional(apiRequest.ReportsToId).Map(_dataIdentityToDomainIdentityMapper.Map));
+    return new EmployeeManagementCommand(
+      _dataIdentityToDomainIdentityMapper.Map(apiRequest.Id),
+      tenantId,
+      userId,
+      Optional(apiRequest.AssignedBranchId).Map(_branchDataIdentityToDomainIdentityMapper.Map),
+      Optional(apiRequest.AssignedDepartmentId).Map(_departmentDataIdentityToDomainIdentityMapper.Map),
+      Optional(apiRequest.ReportsToId).Map(_dataIdentityToDomainIdentityMapper.Map));
   }
 }

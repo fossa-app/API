@@ -80,7 +80,7 @@ public class EmployeeRepositoryAdapter
   public Task<bool> HasDependencyAsync(EmployeeId id, CancellationToken cancellationToken)
   {
     return _dataRepository.HasDependencyOnEmployeeAsync(
-      DomainIdentityToDataIdentityMapper.Map(id), 
+      DomainIdentityToDataIdentityMapper.Map(id),
       cancellationToken);
   }
 
