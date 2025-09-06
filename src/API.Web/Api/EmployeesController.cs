@@ -41,7 +41,8 @@ public class EmployeesController : BaseApiController
       new EmployeeManagementApiCommand(
         id,
         model.AssignedBranchId,
-        model.AssignedDepartmentId),
+        model.AssignedDepartmentId,
+        model.ReportsToId),
       cancellationToken);
   }
 
@@ -54,6 +55,8 @@ public class EmployeesController : BaseApiController
       new EmployeePagingApiQuery(
         requestModel.Id,
         requestModel.Search,
+        requestModel.ReportsToId,
+        requestModel.TopLevelOnly,
         requestModel.PageNumber,
         requestModel.PageSize),
       cancellationToken);

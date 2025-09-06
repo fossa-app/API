@@ -10,13 +10,16 @@ public class EmployeeManagementCommandValidator : AbstractValidator<EmployeeMana
 {
   private readonly IBranchQueryRepository _branchQueryRepository;
   private readonly IDepartmentQueryRepository _departmentQueryRepository;
+  private readonly IEmployeeQueryRepository _employeeQueryRepository;
 
   public EmployeeManagementCommandValidator(
       IBranchQueryRepository branchQueryRepository,
-      IDepartmentQueryRepository departmentQueryRepository)
+      IDepartmentQueryRepository departmentQueryRepository,
+      IEmployeeQueryRepository employeeQueryRepository)
   {
     _branchQueryRepository = branchQueryRepository;
     _departmentQueryRepository = departmentQueryRepository;
+    _employeeQueryRepository = employeeQueryRepository ?? throw new ArgumentNullException(nameof(employeeQueryRepository));
 
     RuleFor(x => x.TenantID)
         .NotEmpty();
@@ -31,6 +34,21 @@ public class EmployeeManagementCommandValidator : AbstractValidator<EmployeeMana
     RuleFor(x => x.AssignedDepartmentId)
         .MustAsync(ValidateDepartmentAsync)
         .WithMessage("Department must exist and belong to the same tenant");
+
+    RuleFor(x => x.ReportsToId)
+      .MustAsync(ValidateReportsToIdBasicAsync)
+      .WithMessage("ReportsToId must exist and belong to the same tenant");
+
+    RuleFor(x => x.ReportsToId)
+      .Must((command, reportsToId) =>
+        reportsToId.Match(
+          Some: id => id != command.ID,
+          None: () => true))
+      .WithMessage("An employee cannot report to themselves.");
+
+    RuleFor(x => x.ReportsToId)
+      .MustAsync(ValidateReportsToIdNoCyclesAsync)
+      .WithMessage("ReportsToId must exist and belong to the same tenant");
   }
 
   private async Task<bool> ValidateBranchAsync(EmployeeManagementCommand command, Option<BranchId> assignedBranchId, CancellationToken cancellationToken)
@@ -57,5 +75,40 @@ public class EmployeeManagementCommandValidator : AbstractValidator<EmployeeMana
                   None: () => false);
         },
         None: () => Task.FromResult(true)).ConfigureAwait(false);
+  }
+
+  private async Task<bool> ValidateReportsToIdBasicAsync(EmployeeManagementCommand command, Option<EmployeeId> reportsToId, CancellationToken cancellationToken)
+  {
+    return await reportsToId.Match(
+        Some: async id =>
+        {
+          var reportsToEmployee = await _employeeQueryRepository.GetOrNoneAsync(id, cancellationToken).ConfigureAwait(false);
+          return reportsToEmployee.Match(
+                  Some: x => x.TenantID == command.TenantID,
+                  None: () => false);
+        },
+        None: () => Task.FromResult(true)).ConfigureAwait(false);
+  }
+
+  private async Task<bool> ValidateReportsToIdNoCyclesAsync(EmployeeManagementCommand command, Option<EmployeeId> reportsToId, CancellationToken cancellationToken)
+  {
+    return await reportsToId.Match(
+        Some: async id =>
+        {
+          var visited = new System.Collections.Generic.HashSet<EmployeeId> { command.ID };
+          return await VisitAsync(id, visited, cancellationToken).ConfigureAwait(false);
+        },
+        None: () => Task.FromResult(true)).ConfigureAwait(false);
+
+    async Task<bool> VisitAsync(EmployeeId reportsToId, ISet<EmployeeId> visited, CancellationToken cancellationToken)
+    {
+      if (!visited.Add(reportsToId))
+        return false;
+
+      var upperManager = await _employeeQueryRepository.GetAsync(reportsToId, cancellationToken).ConfigureAwait(false);
+      return await upperManager.ReportsToId.MatchAsync(
+          Some: upperManagerReportsToId => VisitAsync(upperManagerReportsToId, visited, cancellationToken),
+          None: () => true).ConfigureAwait(false);
+    }
   }
 }

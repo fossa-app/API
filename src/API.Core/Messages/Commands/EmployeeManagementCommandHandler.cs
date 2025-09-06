@@ -20,12 +20,16 @@ public class EmployeeManagementCommandHandler : IRequestHandler<EmployeeManageme
     CancellationToken cancellationToken)
   {
     var entity = await _employeeQueryRepository.GetAsync(request.ID, cancellationToken).ConfigureAwait(false);
+
     entity = entity with
     {
       AssignedBranchId = request.AssignedBranchId,
-      AssignedDepartmentId = request.AssignedDepartmentId
+      AssignedDepartmentId = request.AssignedDepartmentId,
+      ReportsToId = request.ReportsToId
     };
+
     await _employeeRepository.UpdateAsync(entity, cancellationToken).ConfigureAwait(false);
+
     return Unit.Value;
   }
 }

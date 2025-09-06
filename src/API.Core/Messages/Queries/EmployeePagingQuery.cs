@@ -7,6 +7,8 @@ public record EmployeePagingQuery(
     Guid TenantID,
     Guid UserID,
     string Search,
+    Option<EmployeeId> ReportsToId,
+    bool TopLevelOnly,
     Page Page)
   : EntityTenantQuery<EmployeeEntity, EmployeeId, Guid, PageResult<EmployeeEntity>>(TenantID)
     , IPagingQuery<EmployeeEntity>

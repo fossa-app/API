@@ -66,8 +66,9 @@ public class EmployeeCreationCommandHandler : IRequestHandler<EmployeeCreationCo
       request.TenantID,
       request.UserID,
       companyEntity.ID,
-      None,
-      None,
+      AssignedBranchId: None,
+      AssignedDepartmentId: None,
+      ReportsToId: None,
       request.FirstName,
       request.LastName,
       request.FullName);

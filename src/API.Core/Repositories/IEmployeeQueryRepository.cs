@@ -8,7 +8,12 @@ public interface IEmployeeQueryRepository
   , IDependencyQueryRepository<CompanyId>
   , IDependencyQueryRepository<BranchId>
   , IDependencyQueryRepository<DepartmentId>
+  , IDependencyQueryRepository<EmployeeId>
 {
+  Task<int> CountAllAsync(
+    CompanyId companyId,
+    CancellationToken cancellationToken);
+
   Task<Option<EmployeeEntity>> FindByUserIdAsync(
     Guid userId,
     CancellationToken cancellationToken);
@@ -19,9 +24,5 @@ public interface IEmployeeQueryRepository
 
   Task<PageResult<EmployeeEntity>> PageAsync(
     TenantEmployeePageQuery pageQuery,
-    CancellationToken cancellationToken);
-
-  Task<int> CountAllAsync(
-    CompanyId companyId,
     CancellationToken cancellationToken);
 }
