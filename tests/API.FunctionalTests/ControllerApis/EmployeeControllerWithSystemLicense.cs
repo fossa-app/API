@@ -151,6 +151,10 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
       var employeeCreationResponse = await client.PostAsJsonAsync("/api/1.0/Employee", new EmployeeModificationModel(firstName, lastName, fullName));
 
+      if (employeeCreationResponse.StatusCode != HttpStatusCode.OK)
+      {
+        _testOutputHelper.WriteLine(await employeeCreationResponse.Content.ReadAsStringAsync());
+      }
       employeeCreationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 
       var employeeRetrievalResponse = await client.GetAsync("/api/1.0/Employee");
@@ -238,7 +242,7 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     // Arrange
     var client = _factory.CreateClient();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JMV0XC70JH9GC8P9M6SYYYAK.Tenant1.ADMIN420425736");
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425736");
 
     var employeeResponse = await client.PostAsJsonAsync("/api/1.0/Employee", new EmployeeModificationModel("First", "Last", "Full Name"));
     employeeResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
@@ -271,5 +275,158 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var updatedEmployee = await verifyResponse.Content.ReadFromJsonAsync<EmployeeRetrievalModel>();
     updatedEmployee.ShouldNotBeNull();
     updatedEmployee.AssignedDepartmentId.ShouldBe(dept2Id);
+  }
+
+  [Fact]
+  public async Task UpdateEmployee_WithReportsTo_SucceedsAsync()
+  {
+    // Arrange
+    var client = _factory.CreateClient();
+    var manager = await CreateEmployeeAsync(client, "Manager", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425737");
+    var employee = await CreateEmployeeAsync(client, "Employee", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425738");
+
+    // Act
+    var updateResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employee.Id}", new EmployeeManagementModel(null, null, manager.Id));
+    updateResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    // Assert
+    var verifyResponse = await client.GetAsync($"/api/1.0/Employees/{employee.Id}");
+    verifyResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+    var updatedEmployee = await verifyResponse.Content.ReadFromJsonAsync<EmployeeRetrievalModel>();
+    updatedEmployee.ShouldNotBeNull();
+    updatedEmployee.ReportsToId.ShouldBe(manager.Id);
+  }
+
+  [Fact]
+  public async Task DeleteEmployee_WithDirectReport_FailsAsync()
+  {
+    // Arrange
+    var client = _factory.CreateClient();
+    var manager = await CreateEmployeeAsync(client, "Manager", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425739");
+    var employee = await CreateEmployeeAsync(client, "Employee", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425740");
+    var updateResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employee.Id}", new EmployeeManagementModel(null, null, manager.Id));
+    updateResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    // Act
+    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425739");
+    var deleteResponse = await client.DeleteAsync("/api/1.0/Employee");
+
+    // Assert
+    deleteResponse.StatusCode.ShouldBe(HttpStatusCode.FailedDependency);
+  }
+
+  [Fact]
+  public async Task UpdateEmployee_WithNonExistentReportsTo_FailsAsync()
+  {
+    // Arrange
+    var client = _factory.CreateClient();
+    var employee = await CreateEmployeeAsync(client, "Employee", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425741");
+
+    // Act
+    var updateResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employee.Id}", new EmployeeManagementModel(null, null, 999999L));
+
+    // Assert
+    updateResponse.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+  }
+
+  [Fact]
+  public async Task UpdateEmployee_WithCyclicalReference_FailsAsync()
+  {
+    // Arrange
+    var client = _factory.CreateClient();
+    var employee1 = await CreateEmployeeAsync(client, "Employee", "One", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425742");
+    var employee2 = await CreateEmployeeAsync(client, "Employee", "Two", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425743");
+
+    await client.PutAsJsonAsync($"/api/1.0/Employees/{employee2.Id}", new EmployeeManagementModel(null, null, employee1.Id));
+
+    // Act
+    var updateResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employee1.Id}", new EmployeeManagementModel(null, null, employee2.Id));
+
+    // Assert
+    updateResponse.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+  }
+
+  [Fact]
+  public async Task UpdateEmployee_WithLongerCyclicalReference_FailsAsync()
+  {
+    // Arrange
+    var client = _factory.CreateClient();
+    var employee1 = await CreateEmployeeAsync(client, "Employee", "One", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425744");
+    var employee2 = await CreateEmployeeAsync(client, "Employee", "Two", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425745");
+    var employee3 = await CreateEmployeeAsync(client, "Employee", "Three", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425746");
+
+    await client.PutAsJsonAsync($"/api/1.0/Employees/{employee2.Id}", new EmployeeManagementModel(null, null, employee1.Id));
+    await client.PutAsJsonAsync($"/api/1.0/Employees/{employee3.Id}", new EmployeeManagementModel(null, null, employee2.Id));
+
+    // Act
+    var updateResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employee1.Id}", new EmployeeManagementModel(null, null, employee3.Id));
+
+    // Assert
+    updateResponse.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+  }
+
+  [Fact]
+  public async Task ListEmployees_ByReportsToId_ReturnsFilteredResultsAsync()
+  {
+    // Arrange
+    var client = _factory.CreateClient();
+    var manager = await CreateEmployeeAsync(client, "Manager", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425747");
+    var employee1 = await CreateEmployeeAsync(client, "Employee", "One", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425748");
+    var employee2 = await CreateEmployeeAsync(client, "Employee", "Two", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425749");
+    await CreateEmployeeAsync(client, "Employee", "Three", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425750");
+
+    await client.PutAsJsonAsync($"/api/1.0/Employees/{employee1.Id}", new EmployeeManagementModel(null, null, manager.Id));
+    await client.PutAsJsonAsync($"/api/1.0/Employees/{employee2.Id}", new EmployeeManagementModel(null, null, manager.Id));
+
+    // Act
+    var response = await client.GetAsync($"/api/1.0/Employees?reportsToId={manager.Id}&pageNumber=1&pageSize=10");
+
+    // Assert
+    response.StatusCode.ShouldBe(HttpStatusCode.OK);
+    var result = await response.Content.ReadFromJsonAsync<PagingResponseModel<EmployeeRetrievalModel>>();
+    result.ShouldNotBeNull();
+    result.Items.Count.ShouldBe(2);
+    result.Items.All(x => x.ReportsToId == manager.Id).ShouldBeTrue();
+  }
+
+  [Fact]
+  public async Task ListEmployees_TopLevelOnly_ReturnsFilteredResultsAsync()
+  {
+    // Arrange
+    var client = _factory.CreateClient();
+    var manager = await CreateEmployeeAsync(client, "Manager", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425751");
+    var employee = await CreateEmployeeAsync(client, "Employee", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425752");
+    await client.PutAsJsonAsync($"/api/1.0/Employees/{employee.Id}", new EmployeeManagementModel(null, null, manager.Id));
+
+    // Act
+    var response = await client.GetAsync("/api/1.0/Employees?topLevelOnly=true&pageNumber=1&pageSize=10");
+
+    // Assert
+    response.StatusCode.ShouldBe(HttpStatusCode.OK);
+    var result = await response.Content.ReadFromJsonAsync<PagingResponseModel<EmployeeRetrievalModel>>();
+    result.ShouldNotBeNull();
+    result.Items.All(x => x.ReportsToId == null).ShouldBeTrue();
+    result.Items.Any(x => x.Id == employee.Id).ShouldBeFalse();
+    result.Items.Any(x => x.Id == manager.Id).ShouldBeTrue();
+  }
+
+  private async Task<EmployeeRetrievalModel> CreateEmployeeAsync(HttpClient client, string firstName, string lastName, string? token = null)
+  {
+    if (token != null)
+    {
+      client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    }
+
+    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Employee", new EmployeeModificationModel(firstName, lastName, $"{firstName} {lastName}"));
+    if (creationResponse.StatusCode != HttpStatusCode.OK)
+    {
+        _testOutputHelper.WriteLine(await creationResponse.Content.ReadAsStringAsync());
+    }
+    creationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+
+    var retrievalResponse = await client.GetAsync("/api/1.0/Employee");
+    var employee = await retrievalResponse.Content.ReadFromJsonAsync<EmployeeRetrievalModel>();
+    employee.ShouldNotBeNull();
+    return employee;
   }
 }

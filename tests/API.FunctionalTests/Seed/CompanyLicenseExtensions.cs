@@ -20,7 +20,7 @@ public static class CompanyLicenseExtensions
     CancellationToken cancellationToken)
     where TEntryPoint : class
   {
-    await SeedCompanyLicenseAsync(factory, "01JB0QS2K6SA4KYD8S920W7DMG.Tenant1.ADMIN1", 300, 10, 5, cancellationToken).ConfigureAwait(false);
+    await SeedCompanyLicenseAsync(factory, "01JB0QS2K6SA4KYD8S920W7DMG.Tenant1.ADMIN1", 300, 200, 100, cancellationToken).ConfigureAwait(false);
     await SeedCompanyLicenseAsync(factory, "01JB0RAH24ZJBA53AJF5F5MMZX.Tenant2.ADMIN1", 300, 10, 5, cancellationToken).ConfigureAwait(false);
     await SeedCompanyLicenseAsync(factory, "01JB0RAH24ZJBA53AJF5F5MMZX.Tenant3.ADMIN1", 300, 10, 5, cancellationToken).ConfigureAwait(false);
   }
@@ -28,8 +28,8 @@ public static class CompanyLicenseExtensions
   public static async Task SeedCompanyLicenseAsync<TEntryPoint>(
     this WebApplicationFactory<TEntryPoint> factory,
     string accessToken,
-    int maximumBranchCount,
     int maximumEmployeeCount,
+    int maximumBranchCount,
     int maximumDepartmentCount,
     CancellationToken cancellationToken)
     where TEntryPoint : class

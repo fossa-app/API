@@ -105,10 +105,12 @@ public class EmployeeManagementCommandValidator : AbstractValidator<EmployeeMana
       if (!visited.Add(reportsToId))
         return false;
 
-      var upperManager = await _employeeQueryRepository.GetAsync(reportsToId, cancellationToken).ConfigureAwait(false);
-      return await upperManager.ReportsToId.MatchAsync(
+      var upperManager = await _employeeQueryRepository.GetOrNoneAsync(reportsToId, cancellationToken).ConfigureAwait(false);
+      return await upperManager.MatchAsync(
+        Some: upperManager => upperManager.ReportsToId.MatchAsync(
           Some: upperManagerReportsToId => VisitAsync(upperManagerReportsToId, visited, cancellationToken),
-          None: () => true).ConfigureAwait(false);
+          None: () => true),
+        None: () => false).ConfigureAwait(false);
     }
   }
 }

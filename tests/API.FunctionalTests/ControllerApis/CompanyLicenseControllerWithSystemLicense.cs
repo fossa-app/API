@@ -20,7 +20,7 @@ public class CompanyLicenseControllerWithSystemLicense : IClassFixture<CustomWeb
   [Fact]
   public async Task CreateCompanyLicenseWithAdministratorAccessTokenAsync()
   {
-    await _factory.SeedCompanyLicenseAsync("01JBV0GR968WJ25BKJVT8NDXEY.Tenant1.ADMIN1", 4, 10, 2, default);
+    await _factory.SeedCompanyLicenseAsync("01JBV0GR968WJ25BKJVT8NDXEY.Tenant1.ADMIN1", 10, 4, 2, default);
 
     var client = _factory.CreateClient();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.User1");
