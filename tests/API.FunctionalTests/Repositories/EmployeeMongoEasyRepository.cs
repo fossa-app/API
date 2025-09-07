@@ -65,10 +65,13 @@ public class EmployeeMongoEasyRepository
   public Task<PageResult<EmployeeMongoEntity>> PageAsync(TenantEmployeePageQuery pageQuery, CancellationToken cancellationToken)
   {
     var allItems = EasyStore.Entities.Values
-      .Where(x => x.TenantID == pageQuery.TenantId && (string.IsNullOrEmpty(pageQuery.Search)
-      || x.FirstName?.Contains(pageQuery.Search, StringComparison.OrdinalIgnoreCase) == true
-      || x.LastName?.Contains(pageQuery.Search, StringComparison.OrdinalIgnoreCase) == true
-      || x.FullName?.Contains(pageQuery.Search, StringComparison.OrdinalIgnoreCase) == true))
+      .Where(x => x.TenantID == pageQuery.TenantId
+        && (!pageQuery.TopLevelOnly || !x.ReportsToId.HasValue)
+        && pageQuery.ReportsToId.Match(reportsToId => x.ReportsToId == reportsToId, true)
+        && (string.IsNullOrEmpty(pageQuery.Search)
+          || x.FirstName?.Contains(pageQuery.Search, StringComparison.OrdinalIgnoreCase) == true
+          || x.LastName?.Contains(pageQuery.Search, StringComparison.OrdinalIgnoreCase) == true
+          || x.FullName?.Contains(pageQuery.Search, StringComparison.OrdinalIgnoreCase) == true))
       .ToList();
 
     var pageItems = allItems.Skip((pageQuery.Page.Number - 1) * pageQuery.Page.Size).Take(pageQuery.Page.Size).ToList();
