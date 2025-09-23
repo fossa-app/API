@@ -30,7 +30,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Verify.Xunit" VersionOverride="30.12.0" />
+    <PackageReference Include="Verify.Xunit" />
     <Using Include="LanguageExt" />
     <Using Include="LanguageExt.Common" />
     <Using Include="LanguageExt.Effects" />
