@@ -30,6 +30,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="ReportGenerator" VersionOverride="5.4.16" />
     <PackageReference Include="Verify.Xunit" />
     <Using Include="LanguageExt" />
     <Using Include="LanguageExt.Common" />
