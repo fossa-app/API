@@ -420,7 +420,7 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var creationResponse = await client.PostAsJsonAsync("/api/1.0/Employee", new EmployeeModificationModel(firstName, lastName, $"{firstName} {lastName}"));
     if (creationResponse.StatusCode != HttpStatusCode.OK)
     {
-        _testOutputHelper.WriteLine(await creationResponse.Content.ReadAsStringAsync());
+      _testOutputHelper.WriteLine(await creationResponse.Content.ReadAsStringAsync());
     }
     creationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 

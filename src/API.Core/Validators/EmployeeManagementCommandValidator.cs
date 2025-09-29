@@ -48,7 +48,7 @@ public class EmployeeManagementCommandValidator : AbstractValidator<EmployeeMana
 
     RuleFor(x => x.ReportsToId)
       .MustAsync(ValidateReportsToIdNoCyclesAsync)
-      .WithMessage("ReportsToId must exist and belong to the same tenant");
+      .WithMessage("ReportsToId must not be cyclical.");
   }
 
   private async Task<bool> ValidateBranchAsync(EmployeeManagementCommand command, Option<BranchId> assignedBranchId, CancellationToken cancellationToken)
