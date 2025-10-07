@@ -263,9 +263,10 @@ namespace Fossa.API.Web.ApiModels
     }
     public class EmployeeManagementModel : System.IEquatable<Fossa.API.Web.ApiModels.EmployeeManagementModel>
     {
-        public EmployeeManagementModel(long? AssignedBranchId, long? AssignedDepartmentId, long? ReportsToId) { }
+        public EmployeeManagementModel(long? AssignedBranchId, long? AssignedDepartmentId, long? ReportsToId, string? JobTitle) { }
         public long? AssignedBranchId { get; init; }
         public long? AssignedDepartmentId { get; init; }
+        public string? JobTitle { get; init; }
         public long? ReportsToId { get; init; }
     }
     public class EmployeeModificationModel : System.IEquatable<Fossa.API.Web.ApiModels.EmployeeModificationModel>
@@ -294,13 +295,14 @@ namespace Fossa.API.Web.ApiModels
     }
     public class EmployeeRetrievalModel : System.IEquatable<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>
     {
-        public EmployeeRetrievalModel(long Id, long CompanyId, long? AssignedBranchId, long? AssignedDepartmentId, long? ReportsToId, string FirstName, string LastName, string FullName) { }
+        public EmployeeRetrievalModel(long Id, long CompanyId, long? AssignedBranchId, long? AssignedDepartmentId, long? ReportsToId, string JobTitle, string FirstName, string LastName, string FullName) { }
         public long? AssignedBranchId { get; init; }
         public long? AssignedDepartmentId { get; init; }
         public long CompanyId { get; init; }
         public string FirstName { get; init; }
         public string FullName { get; init; }
         public long Id { get; init; }
+        public string JobTitle { get; init; }
         public string LastName { get; init; }
         public long? ReportsToId { get; init; }
     }
@@ -721,10 +723,11 @@ namespace Fossa.API.Web.Messages.Commands
     }
     public class EmployeeManagementApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.EmployeeManagementApiCommand>
     {
-        public EmployeeManagementApiCommand(long Id, long? AssignedBranchId, long? AssignedDepartmentId, long? ReportsToId) { }
+        public EmployeeManagementApiCommand(long Id, long? AssignedBranchId, long? AssignedDepartmentId, long? ReportsToId, string? JobTitle) { }
         public long? AssignedBranchId { get; init; }
         public long? AssignedDepartmentId { get; init; }
         public long Id { get; init; }
+        public string? JobTitle { get; init; }
         public long? ReportsToId { get; init; }
     }
     public class EmployeeManagementApiCommandHandler : Fossa.API.Web.Messages.ApiMessageHandler<Fossa.API.Core.Entities.EmployeeId, Fossa.API.Web.Messages.Commands.EmployeeManagementApiCommand, MediatR.Unit, Fossa.API.Core.Messages.Commands.EmployeeManagementCommand, MediatR.Unit>

@@ -70,6 +70,7 @@ namespace Fossa.API.Persistence.Mongo.Entities
         public string? FullName { get; set; }
         [MongoDB.Bson.Serialization.Attributes.BsonId]
         public long ID { get; set; }
+        public string? JobTitle { get; set; }
         public string? LastName { get; set; }
         public long? ReportsToId { get; set; }
         [MongoDB.Bson.Serialization.Attributes.BsonGuidRepresentation(MongoDB.Bson.GuidRepresentation.Standard)]

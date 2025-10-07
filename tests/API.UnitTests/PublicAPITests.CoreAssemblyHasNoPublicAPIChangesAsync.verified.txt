@@ -137,13 +137,14 @@ namespace Fossa.API.Core.Entities
     }
     public class EmployeeEntity : System.IEquatable<Fossa.API.Core.Entities.EmployeeEntity>, TIKSN.Data.IEntity<Fossa.API.Core.Entities.EmployeeId>, TIKSN.Data.ITenantEntity<Fossa.API.Core.Entities.EmployeeId, System.Guid>, TIKSN.Data.IUserEntity<Fossa.API.Core.Entities.EmployeeId, System.Guid>
     {
-        public EmployeeEntity(Fossa.API.Core.Entities.EmployeeId ID, System.Guid TenantID, System.Guid UserID, Fossa.API.Core.Entities.CompanyId CompanyId, LanguageExt.Option<Fossa.API.Core.Entities.BranchId> AssignedBranchId, LanguageExt.Option<Fossa.API.Core.Entities.DepartmentId> AssignedDepartmentId, LanguageExt.Option<Fossa.API.Core.Entities.EmployeeId> ReportsToId, string FirstName, string LastName, string FullName) { }
+        public EmployeeEntity(Fossa.API.Core.Entities.EmployeeId ID, System.Guid TenantID, System.Guid UserID, Fossa.API.Core.Entities.CompanyId CompanyId, LanguageExt.Option<Fossa.API.Core.Entities.BranchId> AssignedBranchId, LanguageExt.Option<Fossa.API.Core.Entities.DepartmentId> AssignedDepartmentId, LanguageExt.Option<Fossa.API.Core.Entities.EmployeeId> ReportsToId, string JobTitle, string FirstName, string LastName, string FullName) { }
         public LanguageExt.Option<Fossa.API.Core.Entities.BranchId> AssignedBranchId { get; init; }
         public LanguageExt.Option<Fossa.API.Core.Entities.DepartmentId> AssignedDepartmentId { get; init; }
         public Fossa.API.Core.Entities.CompanyId CompanyId { get; init; }
         public string FirstName { get; init; }
         public string FullName { get; init; }
         public Fossa.API.Core.Entities.EmployeeId ID { get; init; }
+        public string JobTitle { get; init; }
         public string LastName { get; init; }
         public LanguageExt.Option<Fossa.API.Core.Entities.EmployeeId> ReportsToId { get; init; }
         public System.Guid TenantID { get; init; }
@@ -510,11 +511,12 @@ namespace Fossa.API.Core.Messages.Commands
     }
     public class EmployeeManagementCommand : Fossa.API.Core.Messages.Commands.EntityTenantUserCommand<Fossa.API.Core.Entities.EmployeeEntity, Fossa.API.Core.Entities.EmployeeId, System.Guid, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.EmployeeManagementCommand>
     {
-        public EmployeeManagementCommand(Fossa.API.Core.Entities.EmployeeId ID, System.Guid TenantID, System.Guid UserID, LanguageExt.Option<Fossa.API.Core.Entities.BranchId> AssignedBranchId, LanguageExt.Option<Fossa.API.Core.Entities.DepartmentId> AssignedDepartmentId, LanguageExt.Option<Fossa.API.Core.Entities.EmployeeId> ReportsToId) { }
+        public EmployeeManagementCommand(Fossa.API.Core.Entities.EmployeeId ID, System.Guid TenantID, System.Guid UserID, LanguageExt.Option<Fossa.API.Core.Entities.BranchId> AssignedBranchId, LanguageExt.Option<Fossa.API.Core.Entities.DepartmentId> AssignedDepartmentId, LanguageExt.Option<Fossa.API.Core.Entities.EmployeeId> ReportsToId, string JobTitle) { }
         public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.EmployeeId> AffectingTenantEntitiesIdentities { get; }
         public LanguageExt.Option<Fossa.API.Core.Entities.BranchId> AssignedBranchId { get; init; }
         public LanguageExt.Option<Fossa.API.Core.Entities.DepartmentId> AssignedDepartmentId { get; init; }
         public Fossa.API.Core.Entities.EmployeeId ID { get; init; }
+        public string JobTitle { get; init; }
         public LanguageExt.Option<Fossa.API.Core.Entities.EmployeeId> ReportsToId { get; init; }
     }
     public class EmployeeManagementCommandHandler : MediatR.IRequestHandler<Fossa.API.Core.Messages.Commands.EmployeeManagementCommand, MediatR.Unit>
