@@ -42,6 +42,7 @@ public class EmployeeManagementApiCommandHandler : ApiMessageHandler<EmployeeId,
       userId,
       Optional(apiRequest.AssignedBranchId).Map(_branchDataIdentityToDomainIdentityMapper.Map),
       Optional(apiRequest.AssignedDepartmentId).Map(_departmentDataIdentityToDomainIdentityMapper.Map),
-      Optional(apiRequest.ReportsToId).Map(_dataIdentityToDomainIdentityMapper.Map));
+      Optional(apiRequest.ReportsToId).Map(_dataIdentityToDomainIdentityMapper.Map),
+      apiRequest.JobTitle ?? string.Empty);
   }
 }

@@ -208,7 +208,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     var createdBranchModel = branchResponseModel.Items.Single(x => string.Equals(x.Name, branchName, StringComparison.OrdinalIgnoreCase));
 
-    var employeeManagementResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employeeResponseModel?.Id}", new EmployeeManagementModel(createdBranchModel.Id, null, null));
+    var employeeManagementResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employeeResponseModel?.Id}", new EmployeeManagementModel(createdBranchModel.Id, null, null, "Staff"));
 
     employeeManagementResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 

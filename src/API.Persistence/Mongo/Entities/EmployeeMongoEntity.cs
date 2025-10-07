@@ -23,6 +23,8 @@ public class EmployeeMongoEntity : IEntity<long>
 
   public long? ReportsToId { get; set; }
 
+  public string? JobTitle { get; set; }
+
   public string? FirstName { get; set; }
 
   public string? LastName { get; set; }

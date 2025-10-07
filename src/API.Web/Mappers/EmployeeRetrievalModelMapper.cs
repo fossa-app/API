@@ -31,6 +31,7 @@ public class EmployeeRetrievalModelMapper : IMapper<EmployeeEntity, EmployeeRetr
         source.AssignedBranchId.Map(_branchDomainToDataIdentityMapper.Map).MatchUnsafe(s => s, (long?)null),
         source.AssignedDepartmentId.Map(_departmentDomainToDataIdentityMapper.Map).MatchUnsafe(x => x, () => (long?)null),
         source.ReportsToId.Map(_employeeDomainToDataIdentityMapper.Map).MatchUnsafe(x => x, () => (long?)null),
+        source.JobTitle,
         source.FirstName, source.LastName, source.FullName);
   }
 }

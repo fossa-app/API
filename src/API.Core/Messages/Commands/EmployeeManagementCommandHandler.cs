@@ -25,7 +25,8 @@ public class EmployeeManagementCommandHandler : IRequestHandler<EmployeeManageme
     {
       AssignedBranchId = request.AssignedBranchId,
       AssignedDepartmentId = request.AssignedDepartmentId,
-      ReportsToId = request.ReportsToId
+      ReportsToId = request.ReportsToId,
+      JobTitle = request.JobTitle
     };
 
     await _employeeRepository.UpdateAsync(entity, cancellationToken).ConfigureAwait(false);
