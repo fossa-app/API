@@ -49,6 +49,12 @@ public class EmployeeManagementCommandValidator : AbstractValidator<EmployeeMana
     RuleFor(x => x.ReportsToId)
       .MustAsync(ValidateReportsToIdNoCyclesAsync)
       .WithMessage("ReportsToId must not be cyclical.");
+
+    RuleFor(x => x.JobTitle)
+      .NotNull()
+      .WithMessage("Job Title cannot be null.")
+      .Must(s => !string.IsNullOrWhiteSpace(s))
+      .WithMessage("Job Title cannot be empty or whitespace.");
   }
 
   private async Task<bool> ValidateBranchAsync(EmployeeManagementCommand command, Option<BranchId> assignedBranchId, CancellationToken cancellationToken)

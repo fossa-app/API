@@ -10,6 +10,7 @@ public record EmployeeEntity(
     Option<BranchId> AssignedBranchId,
     Option<DepartmentId> AssignedDepartmentId,
     Option<EmployeeId> ReportsToId,
+    string JobTitle,
     string FirstName,
     string LastName,
     string FullName)

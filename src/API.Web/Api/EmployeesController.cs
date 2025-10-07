@@ -42,7 +42,8 @@ public class EmployeesController : BaseApiController
         id,
         model.AssignedBranchId,
         model.AssignedDepartmentId,
-        model.ReportsToId),
+        model.ReportsToId,
+        model.JobTitle ?? string.Empty),
       cancellationToken);
   }
 

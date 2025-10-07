@@ -262,11 +262,11 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var dept1Id = depts.Items.First(d => d.Name == "Dept1").Id;
     var dept2Id = depts.Items.First(d => d.Name == "Dept2").Id;
 
-    var manageResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employee.Id}", new EmployeeManagementModel(null, dept1Id, null));
+    var manageResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employee.Id}", new EmployeeManagementModel(null, dept1Id, null, "Staff"));
     manageResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 
     // Act
-    var updateResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employee.Id}", new EmployeeManagementModel(null, dept2Id, null));
+    var updateResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employee.Id}", new EmployeeManagementModel(null, dept2Id, null, "Staff"));
     updateResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 
     // Assert
@@ -286,7 +286,7 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var employee = await CreateEmployeeAsync(client, "Employee", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425738");
 
     // Act
-    var updateResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employee.Id}", new EmployeeManagementModel(null, null, manager.Id));
+    var updateResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employee.Id}", new EmployeeManagementModel(null, null, manager.Id, "Staff"));
     updateResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 
     // Assert
@@ -304,7 +304,7 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var client = _factory.CreateClient();
     var manager = await CreateEmployeeAsync(client, "Manager", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425739");
     var employee = await CreateEmployeeAsync(client, "Employee", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425740");
-    var updateResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employee.Id}", new EmployeeManagementModel(null, null, manager.Id));
+    var updateResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employee.Id}", new EmployeeManagementModel(null, null, manager.Id, "Staff"));
     updateResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 
     // Act
@@ -323,7 +323,7 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var employee = await CreateEmployeeAsync(client, "Employee", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425741");
 
     // Act
-    var updateResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employee.Id}", new EmployeeManagementModel(null, null, 999999L));
+    var updateResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employee.Id}", new EmployeeManagementModel(null, null, 999999L, "Staff"));
 
     // Assert
     updateResponse.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
@@ -337,10 +337,10 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var employee1 = await CreateEmployeeAsync(client, "Employee", "One", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425742");
     var employee2 = await CreateEmployeeAsync(client, "Employee", "Two", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425743");
 
-    await client.PutAsJsonAsync($"/api/1.0/Employees/{employee2.Id}", new EmployeeManagementModel(null, null, employee1.Id));
+    await client.PutAsJsonAsync($"/api/1.0/Employees/{employee2.Id}", new EmployeeManagementModel(null, null, employee1.Id, "Staff"));
 
     // Act
-    var updateResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employee1.Id}", new EmployeeManagementModel(null, null, employee2.Id));
+    var updateResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employee1.Id}", new EmployeeManagementModel(null, null, employee2.Id, "Staff"));
 
     // Assert
     updateResponse.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
@@ -355,11 +355,11 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var employee2 = await CreateEmployeeAsync(client, "Employee", "Two", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425745");
     var employee3 = await CreateEmployeeAsync(client, "Employee", "Three", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425746");
 
-    await client.PutAsJsonAsync($"/api/1.0/Employees/{employee2.Id}", new EmployeeManagementModel(null, null, employee1.Id));
-    await client.PutAsJsonAsync($"/api/1.0/Employees/{employee3.Id}", new EmployeeManagementModel(null, null, employee2.Id));
+    await client.PutAsJsonAsync($"/api/1.0/Employees/{employee2.Id}", new EmployeeManagementModel(null, null, employee1.Id, "Staff"));
+    await client.PutAsJsonAsync($"/api/1.0/Employees/{employee3.Id}", new EmployeeManagementModel(null, null, employee2.Id, "Staff"));
 
     // Act
-    var updateResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employee1.Id}", new EmployeeManagementModel(null, null, employee3.Id));
+    var updateResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employee1.Id}", new EmployeeManagementModel(null, null, employee3.Id, "Staff"));
 
     // Assert
     updateResponse.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
@@ -375,8 +375,8 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var employee2 = await CreateEmployeeAsync(client, "Employee", "Two", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425749");
     await CreateEmployeeAsync(client, "Employee", "Three", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425750");
 
-    await client.PutAsJsonAsync($"/api/1.0/Employees/{employee1.Id}", new EmployeeManagementModel(null, null, manager.Id));
-    await client.PutAsJsonAsync($"/api/1.0/Employees/{employee2.Id}", new EmployeeManagementModel(null, null, manager.Id));
+    await client.PutAsJsonAsync($"/api/1.0/Employees/{employee1.Id}", new EmployeeManagementModel(null, null, manager.Id, "Staff"));
+    await client.PutAsJsonAsync($"/api/1.0/Employees/{employee2.Id}", new EmployeeManagementModel(null, null, manager.Id, "Staff"));
 
     // Act
     var response = await client.GetAsync($"/api/1.0/Employees?reportsToId={manager.Id}&pageNumber=1&pageSize=10");
@@ -396,7 +396,7 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var client = _factory.CreateClient();
     var manager = await CreateEmployeeAsync(client, "Manager", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425751");
     var employee = await CreateEmployeeAsync(client, "Employee", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425752");
-    await client.PutAsJsonAsync($"/api/1.0/Employees/{employee.Id}", new EmployeeManagementModel(null, null, manager.Id));
+    await client.PutAsJsonAsync($"/api/1.0/Employees/{employee.Id}", new EmployeeManagementModel(null, null, manager.Id, "Staff"));
 
     // Act
     var response = await client.GetAsync("/api/1.0/Employees?topLevelOnly=true&pageNumber=1&pageSize=10");

@@ -3,4 +3,5 @@
 public record EmployeeManagementModel(
   long? AssignedBranchId,
   long? AssignedDepartmentId,
-  long? ReportsToId);
+  long? ReportsToId,
+  string? JobTitle);
