@@ -25,6 +25,7 @@ public class IdGenSetupLogger
       _logger.LogInformation("IdGen: Id's/ms total : {IdsPerMillisecondsIntotal}", _idGenerator.Options.IdStructure.MaxGenerators * _idGenerator.Options.IdStructure.MaxSequenceIds);
       _logger.LogInformation("IdGen: Wraparound interval : {WraparoundInterval}", _idGenerator.Options.IdStructure.WraparoundInterval(_idGenerator.Options.TimeSource));
       _logger.LogInformation("IdGen: Wraparound date : {WraparoundDate}", _idGenerator.Options.IdStructure.WraparoundDate(_idGenerator.Options.TimeSource.Epoch, _idGenerator.Options.TimeSource));
+      _logger.LogInformation("IdGen: Current Generator ID : {GeneratorId}", _idGenerator.Id);
     }
   }
 }
