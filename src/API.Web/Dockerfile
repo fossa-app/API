@@ -1,5 +1,5 @@
-FROM mcr.microsoft.com/dotnet/aspnet:9.0.10
-RUN apt-get update && apt-get upgrade -y && apt-get install -y curl=7.88.1-10+deb12u14 && apt-get clean
+FROM mcr.microsoft.com/dotnet/aspnet:10.0.0
+RUN apt-get update && apt-get upgrade -y && apt-get install -y curl=8.5.0-2ubuntu10.6 && apt-get clean
 WORKDIR /App
 COPY . ./
 USER app

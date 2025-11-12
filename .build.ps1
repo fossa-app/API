@@ -110,7 +110,7 @@ Task UnitTest Build, {
 
 # Synopsis: Build
 Task Build Format, BuildWeb, {
-    $solution = Resolve-Path -Path 'API.sln'
+    $solution = Resolve-Path -Path 'API.slnx'
     Exec { dotnet build $solution }
 }
 
@@ -152,7 +152,7 @@ Task FormatAnalyzers Restore, FormatAnalyzersPersistence, FormatAnalyzersCore, F
 
 # Synopsis: Format Analyzers Solution
 Task FormatAnalyzersSolution Restore, {
-    $solution = Resolve-Path -Path 'API.sln'
+    $solution = Resolve-Path -Path 'API.slnx'
     Exec { dotnet format analyzers --severity info --verbosity diagnostic $solution }
 }
 
@@ -189,7 +189,7 @@ Task FormatStyle Restore, FormatStylePersistence, FormatStyleCore, FormatStyleIn
 
 # Synopsis: Format Style Solution
 Task FormatStyleSolution Restore, {
-    $solution = Resolve-Path -Path 'API.sln'
+    $solution = Resolve-Path -Path 'API.slnx'
     Exec { dotnet format style --severity info --verbosity diagnostic $solution }
 }
 
@@ -223,7 +223,7 @@ Task FormatStyleCore Restore, {
 
 # Synopsis: Format Whitespace
 Task FormatWhitespace Restore, {
-    $solution = Resolve-Path -Path 'API.sln'
+    $solution = Resolve-Path -Path 'API.slnx'
     Exec { dotnet format whitespace --verbosity diagnostic $solution }
 }
 
@@ -263,7 +263,7 @@ Task RestoreTools Clean, {
 
 # Synopsis: Restore packages
 Task RestorePackages Clean, {
-    $solution = Resolve-Path -Path 'API.sln'
+    $solution = Resolve-Path -Path 'API.slnx'
     Exec { dotnet restore $solution }
 }
 
