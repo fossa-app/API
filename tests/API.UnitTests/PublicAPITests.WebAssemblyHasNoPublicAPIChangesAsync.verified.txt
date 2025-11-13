@@ -876,3 +876,7 @@ namespace Fossa.API.Web.Validators
         public PagingApiQueryValidator() { }
     }
 }
+public class Program
+{
+    public Program() { }
+}

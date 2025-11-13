@@ -1,0 +1,14 @@
+<Solution>
+  <Folder Name="/Solution Items/" />
+  <Folder Name="/src/">
+    <Project Path="src/API.Core/API.Core.csproj" />
+    <Project Path="src/API.Infrastructure/API.Infrastructure.csproj" />
+    <Project Path="src/API.Persistence/API.Persistence.csproj" />
+    <Project Path="src/API.Web/API.Web.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/API.FunctionalTests/API.FunctionalTests.csproj" />
+    <Project Path="tests/API.IntegrationTests/API.IntegrationTests.csproj" />
+    <Project Path="tests/API.UnitTests/API.UnitTests.csproj" />
+  </Folder>
+</Solution>
