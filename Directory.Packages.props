@@ -23,7 +23,7 @@
     <PackageVersion Include="OpenTelemetry" Version="1.14.0" />
     <PackageVersion Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.14.0" />
     <PackageVersion Include="OpenTelemetry.Extensions.Hosting" Version="1.13.1" />
-    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.13.0" />
+    <PackageVersion Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.14.0" />
     <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.13.0" />
     <PackageVersion Include="PublicApiGenerator" Version="11.5.0" />
     <PackageVersion Include="ReportGenerator" Version="5.5.0" />
