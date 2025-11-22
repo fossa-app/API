@@ -26,7 +26,7 @@
     <ProjectReference Include="..\API.UnitTests\API.UnitTests.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="PublicApiGenerator" VersionOverride="11.5.0" />
+    <PackageReference Include="PublicApiGenerator" />
     <PackageReference Include="ReportGenerator" />
     <PackageReference Include="Verify.Xunit" />
     <Using Include="LanguageExt" />
