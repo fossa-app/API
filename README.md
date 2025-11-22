@@ -1,4 +1,7 @@
 # FossaApp API
+[![Developed by Tigran (TIKSN) Torosyan](https://img.shields.io/badge/Developed%20by-%20Tigran%20%28TIKSN%29%20Torosyan-orange.svg)](https://tiksn.com/)
+[![Docker Image Version (latest semver)](https://img.shields.io/docker/v/tiksn/fossa-api?sort=semver)](https://hub.docker.com/r/tiksn/fossa-api)
+[![StandWithUkraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/badges/StandWithUkraine.svg)](https://github.com/vshymanskyy/StandWithUkraine/blob/main/docs/README.md)
 
 The FossaApp API provides backend services for a business management application. It handles entities such as Companies, Employees, and Branches, and includes features for authentication, authorization, and software licensing.
 
