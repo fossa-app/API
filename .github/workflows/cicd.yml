@@ -27,6 +27,15 @@ jobs:
         with:
           lfs: true
           fetch-depth: 0
+      - name: Set up Docker with containerd
+        uses: docker/setup-docker-action@v4
+        with:
+          daemon-config: |
+            {
+              "features": {
+                "containerd-snapshotter": true
+              }
+            }
       - name: "Install .NET Core SDK"
         uses: actions/setup-dotnet@v5.0.1
       - name: "Install InvokeBuild Module"
@@ -78,6 +87,15 @@ jobs:
         with:
           name: ".trash"
           path: "./.trash"
+      - name: Set up Docker with containerd
+        uses: docker/setup-docker-action@v4
+        with:
+          daemon-config: |
+            {
+              "features": {
+                "containerd-snapshotter": true
+              }
+            }
       - name: "Install InvokeBuild Module"
         shell: pwsh
         run: Install-Module -Name InvokeBuild -Force
