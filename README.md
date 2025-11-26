@@ -21,6 +21,7 @@ The easiest way to run the API is by using Docker.
     ```sh
     docker run --rm -it -p 8080:8080 --env-file .env tiksn/fossa-api:latest
     ```
+    This image supports multiple architectures (linux/amd64, linux/arm64).
 
 ## Configuration
 
