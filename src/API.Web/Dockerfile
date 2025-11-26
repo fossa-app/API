@@ -1,7 +1,15 @@
-FROM mcr.microsoft.com/dotnet/aspnet:10.0.0
+FROM --platform=$TARGETARCH mcr.microsoft.com/dotnet/sdk:10.0.100 AS build
+ARG TARGETARCH
+WORKDIR /source
+COPY --link . /source
+RUN dotnet restore --runtime linux-$TARGETARCH
+WORKDIR /source/src/API.Web
+RUN dotnet publish --no-restore --configuration Release --runtime linux-$TARGETARCH --no-self-contained --output /app
+
+FROM --platform=$TARGETARCH mcr.microsoft.com/dotnet/aspnet:10.0.0 AS runtime
 RUN apt-get update && apt-get upgrade -y && apt-get install -y curl=8.5.0-2ubuntu10.6 && apt-get clean
-WORKDIR /App
-COPY . ./
+WORKDIR /app
+COPY --link --from=build /app .
 USER app
 EXPOSE 8080
 ENTRYPOINT ["dotnet", "API.Web.dll"]
