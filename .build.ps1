@@ -256,7 +256,7 @@ Task RestoreTools Clean, {
 }
 
 # Synopsis: Restore packages
-Task RestorePackages Clean, {
+Task RestorePackages Clean, EnsureCentralPackageVersions, {
     $solution = Resolve-Path -Path 'API.slnx'
     Exec { dotnet restore $solution }
 }
@@ -278,6 +278,43 @@ Task Ward Init, {
     }
 
     $outoutFiles | Out-Host
+}
+
+# Synopsis: Ensure Central Package Versions compliance
+Task EnsureCentralPackageVersions Clean, {
+
+    $projectFiles = Get-ChildItem -Path . `
+        -Recurse `
+        -Include *.csproj, *.fsproj, *.vbproj `
+        -File
+
+    $violations = @()
+
+    foreach ($projectFile in $projectFiles) {
+        try {
+            [xml]$xml = Get-Content $projectFile.FullName -Raw
+        }
+        catch {
+            throw "Failed to parse XML: $($projectFile.FullName)"
+        }
+
+        $ns = New-Object System.Xml.XmlNamespaceManager($xml.NameTable)
+        $ns.AddNamespace('msb', $xml.DocumentElement.NamespaceURI)
+
+        $nodes = $xml.SelectNodes('//*[@VersionOverride]', $ns)
+
+        foreach ($node in $nodes) {
+            $violations += [PSCustomObject]@{
+                File  = $projectFile.FullName
+                Node  = $node.Name
+                Value = $node.GetAttribute('VersionOverride')
+            }
+        }
+    }
+
+    if ($violations.Count -gt 0) {
+        throw "VersionOverride attributes are not allowed. File: $($violations[0].File) Node: <$($violations[0].Node)>"
+    }
 }
 
 # Synopsis: Clean previous build leftovers
@@ -312,17 +349,17 @@ Task Init {
     New-Item -Path $winX64BuildArtifactsFolder -ItemType Directory | Out-Null
 
     $state = [PSCustomObject]@{
-        NextVersion                    = $null
-        TrashFolder                    = $trashFolder
-        BuildArtifactsFolder           = $buildArtifactsFolder
-        ContractsArtifactsFolder       = $contractsArtifactsFolder
-        LinuxX64BuildArtifactsFolder   = $linuxX64BuildArtifactsFolder
-        LinuxArm64BuildArtifactsFolder = $linuxArm64BuildArtifactsFolder
-        WinX64BuildArtifactsFolder     = $winX64BuildArtifactsFolder
-        DockerImageName                = 'tiksn/fossa-api'
-        DockerImageVersionTag          = $null
-        DockerImageLatestTag           = $null
-        DockerImageMultiArchArchiveName= 'fossa-api-multiarch.tar'
+        NextVersion                     = $null
+        TrashFolder                     = $trashFolder
+        BuildArtifactsFolder            = $buildArtifactsFolder
+        ContractsArtifactsFolder        = $contractsArtifactsFolder
+        LinuxX64BuildArtifactsFolder    = $linuxX64BuildArtifactsFolder
+        LinuxArm64BuildArtifactsFolder  = $linuxArm64BuildArtifactsFolder
+        WinX64BuildArtifactsFolder      = $winX64BuildArtifactsFolder
+        DockerImageName                 = 'tiksn/fossa-api'
+        DockerImageVersionTag           = $null
+        DockerImageLatestTag            = $null
+        DockerImageMultiArchArchiveName = 'fossa-api-multiarch.tar'
     }
 
     $state | Export-Clixml -Path ".\.trash\$Instance\state.clixml"
