@@ -27,7 +27,7 @@
     <PackageVersion Include="OpenTelemetry.Instrumentation.Http" Version="1.15.0" />
     <PackageVersion Include="PublicApiGenerator" Version="11.5.4" />
     <PackageVersion Include="ReportGenerator" Version="5.5.1" />
-    <PackageVersion Include="Scalar.AspNetCore" Version="2.11.10" />
+    <PackageVersion Include="Scalar.AspNetCore" Version="2.12.18" />
     <PackageVersion Include="Scrutor" Version="7.0.0" />
     <PackageVersion Include="Shouldly" Version="4.3.0" />
     <PackageVersion Include="Swashbuckle.AspNetCore" Version="10.1.0" />
