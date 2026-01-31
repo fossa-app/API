@@ -13,6 +13,7 @@ using Fossa.API.Web.DependencyInjection;
 using Fossa.API.Web.Filters;
 using Fossa.API.Web.HealthChecks.DependencyInjection;
 using Fossa.Licensing;
+using Fossa.Messaging;
 using Hellang.Middleware.ProblemDetails;
 using Hellang.Middleware.ProblemDetails.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -28,6 +29,8 @@ using TIKSN.DependencyInjection;
 using TIKSN.Deployment;
 using TIKSN.Mapping;
 
+const string ApplicationName = "Fossa";
+const string ServiceName = "API";
 var initialReleaseDate = new DateOnly(1956, 05, 01);
 
 var builder = WebApplication.CreateBuilder(args);
@@ -89,6 +92,7 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddFrameworkCore();
 builder.Services.AddLicense();
+builder.Services.AddMessaging(builder.Configuration, ApplicationName, Seq1(ServiceName));
 builder.Services
   .AddHealthChecks()
   .AddMongoDb(builder.Configuration.GetConnectionString("MongoDB") ?? string.Empty)
@@ -139,7 +143,7 @@ builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder =>
 
 builder.Services.AddOpenTelemetry()
   .ConfigureResource(rb => rb
-    .AddService(serviceName: "Fossa-API", serviceNamespace: "Fossa")
+    .AddService(serviceName: $"{ApplicationName}-{ServiceName}", serviceNamespace: ApplicationName)
     .AddAttributes(
     [
         new KeyValuePair<string, object>("deployment.environment", builder.Environment.EnvironmentName),
