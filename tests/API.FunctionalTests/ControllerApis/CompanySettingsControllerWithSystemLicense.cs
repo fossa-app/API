@@ -1,12 +1,9 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using EasyDoubles;
 using Fossa.API.FunctionalTests.Seed;
-using Fossa.API.Persistence.Mongo.Entities;
 using Fossa.API.Web;
 using Fossa.API.Web.ApiModels;
-using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit.Abstractions;
 
