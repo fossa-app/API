@@ -1,6 +1,7 @@
 ﻿using Fossa.API.Core.Entities;
 using Fossa.API.Core.Extensions;
 using Fossa.API.Core.Licensing;
+using Fossa.API.Core.Messages.Events;
 using Fossa.API.Core.Repositories;
 using Fossa.API.Core.Services;
 using Fossa.Licensing;
@@ -17,6 +18,7 @@ public class BranchCreationCommandHandler : IRequestHandler<BranchCreationComman
   private readonly IPostalCodeParser _postalCodeParser;
   private readonly IBranchQueryRepository _branchQueryRepository;
   private readonly ICompanyLicenseRetriever _companyLicenseRetriever;
+  private readonly IPublisher _publisher;
 
   public BranchCreationCommandHandler(
     IIdentityGenerator<BranchId> identityGenerator,
@@ -24,7 +26,8 @@ public class BranchCreationCommandHandler : IRequestHandler<BranchCreationComman
     IBranchRepository branchRepository,
     IPostalCodeParser postalCodeParser,
     IBranchQueryRepository branchQueryRepository,
-    ICompanyLicenseRetriever companyLicenseRetriever)
+    ICompanyLicenseRetriever companyLicenseRetriever,
+    IPublisher publisher)
   {
     _identityGenerator = identityGenerator ?? throw new ArgumentNullException(nameof(identityGenerator));
     _companyQueryRepository = companyQueryRepository ?? throw new ArgumentNullException(nameof(companyQueryRepository));
@@ -32,6 +35,7 @@ public class BranchCreationCommandHandler : IRequestHandler<BranchCreationComman
     _postalCodeParser = postalCodeParser ?? throw new ArgumentNullException(nameof(postalCodeParser));
     _branchQueryRepository = branchQueryRepository ?? throw new ArgumentNullException(nameof(branchQueryRepository));
     _companyLicenseRetriever = companyLicenseRetriever ?? throw new ArgumentNullException(nameof(companyLicenseRetriever));
+    _publisher = publisher ?? throw new ArgumentNullException(nameof(publisher));
   }
 
   public async Task<Unit> Handle(
@@ -68,6 +72,16 @@ public class BranchCreationCommandHandler : IRequestHandler<BranchCreationComman
       }));
 
     await _branchRepository.AddAsync(entity, cancellationToken).ConfigureAwait(false);
+
+    var branchCreatedEvent = new BranchCreatedEvent(
+      entity.TenantID,
+      entity.ID,
+      entity.CompanyId,
+      entity.Name,
+      entity.TimeZone,
+      entity.Address);
+
+    await _publisher.Publish(branchCreatedEvent, cancellationToken).ConfigureAwait(false);
   }
 
   private static bool EnsureMaximumBranchCountWillNotExceed(

@@ -1,9 +1,11 @@
 ﻿using Fossa.API.Core.Entities;
 using Fossa.API.Core.Extensions;
 using Fossa.API.Core.Licensing;
+using Fossa.API.Core.Messages.Events;
 using Fossa.API.Core.Repositories;
 using Fossa.API.Core.Services;
 using Fossa.Licensing;
+using MediatR;
 using TIKSN.Data;
 using TIKSN.Identity;
 using TIKSN.Licensing;
@@ -17,13 +19,15 @@ public class EmployeeCreationCommandHandler : IRequestHandler<EmployeeCreationCo
   private readonly IEmployeeRepository _employeeRepository;
   private readonly IIdentityGenerator<EmployeeId> _identityGenerator;
   private readonly ICompanyLicenseRetriever _companyLicenseRetriever;
+  private readonly IPublisher _publisher;
 
   public EmployeeCreationCommandHandler(
     IIdentityGenerator<EmployeeId> identityGenerator,
     ICompanyLicenseRetriever companyLicenseRetriever,
     ICompanyQueryRepository companyQueryRepository,
     IEmployeeQueryRepository employeeQueryRepository,
-    IEmployeeRepository employeeRepository)
+    IEmployeeRepository employeeRepository,
+    IPublisher publisher)
   {
     _identityGenerator = identityGenerator ?? throw new ArgumentNullException(nameof(identityGenerator));
     _companyLicenseRetriever = companyLicenseRetriever ?? throw new ArgumentNullException(nameof(companyLicenseRetriever));
@@ -31,6 +35,7 @@ public class EmployeeCreationCommandHandler : IRequestHandler<EmployeeCreationCo
     _employeeQueryRepository =
       employeeQueryRepository ?? throw new ArgumentNullException(nameof(employeeQueryRepository));
     _employeeRepository = employeeRepository ?? throw new ArgumentNullException(nameof(employeeRepository));
+    _publisher = publisher ?? throw new ArgumentNullException(nameof(publisher));
   }
 
   public async Task<Unit> Handle(
@@ -75,6 +80,17 @@ public class EmployeeCreationCommandHandler : IRequestHandler<EmployeeCreationCo
       request.FullName);
 
     await _employeeRepository.AddAsync(entity, cancellationToken).ConfigureAwait(false);
+
+    var employeeCreatedEvent = new EmployeeCreatedEvent(
+      entity.TenantID,
+      entity.UserID,
+      entity.ID,
+      entity.FirstName,
+      entity.LastName,
+      entity.FullName,
+      entity.CompanyId);
+
+    await _publisher.Publish(employeeCreatedEvent, cancellationToken).ConfigureAwait(false);
   }
 
   private static bool EnsureMaximumEmployeeCountWillNotExceed(

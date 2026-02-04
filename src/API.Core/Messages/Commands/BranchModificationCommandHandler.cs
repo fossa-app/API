@@ -1,4 +1,5 @@
 ﻿using Fossa.API.Core.Extensions;
+using Fossa.API.Core.Messages.Events;
 using Fossa.API.Core.Repositories;
 using Fossa.API.Core.Services;
 
@@ -9,23 +10,27 @@ public class BranchModificationCommandHandler : IRequestHandler<BranchModificati
   private readonly IBranchQueryRepository _branchQueryRepository;
   private readonly IBranchRepository _branchRepository;
   private readonly IPostalCodeParser _postalCodeParser;
+  private readonly IPublisher _publisher;
 
   public BranchModificationCommandHandler(
     IBranchQueryRepository branchQueryRepository,
     IBranchRepository branchRepository,
-    IPostalCodeParser postalCodeParser)
+    IPostalCodeParser postalCodeParser,
+    IPublisher publisher)
   {
     _branchQueryRepository = branchQueryRepository ?? throw new ArgumentNullException(nameof(branchQueryRepository));
     _branchRepository = branchRepository ?? throw new ArgumentNullException(nameof(branchRepository));
     _postalCodeParser = postalCodeParser ?? throw new ArgumentNullException(nameof(postalCodeParser));
+    _publisher = publisher ?? throw new ArgumentNullException(nameof(publisher));
   }
 
   public async Task<Unit> Handle(
     BranchModificationCommand request,
     CancellationToken cancellationToken)
   {
-    var entity = await _branchQueryRepository.GetAsync(request.ID, cancellationToken).ConfigureAwait(false);
-    entity = entity with
+    var originalEntity = await _branchQueryRepository.GetAsync(request.ID, cancellationToken).ConfigureAwait(false);
+
+    var entity = originalEntity with
     {
       Name = request.Name,
       TimeZone = request.TimeZone,
@@ -36,6 +41,41 @@ public class BranchModificationCommandHandler : IRequestHandler<BranchModificati
       }),
     };
     await _branchRepository.UpdateAsync(entity, cancellationToken).ConfigureAwait(false);
+
+    var updatedEvent = new BranchUpdatedEvent(
+      entity.TenantID,
+      entity.ID,
+      entity.CompanyId,
+      entity.Name,
+      entity.TimeZone,
+      entity.Address);
+
+    await _publisher.Publish(updatedEvent, cancellationToken).ConfigureAwait(false);
+
+    if (originalEntity.TimeZone != entity.TimeZone)
+    {
+      var timeZoneChangedEvent = new BranchTimeZoneChangedEvent(
+        entity.TenantID,
+        entity.ID,
+        entity.CompanyId,
+        originalEntity.TimeZone,
+        entity.TimeZone);
+
+      await _publisher.Publish(timeZoneChangedEvent, cancellationToken).ConfigureAwait(false);
+    }
+
+    if (originalEntity.Address != entity.Address)
+    {
+      var addressChangedEvent = new BranchAddressChangedEvent(
+        entity.TenantID,
+        entity.ID,
+        entity.CompanyId,
+        originalEntity.Address,
+        entity.Address);
+
+      await _publisher.Publish(addressChangedEvent, cancellationToken).ConfigureAwait(false);
+    }
+
     return Unit.Value;
   }
 }

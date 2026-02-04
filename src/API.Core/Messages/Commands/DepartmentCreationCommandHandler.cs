@@ -1,6 +1,7 @@
 ﻿using Fossa.API.Core.Entities;
 using Fossa.API.Core.Extensions;
 using Fossa.API.Core.Licensing;
+using Fossa.API.Core.Messages.Events;
 using Fossa.API.Core.Repositories;
 using Fossa.API.Core.Services;
 using Fossa.Licensing;
@@ -16,19 +17,22 @@ public class DepartmentCreationCommandHandler : IRequestHandler<DepartmentCreati
   private readonly IDepartmentQueryRepository _departmentQueryRepository;
   private readonly IDepartmentRepository _departmentRepository;
   private readonly IIdentityGenerator<DepartmentId> _identityGenerator;
+  private readonly IPublisher _publisher;
 
   public DepartmentCreationCommandHandler(
       IIdentityGenerator<DepartmentId> identityGenerator,
       IDepartmentRepository departmentRepository,
       ICompanyLicenseRetriever companyLicenseRetriever,
       IDepartmentQueryRepository departmentQueryRepository,
-      ICompanyQueryRepository companyQueryRepository)
+      ICompanyQueryRepository companyQueryRepository,
+      IPublisher publisher)
   {
     _identityGenerator = identityGenerator ?? throw new ArgumentNullException(nameof(identityGenerator));
     _departmentRepository = departmentRepository ?? throw new ArgumentNullException(nameof(departmentRepository));
     _companyLicenseRetriever = companyLicenseRetriever ?? throw new ArgumentNullException(nameof(companyLicenseRetriever));
     _departmentQueryRepository = departmentQueryRepository ?? throw new ArgumentNullException(nameof(departmentQueryRepository));
     _companyQueryRepository = companyQueryRepository ?? throw new ArgumentNullException(nameof(companyQueryRepository));
+    _publisher = publisher ?? throw new ArgumentNullException(nameof(publisher));
   }
 
   public async Task<Unit> Handle(
@@ -42,6 +46,16 @@ public class DepartmentCreationCommandHandler : IRequestHandler<DepartmentCreati
     DepartmentEntity entity = new(id, request.TenantID, company.ID, request.Name, request.ManagerId, request.ParentDepartmentId);
 
     await _departmentRepository.AddAsync(entity, cancellationToken).ConfigureAwait(false);
+
+    var createdEvent = new DepartmentCreatedEvent(
+      entity.TenantID,
+      entity.ID,
+      entity.CompanyId,
+      entity.Name,
+      entity.ParentDepartmentId,
+      entity.ManagerId);
+
+    await _publisher.Publish(createdEvent, cancellationToken).ConfigureAwait(false);
     return Unit.Value;
   }
 
