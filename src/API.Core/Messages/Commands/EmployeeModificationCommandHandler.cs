@@ -1,4 +1,5 @@
-﻿using Fossa.API.Core.Repositories;
+﻿using Fossa.API.Core.Messages.Events;
+using Fossa.API.Core.Repositories;
 
 namespace Fossa.API.Core.Messages.Commands;
 
@@ -6,13 +7,16 @@ public class EmployeeModificationCommandHandler : IRequestHandler<EmployeeModifi
 {
   private readonly IEmployeeQueryRepository _employeeQueryRepository;
   private readonly IEmployeeRepository _employeeRepository;
+  private readonly IPublisher _publisher;
 
   public EmployeeModificationCommandHandler(
     IEmployeeQueryRepository employeeQueryRepository,
-    IEmployeeRepository employeeRepository)
+    IEmployeeRepository employeeRepository,
+    IPublisher publisher)
   {
     _employeeQueryRepository = employeeQueryRepository ?? throw new ArgumentNullException(nameof(employeeQueryRepository));
     _employeeRepository = employeeRepository ?? throw new ArgumentNullException(nameof(employeeRepository));
+    _publisher = publisher ?? throw new ArgumentNullException(nameof(publisher));
   }
 
   public async Task<Unit> Handle(
@@ -27,6 +31,18 @@ public class EmployeeModificationCommandHandler : IRequestHandler<EmployeeModifi
       FullName = request.FullName,
     };
     await _employeeRepository.UpdateAsync(entity, cancellationToken).ConfigureAwait(false);
+
+    var updatedEvent = new EmployeeUpdatedEvent(
+      entity.TenantID,
+      entity.UserID,
+      entity.ID,
+      entity.JobTitle,
+      entity.AssignedBranchId,
+      entity.AssignedDepartmentId,
+      entity.ReportsToId,
+      entity.CompanyId);
+
+    await _publisher.Publish(updatedEvent, cancellationToken).ConfigureAwait(false);
     return Unit.Value;
   }
 }

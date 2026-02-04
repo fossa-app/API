@@ -1,5 +1,6 @@
 ﻿using Fossa.API.Core.Entities;
 using Fossa.API.Core.Extensions;
+using Fossa.API.Core.Messages.Events;
 using Fossa.API.Core.Repositories;
 using Fossa.API.Core.Services;
 using Fossa.Licensing;
@@ -15,19 +16,22 @@ public class CompanyCreationCommandHandler : IRequestHandler<CompanyCreationComm
   private readonly ICompanyRepository _companyRepository;
   private readonly IIdentityGenerator<CompanyId> _identityGenerator;
   private readonly ISystemLicenseRetriever _systemLicenseRetriever;
+  private readonly IPublisher _publisher;
 
   public CompanyCreationCommandHandler(
     IIdentityGenerator<CompanyId> identityGenerator,
     ISystemLicenseRetriever systemLicenseRetriever,
     ICompanyLicenseInitializer companyLicenseInitializer,
     ICompanyQueryRepository companyQueryRepository,
-    ICompanyRepository companyRepository)
+    ICompanyRepository companyRepository,
+    IPublisher publisher)
   {
     _identityGenerator = identityGenerator ?? throw new ArgumentNullException(nameof(identityGenerator));
     _systemLicenseRetriever = systemLicenseRetriever ?? throw new ArgumentNullException(nameof(systemLicenseRetriever));
     _companyLicenseInitializer = companyLicenseInitializer ?? throw new ArgumentNullException(nameof(companyLicenseInitializer));
     _companyQueryRepository = companyQueryRepository ?? throw new ArgumentNullException(nameof(companyQueryRepository));
     _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
+    _publisher = publisher ?? throw new ArgumentNullException(nameof(publisher));
   }
 
   public async Task<Unit> Handle(
@@ -46,6 +50,14 @@ public class CompanyCreationCommandHandler : IRequestHandler<CompanyCreationComm
     CompanyEntity entity = new(id, request.TenantID, request.Name, request.Country);
     await _companyRepository.AddAsync(entity, cancellationToken).ConfigureAwait(false);
     await _companyLicenseInitializer.InitializeAsync(id, cancellationToken).ConfigureAwait(false);
+
+    var companyCreatedEvent = new CompanyCreatedEvent(
+      entity.TenantID,
+      entity.ID,
+      entity.Name,
+      entity.Country);
+
+    await _publisher.Publish(companyCreatedEvent, cancellationToken).ConfigureAwait(false);
 
     return Unit.Value;
   }

@@ -1,5 +1,6 @@
 ﻿using Fossa.API.Core.Entities;
 using Fossa.API.Core.Extensions;
+using Fossa.API.Core.Messages.Events;
 using Fossa.API.Core.Relationship;
 using Fossa.API.Core.Repositories;
 
@@ -10,15 +11,18 @@ public class CompanyDeletionCommandHandler : IRequestHandler<CompanyDeletionComm
   private readonly ICompanyQueryRepository _companyQueryRepository;
   private readonly ICompanyRepository _companyRepository;
   private readonly IRelationshipGraph _relationshipGraph;
+  private readonly IPublisher _publisher;
 
   public CompanyDeletionCommandHandler(
     ICompanyQueryRepository companyQueryRepository,
     ICompanyRepository companyRepository,
-    IRelationshipGraph relationshipGraph)
+    IRelationshipGraph relationshipGraph,
+    IPublisher publisher)
   {
     _companyQueryRepository = companyQueryRepository ?? throw new ArgumentNullException(nameof(companyQueryRepository));
     _companyRepository = companyRepository ?? throw new ArgumentNullException(nameof(companyRepository));
     _relationshipGraph = relationshipGraph ?? throw new ArgumentNullException(nameof(relationshipGraph));
+    _publisher = publisher ?? throw new ArgumentNullException(nameof(publisher));
   }
 
   public async Task DeleteCompanyAsync(
@@ -27,6 +31,12 @@ public class CompanyDeletionCommandHandler : IRequestHandler<CompanyDeletionComm
   {
     await _relationshipGraph.ThrowIfHasDependentEntitiesAsync(entity.ID, cancellationToken).ConfigureAwait(false);
     await _companyRepository.RemoveAsync(entity, cancellationToken).ConfigureAwait(false);
+
+    var deletedEvent = new CompanyDeletedEvent(
+      entity.TenantID,
+      entity.ID);
+
+    await _publisher.Publish(deletedEvent, cancellationToken).ConfigureAwait(false);
   }
 
   public async Task<Unit> Handle(
