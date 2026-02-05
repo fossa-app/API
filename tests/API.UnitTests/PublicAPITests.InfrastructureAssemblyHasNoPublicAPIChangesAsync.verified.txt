@@ -25,7 +25,7 @@ namespace Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters
 }
 namespace Fossa.API.Infrastructure.Messages.Queries
 {
-    public class IdentityClientRetrievalQuery : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Infrastructure.Models.IdentityClient>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Infrastructure.Models.IdentityClient>, System.IEquatable<Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery>
+    public class IdentityClientRetrievalQuery : MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Infrastructure.Models.IdentityClient>, System.IEquatable<Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery>, TIKSN.Integration.Messages.Queries.IQuery<Fossa.API.Infrastructure.Models.IdentityClient>
     {
         public IdentityClientRetrievalQuery(LanguageExt.Option<System.Uri> Origin) { }
         public LanguageExt.Option<System.Uri> Origin { get; init; }

@@ -1,5 +1,5 @@
-﻿using Fossa.API.Core.Messages.Queries;
-using Fossa.API.Infrastructure.Models;
+﻿using Fossa.API.Infrastructure.Models;
+using TIKSN.Integration.Messages.Queries;
 
 namespace Fossa.API.Infrastructure.Messages.Queries;
 

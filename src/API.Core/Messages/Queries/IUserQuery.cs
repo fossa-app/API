@@ -1,4 +1,6 @@
-﻿namespace Fossa.API.Core.Messages.Queries;
+﻿using TIKSN.Integration.Messages.Queries;
+
+namespace Fossa.API.Core.Messages.Queries;
 
 public interface IUserQuery<out TUserIdentity, out TResult>
   : IQuery<TResult>

@@ -1,5 +1,6 @@
 ﻿using Fossa.API.Core.Entities;
 using TIKSN.Data;
+using TIKSN.Integration.Messages.Queries;
 
 namespace Fossa.API.Core.Messages.Queries;
 

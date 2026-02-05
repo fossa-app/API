@@ -1,11 +1,8 @@
-﻿using Fossa.API.Core.Entities;
-using Fossa.API.Core.Extensions;
-using Fossa.API.Core.Licensing;
+﻿using Fossa.API.Core.Extensions;
 using Fossa.API.Core.Messages.Events;
 using Fossa.API.Core.Repositories;
 using Fossa.API.Core.Services;
 using Fossa.Licensing;
-using TIKSN.Identity;
 using TIKSN.Licensing;
 
 namespace Fossa.API.Core.Messages.Commands;

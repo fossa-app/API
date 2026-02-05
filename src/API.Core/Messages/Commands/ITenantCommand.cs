@@ -1,4 +1,6 @@
-﻿namespace Fossa.API.Core.Messages.Commands;
+﻿using TIKSN.Integration.Messages.Commands;
+
+namespace Fossa.API.Core.Messages.Commands;
 
 public interface ITenantCommand<TEntityIdentity, out TTenantIdentity>
   : ICommand, IAffectingTenantEntities<TEntityIdentity>

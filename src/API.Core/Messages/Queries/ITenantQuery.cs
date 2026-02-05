@@ -1,4 +1,6 @@
-﻿namespace Fossa.API.Core.Messages.Queries;
+﻿using TIKSN.Integration.Messages.Queries;
+
+namespace Fossa.API.Core.Messages.Queries;
 
 public interface ITenantQuery<TEntityIdentity, out TTenantIdentity, out TResult>
   : IQuery<TResult>, IAffectingTenantEntities<TEntityIdentity>

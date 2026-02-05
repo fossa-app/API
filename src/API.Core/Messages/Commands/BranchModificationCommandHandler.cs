@@ -2,6 +2,7 @@
 using Fossa.API.Core.Messages.Events;
 using Fossa.API.Core.Repositories;
 using Fossa.API.Core.Services;
+using TIKSN.Parsing;
 
 namespace Fossa.API.Core.Messages.Commands;
 
