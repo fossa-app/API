@@ -1,7 +1,5 @@
-﻿using Fossa.API.Core.Entities;
-using Fossa.API.Core.Messages.Events;
+﻿using Fossa.API.Core.Messages.Events;
 using Fossa.API.Core.Repositories;
-using TIKSN.Identity;
 
 namespace Fossa.API.Core.Messages.Commands;
 

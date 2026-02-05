@@ -5,7 +5,6 @@ using Fossa.API.Core.Messages.Events;
 using Fossa.API.Core.Repositories;
 using Fossa.API.Core.Services;
 using Fossa.Licensing;
-using MediatR;
 using TIKSN.Data;
 using TIKSN.Identity;
 using TIKSN.Licensing;

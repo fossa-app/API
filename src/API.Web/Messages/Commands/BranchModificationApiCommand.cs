@@ -1,5 +1,5 @@
-﻿using Fossa.API.Core.Messages.Commands;
-using Fossa.API.Web.ApiModels;
+﻿using Fossa.API.Web.ApiModels;
+using TIKSN.Integration.Messages.Commands;
 
 namespace Fossa.API.Web.Messages.Commands;
 

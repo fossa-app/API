@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
-using Fossa.API.Core.Messages.Queries;
 using Microsoft.Extensions.Options;
 using TIKSN.Configuration;
+using TIKSN.Integration.Messages.Queries;
 
 namespace Fossa.API.Core.Messages;
 

@@ -1,6 +1,5 @@
 ﻿using Fossa.API.Core.Entities;
 using NodaTime;
-using TIKSN.Data;
 
 namespace Fossa.API.Core.Messages.Events;
 

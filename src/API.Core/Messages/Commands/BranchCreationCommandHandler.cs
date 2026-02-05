@@ -7,6 +7,7 @@ using Fossa.API.Core.Services;
 using Fossa.Licensing;
 using TIKSN.Identity;
 using TIKSN.Licensing;
+using TIKSN.Parsing;
 
 namespace Fossa.API.Core.Messages.Commands;
 

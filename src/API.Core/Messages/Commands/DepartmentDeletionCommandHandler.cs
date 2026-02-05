@@ -4,7 +4,6 @@ using Fossa.API.Core.Messages.Events;
 using Fossa.API.Core.Relationship;
 using Fossa.API.Core.Repositories;
 using TIKSN.Data;
-using TIKSN.Identity;
 
 namespace Fossa.API.Core.Messages.Commands;
 
