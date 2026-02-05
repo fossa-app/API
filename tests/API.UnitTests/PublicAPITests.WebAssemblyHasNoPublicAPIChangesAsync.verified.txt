@@ -556,7 +556,7 @@ namespace Fossa.API.Web.Messages
 }
 namespace Fossa.API.Web.Messages.Commands
 {
-    public class BranchCreationApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.BranchCreationApiCommand>
+    public class BranchCreationApiCommand : MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.BranchCreationApiCommand>, TIKSN.Integration.Messages.Commands.ICommand
     {
         public BranchCreationApiCommand(string? Name, string? TimeZoneId, Fossa.API.Web.ApiModels.AddressModel? Address) { }
         public Fossa.API.Web.ApiModels.AddressModel? Address { get; init; }
@@ -569,7 +569,7 @@ namespace Fossa.API.Web.Messages.Commands
         protected override MediatR.Unit MapToApiResponse(MediatR.Unit domainResponse) { }
         protected override Fossa.API.Core.Messages.Commands.BranchCreationCommand MapToDomainRequest(Fossa.API.Web.Messages.Commands.BranchCreationApiCommand apiRequest) { }
     }
-    public class BranchDeletionApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.BranchDeletionApiCommand>
+    public class BranchDeletionApiCommand : MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.BranchDeletionApiCommand>, TIKSN.Integration.Messages.Commands.ICommand
     {
         public BranchDeletionApiCommand(long Id) { }
         public long Id { get; init; }
@@ -580,7 +580,7 @@ namespace Fossa.API.Web.Messages.Commands
         protected override MediatR.Unit MapToApiResponse(MediatR.Unit domainResponse) { }
         protected override Fossa.API.Core.Messages.Commands.BranchDeletionCommand MapToDomainRequest(Fossa.API.Web.Messages.Commands.BranchDeletionApiCommand apiRequest) { }
     }
-    public class BranchModificationApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.BranchModificationApiCommand>
+    public class BranchModificationApiCommand : MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.BranchModificationApiCommand>, TIKSN.Integration.Messages.Commands.ICommand
     {
         public BranchModificationApiCommand(long Id, string? Name, string? TimeZoneId, Fossa.API.Web.ApiModels.AddressModel? Address) { }
         public Fossa.API.Web.ApiModels.AddressModel? Address { get; init; }
@@ -594,7 +594,7 @@ namespace Fossa.API.Web.Messages.Commands
         protected override MediatR.Unit MapToApiResponse(MediatR.Unit domainResponse) { }
         protected override Fossa.API.Core.Messages.Commands.BranchModificationCommand MapToDomainRequest(Fossa.API.Web.Messages.Commands.BranchModificationApiCommand apiRequest) { }
     }
-    public class CompanyCreationApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.CompanyCreationApiCommand>
+    public class CompanyCreationApiCommand : MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.CompanyCreationApiCommand>, TIKSN.Integration.Messages.Commands.ICommand
     {
         public CompanyCreationApiCommand(string? Name, string? CountryCode) { }
         public string? CountryCode { get; init; }
@@ -606,7 +606,7 @@ namespace Fossa.API.Web.Messages.Commands
         protected override MediatR.Unit MapToApiResponse(MediatR.Unit domainResponse) { }
         protected override Fossa.API.Core.Messages.Commands.CompanyCreationCommand MapToDomainRequest(Fossa.API.Web.Messages.Commands.CompanyCreationApiCommand apiRequest) { }
     }
-    public class CompanyDeletionApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.CompanyDeletionApiCommand>
+    public class CompanyDeletionApiCommand : MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.CompanyDeletionApiCommand>, TIKSN.Integration.Messages.Commands.ICommand
     {
         public CompanyDeletionApiCommand() { }
     }
@@ -616,7 +616,7 @@ namespace Fossa.API.Web.Messages.Commands
         protected override MediatR.Unit MapToApiResponse(MediatR.Unit domainResponse) { }
         protected override Fossa.API.Core.Messages.Commands.CompanyDeletionCommand MapToDomainRequest(Fossa.API.Web.Messages.Commands.CompanyDeletionApiCommand apiRequest) { }
     }
-    public class CompanyModificationApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.CompanyModificationApiCommand>
+    public class CompanyModificationApiCommand : MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.CompanyModificationApiCommand>, TIKSN.Integration.Messages.Commands.ICommand
     {
         public CompanyModificationApiCommand(string? Name, string? CountryCode) { }
         public string? CountryCode { get; init; }
@@ -628,7 +628,7 @@ namespace Fossa.API.Web.Messages.Commands
         protected override MediatR.Unit MapToApiResponse(MediatR.Unit domainResponse) { }
         protected override Fossa.API.Core.Messages.Commands.CompanyModificationCommand MapToDomainRequest(Fossa.API.Web.Messages.Commands.CompanyModificationApiCommand apiRequest) { }
     }
-    public class CompanySettingsCreationApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.CompanySettingsCreationApiCommand>
+    public class CompanySettingsCreationApiCommand : MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.CompanySettingsCreationApiCommand>, TIKSN.Integration.Messages.Commands.ICommand
     {
         public CompanySettingsCreationApiCommand(string? ColorSchemeId) { }
         public string? ColorSchemeId { get; init; }
@@ -639,7 +639,7 @@ namespace Fossa.API.Web.Messages.Commands
         protected override MediatR.Unit MapToApiResponse(MediatR.Unit domainResponse) { }
         protected override Fossa.API.Core.Messages.Commands.CompanySettingsCreationCommand MapToDomainRequest(Fossa.API.Web.Messages.Commands.CompanySettingsCreationApiCommand apiRequest) { }
     }
-    public class CompanySettingsDeletionApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.CompanySettingsDeletionApiCommand>
+    public class CompanySettingsDeletionApiCommand : MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.CompanySettingsDeletionApiCommand>, TIKSN.Integration.Messages.Commands.ICommand
     {
         public CompanySettingsDeletionApiCommand() { }
     }
@@ -649,7 +649,7 @@ namespace Fossa.API.Web.Messages.Commands
         protected override MediatR.Unit MapToApiResponse(MediatR.Unit domainResponse) { }
         protected override Fossa.API.Core.Messages.Commands.CompanySettingsDeletionCommand MapToDomainRequest(Fossa.API.Web.Messages.Commands.CompanySettingsDeletionApiCommand apiRequest) { }
     }
-    public class CompanySettingsModificationApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.CompanySettingsModificationApiCommand>
+    public class CompanySettingsModificationApiCommand : MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.CompanySettingsModificationApiCommand>, TIKSN.Integration.Messages.Commands.ICommand
     {
         public CompanySettingsModificationApiCommand(string? ColorSchemeId) { }
         public string? ColorSchemeId { get; init; }
@@ -660,7 +660,7 @@ namespace Fossa.API.Web.Messages.Commands
         protected override MediatR.Unit MapToApiResponse(MediatR.Unit domainResponse) { }
         protected override Fossa.API.Core.Messages.Commands.CompanySettingsModificationCommand MapToDomainRequest(Fossa.API.Web.Messages.Commands.CompanySettingsModificationApiCommand apiRequest) { }
     }
-    public class DepartmentCreationApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.DepartmentCreationApiCommand>
+    public class DepartmentCreationApiCommand : MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.DepartmentCreationApiCommand>, TIKSN.Integration.Messages.Commands.ICommand
     {
         public DepartmentCreationApiCommand(string? Name, long? ParentDepartmentId, long? ManagerId) { }
         public long? ManagerId { get; init; }
@@ -673,7 +673,7 @@ namespace Fossa.API.Web.Messages.Commands
         protected override MediatR.Unit MapToApiResponse(MediatR.Unit domainResponse) { }
         protected override Fossa.API.Core.Messages.Commands.DepartmentCreationCommand MapToDomainRequest(Fossa.API.Web.Messages.Commands.DepartmentCreationApiCommand apiRequest) { }
     }
-    public class DepartmentDeletionApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.DepartmentDeletionApiCommand>
+    public class DepartmentDeletionApiCommand : MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.DepartmentDeletionApiCommand>, TIKSN.Integration.Messages.Commands.ICommand
     {
         public DepartmentDeletionApiCommand(long Id) { }
         public long Id { get; init; }
@@ -684,7 +684,7 @@ namespace Fossa.API.Web.Messages.Commands
         protected override MediatR.Unit MapToApiResponse(MediatR.Unit domainResponse) { }
         protected override Fossa.API.Core.Messages.Commands.DepartmentDeletionCommand MapToDomainRequest(Fossa.API.Web.Messages.Commands.DepartmentDeletionApiCommand apiRequest) { }
     }
-    public class DepartmentModificationApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.DepartmentModificationApiCommand>
+    public class DepartmentModificationApiCommand : MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.DepartmentModificationApiCommand>, TIKSN.Integration.Messages.Commands.ICommand
     {
         public DepartmentModificationApiCommand(long Id, string? Name, long? ParentDepartmentId, long? ManagerId) { }
         public long Id { get; init; }
@@ -698,7 +698,7 @@ namespace Fossa.API.Web.Messages.Commands
         protected override MediatR.Unit MapToApiResponse(MediatR.Unit domainResponse) { }
         protected override Fossa.API.Core.Messages.Commands.DepartmentModificationCommand MapToDomainRequest(Fossa.API.Web.Messages.Commands.DepartmentModificationApiCommand apiRequest) { }
     }
-    public class EmployeeCreationApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.EmployeeCreationApiCommand>
+    public class EmployeeCreationApiCommand : MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.EmployeeCreationApiCommand>, TIKSN.Integration.Messages.Commands.ICommand
     {
         public EmployeeCreationApiCommand(string? FirstName, string? LastName, string? FullName) { }
         public string? FirstName { get; init; }
@@ -711,7 +711,7 @@ namespace Fossa.API.Web.Messages.Commands
         protected override MediatR.Unit MapToApiResponse(MediatR.Unit domainResponse) { }
         protected override Fossa.API.Core.Messages.Commands.EmployeeCreationCommand MapToDomainRequest(Fossa.API.Web.Messages.Commands.EmployeeCreationApiCommand apiRequest) { }
     }
-    public class EmployeeDeletionApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.EmployeeDeletionApiCommand>
+    public class EmployeeDeletionApiCommand : MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.EmployeeDeletionApiCommand>, TIKSN.Integration.Messages.Commands.ICommand
     {
         public EmployeeDeletionApiCommand() { }
     }
@@ -721,7 +721,7 @@ namespace Fossa.API.Web.Messages.Commands
         protected override MediatR.Unit MapToApiResponse(MediatR.Unit domainResponse) { }
         protected override Fossa.API.Core.Messages.Commands.EmployeeDeletionCommand MapToDomainRequest(Fossa.API.Web.Messages.Commands.EmployeeDeletionApiCommand apiRequest) { }
     }
-    public class EmployeeManagementApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.EmployeeManagementApiCommand>
+    public class EmployeeManagementApiCommand : MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.EmployeeManagementApiCommand>, TIKSN.Integration.Messages.Commands.ICommand
     {
         public EmployeeManagementApiCommand(long Id, long? AssignedBranchId, long? AssignedDepartmentId, long? ReportsToId, string? JobTitle) { }
         public long? AssignedBranchId { get; init; }
@@ -736,7 +736,7 @@ namespace Fossa.API.Web.Messages.Commands
         protected override MediatR.Unit MapToApiResponse(MediatR.Unit domainResponse) { }
         protected override Fossa.API.Core.Messages.Commands.EmployeeManagementCommand MapToDomainRequest(Fossa.API.Web.Messages.Commands.EmployeeManagementApiCommand apiRequest) { }
     }
-    public class EmployeeModificationApiCommand : Fossa.API.Core.Messages.Commands.ICommand, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.EmployeeModificationApiCommand>
+    public class EmployeeModificationApiCommand : MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Web.Messages.Commands.EmployeeModificationApiCommand>, TIKSN.Integration.Messages.Commands.ICommand
     {
         public EmployeeModificationApiCommand(string? FirstName, string? LastName, string? FullName) { }
         public string? FirstName { get; init; }
@@ -752,7 +752,7 @@ namespace Fossa.API.Web.Messages.Commands
 }
 namespace Fossa.API.Web.Messages.Queries
 {
-    public class BranchPagingApiQuery : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.BranchRetrievalModel>>, Fossa.API.Web.Messages.Queries.IPagingApiQuery, Fossa.API.Web.Messages.Queries.IPagingApiQuery<Fossa.API.Web.ApiModels.BranchRetrievalModel>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.BranchRetrievalModel>>, System.IEquatable<Fossa.API.Web.Messages.Queries.BranchPagingApiQuery>
+    public class BranchPagingApiQuery : Fossa.API.Web.Messages.Queries.IPagingApiQuery, Fossa.API.Web.Messages.Queries.IPagingApiQuery<Fossa.API.Web.ApiModels.BranchRetrievalModel>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.BranchRetrievalModel>>, System.IEquatable<Fossa.API.Web.Messages.Queries.BranchPagingApiQuery>, TIKSN.Integration.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.BranchRetrievalModel>>
     {
         public BranchPagingApiQuery(System.Collections.Generic.IReadOnlyList<long>? Id, string? Search, int? PageNumber, int? PageSize) { }
         public System.Collections.Generic.IReadOnlyList<long>? Id { get; init; }
@@ -767,7 +767,7 @@ namespace Fossa.API.Web.Messages.Queries
         protected override Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.BranchRetrievalModel> MapToApiResponse(TIKSN.Data.PageResult<Fossa.API.Core.Entities.BranchEntity> domainResponse) { }
         protected override LanguageExt.Either<Fossa.API.Core.Messages.Queries.BranchListingQuery, Fossa.API.Core.Messages.Queries.BranchPagingQuery> MapToDomainRequest(Fossa.API.Web.Messages.Queries.BranchPagingApiQuery apiRequest) { }
     }
-    public class BranchRetrievalApiQuery : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.BranchRetrievalModel>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.BranchRetrievalModel>, System.IEquatable<Fossa.API.Web.Messages.Queries.BranchRetrievalApiQuery>
+    public class BranchRetrievalApiQuery : MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.BranchRetrievalModel>, System.IEquatable<Fossa.API.Web.Messages.Queries.BranchRetrievalApiQuery>, TIKSN.Integration.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.BranchRetrievalModel>
     {
         public BranchRetrievalApiQuery(long Id) { }
         public long Id { get; init; }
@@ -778,7 +778,7 @@ namespace Fossa.API.Web.Messages.Queries
         protected override Fossa.API.Web.ApiModels.BranchRetrievalModel MapToApiResponse(Fossa.API.Core.Entities.BranchEntity domainResponse) { }
         protected override Fossa.API.Core.Messages.Queries.BranchRetrievalQuery MapToDomainRequest(Fossa.API.Web.Messages.Queries.BranchRetrievalApiQuery apiRequest) { }
     }
-    public class CompanyRetrievalApiQuery : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.CompanyRetrievalModel>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.CompanyRetrievalModel>, System.IEquatable<Fossa.API.Web.Messages.Queries.CompanyRetrievalApiQuery>
+    public class CompanyRetrievalApiQuery : MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.CompanyRetrievalModel>, System.IEquatable<Fossa.API.Web.Messages.Queries.CompanyRetrievalApiQuery>, TIKSN.Integration.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.CompanyRetrievalModel>
     {
         public CompanyRetrievalApiQuery() { }
     }
@@ -788,7 +788,7 @@ namespace Fossa.API.Web.Messages.Queries
         protected override Fossa.API.Web.ApiModels.CompanyRetrievalModel MapToApiResponse(Fossa.API.Core.Entities.CompanyEntity domainResponse) { }
         protected override Fossa.API.Core.Messages.Queries.CompanyRetrievalQuery MapToDomainRequest(Fossa.API.Web.Messages.Queries.CompanyRetrievalApiQuery apiRequest) { }
     }
-    public class CompanySettingsRetrievalApiQuery : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.CompanySettingsRetrievalModel>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.CompanySettingsRetrievalModel>, System.IEquatable<Fossa.API.Web.Messages.Queries.CompanySettingsRetrievalApiQuery>
+    public class CompanySettingsRetrievalApiQuery : MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.CompanySettingsRetrievalModel>, System.IEquatable<Fossa.API.Web.Messages.Queries.CompanySettingsRetrievalApiQuery>, TIKSN.Integration.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.CompanySettingsRetrievalModel>
     {
         public CompanySettingsRetrievalApiQuery() { }
     }
@@ -798,7 +798,7 @@ namespace Fossa.API.Web.Messages.Queries
         protected override Fossa.API.Web.ApiModels.CompanySettingsRetrievalModel MapToApiResponse(Fossa.API.Core.Entities.CompanySettingsEntity domainResponse) { }
         protected override Fossa.API.Core.Messages.Queries.CompanySettingsRetrievalQuery MapToDomainRequest(Fossa.API.Web.Messages.Queries.CompanySettingsRetrievalApiQuery apiRequest) { }
     }
-    public class CurrentEmployeeRetrievalApiQuery : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>, System.IEquatable<Fossa.API.Web.Messages.Queries.CurrentEmployeeRetrievalApiQuery>
+    public class CurrentEmployeeRetrievalApiQuery : MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>, System.IEquatable<Fossa.API.Web.Messages.Queries.CurrentEmployeeRetrievalApiQuery>, TIKSN.Integration.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>
     {
         public CurrentEmployeeRetrievalApiQuery() { }
     }
@@ -808,7 +808,7 @@ namespace Fossa.API.Web.Messages.Queries
         protected override Fossa.API.Web.ApiModels.EmployeeRetrievalModel MapToApiResponse(Fossa.API.Core.Entities.EmployeeEntity domainResponse) { }
         protected override Fossa.API.Core.Messages.Queries.CurrentEmployeeRetrievalQuery MapToDomainRequest(Fossa.API.Web.Messages.Queries.CurrentEmployeeRetrievalApiQuery apiRequest) { }
     }
-    public class DepartmentPagingApiQuery : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.DepartmentRetrievalModel>>, Fossa.API.Web.Messages.Queries.IPagingApiQuery, Fossa.API.Web.Messages.Queries.IPagingApiQuery<Fossa.API.Web.ApiModels.DepartmentRetrievalModel>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.DepartmentRetrievalModel>>, System.IEquatable<Fossa.API.Web.Messages.Queries.DepartmentPagingApiQuery>
+    public class DepartmentPagingApiQuery : Fossa.API.Web.Messages.Queries.IPagingApiQuery, Fossa.API.Web.Messages.Queries.IPagingApiQuery<Fossa.API.Web.ApiModels.DepartmentRetrievalModel>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.DepartmentRetrievalModel>>, System.IEquatable<Fossa.API.Web.Messages.Queries.DepartmentPagingApiQuery>, TIKSN.Integration.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.DepartmentRetrievalModel>>
     {
         public DepartmentPagingApiQuery(System.Collections.Generic.IReadOnlyList<long>? Id, string? Search, int? PageNumber, int? PageSize) { }
         public System.Collections.Generic.IReadOnlyList<long>? Id { get; init; }
@@ -823,7 +823,7 @@ namespace Fossa.API.Web.Messages.Queries
         protected override Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.DepartmentRetrievalModel> MapToApiResponse(TIKSN.Data.PageResult<Fossa.API.Core.Entities.DepartmentEntity> domainResponse) { }
         protected override LanguageExt.Either<Fossa.API.Core.Messages.Queries.DepartmentListingQuery, Fossa.API.Core.Messages.Queries.DepartmentPagingQuery> MapToDomainRequest(Fossa.API.Web.Messages.Queries.DepartmentPagingApiQuery apiRequest) { }
     }
-    public class DepartmentRetrievalApiQuery : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.DepartmentRetrievalModel>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.DepartmentRetrievalModel>, System.IEquatable<Fossa.API.Web.Messages.Queries.DepartmentRetrievalApiQuery>
+    public class DepartmentRetrievalApiQuery : MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.DepartmentRetrievalModel>, System.IEquatable<Fossa.API.Web.Messages.Queries.DepartmentRetrievalApiQuery>, TIKSN.Integration.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.DepartmentRetrievalModel>
     {
         public DepartmentRetrievalApiQuery(long Id) { }
         public long Id { get; init; }
@@ -834,7 +834,7 @@ namespace Fossa.API.Web.Messages.Queries
         protected override Fossa.API.Web.ApiModels.DepartmentRetrievalModel MapToApiResponse(Fossa.API.Core.Entities.DepartmentEntity domainResponse) { }
         protected override Fossa.API.Core.Messages.Queries.DepartmentRetrievalQuery MapToDomainRequest(Fossa.API.Web.Messages.Queries.DepartmentRetrievalApiQuery apiRequest) { }
     }
-    public class EmployeePagingApiQuery : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>>, Fossa.API.Web.Messages.Queries.IPagingApiQuery, Fossa.API.Web.Messages.Queries.IPagingApiQuery<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>>, System.IEquatable<Fossa.API.Web.Messages.Queries.EmployeePagingApiQuery>
+    public class EmployeePagingApiQuery : Fossa.API.Web.Messages.Queries.IPagingApiQuery, Fossa.API.Web.Messages.Queries.IPagingApiQuery<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>>, System.IEquatable<Fossa.API.Web.Messages.Queries.EmployeePagingApiQuery>, TIKSN.Integration.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>>
     {
         public EmployeePagingApiQuery(System.Collections.Generic.IReadOnlyList<long>? Id, string? Search, long? ReportsToId, bool? TopLevelOnly, int? PageNumber, int? PageSize) { }
         public System.Collections.Generic.IReadOnlyList<long>? Id { get; init; }
@@ -851,7 +851,7 @@ namespace Fossa.API.Web.Messages.Queries
         protected override Fossa.API.Web.ApiModels.PagingResponseModel<Fossa.API.Web.ApiModels.EmployeeRetrievalModel> MapToApiResponse(TIKSN.Data.PageResult<Fossa.API.Core.Entities.EmployeeEntity> domainResponse) { }
         protected override LanguageExt.Either<Fossa.API.Core.Messages.Queries.EmployeeListingQuery, Fossa.API.Core.Messages.Queries.EmployeePagingQuery> MapToDomainRequest(Fossa.API.Web.Messages.Queries.EmployeePagingApiQuery apiRequest) { }
     }
-    public class EmployeeRetrievalApiQuery : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>, System.IEquatable<Fossa.API.Web.Messages.Queries.EmployeeRetrievalApiQuery>
+    public class EmployeeRetrievalApiQuery : MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>, System.IEquatable<Fossa.API.Web.Messages.Queries.EmployeeRetrievalApiQuery>, TIKSN.Integration.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.EmployeeRetrievalModel>
     {
         public EmployeeRetrievalApiQuery(long Id) { }
         public long Id { get; init; }
@@ -867,7 +867,7 @@ namespace Fossa.API.Web.Messages.Queries
         int? PageNumber { get; }
         int? PageSize { get; }
     }
-    public interface IPagingApiQuery<TRetrievalModel> : Fossa.API.Core.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.PagingResponseModel<TRetrievalModel>>, Fossa.API.Web.Messages.Queries.IPagingApiQuery, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.PagingResponseModel<TRetrievalModel>> { }
+    public interface IPagingApiQuery<TRetrievalModel> : Fossa.API.Web.Messages.Queries.IPagingApiQuery, MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Web.ApiModels.PagingResponseModel<TRetrievalModel>>, TIKSN.Integration.Messages.Queries.IQuery<Fossa.API.Web.ApiModels.PagingResponseModel<TRetrievalModel>> { }
 }
 namespace Fossa.API.Web.Validators
 {
