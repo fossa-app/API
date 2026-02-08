@@ -3,7 +3,7 @@
 namespace Fossa.API.Core.Messages.Commands;
 
 public interface ITenantCommand<TEntityIdentity, out TTenantIdentity>
-  : ICommand, ITenantEntityReferences<TEntityIdentity>
+  : ICommand
   where TEntityIdentity : IEquatable<TEntityIdentity>
   where TTenantIdentity : IEquatable<TTenantIdentity>
 {

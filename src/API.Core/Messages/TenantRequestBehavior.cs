@@ -42,6 +42,21 @@ public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, T
     return response;
   }
 
+  private static Task InspectTenantEntityAsync(
+    TTenantIdentity tenantId,
+    ITenantEntity<TEntityIdentity, TTenantIdentity> tenantEntity,
+    CancellationToken cancellationToken)
+  {
+    if (tenantEntity.TenantID.Equals(default) || !tenantEntity.TenantID.Equals(tenantId))
+    {
+      throw new CrossTenantOutboundUnauthorizedAccessException();
+    }
+
+    cancellationToken.ThrowIfCancellationRequested();
+
+    return Task.CompletedTask;
+  }
+
   private async Task InspectAffectingTenantEntitiesAsync(
     IEnumerable<EntityReference<TEntityIdentity>> affectingEntities,
     TTenantIdentity tenantId,
@@ -132,25 +147,17 @@ public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, T
       throw new CrossTenantInboundUnauthorizedAccessException();
     }
 
-    await InspectAffectingTenantEntitiesAsync(
-      tenantCommand.TenantEntityReferences,
+    if (tenantCommand is ITenantEntityReferences<TEntityIdentity> tenantEntityReferences)
+    {
+      await InspectAffectingTenantEntitiesAsync(
+      tenantEntityReferences.TenantEntityReferences,
       tenantId,
       cancellationToken).ConfigureAwait(false);
-  }
-
-  private static Task InspectTenantEntityAsync(
-    TTenantIdentity tenantId,
-    ITenantEntity<TEntityIdentity, TTenantIdentity> tenantEntity,
-    CancellationToken cancellationToken)
-  {
-    if (tenantEntity.TenantID.Equals(default) || !tenantEntity.TenantID.Equals(tenantId))
-    {
-      throw new CrossTenantOutboundUnauthorizedAccessException();
     }
-
-    cancellationToken.ThrowIfCancellationRequested();
-
-    return Task.CompletedTask;
+    else
+    {
+      throw new InvalidOperationException("Tenant Command does not implement ITenantEntityReferences");
+    }
   }
 
   private async Task InspectTenantQueryAsync(
@@ -164,9 +171,16 @@ public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, T
       throw new CrossTenantInboundUnauthorizedAccessException();
     }
 
-    await InspectAffectingTenantEntitiesAsync(
-      tenantQuery.TenantEntityReferences,
-      tenantId,
-      cancellationToken).ConfigureAwait(false);
+    if (tenantQuery is ITenantEntityReferences<TEntityIdentity> tenantEntityReferences)
+    {
+      await InspectAffectingTenantEntitiesAsync(
+        tenantEntityReferences.TenantEntityReferences,
+        tenantId,
+        cancellationToken).ConfigureAwait(false);
+    }
+    else
+    {
+      throw new InvalidOperationException("Tenant Query does not implement ITenantEntityReferences");
+    }
   }
 }

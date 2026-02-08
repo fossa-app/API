@@ -4,7 +4,7 @@ namespace Fossa.API.Core.Messages.Queries;
 
 public abstract record EntityTenantQuery<TEntity, TEntityIdentity, TTenantIdentity, TResult>(
   TTenantIdentity TenantID)
-  : ITenantQuery<TEntityIdentity, TTenantIdentity, TResult>
+  : ITenantQuery<TEntityIdentity, TTenantIdentity, TResult>, ITenantEntityReferences<TEntityIdentity>
   where TEntity : IEntity<TEntityIdentity>
   where TEntityIdentity : IEquatable<TEntityIdentity>
   where TTenantIdentity : IEquatable<TTenantIdentity>
