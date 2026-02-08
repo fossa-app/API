@@ -8,4 +8,4 @@ public record BranchAddressChangedEvent(
     CompanyId CompanyId,
     Option<Address> PreviousAddress,
     Option<Address> NewAddress)
-  : ICompanyEvent<Guid>;
+  : CompanyEvent<Guid>(TenantID, CompanyId);

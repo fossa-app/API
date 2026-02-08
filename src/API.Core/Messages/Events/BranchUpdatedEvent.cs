@@ -10,4 +10,4 @@ public record BranchUpdatedEvent(
     string Name,
     DateTimeZone TimeZone,
     Option<Address> Address)
-  : ICompanyEvent<Guid>;
+  : CompanyEvent<Guid>(TenantID, CompanyId);

@@ -9,4 +9,4 @@ public record BranchTimeZoneChangedEvent(
     CompanyId CompanyId,
     DateTimeZone PreviousTimeZone,
     DateTimeZone NewTimeZone)
-  : ICompanyEvent<Guid>;
+  : CompanyEvent<Guid>(TenantID, CompanyId);

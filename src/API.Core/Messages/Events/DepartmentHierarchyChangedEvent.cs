@@ -8,4 +8,4 @@ public record DepartmentHierarchyChangedEvent(
     CompanyId CompanyId,
     Option<DepartmentId> PreviousParentDepartmentId,
     Option<DepartmentId> NewParentDepartmentId)
-  : ICompanyEvent<Guid>;
+  : CompanyEvent<Guid>(TenantID, CompanyId);

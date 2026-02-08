@@ -11,4 +11,4 @@ public record EmployeeUpdatedEvent(
     Option<DepartmentId> AssignedDepartmentId,
     Option<EmployeeId> ReportsToId,
     CompanyId CompanyId)
-  : ICompanyEmployeeEvent<Guid, Guid>;
+  : CompanyEmployeeEvent<Guid, Guid>(TenantID, CompanyId, UserID, EmployeeId);

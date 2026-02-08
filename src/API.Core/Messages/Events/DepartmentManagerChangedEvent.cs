@@ -8,4 +8,4 @@ public record DepartmentManagerChangedEvent(
     CompanyId CompanyId,
     Option<EmployeeId> PreviousManagerId,
     Option<EmployeeId> NewManagerId)
-  : ICompanyEvent<Guid>;
+  : CompanyEvent<Guid>(TenantID, CompanyId);

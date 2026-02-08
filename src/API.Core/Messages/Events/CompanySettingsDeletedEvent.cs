@@ -6,4 +6,4 @@ public record CompanySettingsDeletedEvent(
     Guid TenantID,
     CompanySettingsId CompanySettingsId,
     CompanyId CompanyId)
-  : ICompanyEvent<Guid>;
+  : CompanyEvent<Guid>(TenantID, CompanyId);

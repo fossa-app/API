@@ -9,4 +9,4 @@ public record EmployeeAssignedToBranchEvent(
     CompanyId CompanyId,
     Option<BranchId> PreviousBranchId,
     Option<BranchId> NewBranchId)
-  : ICompanyEmployeeEvent<Guid, Guid>;
+  : CompanyEmployeeEvent<Guid, Guid>(TenantID, CompanyId, UserID, EmployeeId);

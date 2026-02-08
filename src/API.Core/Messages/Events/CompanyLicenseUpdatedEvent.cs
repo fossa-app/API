@@ -8,4 +8,4 @@ public record CompanyLicenseUpdatedEvent(
     Guid TenantID,
     CompanyId CompanyId,
     License<CompanyEntitlements> license)
-  : ICompanyEvent<Guid>;
+  : CompanyEvent<Guid>(TenantID, CompanyId);

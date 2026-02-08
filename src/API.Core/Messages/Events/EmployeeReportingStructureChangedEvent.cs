@@ -9,4 +9,4 @@ public record EmployeeReportingStructureChangedEvent(
     CompanyId CompanyId,
     Option<EmployeeId> PreviousReportsToId,
     Option<EmployeeId> NewReportsToId)
-  : ICompanyEmployeeEvent<Guid, Guid>;
+  : CompanyEmployeeEvent<Guid, Guid>(TenantID, CompanyId, UserID, EmployeeId);

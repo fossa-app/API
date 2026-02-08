@@ -10,4 +10,4 @@ public record EmployeeCreatedEvent(
     string LastName,
     string FullName,
     CompanyId CompanyId)
-  : ICompanyEmployeeEvent<Guid, Guid>;
+  : CompanyEmployeeEvent<Guid, Guid>(TenantID, CompanyId, UserID, EmployeeId);

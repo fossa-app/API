@@ -6,4 +6,4 @@ public record BranchDeletedEvent(
     Guid TenantID,
     BranchId BranchId,
     CompanyId CompanyId)
-  : ICompanyEvent<Guid>;
+  : CompanyEvent<Guid>(TenantID, CompanyId);
