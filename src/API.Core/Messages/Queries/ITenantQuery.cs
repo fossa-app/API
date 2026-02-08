@@ -3,7 +3,7 @@
 namespace Fossa.API.Core.Messages.Queries;
 
 public interface ITenantQuery<TEntityIdentity, out TTenantIdentity, out TResult>
-  : IQuery<TResult>, IAffectingTenantEntities<TEntityIdentity>
+  : IQuery<TResult>, ITenantEntityReferences<TEntityIdentity>
   where TEntityIdentity : IEquatable<TEntityIdentity>
   where TTenantIdentity : IEquatable<TTenantIdentity>
 {

@@ -11,6 +11,6 @@ public abstract record EntityTenantCommand<TEntity, TEntityIdentity, TTenantIden
 {
   public abstract IEnumerable<TEntityIdentity> AffectingTenantEntitiesIdentities { get; }
 
-  public IEnumerable<AffectingEntity<TEntityIdentity>> AffectingTenantEntities
-    => AffectingTenantEntitiesIdentities.Select(x => new AffectingEntity<TEntityIdentity>(typeof(TEntity), x));
+  public IEnumerable<EntityReference<TEntityIdentity>> TenantEntityReferences
+    => AffectingTenantEntitiesIdentities.Select(x => new EntityReference<TEntityIdentity>(typeof(TEntity), x));
 }

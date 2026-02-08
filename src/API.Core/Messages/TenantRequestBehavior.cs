@@ -43,7 +43,7 @@ public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, T
   }
 
   private async Task InspectAffectingTenantEntitiesAsync(
-    IEnumerable<AffectingEntity<TEntityIdentity>> affectingEntities,
+    IEnumerable<EntityReference<TEntityIdentity>> affectingEntities,
     TTenantIdentity tenantId,
     CancellationToken cancellationToken)
   {
@@ -133,7 +133,7 @@ public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, T
     }
 
     await InspectAffectingTenantEntitiesAsync(
-      tenantCommand.AffectingTenantEntities,
+      tenantCommand.TenantEntityReferences,
       tenantId,
       cancellationToken).ConfigureAwait(false);
   }
@@ -165,7 +165,7 @@ public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, T
     }
 
     await InspectAffectingTenantEntitiesAsync(
-      tenantQuery.AffectingTenantEntities,
+      tenantQuery.TenantEntityReferences,
       tenantId,
       cancellationToken).ConfigureAwait(false);
   }

@@ -11,6 +11,6 @@ public abstract record EntityTenantQuery<TEntity, TEntityIdentity, TTenantIdenti
 {
   public abstract IEnumerable<TEntityIdentity> AffectingTenantEntitiesIdentities { get; }
 
-  public IEnumerable<AffectingEntity<TEntityIdentity>> AffectingTenantEntities
-    => AffectingTenantEntitiesIdentities.Select(x => new AffectingEntity<TEntityIdentity>(typeof(TEntity), x));
+  public IEnumerable<EntityReference<TEntityIdentity>> TenantEntityReferences
+    => AffectingTenantEntitiesIdentities.Select(x => new EntityReference<TEntityIdentity>(typeof(TEntity), x));
 }
