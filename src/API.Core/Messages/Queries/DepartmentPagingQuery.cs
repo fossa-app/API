@@ -12,6 +12,6 @@ public record DepartmentPagingQuery(
     : EntityTenantQuery<DepartmentEntity, DepartmentId, Guid, PageResult<DepartmentEntity>>(TenantID)
     , IPagingQuery<DepartmentEntity>
 {
-  public override IEnumerable<DepartmentId> AffectingTenantEntitiesIdentities
+  public override IEnumerable<DepartmentId> TenantEntityReferencesIdentities
       => [];
 }

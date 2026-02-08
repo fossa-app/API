@@ -6,6 +6,6 @@ public record CompanySettingsRetrievalQuery(
     Guid TenantID)
   : EntityTenantQuery<CompanySettingsEntity, CompanySettingsId, Guid, CompanySettingsEntity>(TenantID)
 {
-  public override IEnumerable<CompanySettingsId> AffectingTenantEntitiesIdentities
+  public override IEnumerable<CompanySettingsId> TenantEntityReferencesIdentities
     => [];
 }

@@ -8,6 +8,6 @@ public record BranchDeletionCommand(
   Guid UserID)
 : EntityTenantCommand<BranchEntity, BranchId, Guid>(TenantID)
 {
-  public override IEnumerable<BranchId> AffectingTenantEntitiesIdentities
+  public override IEnumerable<BranchId> TenantEntityReferencesIdentities
     => Prelude.Seq1(ID);
 }

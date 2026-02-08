@@ -9,6 +9,6 @@ public record CompanyCreationCommand(
   RegionInfo Country)
   : EntityTenantCommand<CompanyEntity, CompanyId, Guid>(TenantID)
 {
-  public override IEnumerable<CompanyId> AffectingTenantEntitiesIdentities
+  public override IEnumerable<CompanyId> TenantEntityReferencesIdentities
     => [];
 }

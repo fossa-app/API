@@ -8,6 +8,6 @@ public record BranchListingQuery(
     Guid UserID)
   : EntityTenantQuery<BranchEntity, BranchId, Guid, Seq<BranchEntity>>(TenantID)
 {
-  public override IEnumerable<BranchId> AffectingTenantEntitiesIdentities
+  public override IEnumerable<BranchId> TenantEntityReferencesIdentities
     => Ids;
 }

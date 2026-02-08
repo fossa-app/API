@@ -14,6 +14,6 @@ public record EmployeePagingQuery(
   : EntityTenantQuery<EmployeeEntity, EmployeeId, Guid, PageResult<EmployeeEntity>>(TenantID)
     , IPagingQuery<EmployeeEntity>
 {
-  public override IEnumerable<EmployeeId> AffectingTenantEntitiesIdentities
+  public override IEnumerable<EmployeeId> TenantEntityReferencesIdentities
     => [];
 }

@@ -10,6 +10,6 @@ public record EmployeeCreationCommand(
     string FullName)
   : EntityTenantUserCommand<EmployeeEntity, EmployeeId, Guid, Guid>(TenantID, UserID)
 {
-  public override IEnumerable<EmployeeId> AffectingTenantEntitiesIdentities
+  public override IEnumerable<EmployeeId> TenantEntityReferencesIdentities
     => [];
 }

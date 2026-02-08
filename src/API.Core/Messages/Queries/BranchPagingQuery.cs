@@ -12,6 +12,6 @@ public record BranchPagingQuery(
   : EntityTenantQuery<BranchEntity, BranchId, Guid, PageResult<BranchEntity>>(TenantID)
     , IPagingQuery<BranchEntity>
 {
-  public override IEnumerable<BranchId> AffectingTenantEntitiesIdentities
+  public override IEnumerable<BranchId> TenantEntityReferencesIdentities
     => [];
 }

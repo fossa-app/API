@@ -8,6 +8,6 @@ public record DepartmentListingQuery(
     Guid UserID)
     : EntityTenantQuery<DepartmentEntity, DepartmentId, Guid, Seq<DepartmentEntity>>(TenantID)
 {
-  public override IEnumerable<DepartmentId> AffectingTenantEntitiesIdentities
+  public override IEnumerable<DepartmentId> TenantEntityReferencesIdentities
       => Ids;
 }

@@ -10,6 +10,6 @@ public record DepartmentCreationCommand(
     EmployeeId ManagerId)
     : EntityTenantCommand<DepartmentEntity, DepartmentId, Guid>(TenantID)
 {
-  public override IEnumerable<DepartmentId> AffectingTenantEntitiesIdentities
+  public override IEnumerable<DepartmentId> TenantEntityReferencesIdentities
       => [];
 }

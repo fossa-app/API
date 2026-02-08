@@ -11,6 +11,6 @@ public record DepartmentModificationCommand(
     EmployeeId ManagerId)
     : EntityTenantCommand<DepartmentEntity, DepartmentId, Guid>(TenantID)
 {
-  public override IEnumerable<DepartmentId> AffectingTenantEntitiesIdentities
+  public override IEnumerable<DepartmentId> TenantEntityReferencesIdentities
       => Seq1(ID);
 }
