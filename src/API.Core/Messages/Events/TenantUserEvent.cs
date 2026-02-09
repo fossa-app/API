@@ -1,4 +1,6 @@
-﻿namespace Fossa.API.Core.Messages.Events;
+﻿using TIKSN.Integration.Messages.Events;
+
+namespace Fossa.API.Core.Messages.Events;
 
 public abstract record TenantUserEvent<TTenantIdentity, TUserIdentity> : TenantEvent<TTenantIdentity>, IUserEvent<TUserIdentity>
   where TTenantIdentity : IEquatable<TTenantIdentity>
