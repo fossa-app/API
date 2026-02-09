@@ -90,12 +90,12 @@ public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, T
     TRequest request,
     CancellationToken cancellationToken)
   {
-    if (request is ITenantCommand<TEntityIdentity, TTenantIdentity> tenantCommand)
+    if (request is ITenantEntityCommand<TEntityIdentity, TTenantIdentity> tenantCommand)
     {
       return InspectTenantCommandAsync(tenantCommand, cancellationToken);
     }
 
-    if (request is ITenantQuery<TEntityIdentity, TTenantIdentity, TResponse> tenantQuery)
+    if (request is ITenantEntityQuery<TEntityIdentity, TTenantIdentity, TResponse> tenantQuery)
     {
       return InspectTenantQueryAsync(tenantQuery, cancellationToken);
     }
@@ -137,7 +137,7 @@ public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, T
   }
 
   private async Task InspectTenantCommandAsync(
-    ITenantCommand<TEntityIdentity, TTenantIdentity> tenantCommand,
+    ITenantEntityCommand<TEntityIdentity, TTenantIdentity> tenantCommand,
     CancellationToken cancellationToken)
   {
     var tenantId = _tenantIdProvider.GetTenantId();
@@ -161,7 +161,7 @@ public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, T
   }
 
   private async Task InspectTenantQueryAsync(
-    ITenantQuery<TEntityIdentity, TTenantIdentity, TResponse> tenantQuery,
+    ITenantEntityQuery<TEntityIdentity, TTenantIdentity, TResponse> tenantQuery,
     CancellationToken cancellationToken)
   {
     var tenantId = _tenantIdProvider.GetTenantId();

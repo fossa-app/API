@@ -9,8 +9,8 @@ public record DepartmentModificationCommand(
     string Name,
     Option<DepartmentId> ParentDepartmentId,
     EmployeeId ManagerId)
-    : EntityTenantCommand<DepartmentEntity, DepartmentId, Guid>(TenantID)
+    : TenantEntityCommand<DepartmentEntity, DepartmentId, Guid>(TenantID)
 {
-  public override IEnumerable<DepartmentId> TenantEntityReferencesIdentities
+  public override IEnumerable<DepartmentId> TenantEntityIdentities
       => Seq1(ID);
 }

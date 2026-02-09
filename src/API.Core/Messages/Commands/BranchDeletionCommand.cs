@@ -6,8 +6,8 @@ public record BranchDeletionCommand(
   BranchId ID,
   Guid TenantID,
   Guid UserID)
-: EntityTenantCommand<BranchEntity, BranchId, Guid>(TenantID)
+: TenantEntityCommand<BranchEntity, BranchId, Guid>(TenantID)
 {
-  public override IEnumerable<BranchId> TenantEntityReferencesIdentities
+  public override IEnumerable<BranchId> TenantEntityIdentities
     => Prelude.Seq1(ID);
 }

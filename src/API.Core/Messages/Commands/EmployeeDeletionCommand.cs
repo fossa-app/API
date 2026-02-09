@@ -5,8 +5,8 @@ namespace Fossa.API.Core.Messages.Commands;
 public record EmployeeDeletionCommand(
     Guid TenantID,
     Guid UserID)
-  : EntityTenantUserCommand<EmployeeEntity, EmployeeId, Guid, Guid>(TenantID, UserID)
+  : TenantUserEntityCommand<EmployeeEntity, EmployeeId, Guid, Guid>(TenantID, UserID)
 {
-  public override IEnumerable<EmployeeId> TenantEntityReferencesIdentities
+  public override IEnumerable<EmployeeId> TenantEntityIdentities
     => [];
 }

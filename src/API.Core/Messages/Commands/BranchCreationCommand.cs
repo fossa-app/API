@@ -9,8 +9,8 @@ public record BranchCreationCommand(
   string Name,
   DateTimeZone TimeZone,
   Option<Address> Address)
-: EntityTenantCommand<BranchEntity, BranchId, Guid>(TenantID)
+: TenantEntityCommand<BranchEntity, BranchId, Guid>(TenantID)
 {
-  public override IEnumerable<BranchId> TenantEntityReferencesIdentities
+  public override IEnumerable<BranchId> TenantEntityIdentities
     => [];
 }

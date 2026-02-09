@@ -9,9 +9,9 @@ public record DepartmentPagingQuery(
     Guid UserID,
     string Search,
     Page Page)
-    : EntityTenantQuery<DepartmentEntity, DepartmentId, Guid, PageResult<DepartmentEntity>>(TenantID)
+    : TenantEntityQuery<DepartmentEntity, DepartmentId, Guid, PageResult<DepartmentEntity>>(TenantID)
     , IPagingQuery<DepartmentEntity>
 {
-  public override IEnumerable<DepartmentId> TenantEntityReferencesIdentities
+  public override IEnumerable<DepartmentId> TenantEntityIdentities
       => [];
 }

@@ -7,8 +7,8 @@ public record CompanyModificationCommand(
     Guid TenantID,
     string Name,
     RegionInfo Country)
-  : EntityTenantCommand<CompanyEntity, CompanyId, Guid>(TenantID)
+  : TenantEntityCommand<CompanyEntity, CompanyId, Guid>(TenantID)
 {
-  public override IEnumerable<CompanyId> TenantEntityReferencesIdentities
+  public override IEnumerable<CompanyId> TenantEntityIdentities
     => [];
 }

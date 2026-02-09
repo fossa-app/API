@@ -6,8 +6,8 @@ public record CompanySettingsModificationCommand(
     Guid TenantID,
     Guid UserID,
     ColorSchemeId ColorSchemeId)
-  : EntityTenantUserCommand<CompanySettingsEntity, CompanySettingsId, Guid, Guid>(TenantID, UserID)
+  : TenantUserEntityCommand<CompanySettingsEntity, CompanySettingsId, Guid, Guid>(TenantID, UserID)
 {
-  public override IEnumerable<CompanySettingsId> TenantEntityReferencesIdentities
+  public override IEnumerable<CompanySettingsId> TenantEntityIdentities
     => [];
 }

@@ -9,9 +9,9 @@ public record BranchPagingQuery(
     Guid UserID,
     string Search,
     Page Page)
-  : EntityTenantQuery<BranchEntity, BranchId, Guid, PageResult<BranchEntity>>(TenantID)
+  : TenantEntityQuery<BranchEntity, BranchId, Guid, PageResult<BranchEntity>>(TenantID)
     , IPagingQuery<BranchEntity>
 {
-  public override IEnumerable<BranchId> TenantEntityReferencesIdentities
+  public override IEnumerable<BranchId> TenantEntityIdentities
     => [];
 }

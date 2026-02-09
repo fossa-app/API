@@ -2,9 +2,9 @@
 
 namespace Fossa.API.Core.Messages.Events;
 
-public abstract record CompanyEmployeeEvent<TUserIdentity, TTenantIdentity> : TenantUserEvent<TUserIdentity, TTenantIdentity>, ICompanyEmployeeEvent<TUserIdentity, TTenantIdentity>
-  where TUserIdentity : IEquatable<TUserIdentity>
+public abstract record CompanyEmployeeEvent<TTenantIdentity, TUserIdentity> : TenantUserEvent<TTenantIdentity, TUserIdentity>, ICompanyEmployeeEvent<TTenantIdentity, TUserIdentity>
   where TTenantIdentity : IEquatable<TTenantIdentity>
+  where TUserIdentity : IEquatable<TUserIdentity>
 {
   protected CompanyEmployeeEvent(TTenantIdentity tenantID, CompanyId companyId, TUserIdentity userID, EmployeeId employeeId) : base(tenantID, userID)
   {
