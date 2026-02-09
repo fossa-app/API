@@ -468,30 +468,7 @@ namespace Fossa.API.Core.Messages.Commands
         public EmployeeModificationCommandHandler(Fossa.API.Core.Repositories.IEmployeeQueryRepository employeeQueryRepository, Fossa.API.Core.Repositories.IEmployeeRepository employeeRepository, MediatR.IPublisher publisher) { }
         public System.Threading.Tasks.Task<MediatR.Unit> Handle(Fossa.API.Core.Messages.Commands.EmployeeModificationCommand request, System.Threading.CancellationToken cancellationToken) { }
     }
-    public interface ITenantCommand<out TTenantIdentity> : MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, TIKSN.Integration.Messages.Commands.ICommand
-        where out TTenantIdentity : System.IEquatable<TTenantIdentity>
-    {
-        TTenantIdentity TenantID { get; }
-    }
-    public interface ITenantEntityCommand<TEntityIdentity, out TTenantIdentity> : Fossa.API.Core.Messages.Commands.ITenantCommand<TTenantIdentity>, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, TIKSN.Integration.Messages.Commands.ICommand
-        where TEntityIdentity : System.IEquatable<TEntityIdentity>
-        where out TTenantIdentity : System.IEquatable<TTenantIdentity>
-    {
-        System.Collections.Generic.IEnumerable<TEntityIdentity> TenantEntityIdentities { get; }
-    }
-    public interface ITenantUserCommand<out TTenantIdentity, out TUserIdentity> : Fossa.API.Core.Messages.Commands.ITenantCommand<TTenantIdentity>, Fossa.API.Core.Messages.Commands.IUserCommand<TUserIdentity>, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, TIKSN.Integration.Messages.Commands.ICommand
-        where out TTenantIdentity : System.IEquatable<TTenantIdentity>
-        where out TUserIdentity : System.IEquatable<TUserIdentity> { }
-    public interface ITenantUserEntityCommand<TEntityIdentity, out TTenantIdentity, out TUserIdentity> : Fossa.API.Core.Messages.Commands.ITenantCommand<TTenantIdentity>, Fossa.API.Core.Messages.Commands.ITenantEntityCommand<TEntityIdentity, TTenantIdentity>, Fossa.API.Core.Messages.Commands.ITenantUserCommand<TTenantIdentity, TUserIdentity>, Fossa.API.Core.Messages.Commands.IUserCommand<TUserIdentity>, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, TIKSN.Integration.Messages.Commands.ICommand
-        where TEntityIdentity : System.IEquatable<TEntityIdentity>
-        where out TTenantIdentity : System.IEquatable<TTenantIdentity>
-        where out TUserIdentity : System.IEquatable<TUserIdentity> { }
-    public interface IUserCommand<out TUserIdentity> : MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, TIKSN.Integration.Messages.Commands.ICommand
-        where out TUserIdentity : System.IEquatable<TUserIdentity>
-    {
-        TUserIdentity UserID { get; }
-    }
-    public abstract class TenantEntityCommand<TEntity, TEntityIdentity, TTenantIdentity> : Fossa.API.Core.Messages.Commands.ITenantCommand<TTenantIdentity>, Fossa.API.Core.Messages.Commands.ITenantEntityCommand<TEntityIdentity, TTenantIdentity>, Fossa.API.Core.Messages.ITenantEntityReferences<TEntityIdentity>, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Core.Messages.Commands.TenantEntityCommand<TEntity, TEntityIdentity, TTenantIdentity>>, TIKSN.Integration.Messages.Commands.ICommand
+    public abstract class TenantEntityCommand<TEntity, TEntityIdentity, TTenantIdentity> : Fossa.API.Core.Messages.ITenantEntityReferences<TEntityIdentity>, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Core.Messages.Commands.TenantEntityCommand<TEntity, TEntityIdentity, TTenantIdentity>>, TIKSN.Integration.Messages.Commands.ICommand, TIKSN.Integration.Messages.Commands.ITenantCommand<TTenantIdentity>, TIKSN.Integration.Messages.Commands.ITenantEntityCommand<TEntityIdentity, TTenantIdentity>
         where TEntity : TIKSN.Data.IEntity<TEntityIdentity>
         where TEntityIdentity : System.IEquatable<TEntityIdentity>
         where TTenantIdentity : System.IEquatable<TTenantIdentity>
@@ -501,7 +478,7 @@ namespace Fossa.API.Core.Messages.Commands
         public System.Collections.Generic.IEnumerable<Fossa.API.Core.Messages.EntityReference<TEntityIdentity>> TenantEntityReferences { get; }
         public TTenantIdentity TenantID { get; init; }
     }
-    public abstract class TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity> : Fossa.API.Core.Messages.Commands.ITenantCommand<TTenantIdentity>, Fossa.API.Core.Messages.Commands.ITenantEntityCommand<TEntityIdentity, TTenantIdentity>, Fossa.API.Core.Messages.Commands.ITenantUserCommand<TTenantIdentity, TUserIdentity>, Fossa.API.Core.Messages.Commands.ITenantUserEntityCommand<TEntityIdentity, TTenantIdentity, TUserIdentity>, Fossa.API.Core.Messages.Commands.IUserCommand<TUserIdentity>, Fossa.API.Core.Messages.ITenantEntityReferences<TEntityIdentity>, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Core.Messages.Commands.TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>>, TIKSN.Integration.Messages.Commands.ICommand
+    public abstract class TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity> : Fossa.API.Core.Messages.ITenantEntityReferences<TEntityIdentity>, MediatR.IBaseRequest, MediatR.IRequest<MediatR.Unit>, System.IEquatable<Fossa.API.Core.Messages.Commands.TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>>, TIKSN.Integration.Messages.Commands.ICommand, TIKSN.Integration.Messages.Commands.ITenantCommand<TTenantIdentity>, TIKSN.Integration.Messages.Commands.ITenantEntityCommand<TEntityIdentity, TTenantIdentity>, TIKSN.Integration.Messages.Commands.ITenantUserCommand<TTenantIdentity, TUserIdentity>, TIKSN.Integration.Messages.Commands.ITenantUserEntityCommand<TEntityIdentity, TTenantIdentity, TUserIdentity>, TIKSN.Integration.Messages.Commands.IUserCommand<TUserIdentity>
         where TEntity : TIKSN.Data.IEntity<TEntityIdentity>
         where TEntityIdentity : System.IEquatable<TEntityIdentity>
         where TTenantIdentity : System.IEquatable<TTenantIdentity>
@@ -626,7 +603,7 @@ namespace Fossa.API.Core.Messages.Events
     {
         public CompanyDeletedEvent(System.Guid TenantID, Fossa.API.Core.Entities.CompanyId CompanyId) { }
     }
-    public abstract class CompanyEmployeeEvent<TTenantIdentity, TUserIdentity> : Fossa.API.Core.Messages.Events.TenantUserEvent<TTenantIdentity, TUserIdentity>, Fossa.API.Core.Messages.Events.ICompanyEmployeeEvent<TTenantIdentity, TUserIdentity>, Fossa.API.Core.Messages.Events.ICompanyEvent<TTenantIdentity>, Fossa.API.Core.Messages.Events.ITenantEvent<TTenantIdentity>, Fossa.API.Core.Messages.Events.ITenantUserEvent<TTenantIdentity, TUserIdentity>, Fossa.API.Core.Messages.Events.IUserEvent<TUserIdentity>, MediatR.INotification, System.IEquatable<Fossa.API.Core.Messages.Events.CompanyEmployeeEvent<TTenantIdentity, TUserIdentity>>, TIKSN.Integration.Messages.Events.IEvent
+    public abstract class CompanyEmployeeEvent<TTenantIdentity, TUserIdentity> : Fossa.API.Core.Messages.Events.TenantUserEvent<TTenantIdentity, TUserIdentity>, Fossa.API.Core.Messages.Events.ICompanyEmployeeEvent<TTenantIdentity, TUserIdentity>, Fossa.API.Core.Messages.Events.ICompanyEvent<TTenantIdentity>, MediatR.INotification, System.IEquatable<Fossa.API.Core.Messages.Events.CompanyEmployeeEvent<TTenantIdentity, TUserIdentity>>, TIKSN.Integration.Messages.Events.IEvent, TIKSN.Integration.Messages.Events.ITenantEvent<TTenantIdentity>, TIKSN.Integration.Messages.Events.ITenantUserEvent<TTenantIdentity, TUserIdentity>, TIKSN.Integration.Messages.Events.IUserEvent<TUserIdentity>
         where TTenantIdentity : System.IEquatable<TTenantIdentity>
         where TUserIdentity : System.IEquatable<TUserIdentity>
     {
@@ -634,7 +611,7 @@ namespace Fossa.API.Core.Messages.Events
         public Fossa.API.Core.Entities.CompanyId CompanyId { get; }
         public Fossa.API.Core.Entities.EmployeeId EmployeeId { get; }
     }
-    public abstract class CompanyEvent<TTenantIdentity> : Fossa.API.Core.Messages.Events.TenantEvent<TTenantIdentity>, Fossa.API.Core.Messages.Events.ICompanyEvent<TTenantIdentity>, Fossa.API.Core.Messages.Events.ITenantEvent<TTenantIdentity>, MediatR.INotification, System.IEquatable<Fossa.API.Core.Messages.Events.CompanyEvent<TTenantIdentity>>, TIKSN.Integration.Messages.Events.IEvent
+    public abstract class CompanyEvent<TTenantIdentity> : Fossa.API.Core.Messages.Events.TenantEvent<TTenantIdentity>, Fossa.API.Core.Messages.Events.ICompanyEvent<TTenantIdentity>, MediatR.INotification, System.IEquatable<Fossa.API.Core.Messages.Events.CompanyEvent<TTenantIdentity>>, TIKSN.Integration.Messages.Events.IEvent, TIKSN.Integration.Messages.Events.ITenantEvent<TTenantIdentity>
         where TTenantIdentity : System.IEquatable<TTenantIdentity>
     {
         protected CompanyEvent(TTenantIdentity tenantID, Fossa.API.Core.Entities.CompanyId companyId) { }
@@ -745,37 +722,24 @@ namespace Fossa.API.Core.Messages.Events
         public string JobTitle { get; init; }
         public LanguageExt.Option<Fossa.API.Core.Entities.EmployeeId> ReportsToId { get; init; }
     }
-    public interface ICompanyEmployeeEvent<out TTenantIdentity, out TUserIdentity> : Fossa.API.Core.Messages.Events.ICompanyEvent<TTenantIdentity>, Fossa.API.Core.Messages.Events.ITenantEvent<TTenantIdentity>, Fossa.API.Core.Messages.Events.ITenantUserEvent<TTenantIdentity, TUserIdentity>, Fossa.API.Core.Messages.Events.IUserEvent<TUserIdentity>, MediatR.INotification, TIKSN.Integration.Messages.Events.IEvent
+    public interface ICompanyEmployeeEvent<out TTenantIdentity, out TUserIdentity> : Fossa.API.Core.Messages.Events.ICompanyEvent<TTenantIdentity>, MediatR.INotification, TIKSN.Integration.Messages.Events.IEvent, TIKSN.Integration.Messages.Events.ITenantEvent<TTenantIdentity>, TIKSN.Integration.Messages.Events.ITenantUserEvent<TTenantIdentity, TUserIdentity>, TIKSN.Integration.Messages.Events.IUserEvent<TUserIdentity>
         where out TTenantIdentity : System.IEquatable<TTenantIdentity>
         where out TUserIdentity : System.IEquatable<TUserIdentity>
     {
         Fossa.API.Core.Entities.EmployeeId EmployeeId { get; }
     }
-    public interface ICompanyEvent<out TTenantIdentity> : Fossa.API.Core.Messages.Events.ITenantEvent<TTenantIdentity>, MediatR.INotification, TIKSN.Integration.Messages.Events.IEvent
+    public interface ICompanyEvent<out TTenantIdentity> : MediatR.INotification, TIKSN.Integration.Messages.Events.IEvent, TIKSN.Integration.Messages.Events.ITenantEvent<TTenantIdentity>
         where out TTenantIdentity : System.IEquatable<TTenantIdentity>
     {
         Fossa.API.Core.Entities.CompanyId CompanyId { get; }
     }
-    public interface ITenantEvent<out TTenantIdentity> : MediatR.INotification, TIKSN.Integration.Messages.Events.IEvent
-        where out TTenantIdentity : System.IEquatable<TTenantIdentity>
-    {
-        TTenantIdentity TenantID { get; }
-    }
-    public interface ITenantUserEvent<out TTenantIdentity, out TUserIdentity> : Fossa.API.Core.Messages.Events.ITenantEvent<TTenantIdentity>, Fossa.API.Core.Messages.Events.IUserEvent<TUserIdentity>, MediatR.INotification, TIKSN.Integration.Messages.Events.IEvent
-        where out TTenantIdentity : System.IEquatable<TTenantIdentity>
-        where out TUserIdentity : System.IEquatable<TUserIdentity> { }
-    public interface IUserEvent<out TUserIdentity> : MediatR.INotification, TIKSN.Integration.Messages.Events.IEvent
-        where out TUserIdentity : System.IEquatable<TUserIdentity>
-    {
-        TUserIdentity UserID { get; }
-    }
-    public abstract class TenantEvent<TTenantIdentity> : Fossa.API.Core.Messages.Events.ITenantEvent<TTenantIdentity>, MediatR.INotification, System.IEquatable<Fossa.API.Core.Messages.Events.TenantEvent<TTenantIdentity>>, TIKSN.Integration.Messages.Events.IEvent
+    public abstract class TenantEvent<TTenantIdentity> : MediatR.INotification, System.IEquatable<Fossa.API.Core.Messages.Events.TenantEvent<TTenantIdentity>>, TIKSN.Integration.Messages.Events.IEvent, TIKSN.Integration.Messages.Events.ITenantEvent<TTenantIdentity>
         where TTenantIdentity : System.IEquatable<TTenantIdentity>
     {
         protected TenantEvent(TTenantIdentity tenantID) { }
         public TTenantIdentity TenantID { get; }
     }
-    public abstract class TenantUserEvent<TTenantIdentity, TUserIdentity> : Fossa.API.Core.Messages.Events.TenantEvent<TTenantIdentity>, Fossa.API.Core.Messages.Events.IUserEvent<TUserIdentity>, MediatR.INotification, System.IEquatable<Fossa.API.Core.Messages.Events.TenantUserEvent<TTenantIdentity, TUserIdentity>>, TIKSN.Integration.Messages.Events.IEvent
+    public abstract class TenantUserEvent<TTenantIdentity, TUserIdentity> : Fossa.API.Core.Messages.Events.TenantEvent<TTenantIdentity>, MediatR.INotification, System.IEquatable<Fossa.API.Core.Messages.Events.TenantUserEvent<TTenantIdentity, TUserIdentity>>, TIKSN.Integration.Messages.Events.IEvent, TIKSN.Integration.Messages.Events.IUserEvent<TUserIdentity>
         where TTenantIdentity : System.IEquatable<TTenantIdentity>
         where TUserIdentity : System.IEquatable<TUserIdentity>
     {
@@ -939,29 +903,6 @@ namespace Fossa.API.Core.Messages.Queries
         public EmployeeRetrievalQueryHandler(Fossa.API.Core.Repositories.IEmployeeQueryRepository employeeQueryRepository) { }
         public System.Threading.Tasks.Task<Fossa.API.Core.Entities.EmployeeEntity> Handle(Fossa.API.Core.Messages.Queries.EmployeeRetrievalQuery request, System.Threading.CancellationToken cancellationToken) { }
     }
-    public interface ITenantEntityQuery<TEntityIdentity, out TTenantIdentity, out TResult> : Fossa.API.Core.Messages.Queries.ITenantQuery<TTenantIdentity, TResult>, MediatR.IBaseRequest, MediatR.IRequest<TResult>, TIKSN.Integration.Messages.Queries.IQuery<TResult>
-        where TEntityIdentity : System.IEquatable<TEntityIdentity>
-        where out TTenantIdentity : System.IEquatable<TTenantIdentity>
-    {
-        System.Collections.Generic.IEnumerable<TEntityIdentity> TenantEntityIdentities { get; }
-    }
-    public interface ITenantQuery<out TTenantIdentity, out TResult> : MediatR.IBaseRequest, MediatR.IRequest<TResult>, TIKSN.Integration.Messages.Queries.IQuery<TResult>
-        where out TTenantIdentity : System.IEquatable<TTenantIdentity>
-    {
-        TTenantIdentity TenantID { get; }
-    }
-    public interface ITenantUserEntityQuery<TEntityIdentity, out TTenantIdentity, out TUserIdentity, out TResult> : Fossa.API.Core.Messages.Queries.ITenantEntityQuery<TEntityIdentity, TTenantIdentity, TResult>, Fossa.API.Core.Messages.Queries.ITenantQuery<TTenantIdentity, TResult>, Fossa.API.Core.Messages.Queries.IUserQuery<TUserIdentity, TResult>, MediatR.IBaseRequest, MediatR.IRequest<TResult>, TIKSN.Integration.Messages.Queries.IQuery<TResult>
-        where TEntityIdentity : System.IEquatable<TEntityIdentity>
-        where out TTenantIdentity : System.IEquatable<TTenantIdentity>
-        where out TUserIdentity : System.IEquatable<TUserIdentity> { }
-    public interface ITenantUserQuery<out TTenantIdentity, out TUserIdentity, out TResult> : Fossa.API.Core.Messages.Queries.ITenantQuery<TTenantIdentity, TResult>, Fossa.API.Core.Messages.Queries.IUserQuery<TUserIdentity, TResult>, MediatR.IBaseRequest, MediatR.IRequest<TResult>, TIKSN.Integration.Messages.Queries.IQuery<TResult>
-        where out TTenantIdentity : System.IEquatable<TTenantIdentity>
-        where out TUserIdentity : System.IEquatable<TUserIdentity> { }
-    public interface IUserQuery<out TUserIdentity, out TResult> : MediatR.IBaseRequest, MediatR.IRequest<TResult>, TIKSN.Integration.Messages.Queries.IQuery<TResult>
-        where out TUserIdentity : System.IEquatable<TUserIdentity>
-    {
-        TUserIdentity UserID { get; }
-    }
     public class SystemLicenseRetrievalQuery : MediatR.IBaseRequest, MediatR.IRequest<TIKSN.Licensing.License<Fossa.Licensing.SystemEntitlements>>, System.IEquatable<Fossa.API.Core.Messages.Queries.SystemLicenseRetrievalQuery>, TIKSN.Integration.Messages.Queries.IQuery<TIKSN.Licensing.License<Fossa.Licensing.SystemEntitlements>>
     {
         public SystemLicenseRetrievalQuery() { }
@@ -971,7 +912,7 @@ namespace Fossa.API.Core.Messages.Queries
         public SystemLicenseRetrievalQueryHandler(Fossa.API.Core.Services.ISystemLicenseRetriever systemLicenseRetriever) { }
         public System.Threading.Tasks.Task<TIKSN.Licensing.License<Fossa.Licensing.SystemEntitlements>> Handle(Fossa.API.Core.Messages.Queries.SystemLicenseRetrievalQuery request, System.Threading.CancellationToken cancellationToken) { }
     }
-    public abstract class TenantEntityQuery<TEntity, TEntityIdentity, TTenantIdentity, TResult> : Fossa.API.Core.Messages.ITenantEntityReferences<TEntityIdentity>, Fossa.API.Core.Messages.Queries.ITenantEntityQuery<TEntityIdentity, TTenantIdentity, TResult>, Fossa.API.Core.Messages.Queries.ITenantQuery<TTenantIdentity, TResult>, MediatR.IBaseRequest, MediatR.IRequest<TResult>, System.IEquatable<Fossa.API.Core.Messages.Queries.TenantEntityQuery<TEntity, TEntityIdentity, TTenantIdentity, TResult>>, TIKSN.Integration.Messages.Queries.IQuery<TResult>
+    public abstract class TenantEntityQuery<TEntity, TEntityIdentity, TTenantIdentity, TResult> : Fossa.API.Core.Messages.ITenantEntityReferences<TEntityIdentity>, MediatR.IBaseRequest, MediatR.IRequest<TResult>, System.IEquatable<Fossa.API.Core.Messages.Queries.TenantEntityQuery<TEntity, TEntityIdentity, TTenantIdentity, TResult>>, TIKSN.Integration.Messages.Queries.IQuery<TResult>, TIKSN.Integration.Messages.Queries.ITenantEntityQuery<TEntityIdentity, TTenantIdentity, TResult>, TIKSN.Integration.Messages.Queries.ITenantQuery<TTenantIdentity, TResult>
         where TEntity : TIKSN.Data.IEntity<TEntityIdentity>
         where TEntityIdentity : System.IEquatable<TEntityIdentity>
         where TTenantIdentity : System.IEquatable<TTenantIdentity>
