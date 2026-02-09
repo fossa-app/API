@@ -42,8 +42,23 @@ public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, T
     return response;
   }
 
+  private static Task InspectTenantEntityAsync(
+    TTenantIdentity tenantId,
+    ITenantEntity<TEntityIdentity, TTenantIdentity> tenantEntity,
+    CancellationToken cancellationToken)
+  {
+    if (tenantEntity.TenantID.Equals(default) || !tenantEntity.TenantID.Equals(tenantId))
+    {
+      throw new CrossTenantOutboundUnauthorizedAccessException();
+    }
+
+    cancellationToken.ThrowIfCancellationRequested();
+
+    return Task.CompletedTask;
+  }
+
   private async Task InspectAffectingTenantEntitiesAsync(
-    IEnumerable<AffectingEntity<TEntityIdentity>> affectingEntities,
+    IEnumerable<EntityReference<TEntityIdentity>> affectingEntities,
     TTenantIdentity tenantId,
     CancellationToken cancellationToken)
   {
@@ -75,12 +90,12 @@ public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, T
     TRequest request,
     CancellationToken cancellationToken)
   {
-    if (request is ITenantCommand<TEntityIdentity, TTenantIdentity> tenantCommand)
+    if (request is ITenantEntityCommand<TEntityIdentity, TTenantIdentity> tenantCommand)
     {
       return InspectTenantCommandAsync(tenantCommand, cancellationToken);
     }
 
-    if (request is ITenantQuery<TEntityIdentity, TTenantIdentity, TResponse> tenantQuery)
+    if (request is ITenantEntityQuery<TEntityIdentity, TTenantIdentity, TResponse> tenantQuery)
     {
       return InspectTenantQueryAsync(tenantQuery, cancellationToken);
     }
@@ -122,7 +137,7 @@ public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, T
   }
 
   private async Task InspectTenantCommandAsync(
-    ITenantCommand<TEntityIdentity, TTenantIdentity> tenantCommand,
+    ITenantEntityCommand<TEntityIdentity, TTenantIdentity> tenantCommand,
     CancellationToken cancellationToken)
   {
     var tenantId = _tenantIdProvider.GetTenantId();
@@ -132,29 +147,21 @@ public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, T
       throw new CrossTenantInboundUnauthorizedAccessException();
     }
 
-    await InspectAffectingTenantEntitiesAsync(
-      tenantCommand.AffectingTenantEntities,
+    if (tenantCommand is ITenantEntityReferences<TEntityIdentity> tenantEntityReferences)
+    {
+      await InspectAffectingTenantEntitiesAsync(
+      tenantEntityReferences.TenantEntityReferences,
       tenantId,
       cancellationToken).ConfigureAwait(false);
-  }
-
-  private static Task InspectTenantEntityAsync(
-    TTenantIdentity tenantId,
-    ITenantEntity<TEntityIdentity, TTenantIdentity> tenantEntity,
-    CancellationToken cancellationToken)
-  {
-    if (tenantEntity.TenantID.Equals(default) || !tenantEntity.TenantID.Equals(tenantId))
-    {
-      throw new CrossTenantOutboundUnauthorizedAccessException();
     }
-
-    cancellationToken.ThrowIfCancellationRequested();
-
-    return Task.CompletedTask;
+    else
+    {
+      throw new InvalidOperationException("Tenant Command does not implement ITenantEntityReferences");
+    }
   }
 
   private async Task InspectTenantQueryAsync(
-    ITenantQuery<TEntityIdentity, TTenantIdentity, TResponse> tenantQuery,
+    ITenantEntityQuery<TEntityIdentity, TTenantIdentity, TResponse> tenantQuery,
     CancellationToken cancellationToken)
   {
     var tenantId = _tenantIdProvider.GetTenantId();
@@ -164,9 +171,16 @@ public class TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, T
       throw new CrossTenantInboundUnauthorizedAccessException();
     }
 
-    await InspectAffectingTenantEntitiesAsync(
-      tenantQuery.AffectingTenantEntities,
-      tenantId,
-      cancellationToken).ConfigureAwait(false);
+    if (tenantQuery is ITenantEntityReferences<TEntityIdentity> tenantEntityReferences)
+    {
+      await InspectAffectingTenantEntitiesAsync(
+        tenantEntityReferences.TenantEntityReferences,
+        tenantId,
+        cancellationToken).ConfigureAwait(false);
+    }
+    else
+    {
+      throw new InvalidOperationException("Tenant Query does not implement ITenantEntityReferences");
+    }
   }
 }

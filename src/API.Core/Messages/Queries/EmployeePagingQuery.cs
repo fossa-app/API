@@ -11,9 +11,9 @@ public record EmployeePagingQuery(
     Option<EmployeeId> ReportsToId,
     bool TopLevelOnly,
     Page Page)
-  : EntityTenantQuery<EmployeeEntity, EmployeeId, Guid, PageResult<EmployeeEntity>>(TenantID)
+  : TenantEntityQuery<EmployeeEntity, EmployeeId, Guid, PageResult<EmployeeEntity>>(TenantID)
     , IPagingQuery<EmployeeEntity>
 {
-  public override IEnumerable<EmployeeId> AffectingTenantEntitiesIdentities
+  public override IEnumerable<EmployeeId> TenantEntityIdentities
     => [];
 }

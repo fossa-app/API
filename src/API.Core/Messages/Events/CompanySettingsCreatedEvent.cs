@@ -7,4 +7,4 @@ public record CompanySettingsCreatedEvent(
     CompanySettingsId CompanySettingsId,
     CompanyId CompanyId,
     ColorSchemeId ColorSchemeId)
-  : ICompanyEvent<Guid>;
+  : CompanyEvent<Guid>(TenantID, CompanyId);

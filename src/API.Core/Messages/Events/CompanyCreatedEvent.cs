@@ -8,4 +8,4 @@ public record CompanyCreatedEvent(
     CompanyId CompanyId,
     string Name,
     RegionInfo Country)
-  : ICompanyEvent<Guid>;
+  : CompanyEvent<Guid>(TenantID, CompanyId);

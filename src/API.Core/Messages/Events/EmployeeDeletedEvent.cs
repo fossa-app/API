@@ -7,4 +7,4 @@ public record EmployeeDeletedEvent(
     Guid UserID,
     EmployeeId EmployeeId,
     CompanyId CompanyId)
-  : ICompanyEmployeeEvent<Guid, Guid>;
+  : CompanyEmployeeEvent<Guid, Guid>(TenantID, CompanyId, UserID, EmployeeId);

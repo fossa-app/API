@@ -4,8 +4,8 @@ namespace Fossa.API.Core.Messages.Queries;
 
 public record CompanySettingsRetrievalQuery(
     Guid TenantID)
-  : EntityTenantQuery<CompanySettingsEntity, CompanySettingsId, Guid, CompanySettingsEntity>(TenantID)
+  : TenantEntityQuery<CompanySettingsEntity, CompanySettingsId, Guid, CompanySettingsEntity>(TenantID)
 {
-  public override IEnumerable<CompanySettingsId> AffectingTenantEntitiesIdentities
+  public override IEnumerable<CompanySettingsId> TenantEntityIdentities
     => [];
 }

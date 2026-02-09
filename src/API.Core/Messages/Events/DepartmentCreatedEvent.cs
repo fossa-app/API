@@ -9,4 +9,4 @@ public record DepartmentCreatedEvent(
     string Name,
     Option<DepartmentId> ParentDepartmentId,
     EmployeeId ManagerId)
-  : ICompanyEvent<Guid>;
+  : CompanyEvent<Guid>(TenantID, CompanyId);

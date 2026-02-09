@@ -2,10 +2,10 @@
 
 namespace Fossa.API.Core.Messages.Events;
 
-public interface ICompanyEmployeeEvent<out TUserIdentity, out TTenantIdentity>
-  : ITenantUserEvent<TUserIdentity, TTenantIdentity>, ICompanyEvent<TTenantIdentity>
-  where TUserIdentity : IEquatable<TUserIdentity>
+public interface ICompanyEmployeeEvent<out TTenantIdentity, out TUserIdentity>
+  : ITenantUserEvent<TTenantIdentity, TUserIdentity>, ICompanyEvent<TTenantIdentity>
   where TTenantIdentity : IEquatable<TTenantIdentity>
+  where TUserIdentity : IEquatable<TUserIdentity>
 
 {
   EmployeeId EmployeeId { get; }

@@ -6,8 +6,8 @@ public record DepartmentRetrievalQuery(
     DepartmentId ID,
     Guid TenantID,
     Guid UserID)
-    : EntityTenantQuery<DepartmentEntity, DepartmentId, Guid, DepartmentEntity>(TenantID)
+    : TenantEntityQuery<DepartmentEntity, DepartmentId, Guid, DepartmentEntity>(TenantID)
 {
-  public override IEnumerable<DepartmentId> AffectingTenantEntitiesIdentities
+  public override IEnumerable<DepartmentId> TenantEntityIdentities
       => [ID];
 }

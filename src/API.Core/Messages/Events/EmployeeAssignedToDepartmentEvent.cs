@@ -9,4 +9,4 @@ public record EmployeeAssignedToDepartmentEvent(
     CompanyId CompanyId,
     Option<DepartmentId> PreviousDepartmentId,
     Option<DepartmentId> NewDepartmentId)
-  : ICompanyEmployeeEvent<Guid, Guid>;
+  : CompanyEmployeeEvent<Guid, Guid>(TenantID, CompanyId, UserID, EmployeeId);

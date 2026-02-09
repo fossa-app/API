@@ -8,8 +8,8 @@ public record EmployeeCreationCommand(
     string FirstName,
     string LastName,
     string FullName)
-  : EntityTenantUserCommand<EmployeeEntity, EmployeeId, Guid, Guid>(TenantID, UserID)
+  : TenantUserEntityCommand<EmployeeEntity, EmployeeId, Guid, Guid>(TenantID, UserID)
 {
-  public override IEnumerable<EmployeeId> AffectingTenantEntitiesIdentities
+  public override IEnumerable<EmployeeId> TenantEntityIdentities
     => [];
 }

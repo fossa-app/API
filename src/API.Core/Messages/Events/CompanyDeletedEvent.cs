@@ -5,4 +5,4 @@ namespace Fossa.API.Core.Messages.Events;
 public record CompanyDeletedEvent(
     Guid TenantID,
     CompanyId CompanyId)
-  : ICompanyEvent<Guid>;
+  : CompanyEvent<Guid>(TenantID, CompanyId);

@@ -6,8 +6,8 @@ public record DepartmentDeletionCommand(
     DepartmentId ID,
     Guid TenantID,
     Guid UserID)
-    : EntityTenantCommand<DepartmentEntity, DepartmentId, Guid>(TenantID)
+    : TenantEntityCommand<DepartmentEntity, DepartmentId, Guid>(TenantID)
 {
-  public override IEnumerable<DepartmentId> AffectingTenantEntitiesIdentities
+  public override IEnumerable<DepartmentId> TenantEntityIdentities
       => Seq1(ID);
 }

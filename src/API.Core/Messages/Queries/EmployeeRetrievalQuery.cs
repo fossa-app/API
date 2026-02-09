@@ -6,8 +6,8 @@ public record EmployeeRetrievalQuery(
     EmployeeId ID,
     Guid TenantID,
     Guid UserID)
-  : EntityTenantQuery<EmployeeEntity, EmployeeId, Guid, EmployeeEntity>(TenantID)
+  : TenantEntityQuery<EmployeeEntity, EmployeeId, Guid, EmployeeEntity>(TenantID)
 {
-  public override IEnumerable<EmployeeId> AffectingTenantEntitiesIdentities
+  public override IEnumerable<EmployeeId> TenantEntityIdentities
     => [ID];
 }

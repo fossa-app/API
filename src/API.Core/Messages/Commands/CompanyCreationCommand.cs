@@ -7,8 +7,8 @@ public record CompanyCreationCommand(
   Guid TenantID,
   string Name,
   RegionInfo Country)
-  : EntityTenantCommand<CompanyEntity, CompanyId, Guid>(TenantID)
+  : TenantEntityCommand<CompanyEntity, CompanyId, Guid>(TenantID)
 {
-  public override IEnumerable<CompanyId> AffectingTenantEntitiesIdentities
+  public override IEnumerable<CompanyId> TenantEntityIdentities
     => [];
 }
