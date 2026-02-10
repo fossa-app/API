@@ -1,4 +1,5 @@
 ﻿using Fossa.API.Core.Entities;
+using TIKSN.Integration.Messages.Events;
 
 namespace Fossa.API.Core.Messages.Events;
 
