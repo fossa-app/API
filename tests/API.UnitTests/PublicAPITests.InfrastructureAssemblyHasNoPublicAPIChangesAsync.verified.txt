@@ -6,6 +6,79 @@
         protected override void Load(Autofac.ContainerBuilder builder) { }
     }
 }
+namespace Fossa.API.Infrastructure.Messages.Events
+{
+    public class BranchCreatedEventBusHandler : Fossa.API.Infrastructure.Messages.Events.CompanyEventBusHandler<Fossa.API.Core.Messages.Events.BranchCreatedEvent, Fossa.Messaging.Messages.Events.BranchChangedProtoEvent>
+    {
+        public BranchCreatedEventBusHandler(Fossa.Messaging.IMessagePublisher messagePublisher, Microsoft.Extensions.Logging.ILogger<Fossa.API.Infrastructure.Messages.Events.BranchCreatedEventBusHandler> logger) { }
+        protected override Fossa.Messaging.Messages.Events.BranchChangedProtoEvent Map(Fossa.API.Core.Messages.Events.BranchCreatedEvent domainEvent) { }
+        protected override long ResolveEntityId(Fossa.API.Core.Messages.Events.BranchCreatedEvent domainEvent) { }
+        protected override string ResolveEntityName(Fossa.API.Core.Messages.Events.BranchCreatedEvent domainEvent) { }
+    }
+    public class BranchUpdatedEventBusHandler : Fossa.API.Infrastructure.Messages.Events.CompanyEventBusHandler<Fossa.API.Core.Messages.Events.BranchUpdatedEvent, Fossa.Messaging.Messages.Events.BranchChangedProtoEvent>
+    {
+        public BranchUpdatedEventBusHandler(Fossa.Messaging.IMessagePublisher messagePublisher, Microsoft.Extensions.Logging.ILogger<Fossa.API.Infrastructure.Messages.Events.BranchUpdatedEventBusHandler> logger) { }
+        protected override Fossa.Messaging.Messages.Events.BranchChangedProtoEvent Map(Fossa.API.Core.Messages.Events.BranchUpdatedEvent domainEvent) { }
+        protected override long ResolveEntityId(Fossa.API.Core.Messages.Events.BranchUpdatedEvent domainEvent) { }
+        protected override string ResolveEntityName(Fossa.API.Core.Messages.Events.BranchUpdatedEvent domainEvent) { }
+    }
+    public class CompanyCreatedEventBusHandler : Fossa.API.Infrastructure.Messages.Events.CompanyEventBusHandler<Fossa.API.Core.Messages.Events.CompanyCreatedEvent, Fossa.Messaging.Messages.Events.CompanyChangedProtoEvent>
+    {
+        public CompanyCreatedEventBusHandler(Fossa.Messaging.IMessagePublisher messagePublisher, Microsoft.Extensions.Logging.ILogger<Fossa.API.Infrastructure.Messages.Events.CompanyCreatedEventBusHandler> logger) { }
+        protected override Fossa.Messaging.Messages.Events.CompanyChangedProtoEvent Map(Fossa.API.Core.Messages.Events.CompanyCreatedEvent domainEvent) { }
+        protected override long ResolveEntityId(Fossa.API.Core.Messages.Events.CompanyCreatedEvent domainEvent) { }
+        protected override string ResolveEntityName(Fossa.API.Core.Messages.Events.CompanyCreatedEvent domainEvent) { }
+    }
+    public abstract class CompanyEventBusHandler<TEvent, TProtoEvent> : MediatR.INotificationHandler<TEvent>
+        where TEvent : Fossa.API.Core.Messages.Events.ICompanyEvent<System.Guid>
+        where TProtoEvent : Google.Protobuf.IMessage
+    {
+        protected CompanyEventBusHandler(Fossa.Messaging.IMessagePublisher messagePublisher, Microsoft.Extensions.Logging.ILogger<Fossa.API.Infrastructure.Messages.Events.CompanyEventBusHandler<TEvent, TProtoEvent>> logger) { }
+        protected static string BranchEntityName { get; }
+        protected static string CompanyEntityName { get; }
+        protected static string DepartmentEntityName { get; }
+        protected static string EmployeeEntityName { get; }
+        public System.Threading.Tasks.Task Handle(TEvent notification, System.Threading.CancellationToken cancellationToken) { }
+        protected abstract TProtoEvent Map(TEvent domainEvent);
+        protected abstract long ResolveEntityId(TEvent domainEvent);
+        protected abstract string ResolveEntityName(TEvent domainEvent);
+    }
+    public class CompanyUpdatedEventBusHandler : Fossa.API.Infrastructure.Messages.Events.CompanyEventBusHandler<Fossa.API.Core.Messages.Events.CompanyUpdatedEvent, Fossa.Messaging.Messages.Events.CompanyChangedProtoEvent>
+    {
+        public CompanyUpdatedEventBusHandler(Fossa.Messaging.IMessagePublisher messagePublisher, Microsoft.Extensions.Logging.ILogger<Fossa.API.Infrastructure.Messages.Events.CompanyUpdatedEventBusHandler> logger) { }
+        protected override Fossa.Messaging.Messages.Events.CompanyChangedProtoEvent Map(Fossa.API.Core.Messages.Events.CompanyUpdatedEvent domainEvent) { }
+        protected override long ResolveEntityId(Fossa.API.Core.Messages.Events.CompanyUpdatedEvent domainEvent) { }
+        protected override string ResolveEntityName(Fossa.API.Core.Messages.Events.CompanyUpdatedEvent domainEvent) { }
+    }
+    public class DepartmentCreatedEventBusHandler : Fossa.API.Infrastructure.Messages.Events.CompanyEventBusHandler<Fossa.API.Core.Messages.Events.DepartmentCreatedEvent, Fossa.Messaging.Messages.Events.DepartmentChangedProtoEvent>
+    {
+        public DepartmentCreatedEventBusHandler(Fossa.Messaging.IMessagePublisher messagePublisher, Microsoft.Extensions.Logging.ILogger<Fossa.API.Infrastructure.Messages.Events.DepartmentCreatedEventBusHandler> logger) { }
+        protected override Fossa.Messaging.Messages.Events.DepartmentChangedProtoEvent Map(Fossa.API.Core.Messages.Events.DepartmentCreatedEvent domainEvent) { }
+        protected override long ResolveEntityId(Fossa.API.Core.Messages.Events.DepartmentCreatedEvent domainEvent) { }
+        protected override string ResolveEntityName(Fossa.API.Core.Messages.Events.DepartmentCreatedEvent domainEvent) { }
+    }
+    public class DepartmentUpdatedEventBusHandler : Fossa.API.Infrastructure.Messages.Events.CompanyEventBusHandler<Fossa.API.Core.Messages.Events.DepartmentUpdatedEvent, Fossa.Messaging.Messages.Events.DepartmentChangedProtoEvent>
+    {
+        public DepartmentUpdatedEventBusHandler(Fossa.Messaging.IMessagePublisher messagePublisher, Microsoft.Extensions.Logging.ILogger<Fossa.API.Infrastructure.Messages.Events.DepartmentUpdatedEventBusHandler> logger) { }
+        protected override Fossa.Messaging.Messages.Events.DepartmentChangedProtoEvent Map(Fossa.API.Core.Messages.Events.DepartmentUpdatedEvent domainEvent) { }
+        protected override long ResolveEntityId(Fossa.API.Core.Messages.Events.DepartmentUpdatedEvent domainEvent) { }
+        protected override string ResolveEntityName(Fossa.API.Core.Messages.Events.DepartmentUpdatedEvent domainEvent) { }
+    }
+    public class EmployeeCreatedEventBusHandler : Fossa.API.Infrastructure.Messages.Events.CompanyEventBusHandler<Fossa.API.Core.Messages.Events.EmployeeCreatedEvent, Fossa.Messaging.Messages.Events.EmployeeChangedProtoEvent>
+    {
+        public EmployeeCreatedEventBusHandler(Fossa.Messaging.IMessagePublisher messagePublisher, Microsoft.Extensions.Logging.ILogger<Fossa.API.Infrastructure.Messages.Events.EmployeeCreatedEventBusHandler> logger) { }
+        protected override Fossa.Messaging.Messages.Events.EmployeeChangedProtoEvent Map(Fossa.API.Core.Messages.Events.EmployeeCreatedEvent domainEvent) { }
+        protected override long ResolveEntityId(Fossa.API.Core.Messages.Events.EmployeeCreatedEvent domainEvent) { }
+        protected override string ResolveEntityName(Fossa.API.Core.Messages.Events.EmployeeCreatedEvent domainEvent) { }
+    }
+    public class EmployeeUpdatedEventBusHandler : Fossa.API.Infrastructure.Messages.Events.CompanyEventBusHandler<Fossa.API.Core.Messages.Events.EmployeeUpdatedEvent, Fossa.Messaging.Messages.Events.EmployeeChangedProtoEvent>
+    {
+        public EmployeeUpdatedEventBusHandler(Fossa.Messaging.IMessagePublisher messagePublisher, Microsoft.Extensions.Logging.ILogger<Fossa.API.Infrastructure.Messages.Events.EmployeeUpdatedEventBusHandler> logger) { }
+        protected override Fossa.Messaging.Messages.Events.EmployeeChangedProtoEvent Map(Fossa.API.Core.Messages.Events.EmployeeUpdatedEvent domainEvent) { }
+        protected override long ResolveEntityId(Fossa.API.Core.Messages.Events.EmployeeUpdatedEvent domainEvent) { }
+        protected override string ResolveEntityName(Fossa.API.Core.Messages.Events.EmployeeUpdatedEvent domainEvent) { }
+    }
+}
 namespace Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters
 {
     public class ActiveFusionAuthApplicationFilter : Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters.IFusionAuthApplicationFilter

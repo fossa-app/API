@@ -716,10 +716,13 @@ namespace Fossa.API.Core.Messages.Events
     }
     public class EmployeeUpdatedEvent : Fossa.API.Core.Messages.Events.CompanyEmployeeEvent<System.Guid, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Events.EmployeeUpdatedEvent>
     {
-        public EmployeeUpdatedEvent(System.Guid TenantID, System.Guid UserID, Fossa.API.Core.Entities.EmployeeId EmployeeId, string JobTitle, LanguageExt.Option<Fossa.API.Core.Entities.BranchId> AssignedBranchId, LanguageExt.Option<Fossa.API.Core.Entities.DepartmentId> AssignedDepartmentId, LanguageExt.Option<Fossa.API.Core.Entities.EmployeeId> ReportsToId, Fossa.API.Core.Entities.CompanyId CompanyId) { }
+        public EmployeeUpdatedEvent(System.Guid TenantID, System.Guid UserID, Fossa.API.Core.Entities.EmployeeId EmployeeId, string FirstName, string LastName, string FullName, string JobTitle, LanguageExt.Option<Fossa.API.Core.Entities.BranchId> AssignedBranchId, LanguageExt.Option<Fossa.API.Core.Entities.DepartmentId> AssignedDepartmentId, LanguageExt.Option<Fossa.API.Core.Entities.EmployeeId> ReportsToId, Fossa.API.Core.Entities.CompanyId CompanyId) { }
         public LanguageExt.Option<Fossa.API.Core.Entities.BranchId> AssignedBranchId { get; init; }
         public LanguageExt.Option<Fossa.API.Core.Entities.DepartmentId> AssignedDepartmentId { get; init; }
+        public string FirstName { get; init; }
+        public string FullName { get; init; }
         public string JobTitle { get; init; }
+        public string LastName { get; init; }
         public LanguageExt.Option<Fossa.API.Core.Entities.EmployeeId> ReportsToId { get; init; }
     }
     public interface ICompanyEmployeeEvent<out TTenantIdentity, out TUserIdentity> : Fossa.API.Core.Messages.Events.ICompanyEvent<TTenantIdentity>, MediatR.INotification, TIKSN.Integration.Messages.Events.IEvent, TIKSN.Integration.Messages.Events.ITenantEvent<TTenantIdentity>, TIKSN.Integration.Messages.Events.ITenantUserEvent<TTenantIdentity, TUserIdentity>, TIKSN.Integration.Messages.Events.IUserEvent<TUserIdentity>
