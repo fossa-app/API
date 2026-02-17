@@ -1,12 +1,13 @@
 ﻿using Fossa.API.Core.Messages.Events;
 using Fossa.Messaging;
 using Fossa.Messaging.Messages.Events;
+using Microsoft.Extensions.Logging;
 
 namespace Fossa.API.Infrastructure.Messages.Events;
 
 public class DepartmentCreatedEventBusHandler : CompanyEventBusHandler<DepartmentCreatedEvent, DepartmentChangedProtoEvent>
 {
-  public DepartmentCreatedEventBusHandler(IMessagePublisher messagePublisher) : base(messagePublisher)
+  public DepartmentCreatedEventBusHandler(IMessagePublisher messagePublisher, ILogger<DepartmentCreatedEventBusHandler> logger) : base(messagePublisher, logger)
   {
   }
 
