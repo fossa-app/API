@@ -9,7 +9,6 @@
     <PackageReference Include="FluentValidation" />
     <PackageReference Include="Fossa.Licensing" />
     <PackageReference Include="MediatR" />
-    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
     <PackageReference Include="TIKSN-Framework" />
     <PackageReference Include="UnitGenerator">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
