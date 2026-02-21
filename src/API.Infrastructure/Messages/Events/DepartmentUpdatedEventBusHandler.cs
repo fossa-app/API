@@ -1,4 +1,5 @@
-﻿using Fossa.API.Core.Messages.Events;
+﻿using System.Diagnostics.Metrics;
+using Fossa.API.Core.Messages.Events;
 using Fossa.Messaging;
 using Fossa.Messaging.Messages.Events;
 using Microsoft.Extensions.Logging;
@@ -7,7 +8,10 @@ namespace Fossa.API.Infrastructure.Messages.Events;
 
 public class DepartmentUpdatedEventBusHandler : CompanyEventBusHandler<DepartmentUpdatedEvent, DepartmentChangedProtoEvent>
 {
-  public DepartmentUpdatedEventBusHandler(IMessagePublisher messagePublisher, ILogger<DepartmentUpdatedEventBusHandler> logger) : base(messagePublisher, logger)
+  public DepartmentUpdatedEventBusHandler(
+      IMessagePublisher messagePublisher,
+      IMeterFactory meterFactory,
+      ILogger<DepartmentUpdatedEventBusHandler> logger) : base(messagePublisher, meterFactory, logger)
   {
   }
 
