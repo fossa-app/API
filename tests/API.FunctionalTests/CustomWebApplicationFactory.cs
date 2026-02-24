@@ -103,6 +103,11 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
         .RegisterType<TestCertificateProvider>()
         .AsImplementedInterfaces()
         .SingleInstance();
+
+      containerBuilder
+        .RegisterType<TestProducerProvider>()
+        .AsImplementedInterfaces()
+        .SingleInstance();
     });
     var host = builder.Build();
     host.Start();
