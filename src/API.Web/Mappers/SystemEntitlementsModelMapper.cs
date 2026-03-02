@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using Fossa.API.Core.Services;
-using Fossa.API.Web.ApiModels;
+using Fossa.Bridge.Models.ApiModels;
 using Fossa.Licensing;
 using NodaTime;
 using TIKSN.Mapping;

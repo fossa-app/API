@@ -1,5 +1,4 @@
-﻿using MediatR;
-using TIKSN.Integration.Messages.Events;
+﻿using TIKSN.Integration.Messages.Events;
 
 namespace Fossa.API.Core.Messages.Events;
 

@@ -5,7 +5,7 @@ using EasyDoubles;
 using Fossa.API.FunctionalTests.Seed;
 using Fossa.API.Persistence.Mongo.Entities;
 using Fossa.API.Web;
-using Fossa.API.Web.ApiModels;
+using Fossa.Bridge.Models.ApiModels;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit.Abstractions;

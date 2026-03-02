@@ -1,7 +1,7 @@
 ﻿using Asp.Versioning;
-using Fossa.API.Web.ApiModels;
 using Fossa.API.Web.Messages.Commands;
 using Fossa.API.Web.Messages.Queries;
+using Fossa.Bridge.Models.ApiModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

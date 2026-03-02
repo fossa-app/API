@@ -3,7 +3,7 @@ using Fossa.API.Core.Messages.Commands;
 using Fossa.API.Core.Tenant;
 using Fossa.API.Core.TimeZone;
 using Fossa.API.Core.User;
-using Fossa.API.Web.ApiModels;
+using Fossa.Bridge.Models.ApiModels;
 using TIKSN.Mapping;
 
 namespace Fossa.API.Web.Messages.Commands;

@@ -1,11 +1,11 @@
 ﻿using Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters;
-using Fossa.API.Infrastructure.Models;
 using Fossa.API.Infrastructure.RestClients;
+using Fossa.Bridge.Models.ApiModels;
 using TIKSN.Data;
 
 namespace Fossa.API.Infrastructure.Messages.Queries;
 
-public partial class IdentityClientRetrievalQueryHandler : IRequestHandler<IdentityClientRetrievalQuery, IdentityClient>
+public partial class IdentityClientRetrievalQueryHandler : IRequestHandler<IdentityClientRetrievalQuery, IdentityClientRetrievalModel>
 {
   private readonly Lst<IFusionAuthApplicationFilter> _fusionAuthApplicationFilters;
   private readonly IFusionAuthRestClient _fusionAuthRestClient;
@@ -21,7 +21,7 @@ public partial class IdentityClientRetrievalQueryHandler : IRequestHandler<Ident
       originFusionAuthApplicationFilter);
   }
 
-  public async Task<IdentityClient> Handle(
+  public async Task<IdentityClientRetrievalModel> Handle(
     IdentityClientRetrievalQuery request,
     CancellationToken cancellationToken)
   {
@@ -36,6 +36,6 @@ public partial class IdentityClientRetrievalQueryHandler : IRequestHandler<Ident
 
     var application = applications.Match(Empty: () => throw new EntityNotFoundException(), One: x => x, More: (_, _) => throw new EntityNotFoundException());
 
-    return new IdentityClient(application.Id, application.Name ?? string.Empty, application.TenantId);
+    return new IdentityClientRetrievalModel(application.Id, application.Name ?? string.Empty, application.TenantId);
   }
 }

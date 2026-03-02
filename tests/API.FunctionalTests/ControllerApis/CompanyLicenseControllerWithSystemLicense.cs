@@ -3,7 +3,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Fossa.API.FunctionalTests.Seed;
 using Fossa.API.Web;
-using Fossa.API.Web.ApiModels;
+using Fossa.Bridge.Models.ApiModels;
 using Shouldly;
 
 namespace Fossa.API.FunctionalTests.ControllerApis;

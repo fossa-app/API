@@ -5,7 +5,7 @@ using Fossa.API.Core.Extensions;
 using Fossa.API.Core.Services;
 using Fossa.API.FunctionalTests.Repositories;
 using Fossa.API.FunctionalTests.Services;
-using Fossa.API.Web.ApiModels;
+using Fossa.Bridge.Models.ApiModels;
 using Fossa.Licensing;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;

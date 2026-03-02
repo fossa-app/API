@@ -6,7 +6,7 @@ using Fossa.API.FunctionalTests.Extensions;
 using Fossa.API.FunctionalTests.Seed;
 using Fossa.API.Persistence.Mongo.Entities;
 using Fossa.API.Web;
-using Fossa.API.Web.ApiModels;
+using Fossa.Bridge.Models.ApiModels;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 using Xunit.Abstractions;
@@ -53,7 +53,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     const string branchName = "Branch-392136901";
     const string timeZoneId = "America/New_York";
 
-    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId, Address: null));
+    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId, address: null));
 
     creationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 
@@ -75,7 +75,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     const string branchName = "Branch-392136901";
     const string timeZoneId = "Australia/Perth";
 
-    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId, Address: null));
+    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId, address: null));
 
     if (creationResponse.StatusCode != HttpStatusCode.OK)
     {
@@ -90,7 +90,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     var client = _factory.CreateClient();
 
-    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel("Branch X", "America/New_York", Address: null));
+    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel("Branch X", "America/New_York", address: null));
 
     response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
   }
@@ -101,7 +101,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var client = _factory.CreateClient();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.User1");
     const string branchName = "Branch-826076795";
-    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, "USZone", Address: null));
+    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, "USZone", address: null));
 
     response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
   }
@@ -112,7 +112,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var client = _factory.CreateClient();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.User1");
     const string branchName = "Branch-826076795";
-    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, "America/Detroit", Address: null));
+    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, "America/Detroit", address: null));
 
     response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
   }
@@ -123,7 +123,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var client = _factory.CreateClient();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.User1");
     const string branchName = "Branch-826076795";
-    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, "Australia/Perth", Address: null));
+    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, "Australia/Perth", address: null));
 
     response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
   }
@@ -137,7 +137,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     const string branchName = "Branch-832159009";
     const string timeZoneId = "America/New_York";
 
-    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId, Address: null));
+    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId, address: null));
 
     creationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 
@@ -195,7 +195,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JKXHHECNDQ6BYNA6CQQ2S59P.Tenant1.ADMIN1");
 
-    var branchCreationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId, Address: null));
+    var branchCreationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId, address: null));
 
     branchCreationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 
@@ -302,7 +302,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     result.ShouldNotBeNull();
     result.Items.Count.ShouldBe(2);
-    result.Items.All(x => x.Name.Contains("NYC")).ShouldBeTrue();
+    result.Items.All(x => x.Name?.Contains("NYC") == true).ShouldBeTrue();
   }
 
   [Fact]
@@ -382,9 +382,9 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JMV0X5W7N908QW69WVVDPFAW.Tenant1.ADMIN1");
 
-    var branch1CreationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branch1Name, timeZoneId, Address: null));
-    var branch2CreationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branch2Name, timeZoneId, Address: null));
-    var branch3CreationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branch3Name, timeZoneId, Address: null));
+    var branch1CreationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branch1Name, timeZoneId, address: null));
+    var branch2CreationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branch2Name, timeZoneId, address: null));
+    var branch3CreationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branch3Name, timeZoneId, address: null));
 
     branch1CreationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
     branch2CreationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);

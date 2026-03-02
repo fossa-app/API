@@ -1,6 +1,6 @@
 ﻿using Asp.Versioning;
 using Fossa.API.Infrastructure.Messages.Queries;
-using Fossa.API.Infrastructure.Models;
+using Fossa.Bridge.Models.ApiModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Fossa.API.Web.Api.Identity;
@@ -19,7 +19,7 @@ public class ClientController : BaseApiController
   }
 
   [HttpGet]
-  public async Task<IdentityClient> GetAsync(
+  public async Task<IdentityClientRetrievalModel> GetAsync(
     [FromQuery] string? origin,
     CancellationToken cancellationToken)
   {

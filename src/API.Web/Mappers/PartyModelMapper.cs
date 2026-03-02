@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Fossa.Bridge.Models.ApiModels;
 using TIKSN.Licensing;
 using TIKSN.Mapping;
 

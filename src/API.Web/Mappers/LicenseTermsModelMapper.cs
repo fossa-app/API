@@ -1,4 +1,5 @@
-﻿using TIKSN.Licensing;
+﻿using Fossa.Bridge.Models.ApiModels;
+using TIKSN.Licensing;
 using TIKSN.Mapping;
 
 namespace Fossa.API.Web.Mappers;
