@@ -1,33 +1,32 @@
 ﻿using System.Net;
-using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using Fossa.API.FunctionalTests.Seed;
 using Fossa.API.Web;
 using Fossa.Bridge.Models.ApiModels;
+using Fossa.Bridge.Services;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using Xunit.Abstractions;
 
 namespace Fossa.API.FunctionalTests.ControllerApis;
 
 public class DepartmentsControllerWithSystemLicense : IClassFixture<CustomWebApplicationFactory<DefaultWebModule>>, IAsyncLifetime
 {
   private readonly CustomWebApplicationFactory<DefaultWebModule> _factory;
-  private readonly ITestOutputHelper _testOutputHelper;
 
   public DepartmentsControllerWithSystemLicense(
-      CustomWebApplicationFactory<DefaultWebModule> factory,
-      ITestOutputHelper testOutputHelper)
+      CustomWebApplicationFactory<DefaultWebModule> factory)
   {
     _factory = factory;
-    _testOutputHelper = testOutputHelper;
   }
 
   [Fact]
   public async Task CreateAndListDepartmentsAsync()
   {
-    // Arrange
-    var client = _factory.CreateClient();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JMV0XC70JH9GC8P9M6SYYYAK.Tenant1.ADMIN420425736");
+    using var scope = _factory.Services.CreateScope();
+    var departmentClient = scope.ServiceProvider.GetRequiredService<IClients>().DepartmentClient;
+    var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+
+    transport.SetAuthorizationToken("Bearer", "01JMV0XC70JH9GC8P9M6SYYYAK.Tenant1.ADMIN420425736");
 
     const string firstName = "First35292075";
     const string lastName = "Last35292075";
@@ -37,43 +36,18 @@ public class DepartmentsControllerWithSystemLicense : IClassFixture<CustomWebApp
     var dept2Name = $"Department-{Random.Shared.Next()}";
     var dept3Name = $"Department-{Random.Shared.Next()}";
 
-    var employeeCreationResponse = await client.PostAsJsonAsync("/api/1.0/Employee", new EmployeeModificationModel(firstName, lastName, fullName));
-    employeeCreationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-    var employeeRetrievalResponse = await client.GetAsync("/api/1.0/Employee");
-    var employeeResponseModel =
-      await employeeRetrievalResponse.Content.ReadFromJsonAsync<EmployeeRetrievalModel>();
-    employeeResponseModel.ShouldNotBeNull();
+    await employeeClient.CreateEmployeeAsync(new EmployeeModificationModel(firstName, lastName, fullName), TestContext.Current.CancellationToken);
+
+    var createdEmployee = await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken);
+    createdEmployee.ShouldNotBeNull();
 
     // Act - Create departments
-    var dept1CreationResponse = await client.PostAsJsonAsync("/api/1.0/Departments",
-        new DepartmentModificationModel(dept1Name, null, employeeResponseModel.Id));
-    var dept2CreationResponse = await client.PostAsJsonAsync("/api/1.0/Departments",
-        new DepartmentModificationModel(dept2Name, null, employeeResponseModel.Id));
-    var dept3CreationResponse = await client.PostAsJsonAsync("/api/1.0/Departments",
-        new DepartmentModificationModel(dept3Name, null, employeeResponseModel.Id));
-
-    // Assert creation responses
-    if (dept1CreationResponse.StatusCode != HttpStatusCode.OK)
-    {
-      _testOutputHelper.WriteLine(await dept1CreationResponse.Content.ReadAsStringAsync());
-    }
-    dept1CreationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-    if (dept2CreationResponse.StatusCode != HttpStatusCode.OK)
-    {
-      _testOutputHelper.WriteLine(await dept2CreationResponse.Content.ReadAsStringAsync());
-    }
-    dept2CreationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-    if (dept3CreationResponse.StatusCode != HttpStatusCode.OK)
-    {
-      _testOutputHelper.WriteLine(await dept3CreationResponse.Content.ReadAsStringAsync());
-    }
-    dept3CreationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+    await departmentClient.CreateDepartmentAsync(new DepartmentModificationModel(dept1Name, null, createdEmployee.Id), TestContext.Current.CancellationToken);
+    await departmentClient.CreateDepartmentAsync(new DepartmentModificationModel(dept2Name, null, createdEmployee.Id), TestContext.Current.CancellationToken);
+    await departmentClient.CreateDepartmentAsync(new DepartmentModificationModel(dept3Name, null, createdEmployee.Id), TestContext.Current.CancellationToken);
 
     // Get the created departments
-    var retrievalResponse = await client.GetAsync("/api/1.0/Departments?pageNumber=1&pageSize=100");
-    var retrievalResponseModel = await retrievalResponse.Content.ReadFromJsonAsync<PagingResponseModel<DepartmentRetrievalModel>>();
+    var retrievalResponseModel = await departmentClient.GetDepartmentsAsync(new DepartmentQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
 
     retrievalResponseModel.ShouldNotBeNull();
     var dept1Model = retrievalResponseModel.Items.Single(x => string.Equals(x.Name, dept1Name, StringComparison.OrdinalIgnoreCase));
@@ -86,10 +60,7 @@ public class DepartmentsControllerWithSystemLicense : IClassFixture<CustomWebApp
     const int dept4Id = 204298046; // Missing department
 
     // Query specific departments
-    var deptRetrievalResponse = await client.GetAsync($"/api/1.0/Departments?Id={dept1Id}&Id={dept2Id}&Id={dept3Id}&Id={dept4Id}");
-    deptRetrievalResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-    var deptResponseModel = await deptRetrievalResponse.Content.ReadFromJsonAsync<PagingResponseModel<DepartmentRetrievalModel>>();
+    var deptResponseModel = await departmentClient.GetDepartmentsAsync(new DepartmentQueryRequestModel { Id = [dept1Id, dept2Id, dept3Id, dept4Id] }, TestContext.Current.CancellationToken);
 
     deptResponseModel.ShouldNotBeNull();
     deptResponseModel.Items.Count.ShouldBe(3);
@@ -107,49 +78,39 @@ public class DepartmentsControllerWithSystemLicense : IClassFixture<CustomWebApp
     const string lastName = "Last35292075";
     const string fullName = "Full35292075";
 
-    var client = _factory.CreateClient();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JMV0XC70JH9GC8P9M6SYYYAK.Tenant1.ADMIN430851539");
+    using var scope = _factory.Services.CreateScope();
+    var departmentClient = scope.ServiceProvider.GetRequiredService<IClients>().DepartmentClient;
+    var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
 
-    var employeeCreationResponse = await client.PostAsJsonAsync("/api/1.0/Employee", new EmployeeModificationModel(firstName, lastName, fullName));
-    employeeCreationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-    var employeeRetrievalResponse = await client.GetAsync("/api/1.0/Employee");
-    var employeeResponseModel =
-      await employeeRetrievalResponse.Content.ReadFromJsonAsync<EmployeeRetrievalModel>();
-    employeeResponseModel.ShouldNotBeNull();
+    transport.SetAuthorizationToken("Bearer", "01JMV0XC70JH9GC8P9M6SYYYAK.Tenant1.ADMIN430851539");
+
+    await employeeClient.CreateEmployeeAsync(new EmployeeModificationModel(firstName, lastName, fullName), TestContext.Current.CancellationToken);
+
+    var createdEmployee = await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken);
+    createdEmployee.ShouldNotBeNull();
 
     var departmentName = $"Department-{Random.Shared.Next()}";
-    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Departments",
-        new DepartmentModificationModel(departmentName, null, employeeResponseModel.Id));
-    if (creationResponse.StatusCode != HttpStatusCode.OK)
-    {
-      _testOutputHelper.WriteLine(await creationResponse.Content.ReadAsStringAsync());
-    }
-    creationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-    var retrievalResponse = await client.GetAsync("/api/1.0/Departments?pageNumber=1&pageSize=100");
-    var retrievalResponseModel = await retrievalResponse.Content.ReadFromJsonAsync<PagingResponseModel<DepartmentRetrievalModel>>();
+    await departmentClient.CreateDepartmentAsync(new DepartmentModificationModel(departmentName, null, createdEmployee.Id), TestContext.Current.CancellationToken);
+
+    var retrievalResponseModel = await departmentClient.GetDepartmentsAsync(new DepartmentQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
     var department = retrievalResponseModel?.Items.Single(x => string.Equals(x.Name, departmentName, StringComparison.OrdinalIgnoreCase));
 
     // Act
-    var deleteResponse = await client.DeleteAsync($"/api/1.0/Departments/{department?.Id}");
+    await departmentClient.DeleteDepartmentAsync(department!.Id, TestContext.Current.CancellationToken);
 
     // Assert
-    if (deleteResponse.StatusCode != HttpStatusCode.OK)
-    {
-      _testOutputHelper.WriteLine(await deleteResponse.Content.ReadAsStringAsync());
-    }
-    deleteResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-    var verificationResponse = await client.GetAsync($"/api/1.0/Departments/{department?.Id}");
-    verificationResponse.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+    var ex = await Should.ThrowAsync<HttpRequestException>(() => departmentClient.GetDepartmentAsync(department.Id, TestContext.Current.CancellationToken));
+    ex.StatusCode.ShouldBe(HttpStatusCode.NotFound);
   }
 
-  public Task DisposeAsync() => Task.CompletedTask;
+  public ValueTask DisposeAsync() => ValueTask.CompletedTask;
 
-  public async Task InitializeAsync()
+  public async ValueTask InitializeAsync()
   {
-    await _factory.SeedSystemLicenseAsync(default).ConfigureAwait(false);
-    await _factory.SeedAllEntitiesAsync(default).ConfigureAwait(false);
+    await _factory.SeedSystemLicenseAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+    await _factory.SeedAllEntitiesAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
   }
 
   [Fact]
@@ -160,40 +121,31 @@ public class DepartmentsControllerWithSystemLicense : IClassFixture<CustomWebApp
     const string lastName = "Last35292075";
     const string fullName = "Full35292075";
 
-    var client = _factory.CreateClient();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JMV0XC70JH9GC8P9M6SYYYAK.Tenant1.ADMIN604735919");
+    using var scope = _factory.Services.CreateScope();
+    var departmentClient = scope.ServiceProvider.GetRequiredService<IClients>().DepartmentClient;
+    var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
 
-    var employeeCreationResponse = await client.PostAsJsonAsync("/api/1.0/Employee", new EmployeeModificationModel(firstName, lastName, fullName));
-    employeeCreationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-    var employeeRetrievalResponse = await client.GetAsync("/api/1.0/Employee");
-    var employeeResponseModel =
-      await employeeRetrievalResponse.Content.ReadFromJsonAsync<EmployeeRetrievalModel>();
-    employeeResponseModel.ShouldNotBeNull();
+    transport.SetAuthorizationToken("Bearer", "01JMV0XC70JH9GC8P9M6SYYYAK.Tenant1.ADMIN604735919");
+
+    await employeeClient.CreateEmployeeAsync(new EmployeeModificationModel(firstName, lastName, fullName), TestContext.Current.CancellationToken);
+
+    var createdEmployee = await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken);
+    createdEmployee.ShouldNotBeNull();
 
     var departmentName = $"Department-{Random.Shared.Next()}";
-    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Departments",
-        new DepartmentModificationModel(departmentName, null, employeeResponseModel.Id));
-    creationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+    await departmentClient.CreateDepartmentAsync(new DepartmentModificationModel(departmentName, null, createdEmployee.Id), TestContext.Current.CancellationToken);
 
-    var retrievalResponse = await client.GetAsync("/api/1.0/Departments?pageNumber=1&pageSize=100");
-    var retrievalResponseModel = await retrievalResponse.Content.ReadFromJsonAsync<PagingResponseModel<DepartmentRetrievalModel>>();
+    var retrievalResponseModel = await departmentClient.GetDepartmentsAsync(new DepartmentQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
     var departmentId = retrievalResponseModel?.Items.Single(x => string.Equals(x.Name, departmentName, StringComparison.OrdinalIgnoreCase)).Id;
 
     // Act
     var updatedName = $"Updated-{Random.Shared.Next()}";
-    var modificationResponse = await client.PutAsJsonAsync($"/api/1.0/Departments/{departmentId}",
-        new DepartmentModificationModel(updatedName, null, employeeResponseModel.Id));
+    await departmentClient.UpdateDepartmentAsync(departmentId!.Value, new DepartmentModificationModel(updatedName, null, createdEmployee.Id), TestContext.Current.CancellationToken);
 
     // Assert
-    if (modificationResponse.StatusCode != HttpStatusCode.OK)
-    {
-      _testOutputHelper.WriteLine(await modificationResponse.Content.ReadAsStringAsync());
-    }
-    modificationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+    var verificationModel = await departmentClient.GetDepartmentAsync(departmentId.Value, TestContext.Current.CancellationToken);
 
-    var verificationResponse = await client.GetAsync($"/api/1.0/Departments/{departmentId}");
-    verificationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-    var verificationModel = await verificationResponse.Content.ReadFromJsonAsync<DepartmentRetrievalModel>();
     verificationModel.ShouldNotBeNull();
     verificationModel.Name.ShouldBe(updatedName);
   }

@@ -38,7 +38,7 @@ public static class CompanyLicenseExtensions
     var licenseFactory = factory.Services.GetRequiredService<ILicenseFactory<CompanyEntitlements, CompanyLicenseEntitlements>>();
     var systemPropertiesRepository = factory.Services.GetRequiredService<SystemPropertiesMongoEasyRepository>();
 
-    var systemPropertiesEntity = await systemPropertiesRepository.GetAsync(SystemProperties.MainSystemPropertiesId.AsPrimitive(), default).ConfigureAwait(false);
+    var systemPropertiesEntity = await systemPropertiesRepository.GetAsync(SystemProperties.MainSystemPropertiesId.AsPrimitive(), cancellationToken).ConfigureAwait(false);
 
     var client = factory.CreateClient();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);

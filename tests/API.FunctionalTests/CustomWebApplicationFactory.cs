@@ -2,6 +2,7 @@
 using Autofac.Extensions.DependencyInjection;
 using EasyDoubles;
 using Fossa.API.Core.Services;
+using Fossa.API.FunctionalTests.Extensions;
 using Fossa.API.FunctionalTests.Repositories;
 using Fossa.API.FunctionalTests.Services;
 using Microsoft.AspNetCore.Authentication;
@@ -34,7 +35,9 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
     builder
       .ConfigureServices(services =>
       {
+        services.AddSingleton(this);
         services.AddEasyDoubles();
+        services.AddBridge();
         services.AddAuthentication("Test")
           .AddScheme<AuthenticationSchemeOptions, TestAuthHandler>("Test", _ => { });
       })
