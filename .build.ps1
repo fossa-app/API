@@ -22,7 +22,11 @@ param(
     # Build Instance
     [Parameter()]
     [string]
-    $Instance
+    $Instance,
+    # Fast mode
+    [Parameter()]
+    [switch]
+    $Fast
 )
 
 Set-StrictMode -Version Latest
@@ -139,7 +143,7 @@ Task EstimateVersion Restore, {
 }
 
 # Synopsis: Format
-Task Format Restore, FormatXmlFiles, FormatWhitespace, FormatStyle, FormatAnalyzers
+Task Format -If { -not $Fast } Restore, FormatXmlFiles, FormatWhitespace, FormatStyle, FormatAnalyzers
 
 # Synopsis: Format Analyzers
 Task FormatAnalyzers Restore, FormatAnalyzersPersistence, FormatAnalyzersCore, FormatAnalyzersInfrastructure, FormatAnalyzersWeb, FormatAnalyzersSolution
@@ -246,7 +250,7 @@ Task DevSkim Restore, {
 Task Restore RestoreWorkloads, RestoreTools, RestorePackages
 
 # Synopsis: Restore workloads
-Task RestoreWorkloads Clean, {
+Task RestoreWorkloads -If { -not $Fast } Clean, {
     Exec { dotnet workload restore }
 }
 
