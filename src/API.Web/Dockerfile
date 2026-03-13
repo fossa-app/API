@@ -1,4 +1,4 @@
-FROM --platform=$TARGETARCH mcr.microsoft.com/dotnet/sdk:10.0.200 AS build
+FROM --platform=$TARGETARCH mcr.microsoft.com/dotnet/sdk:10.0.201 AS build
 ARG TARGETARCH
 WORKDIR /source
 COPY --link . /source
