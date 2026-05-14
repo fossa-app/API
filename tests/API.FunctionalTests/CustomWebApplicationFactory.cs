@@ -18,16 +18,16 @@ namespace Fossa.API.FunctionalTests;
 public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProgram>, IAsyncLifetime
   where TProgram : class
 {
-  async Task IAsyncLifetime.DisposeAsync()
+  async ValueTask IAsyncDisposable.DisposeAsync()
   {
     await base.DisposeAsync().ConfigureAwait(false);
   }
 
-  public Task InitializeAsync()
+  public ValueTask InitializeAsync()
   {
     var systemInitializer = Services.GetRequiredService<ISystemInitializer>();
 
-    return systemInitializer.InitializeAsync(default);
+    return new ValueTask(systemInitializer.InitializeAsync(TestContext.Current.CancellationToken));
   }
 
   protected override void ConfigureWebHost(IWebHostBuilder builder)

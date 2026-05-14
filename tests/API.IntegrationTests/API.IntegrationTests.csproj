@@ -17,7 +17,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.v3" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" />
   </ItemGroup>
   <ItemGroup>
@@ -32,7 +32,7 @@
   <ItemGroup>
     <PackageReference Include="PublicApiGenerator" />
     <PackageReference Include="ReportGenerator" />
-    <PackageReference Include="Verify.Xunit" />
+    <PackageReference Include="Verify.XunitV3" />
     <Using Include="LanguageExt" />
     <Using Include="LanguageExt.Common" />
     <Using Include="LanguageExt.Effects" />
