@@ -98,15 +98,15 @@ namespace Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters
 }
 namespace Fossa.API.Infrastructure.Messages.Queries
 {
-    public class IdentityClientRetrievalQuery : MediatR.IBaseRequest, MediatR.IRequest<Fossa.API.Infrastructure.Models.IdentityClient>, System.IEquatable<Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery>, TIKSN.Integration.Messages.Queries.IQuery<Fossa.API.Infrastructure.Models.IdentityClient>
+    public class IdentityClientRetrievalQuery : MediatR.IBaseRequest, MediatR.IRequest<Fossa.Bridge.Models.ApiModels.IdentityClientRetrievalModel>, System.IEquatable<Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery>, TIKSN.Integration.Messages.Queries.IQuery<Fossa.Bridge.Models.ApiModels.IdentityClientRetrievalModel>
     {
         public IdentityClientRetrievalQuery(LanguageExt.Option<System.Uri> Origin) { }
         public LanguageExt.Option<System.Uri> Origin { get; init; }
     }
-    public class IdentityClientRetrievalQueryHandler : MediatR.IRequestHandler<Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery, Fossa.API.Infrastructure.Models.IdentityClient>
+    public class IdentityClientRetrievalQueryHandler : MediatR.IRequestHandler<Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery, Fossa.Bridge.Models.ApiModels.IdentityClientRetrievalModel>
     {
         public IdentityClientRetrievalQueryHandler(Fossa.API.Infrastructure.RestClients.IFusionAuthRestClient fusionAuthRestClient, Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters.ActiveFusionAuthApplicationFilter activeFusionAuthApplicationFilter, Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters.OriginFusionAuthApplicationFilter originFusionAuthApplicationFilter) { }
-        public System.Threading.Tasks.Task<Fossa.API.Infrastructure.Models.IdentityClient> Handle(Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery request, System.Threading.CancellationToken cancellationToken) { }
+        public System.Threading.Tasks.Task<Fossa.Bridge.Models.ApiModels.IdentityClientRetrievalModel> Handle(Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery request, System.Threading.CancellationToken cancellationToken) { }
     }
 }
 namespace Fossa.API.Infrastructure.Models
@@ -182,13 +182,6 @@ namespace Fossa.API.Infrastructure.Models
         public FusionAuthApplicationsListingResponse() { }
         [System.Text.Json.Serialization.JsonPropertyName("applications")]
         public Fossa.API.Infrastructure.Models.FusionAuthApplication[]? Applications { get; set; }
-    }
-    public class IdentityClient : System.IEquatable<Fossa.API.Infrastructure.Models.IdentityClient>
-    {
-        public IdentityClient(System.Guid ClientId, string ClientName, System.Guid TenantId) { }
-        public System.Guid ClientId { get; init; }
-        public string ClientName { get; init; }
-        public System.Guid TenantId { get; init; }
     }
 }
 namespace Fossa.API.Infrastructure.RestClients

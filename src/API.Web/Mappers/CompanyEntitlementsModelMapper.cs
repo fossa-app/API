@@ -1,4 +1,4 @@
-﻿using Fossa.API.Web.ApiModels;
+﻿using Fossa.Bridge.Models.ApiModels;
 using Fossa.Licensing;
 using TIKSN.Mapping;
 

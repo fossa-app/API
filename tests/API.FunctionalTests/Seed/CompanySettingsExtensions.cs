@@ -1,7 +1,7 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Fossa.API.Persistence.Mongo.Entities;
-using Fossa.API.Web.ApiModels;
+using Fossa.Bridge.Models.ApiModels;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Shouldly;
 

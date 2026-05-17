@@ -8,7 +8,7 @@ using Microsoft.Extensions.Hosting;
 using TIKSN.DependencyInjection;
 using TIKSN.Identity;
 using TIKSN.Mapping;
-using Xunit.Abstractions;
+using Xunit;
 
 namespace Fossa.API.UnitTests;
 
@@ -59,6 +59,6 @@ public class DefaultCoreModuleTests
   {
     var identityGenerator = _serviceProvider.GetRequiredService<IIdentityGenerator<T>>();
     var id = identityGenerator.Generate();
-    _testOutputHelper.WriteLine("ID is {0}", id);
+    _testOutputHelper.WriteLine($"ID is {id}");
   }
 }

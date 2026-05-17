@@ -24,7 +24,7 @@ public static class SystemLicenseExtensions
     var licenseFileRepository = factory.Services.GetRequiredService<LicenseEasyFileRepository>();
     var systemPropertiesRepository = factory.Services.GetRequiredService<SystemPropertiesMongoEasyRepository>();
 
-    var systemPropertiesEntity = await systemPropertiesRepository.GetAsync(SystemProperties.MainSystemPropertiesId.AsPrimitive(), default).ConfigureAwait(false);
+    var systemPropertiesEntity = await systemPropertiesRepository.GetAsync(SystemProperties.MainSystemPropertiesId.AsPrimitive(), cancellationToken).ConfigureAwait(false);
 
     var licensor = new OrganizationParty("Microsoft Corporation", "Microsoft", new MailAddress("info@microsoft.com"), new Uri("https://microsoft.com/"));
     var licensee = new OrganizationParty("Alphabet Inc.", "Google", new MailAddress("info@google.com"), new Uri("https://www.google.com"));

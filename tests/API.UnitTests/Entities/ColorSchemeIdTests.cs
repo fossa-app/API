@@ -1,6 +1,6 @@
 ﻿using Fossa.API.Core.Entities;
 using Shouldly;
-using Xunit.Abstractions;
+using Xunit;
 
 namespace Fossa.API.UnitTests.Entities;
 

@@ -1,5 +1,5 @@
 ﻿using Fossa.API.Core.Services;
-using Fossa.API.Web.ApiModels;
+using Fossa.Bridge.Models.ApiModels;
 using NodaTime;
 using NodaTime.TimeZones;
 using TIKSN.Mapping;

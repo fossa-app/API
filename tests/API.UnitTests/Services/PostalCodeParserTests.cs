@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 using Fossa.API.Core.Services;
-using Xunit.Abstractions;
+using Xunit;
 
 namespace Fossa.API.UnitTests.Services;
 

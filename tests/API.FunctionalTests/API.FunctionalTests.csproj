@@ -10,7 +10,7 @@
     <PackageReference Include="Shouldly" />
     <PackageReference Include="TIKSN-Framework" />
     <PackageReference Include="UUIDNext" />
-    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.v3" />
     <PackageReference Include="xunit.runner.visualstudio">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -23,12 +23,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\API.Web\API.Web.csproj" />
-    <ProjectReference Include="..\API.UnitTests\API.UnitTests.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="PublicApiGenerator" />
     <PackageReference Include="ReportGenerator" />
-    <PackageReference Include="Verify.Xunit" />
+    <Using Include="Xunit" />
     <Using Include="LanguageExt" />
     <Using Include="LanguageExt.Common" />
     <Using Include="LanguageExt.Effects" />

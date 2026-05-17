@@ -1,23 +1,28 @@
 ﻿using System.Net;
 using Fossa.API.Web;
+using Fossa.Bridge.Services;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 
 namespace Fossa.API.FunctionalTests.ControllerApis;
 
 public class SystemLicenseControllerEmptyDatabase : IClassFixture<CustomWebApplicationFactory<DefaultWebModule>>
 {
-  private readonly HttpClient _client;
+  private readonly CustomWebApplicationFactory<DefaultWebModule> _factory;
 
   public SystemLicenseControllerEmptyDatabase(CustomWebApplicationFactory<DefaultWebModule> factory)
   {
-    _client = factory.CreateClient();
+    _factory = factory;
   }
 
   [Fact]
   public async Task RetrieveSystemLicenseAsync()
   {
-    var response = await _client.GetAsync("/api/1.0/License/System");
+    using var scope = _factory.Services.CreateScope();
+    var systemLicenseClient = scope.ServiceProvider.GetRequiredService<IClients>().SystemLicenseClient;
 
-    response.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+    var ex = await Should.ThrowAsync<HttpRequestException>(() => systemLicenseClient.GetLicenseAsync(TestContext.Current.CancellationToken));
+
+    ex.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
   }
 }

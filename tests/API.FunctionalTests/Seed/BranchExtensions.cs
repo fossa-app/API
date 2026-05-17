@@ -2,7 +2,7 @@
 using System.Net.Http.Json;
 using EasyDoubles;
 using Fossa.API.Persistence.Mongo.Entities;
-using Fossa.API.Web.ApiModels;
+using Fossa.Bridge.Models.ApiModels;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -34,7 +34,7 @@ public static class BranchExtensions
       var client = factory.CreateClient();
       client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-      var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId, Address: null), cancellationToken).ConfigureAwait(false);
+      var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId, address: null), cancellationToken).ConfigureAwait(false);
 
       creationResponse.EnsureSuccessStatusCode();
     }

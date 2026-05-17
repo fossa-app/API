@@ -1,6 +1,6 @@
 ﻿using Asp.Versioning;
 using Fossa.API.Core.Messages.Queries;
-using Fossa.API.Web.ApiModels;
+using Fossa.Bridge.Models.ApiModels;
 using Fossa.Licensing;
 using Microsoft.AspNetCore.Mvc;
 using TIKSN.Licensing;

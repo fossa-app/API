@@ -1,66 +1,56 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using EasyDoubles;
-using Fossa.API.FunctionalTests.Extensions;
 using Fossa.API.FunctionalTests.Seed;
 using Fossa.API.Persistence.Mongo.Entities;
 using Fossa.API.Web;
-using Fossa.API.Web.ApiModels;
+using Fossa.Bridge.Models.ApiModels;
+using Fossa.Bridge.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using Xunit.Abstractions;
 
 namespace Fossa.API.FunctionalTests.ControllerApis;
 
 public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplicationFactory<DefaultWebModule>>, IAsyncLifetime
 {
   private readonly CustomWebApplicationFactory<DefaultWebModule> _factory;
-  private readonly ITestOutputHelper _testOutputHelper;
-
   public BranchesControllerWithSystemLicense(
-    ITestOutputHelper testOutputHelper,
     CustomWebApplicationFactory<DefaultWebModule> factory)
   {
-    _testOutputHelper = testOutputHelper ?? throw new ArgumentNullException(nameof(testOutputHelper));
     _factory = factory ?? throw new ArgumentNullException(nameof(factory));
   }
 
   [Fact]
   public async Task CreateBranchWithAdministratorAccessWithInvalidTimeZoneIdTokenAsync()
   {
-    var client = _factory.CreateClient();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+
+    transport.SetAuthorizationToken("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
     const string branchName = "Branch-392136901";
     const string timeZoneId = "USZone";
     var address = new AddressModel("1234 Main St", "Suite 100", "Los Angeles", "CA", "12345", "US");
 
-    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId, address));
+    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.CreateBranchAsync(new BranchModificationModel(branchName, timeZoneId, address), TestContext.Current.CancellationToken));
 
-    if (creationResponse.StatusCode != HttpStatusCode.OK)
-    {
-      _testOutputHelper.WriteLine(await creationResponse.Content.ReadAsStringAsync());
-    }
-
-    creationResponse.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+    ex.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
   }
 
   [Fact]
   public async Task CreateBranchWithAdministratorAccessWithLicensedTimeZoneIdTokenAsync()
   {
-    var client = _factory.CreateClient();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+
+    transport.SetAuthorizationToken("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
     const string branchName = "Branch-392136901";
     const string timeZoneId = "America/New_York";
 
-    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId, Address: null));
+    await branchClient.CreateBranchAsync(new BranchModificationModel(branchName, timeZoneId, address: null), TestContext.Current.CancellationToken);
 
-    creationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-    var retrievalResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
-
-    var responseModel =
-      await retrievalResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    var responseModel = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
 
     responseModel.ShouldNotBeNull();
     responseModel.Items.Select(x => x.Name).ShouldContain(branchName);
@@ -70,100 +60,110 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   [Fact]
   public async Task CreateBranchWithAdministratorAccessWithUnlicensedTimeZoneIdTokenAsync()
   {
-    var client = _factory.CreateClient();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+
+    transport.SetAuthorizationToken("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
     const string branchName = "Branch-392136901";
     const string timeZoneId = "Australia/Perth";
 
-    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId, Address: null));
+    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.CreateBranchAsync(new BranchModificationModel(branchName, timeZoneId, address: null), TestContext.Current.CancellationToken));
 
-    if (creationResponse.StatusCode != HttpStatusCode.OK)
-    {
-      _testOutputHelper.WriteLine(await creationResponse.Content.ReadAsStringAsync());
-    }
-
-    creationResponse.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+    ex.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
   }
 
   [Fact]
   public async Task CreateBranchWithoutAccessTokenAsync()
   {
-    var client = _factory.CreateClient();
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
 
-    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel("Branch X", "America/New_York", Address: null));
+    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.CreateBranchAsync(new BranchModificationModel("Branch X", "America/New_York", address: null), TestContext.Current.CancellationToken));
 
-    response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+    ex.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
   }
 
   [Fact]
   public async Task CreateBranchWithUserAccessTokenWithInvalidTimeZoneIdAsync()
   {
-    var client = _factory.CreateClient();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.User1");
-    const string branchName = "Branch-826076795";
-    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, "USZone", Address: null));
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
 
-    response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+    transport.SetAuthorizationToken("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.User1");
+    const string branchName = "Branch-826076795";
+
+    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.CreateBranchAsync(new BranchModificationModel(branchName, "USZone", address: null), TestContext.Current.CancellationToken));
+
+    ex.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
   }
 
   [Fact]
   public async Task CreateBranchWithUserAccessTokenWithLicensedTimeZoneIdAsync()
   {
-    var client = _factory.CreateClient();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.User1");
-    const string branchName = "Branch-826076795";
-    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, "America/Detroit", Address: null));
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
 
-    response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+    transport.SetAuthorizationToken("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.User1");
+    const string branchName = "Branch-826076795";
+
+    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.CreateBranchAsync(new BranchModificationModel(branchName, "America/Detroit", address: null), TestContext.Current.CancellationToken));
+
+    ex.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
   }
 
   [Fact]
   public async Task CreateBranchWithUserAccessTokenWithUnlicensedTimeZoneIdAsync()
   {
-    var client = _factory.CreateClient();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.User1");
-    const string branchName = "Branch-826076795";
-    var response = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, "Australia/Perth", Address: null));
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
 
-    response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+    transport.SetAuthorizationToken("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.User1");
+    const string branchName = "Branch-826076795";
+
+    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.CreateBranchAsync(new BranchModificationModel(branchName, "Australia/Perth", address: null), TestContext.Current.CancellationToken));
+
+    ex.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
   }
 
   [Fact]
   public async Task CreateThenDeleteBranchWithAdministratorAccessTokenAsync()
   {
-    var client = _factory.CreateClient();
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
     var branchEasyStore = _factory.Services.GetRequiredService<IEasyStores>().Resolve<BranchMongoEntity, long>();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
+
+    transport.SetAuthorizationToken("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
     const string branchName = "Branch-832159009";
     const string timeZoneId = "America/New_York";
 
-    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId, Address: null));
+    await branchClient.CreateBranchAsync(new BranchModificationModel(branchName, timeZoneId, address: null), TestContext.Current.CancellationToken);
 
-    creationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-    var retrievalResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
-
-    var responseModel =
-      await retrievalResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    var responseModel = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
 
     responseModel.ShouldNotBeNull();
     var branchRetrievalModel = responseModel.Items.Single(x => string.Equals(x.Name, branchName, StringComparison.OrdinalIgnoreCase));
     branchRetrievalModel.Name.ShouldBe(branchName);
 
     branchEasyStore.Entities.ContainsKey(branchRetrievalModel.Id).ShouldBeTrue();
-    var deletionResponse = await client.DeleteAsync($"/api/1.0/Branches/{branchRetrievalModel.Id}");
+    await branchClient.DeleteBranchAsync(branchRetrievalModel.Id, TestContext.Current.CancellationToken);
 
-    deletionResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
     branchEasyStore.Entities.ContainsKey(branchRetrievalModel.Id).ShouldBeFalse();
   }
 
   [Fact]
   public async Task DeleteBranchWithoutAccessTokenAsync()
   {
-    var client = _factory.CreateClient();
-    var response = await client.DeleteAsync("/api/1.0/Branches/123456789");
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
 
-    response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.DeleteBranchAsync(123456789, TestContext.Current.CancellationToken));
+
+    ex.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
   }
 
   [Fact]
@@ -178,159 +178,154 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     const string branchName = "Branch-35291729";
     const string timeZoneId = "America/New_York";
 
-    var client = _factory.CreateClient();
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
+    var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
 
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JKXJVFFPWRP9E7YNBQE8KMRB.Tenant1.User35292075");
+    transport.SetAuthorizationToken("Bearer", "01JKXJVFFPWRP9E7YNBQE8KMRB.Tenant1.User35292075");
 
-    var employeeCreationResponse = await client.PostAsJsonAsync("/api/1.0/Employee", new EmployeeModificationModel(firstName, lastName, fullName));
+    await employeeClient.CreateEmployeeAsync(new EmployeeModificationModel(firstName, lastName, fullName), TestContext.Current.CancellationToken);
 
-    employeeCreationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-    var employeeRetrievalResponse = await client.GetAsync("/api/1.0/Employee");
-
-    var employeeResponseModel =
-      await employeeRetrievalResponse.Content.ReadFromJsonAsync<EmployeeRetrievalModel>();
-
+    var employeeResponseModel = await employeeClient.GetEmployeesAsync(new EmployeeQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
     employeeResponseModel.ShouldNotBeNull();
+    var createdEmployee = employeeResponseModel.Items.First();
 
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JKXHHECNDQ6BYNA6CQQ2S59P.Tenant1.ADMIN1");
+    transport.SetAuthorizationToken("Bearer", "01JKXHHECNDQ6BYNA6CQQ2S59P.Tenant1.ADMIN1");
 
-    var branchCreationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branchName, timeZoneId, Address: null));
+    await branchClient.CreateBranchAsync(new BranchModificationModel(branchName, timeZoneId, address: null), TestContext.Current.CancellationToken);
 
-    branchCreationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-    var branchRetrievalResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
-
-    var branchResponseModel =
-      await branchRetrievalResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    var branchResponseModel = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
 
     branchResponseModel.ShouldNotBeNull();
 
     var createdBranchModel = branchResponseModel.Items.Single(x => string.Equals(x.Name, branchName, StringComparison.OrdinalIgnoreCase));
 
-    var employeeManagementResponse = await client.PutAsJsonAsync($"/api/1.0/Employees/{employeeResponseModel?.Id}", new EmployeeManagementModel(createdBranchModel.Id, null, null, "Staff"));
-
-    employeeManagementResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+    await transport.PutAsync<EmployeeManagementModel>($"/api/1.0/Employees/{createdEmployee.Id}", new EmployeeManagementModel(createdBranchModel.Id, null, null, "Staff"));
 
     // Act
 
-    var response = await client.DeleteAsync($"/api/1.0/Branches/{createdBranchModel.Id}");
+    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.DeleteBranchAsync(createdBranchModel.Id, TestContext.Current.CancellationToken));
 
     // Assert
 
-    await _testOutputHelper.WriteAsync(response);
-
-    response.StatusCode.ShouldBe(HttpStatusCode.FailedDependency);
+    ex.StatusCode.ShouldBe(HttpStatusCode.FailedDependency);
   }
 
   [Fact]
   public async Task DeleteExistingBranchWithoutDependenciesWithAdministratorAccessTokenAsync()
   {
-    var client = _factory.CreateClient();
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
     var branchEasyStore = _factory.Services.GetRequiredService<IEasyStores>().Resolve<BranchMongoEntity, long>();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA0JKF0VRC9JPZ9JSAMHGAFS.Tenant1.ADMIN1");
+
+    transport.SetAuthorizationToken("Bearer", "01JA0JKF0VRC9JPZ9JSAMHGAFS.Tenant1.ADMIN1");
 
     var existingBranch = branchEasyStore.Entities.Values.Single(x => string.Equals(x.Name, "Branch2-1972002548", StringComparison.Ordinal));
 
-    var response = await client.DeleteAsync($"/api/1.0/Branches/{existingBranch.ID}");
+    await branchClient.DeleteBranchAsync(existingBranch.ID, TestContext.Current.CancellationToken);
 
-    response.StatusCode.ShouldBe(HttpStatusCode.OK);
     branchEasyStore.Entities.Values.FirstOrDefault(x => string.Equals(x.Name, "Branch2-1972002548", StringComparison.Ordinal)).ShouldBeNull();
   }
 
   [Fact]
   public async Task DeleteExistingBranchWithoutDependenciesWithUserAccessTokenAsync()
   {
-    var client = _factory.CreateClient();
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
     var branchEasyStore = _factory.Services.GetRequiredService<IEasyStores>().Resolve<BranchMongoEntity, long>();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA0JKF0VRC9JPZ9JSAMHGAFS.Tenant1.User2");
+
+    transport.SetAuthorizationToken("Bearer", "01JA0JKF0VRC9JPZ9JSAMHGAFS.Tenant1.User2");
 
     var existingBranch = branchEasyStore.Entities.Values.Single(x => string.Equals(x.Name, "Branch3-1513925028", StringComparison.Ordinal));
 
-    var response = await client.DeleteAsync($"/api/1.0/Branches/{existingBranch.ID}");
+    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.DeleteBranchAsync(existingBranch.ID, TestContext.Current.CancellationToken));
 
-    response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+    ex.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
   }
 
   [Fact]
   public async Task DeleteMissingBranchWithAdministratorAccessTokenAsync()
   {
-    var client = _factory.CreateClient();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1J99K3NCGNA6X4Z194PJXF.Tenant1.ADMIN1");
-    var response = await client.DeleteAsync("/api/1.0/Branches/123456789");
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
 
-    response.StatusCode.ShouldBe(HttpStatusCode.OK);
+    transport.SetAuthorizationToken("Bearer", "01JA1J99K3NCGNA6X4Z194PJXF.Tenant1.ADMIN1");
+
+    await branchClient.DeleteBranchAsync(123456789, TestContext.Current.CancellationToken);
+    Assert.True(true); // Fossa.Bridge interface doesn't return response to check status, throws on failure, so succeeding without throwing means OK
   }
 
   [Fact]
   public async Task DeleteMissingBranchWithUserAccessTokenAsync()
   {
-    var client = _factory.CreateClient();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA0JKPRJDN7RXSMGXZ946WRB.Tenant1000.User1");
-    var response = await client.DeleteAsync("/api/1.0/Branches/123456789");
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
 
-    response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+    transport.SetAuthorizationToken("Bearer", "01JA0JKPRJDN7RXSMGXZ946WRB.Tenant1000.User1");
+
+    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.DeleteBranchAsync(123456789, TestContext.Current.CancellationToken));
+
+    ex.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
   }
 
-  public Task DisposeAsync() => Task.CompletedTask;
+  public ValueTask DisposeAsync() => ValueTask.CompletedTask;
 
-  public async Task InitializeAsync()
+  public async ValueTask InitializeAsync()
   {
-    await _factory.SeedSystemLicenseAsync(default).ConfigureAwait(false);
-    await _factory.SeedAllEntitiesAsync(default).ConfigureAwait(false);
+    await _factory.SeedSystemLicenseAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
+    await _factory.SeedAllEntitiesAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
   }
 
   [Fact]
   public async Task ListBranches_WithSearchTerm_ReturnsFilteredResultsAsync()
   {
-    var client = _factory.CreateClient();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+
+    transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
 
     // Create branches with distinct names
-    await client.PostAsJsonAsync("/api/1.0/Branches",
-        new BranchModificationModel("NYC Downtown Branch", "America/New_York", null));
-    await client.PostAsJsonAsync("/api/1.0/Branches",
-        new BranchModificationModel("LA Downtown Branch", "America/Los_Angeles", null));
-    await client.PostAsJsonAsync("/api/1.0/Branches",
-        new BranchModificationModel("NYC Uptown Branch", "America/New_York", null));
+    await branchClient.CreateBranchAsync(new BranchModificationModel("NYC Downtown Branch", "America/New_York", null), TestContext.Current.CancellationToken);
+    await branchClient.CreateBranchAsync(new BranchModificationModel("LA Downtown Branch", "America/Los_Angeles", null), TestContext.Current.CancellationToken);
+    await branchClient.CreateBranchAsync(new BranchModificationModel("NYC Uptown Branch", "America/New_York", null), TestContext.Current.CancellationToken);
 
     // Search for NYC branches
-    var response = await client.GetAsync("/api/1.0/Branches?search=NYC&pageNumber=1&pageSize=10");
-
-    response.StatusCode.ShouldBe(HttpStatusCode.OK);
-    var result = await response.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    var result = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { Search = "NYC", PageNumber = 1, PageSize = 10 }, TestContext.Current.CancellationToken);
 
     result.ShouldNotBeNull();
     result.Items.Count.ShouldBe(2);
-    result.Items.All(x => x.Name.Contains("NYC")).ShouldBeTrue();
+    result.Items.All(x => x.Name?.Contains("NYC") == true).ShouldBeTrue();
   }
 
   [Fact]
   public async Task ListBranches_WithSpecificIds_ReturnsRequestedBranchesAsync()
   {
-    var client = _factory.CreateClient();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+
+    transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
 
     // Create branches and collect their IDs
     var branchIds = new List<long>();
     for (int i = 1; i <= 3; i++)
     {
-      var response1 = await client.PostAsJsonAsync("/api/1.0/Branches",
-          new BranchModificationModel($"Test Branch {i}", "America/New_York", null));
-      response1.EnsureSuccessStatusCode();
+      await branchClient.CreateBranchAsync(new BranchModificationModel($"Test Branch {i}", "America/New_York", null), TestContext.Current.CancellationToken);
 
-      var branchesResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
-      var branches = await branchesResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+      var branches = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
       branches.ShouldNotBeNull();
       var branch = branches.Items.First(x => x.Name == $"Test Branch {i}");
       branchIds.Add(branch.Id);
     }
 
     // Request specific branches by ID
-    var response2 = await client.GetAsync($"/api/1.0/Branches?id={branchIds[0]}&id={branchIds[1]}");
-
-    response2.StatusCode.ShouldBe(HttpStatusCode.OK);
-    var result = await response2.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    var result = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { Id = [branchIds[0], branchIds[1]] }, TestContext.Current.CancellationToken);
 
     result.ShouldNotBeNull();
     result.Items.Count.ShouldBe(2);
@@ -346,21 +341,19 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   public async Task ListBranches_WithValidPaging_ReturnsPaginatedResultsAsync(int pageNumber, int pageSize)
   {
     // Create multiple branches
-    var client = _factory.CreateClient();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+
+    transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
 
     for (int i = 1; i <= 12; i++)
     {
-      var response1 = await client.PostAsJsonAsync("/api/1.0/Branches",
-          new BranchModificationModel($"Test Branch {i}", "America/New_York", null));
-      response1.EnsureSuccessStatusCode();
+      await branchClient.CreateBranchAsync(new BranchModificationModel($"Test Branch {i}", "America/New_York", null), TestContext.Current.CancellationToken);
     }
 
     // Get paginated results
-    var response2 = await client.GetAsync($"/api/1.0/Branches?pageNumber={pageNumber}&pageSize={pageSize}");
-
-    response2.StatusCode.ShouldBe(HttpStatusCode.OK);
-    var result = await response2.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    var result = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = pageNumber, PageSize = pageSize }, TestContext.Current.CancellationToken);
 
     result.ShouldNotBeNull();
     result.PageNumber.ShouldBe(pageNumber);
@@ -378,54 +371,30 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     const string branch3Name = "Branch-637183497";
     const string timeZoneId = "America/New_York";
 
-    var client = _factory.CreateClient();
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
 
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JMV0X5W7N908QW69WVVDPFAW.Tenant1.ADMIN1");
+    transport.SetAuthorizationToken("Bearer", "01JMV0X5W7N908QW69WVVDPFAW.Tenant1.ADMIN1");
 
-    var branch1CreationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branch1Name, timeZoneId, Address: null));
-    var branch2CreationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branch2Name, timeZoneId, Address: null));
-    var branch3CreationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(branch3Name, timeZoneId, Address: null));
+    await branchClient.CreateBranchAsync(new BranchModificationModel(branch1Name, timeZoneId, address: null), TestContext.Current.CancellationToken);
+    await branchClient.CreateBranchAsync(new BranchModificationModel(branch2Name, timeZoneId, address: null), TestContext.Current.CancellationToken);
+    await branchClient.CreateBranchAsync(new BranchModificationModel(branch3Name, timeZoneId, address: null), TestContext.Current.CancellationToken);
 
-    branch1CreationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-    branch2CreationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-    branch3CreationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+    transport.SetAuthorizationToken("Bearer", "01JMV0XC70JH9GC8P9M6SYYYAK.Tenant1.User1");
 
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JMV0XC70JH9GC8P9M6SYYYAK.Tenant1.User1");
-
-    var retrievalResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
-
-    if (retrievalResponse.StatusCode != HttpStatusCode.OK)
-    {
-      _testOutputHelper.WriteLine(await retrievalResponse.Content.ReadAsStringAsync());
-    }
-    retrievalResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-    var retrievalResponseModel =
-      await retrievalResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    var retrievalResponseModel = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
 
     retrievalResponseModel.ShouldNotBeNull();
 
-    var branch1CreationResponseModel = retrievalResponseModel?.Items.Single(x => string.Equals(x.Name, branch1Name, StringComparison.OrdinalIgnoreCase));
-    var branch2CreationResponseModel = retrievalResponseModel?.Items.Single(x => string.Equals(x.Name, branch2Name, StringComparison.OrdinalIgnoreCase));
-    var branch3CreationResponseModel = retrievalResponseModel?.Items.Single(x => string.Equals(x.Name, branch3Name, StringComparison.OrdinalIgnoreCase));
-
-    var branch1Id = branch1CreationResponseModel?.Id;
-    var branch2Id = branch2CreationResponseModel?.Id;
-    var branch3Id = branch3CreationResponseModel?.Id;
+    var branch1Id = retrievalResponseModel.Items.Single(x => x.Name == branch1Name).Id;
+    var branch2Id = retrievalResponseModel.Items.Single(x => x.Name == branch2Name).Id;
+    var branch3Id = retrievalResponseModel.Items.Single(x => x.Name == branch3Name).Id;
     const int branch4Id = 204298046; // Missing branch
 
     // Act
 
-    var branchRetrievalResponse = await client.GetAsync($"/api/1.0/Branches?Id={branch1Id}&Id={branch2Id}&Id={branch3Id}&Id={branch4Id}");
-
-    if (branchRetrievalResponse.StatusCode != HttpStatusCode.OK)
-    {
-      _testOutputHelper.WriteLine(await branchRetrievalResponse.Content.ReadAsStringAsync());
-    }
-    branchRetrievalResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-    var branchResponseModel =
-      await branchRetrievalResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    var branchResponseModel = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { Id = [branch1Id, branch2Id, branch3Id, branch4Id] }, TestContext.Current.CancellationToken);
 
     // Assert
 
@@ -441,22 +410,23 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   [Fact]
   public async Task RetrieveBranchesWithoutAccessTokenAsync()
   {
-    var client = _factory.CreateClient();
-    var response = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=5");
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
 
-    response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 5 }, TestContext.Current.CancellationToken));
+
+    ex.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
   }
 
   [Fact]
   public async Task RetrieveExistingBranchesWithAccessTokenAsync()
   {
-    var client = _factory.CreateClient();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9SYCJ4MHZXGQKT0ARG7KNCC.Tenant1.User1");
-    var response = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=5");
-    response.EnsureSuccessStatusCode();
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
 
-    var responseModel =
-      await response.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    transport.SetAuthorizationToken("Bearer", "01J9SYCJ4MHZXGQKT0ARG7KNCC.Tenant1.User1");
+    var responseModel = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 5 }, TestContext.Current.CancellationToken);
 
     responseModel.ShouldNotBeNull();
     responseModel.PageNumber.ShouldBe(1);
@@ -468,14 +438,12 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   [Fact]
   public async Task RetrieveMissingBranchWithAccessTokenAsync()
   {
-    var client = _factory.CreateClient();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9SYCPN31B53QHRR7Y13D30F.Tenant1000.User1000");
-    var response = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=5");
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
 
-    response.EnsureSuccessStatusCode();
-
-    var responseModel =
-      await response.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    transport.SetAuthorizationToken("Bearer", "01J9SYCPN31B53QHRR7Y13D30F.Tenant1000.User1000");
+    var responseModel = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 5 }, TestContext.Current.CancellationToken);
 
     responseModel.ShouldNotBeNull();
     responseModel.PageNumber.ShouldBe(1);
@@ -497,20 +465,18 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   public async Task UpdateBranchWithAdministratorAccessTokenWithInvalidAddressAsync(
     string? line1, string? line2, string? city, string? subdivision, string? postalCode, string? countryCode)
   {
-    var client = _factory.CreateClient();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+
+    transport.SetAuthorizationToken("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
     var creationBranchName = $"Branch-{Random.Shared.Next()}";
     const string creationTimeZoneId = "America/Los_Angeles";
     var creationAddress = new AddressModel("1234 Main St", "Suite 100", "Los Angeles", "CA", "12345", "US");
 
-    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(creationBranchName, creationTimeZoneId, creationAddress));
+    await branchClient.CreateBranchAsync(new BranchModificationModel(creationBranchName, creationTimeZoneId, creationAddress), TestContext.Current.CancellationToken);
 
-    creationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-    var retrievalResponse1 = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
-
-    var response1Model =
-      await retrievalResponse1.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    var response1Model = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
     response1Model.ShouldNotBeNull();
     var creationBranch = response1Model.Items.Single(x => string.Equals(x.Name, creationBranchName, StringComparison.OrdinalIgnoreCase));
 
@@ -518,30 +484,26 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     const string modificationTimeZoneId = "America/New_York";
     var modificationAddress = new AddressModel(line1, line2, city, subdivision, postalCode, countryCode);
 
-    var modificationResponse = await client.PutAsJsonAsync($"/api/1.0/Branches/{creationBranch?.Id}", new BranchModificationModel(modificationBranchName, modificationTimeZoneId, modificationAddress));
+    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.UpdateBranchAsync(creationBranch.Id, new BranchModificationModel(modificationBranchName, modificationTimeZoneId, modificationAddress), TestContext.Current.CancellationToken));
 
-    await _testOutputHelper.WriteAsync(modificationResponse);
-
-    modificationResponse.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+    ex.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
   }
 
   [Fact]
   public async Task UpdateBranchWithAdministratorAccessWithLicensedTimeZoneIdTokenAsync()
   {
-    var client = _factory.CreateClient();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+
+    transport.SetAuthorizationToken("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
     const string creationBranchName = "Branch-753988509";
     const string creationTimeZoneId = "America/Los_Angeles";
     var creationAddress = new AddressModel("1234 Main St", "Suite 100", "Los Angeles", "CA", "12345", "US");
 
-    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches", new BranchModificationModel(creationBranchName, creationTimeZoneId, creationAddress));
+    await branchClient.CreateBranchAsync(new BranchModificationModel(creationBranchName, creationTimeZoneId, creationAddress), TestContext.Current.CancellationToken);
 
-    creationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-    var retrievalResponse1 = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
-
-    var response1Model =
-      await retrievalResponse1.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    var response1Model = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
     response1Model.ShouldNotBeNull();
     var creationBranch = response1Model.Items.Single(x => string.Equals(x.Name, creationBranchName, StringComparison.OrdinalIgnoreCase));
 
@@ -549,14 +511,9 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     const string modificationTimeZoneId = "America/New_York";
     var modificationAddress = new AddressModel("5234 Main St", "Suite 200", "New York", "NY", "62345", "US");
 
-    var modificationResponse = await client.PutAsJsonAsync($"/api/1.0/Branches/{creationBranch?.Id}", new BranchModificationModel(modificationBranchName, modificationTimeZoneId, modificationAddress));
+    await branchClient.UpdateBranchAsync(creationBranch.Id, new BranchModificationModel(modificationBranchName, modificationTimeZoneId, modificationAddress), TestContext.Current.CancellationToken);
 
-    modificationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
-
-    var retrievalResponse2 = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
-
-    var response2Model =
-      await retrievalResponse2.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    var response2Model = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
 
     response2Model.ShouldNotBeNull();
     response2Model.Items.Select(x => x.Name).ShouldContain(modificationBranchName);
@@ -581,7 +538,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var client = _factory.CreateClient();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant101.ADMIN1");
 
-    var response = await client.GetAsync($"/api/1.0/Branches?pageNumber={pageNumber}&pageSize={pageSize}");
+    var response = await client.GetAsync($"/api/1.0/Branches?pageNumber={pageNumber}&pageSize={pageSize}", TestContext.Current.CancellationToken);
 
     response.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
   }
@@ -590,30 +547,25 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   public async Task UpdateBranch_WithValidData_SucceedsAsync()
   {
     // Create a branch first
-    var client = _factory.CreateClient();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+
+    transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
 
     const string branchName = "Test Branch 647834591";
-    var createResponse = await client.PostAsJsonAsync("/api/1.0/Branches",
-        new BranchModificationModel(branchName, "America/New_York", null));
-    createResponse.EnsureSuccessStatusCode();
+    await branchClient.CreateBranchAsync(new BranchModificationModel(branchName, "America/New_York", null), TestContext.Current.CancellationToken);
 
     // Get the branch ID
-    var branchesResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
-    var branches = await branchesResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    var branches = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
     branches.ShouldNotBeNull();
     var branch = branches.Items.First(x => x.Name == branchName);
 
     // Update the branch
-    var updateResponse = await client.PutAsync($"/api/1.0/Branches/{branch.Id}",
-        JsonContent.Create(new BranchModificationModel("Updated Branch", "America/Chicago",
-            new AddressModel("123 Main St", null, "Chicago", "IL", "60601", "US"))));
-
-    updateResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+    await branchClient.UpdateBranchAsync(branch.Id, new BranchModificationModel("Updated Branch", "America/Chicago", new AddressModel("123 Main St", null, "Chicago", "IL", "60601", "US")), TestContext.Current.CancellationToken);
 
     // Verify the update
-    var getResponse = await client.GetAsync($"/api/1.0/Branches/{branch.Id}");
-    var updatedBranch = await getResponse.Content.ReadFromJsonAsync<BranchRetrievalModel>();
+    var updatedBranch = await branchClient.GetBranchAsync(branch.Id, TestContext.Current.CancellationToken);
 
     updatedBranch.ShouldNotBeNull();
     updatedBranch.Name.ShouldBe("Updated Branch");
@@ -626,83 +578,81 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   public async Task UpdateBranch_WithInvalidTimeZone_ReturnsUnprocessableEntityAsync()
   {
     // Create a branch first
-    var client = _factory.CreateClient();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+
+    transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
 
     const string branchName = "Test Branch 984679490";
-    var createResponse = await client.PostAsJsonAsync("/api/1.0/Branches",
-        new BranchModificationModel(branchName, "America/New_York", null));
-    createResponse.EnsureSuccessStatusCode();
+    await branchClient.CreateBranchAsync(new BranchModificationModel(branchName, "America/New_York", null), TestContext.Current.CancellationToken);
 
-    var branchesResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
-    var branches = await branchesResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    var branches = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
     branches.ShouldNotBeNull();
     var branch = branches.Items.First(x => x.Name == branchName);
 
     // Try to update with invalid timezone
-    var updateResponse = await client.PutAsync($"/api/1.0/Branches/{branch.Id}",
-        JsonContent.Create(new BranchModificationModel("Updated Branch", "Invalid/TimeZone", null)));
+    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.UpdateBranchAsync(branch.Id, new BranchModificationModel("Updated Branch", "Invalid/TimeZone", null), TestContext.Current.CancellationToken));
 
-    updateResponse.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+    ex.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
   }
 
   [Fact]
   public async Task UpdateBranch_WithInvalidBranchId_ReturnsNotFoundAsync()
   {
-    var client = _factory.CreateClient();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant101.ADMIN1");
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
 
-    var updateResponse = await client.PutAsync("/api/1.0/Branches/999999",
-        JsonContent.Create(new BranchModificationModel("Updated Branch", "America/Chicago", null)));
+    transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant101.ADMIN1");
 
-    updateResponse.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.UpdateBranchAsync(999999, new BranchModificationModel("Updated Branch", "America/Chicago", null), TestContext.Current.CancellationToken));
+
+    ex.StatusCode.ShouldBe(HttpStatusCode.NotFound);
   }
 
   [Fact]
   public async Task UpdateBranch_WithoutAuthorization_ReturnsUnauthorizedAsync()
   {
-    var client = _factory.CreateClient();
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
 
-    var updateResponse = await client.PutAsync("/api/1.0/Branches/1",
-        JsonContent.Create(new BranchModificationModel("Updated Branch", "America/Chicago", null)));
+    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.UpdateBranchAsync(1, new BranchModificationModel("Updated Branch", "America/Chicago", null), TestContext.Current.CancellationToken));
 
-    updateResponse.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+    ex.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
   }
 
   [Fact]
   public async Task UpdateBranchWithDifferentCountryCodeShouldFailAsync()
   {
     // Arrange
-    var client = _factory.CreateClient();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
+    using var scope = _factory.Services.CreateScope();
+    var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+
+    transport.SetAuthorizationToken("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
 
     // Create initial branch with US address
     const string branchName = "Branch-CountryValidation";
     const string timeZoneId = "America/New_York";
     var initialAddress = new AddressModel("1234 Main St", "Suite 100", "New York", "NY", "10001", "US");
 
-    var creationResponse = await client.PostAsJsonAsync("/api/1.0/Branches",
-        new BranchModificationModel(branchName, timeZoneId, initialAddress));
-
-    creationResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
+    await branchClient.CreateBranchAsync(new BranchModificationModel(branchName, timeZoneId, initialAddress), TestContext.Current.CancellationToken);
 
     // Get the created branch ID
-    var retrievalResponse = await client.GetAsync("/api/1.0/Branches?pageNumber=1&pageSize=100");
-    var responseModel = await retrievalResponse.Content.ReadFromJsonAsync<PagingResponseModel<BranchRetrievalModel>>();
+    var responseModel = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
     responseModel.ShouldNotBeNull();
     var createdBranch = responseModel.Items.Single(x => string.Equals(x.Name, branchName, StringComparison.OrdinalIgnoreCase));
 
     // Attempt to update with Canadian address
     var canadianAddress = new AddressModel("456 Maple St", null, "Toronto", "ON", "M5V 2H1", "CA");
-    var modificationResponse = await client.PutAsJsonAsync($"/api/1.0/Branches/{createdBranch.Id}",
-        new BranchModificationModel(branchName, timeZoneId, canadianAddress));
+    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.UpdateBranchAsync(createdBranch.Id, new BranchModificationModel(branchName, timeZoneId, canadianAddress), TestContext.Current.CancellationToken));
 
     // Assert
-    modificationResponse.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+    ex.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
 
     // Verify the branch still has US address
-    var verificationResponse = await client.GetAsync($"/api/1.0/Branches/{createdBranch.Id}");
-    var verificationModel = await verificationResponse.Content.ReadFromJsonAsync<BranchRetrievalModel>();
+    var verificationModel = await branchClient.GetBranchAsync(createdBranch.Id, TestContext.Current.CancellationToken);
     verificationModel.ShouldNotBeNull();
     verificationModel.Address.ShouldNotBeNull();
     verificationModel.Address?.CountryCode.ShouldBe("US");
