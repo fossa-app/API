@@ -1,15 +1,14 @@
-﻿using System.Globalization;
-using Fossa.API.Core.Services;
-using Fossa.Bridge.Models.ApiModels;
+﻿using Fossa.Bridge.Models.ApiModels;
 using Fossa.Licensing;
 using NodaTime;
+using TIKSN.Globalization;
 using TIKSN.Mapping;
 
 namespace Fossa.API.Web.Mappers;
 
 public class SystemEntitlementsModelMapper : IMapper<SystemEntitlements, SystemEntitlementsModel>
 {
-  private readonly IMapper<RegionInfo, CountryModel> _countryModelMapper;
+  private readonly IMapper<CountryInfo, CountryModel> _countryModelMapper;
   private readonly IDateTimeZoneLookup _dateTimeZoneLookup;
   private readonly IHostEnvironment _hostEnvironment;
   private readonly IMapper<DateTimeZone, TimeZoneModel> _timeZoneModelMapper;
@@ -17,7 +16,7 @@ public class SystemEntitlementsModelMapper : IMapper<SystemEntitlements, SystemE
   public SystemEntitlementsModelMapper(
     IHostEnvironment hostEnvironment,
     IDateTimeZoneLookup dateTimeZoneLookup,
-    IMapper<RegionInfo, CountryModel> countryModelMapper,
+    IMapper<CountryInfo, CountryModel> countryModelMapper,
     IMapper<DateTimeZone, TimeZoneModel> timeZoneModelMapper)
   {
     _hostEnvironment = hostEnvironment ?? throw new ArgumentNullException(nameof(hostEnvironment));
@@ -29,7 +28,7 @@ public class SystemEntitlementsModelMapper : IMapper<SystemEntitlements, SystemE
   public SystemEntitlementsModel Map(SystemEntitlements source)
   {
     var timeZones = source.Countries
-      .SelectMany(x => _dateTimeZoneLookup.ListRegionalTimeZones(x))
+      .SelectMany(x => _dateTimeZoneLookup.ListCountryTimeZones(x))
       .ToSeq();
 
     return new SystemEntitlementsModel(

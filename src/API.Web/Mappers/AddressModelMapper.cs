@@ -1,6 +1,7 @@
-﻿using Fossa.API.Core.Entities;
-using Fossa.API.Core.Services;
+﻿using FluentValidation;
+using Fossa.API.Core.Entities;
 using Fossa.Bridge.Models.ApiModels;
+using TIKSN.Globalization;
 using TIKSN.Mapping;
 
 namespace Fossa.API.Web.Mappers;
@@ -9,12 +10,12 @@ public class AddressModelMapper :
   IMapper<Address, AddressModel>,
   IMapper<AddressModel, Address>
 {
-  private readonly ICountryProvider _countryProvider;
+  private readonly ICountryFactory _countryFactory;
 
   public AddressModelMapper(
-    ICountryProvider countryProvider)
+    ICountryFactory countryFactory)
   {
-    _countryProvider = countryProvider ?? throw new ArgumentNullException(nameof(countryProvider));
+    _countryFactory = countryFactory ?? throw new ArgumentNullException(nameof(countryFactory));
   }
 
   public AddressModel Map(Address source)
@@ -36,6 +37,16 @@ public class AddressModelMapper :
       source.City ?? string.Empty,
       source.Subdivision ?? string.Empty,
       source.PostalCode ?? string.Empty,
-      _countryProvider.GetCountry(source.CountryCode ?? string.Empty));
+      CreateCountry(source.CountryCode ?? string.Empty));
+  }
+
+  private CountryInfo CreateCountry(string countryCode)
+  {
+    if (_countryFactory.TryCreate(countryCode, out var country))
+    {
+      return country;
+    }
+
+    throw new ValidationException($"Country code '{countryCode}' is invalid.");
   }
 }

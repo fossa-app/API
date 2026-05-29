@@ -1,7 +1,7 @@
-﻿using Fossa.API.Core.Services;
-using Fossa.Bridge.Models.ApiModels;
+﻿using Fossa.Bridge.Models.ApiModels;
 using NodaTime;
 using NodaTime.TimeZones;
+using TIKSN.Globalization;
 using TIKSN.Mapping;
 
 namespace Fossa.API.Web.Mappers;
@@ -24,7 +24,7 @@ public class TimeZoneModelMapper : IMapper<DateTimeZone, TimeZoneModel>
     return new TimeZoneModel(
       source.Id,
       TzdbDateTimeZoneSource.Default.TzdbToWindowsIds[source.Id],
-      _dateTimeZoneLookup.ResolveTimeZoneRegion(source).TwoLetterISORegionName,
+      _dateTimeZoneLookup.ResolveTimeZoneCountry(source).TwoLetterISORegionName,
       source.GetUtcOffset(_clock.GetCurrentInstant()).ToTimeSpan());
   }
 }

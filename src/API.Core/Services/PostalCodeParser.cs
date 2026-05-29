@@ -1,6 +1,6 @@
 ﻿using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
+using TIKSN.Globalization;
 
 namespace Fossa.API.Core.Services;
 
@@ -92,7 +92,7 @@ public class PostalCodeParser : IPostalCodeParser
   private IReadOnlyDictionary<string, Parser<string>> PostalCodeParsers { get; }
 
   public ParserResult<string> ParsePostalCode(
-    RegionInfo country,
+    CountryInfo country,
     string inputPostalCode)
   {
     var key = country.TwoLetterISORegionName;

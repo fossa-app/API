@@ -10,9 +10,9 @@ namespace Fossa.API.Core.Entities
 {
     public class Address : System.IEquatable<Fossa.API.Core.Entities.Address>
     {
-        public Address(string Line1, LanguageExt.Option<string> Line2, string City, string Subdivision, string PostalCode, System.Globalization.RegionInfo Country) { }
+        public Address(string Line1, LanguageExt.Option<string> Line2, string City, string Subdivision, string PostalCode, TIKSN.Globalization.CountryInfo Country) { }
         public string City { get; init; }
-        public System.Globalization.RegionInfo Country { get; init; }
+        public TIKSN.Globalization.CountryInfo Country { get; init; }
         public string Line1 { get; init; }
         public LanguageExt.Option<string> Line2 { get; init; }
         public string PostalCode { get; init; }
@@ -61,8 +61,8 @@ namespace Fossa.API.Core.Entities
     }
     public class CompanyEntity : System.IEquatable<Fossa.API.Core.Entities.CompanyEntity>, TIKSN.Data.IEntity<Fossa.API.Core.Entities.CompanyId>, TIKSN.Data.ITenantEntity<Fossa.API.Core.Entities.CompanyId, System.Guid>
     {
-        public CompanyEntity(Fossa.API.Core.Entities.CompanyId ID, System.Guid TenantID, string Name, System.Globalization.RegionInfo Country) { }
-        public System.Globalization.RegionInfo Country { get; init; }
+        public CompanyEntity(Fossa.API.Core.Entities.CompanyId ID, System.Guid TenantID, string Name, TIKSN.Globalization.CountryInfo Country) { }
+        public TIKSN.Globalization.CountryInfo Country { get; init; }
         public Fossa.API.Core.Entities.CompanyId ID { get; init; }
         public string Name { get; init; }
         public System.Guid TenantID { get; init; }
@@ -298,8 +298,8 @@ namespace Fossa.API.Core.Messages.Commands
     }
     public class CompanyCreationCommand : Fossa.API.Core.Messages.Commands.TenantEntityCommand<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Core.Entities.CompanyId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.CompanyCreationCommand>
     {
-        public CompanyCreationCommand(System.Guid TenantID, string Name, System.Globalization.RegionInfo Country) { }
-        public System.Globalization.RegionInfo Country { get; init; }
+        public CompanyCreationCommand(System.Guid TenantID, string Name, TIKSN.Globalization.CountryInfo Country) { }
+        public TIKSN.Globalization.CountryInfo Country { get; init; }
         public string Name { get; init; }
         public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.CompanyId> TenantEntityIdentities { get; }
     }
@@ -332,8 +332,8 @@ namespace Fossa.API.Core.Messages.Commands
     }
     public class CompanyModificationCommand : Fossa.API.Core.Messages.Commands.TenantEntityCommand<Fossa.API.Core.Entities.CompanyEntity, Fossa.API.Core.Entities.CompanyId, System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Commands.CompanyModificationCommand>
     {
-        public CompanyModificationCommand(System.Guid TenantID, string Name, System.Globalization.RegionInfo Country) { }
-        public System.Globalization.RegionInfo Country { get; init; }
+        public CompanyModificationCommand(System.Guid TenantID, string Name, TIKSN.Globalization.CountryInfo Country) { }
+        public TIKSN.Globalization.CountryInfo Country { get; init; }
         public string Name { get; init; }
         public override System.Collections.Generic.IEnumerable<Fossa.API.Core.Entities.CompanyId> TenantEntityIdentities { get; }
     }
@@ -595,8 +595,8 @@ namespace Fossa.API.Core.Messages.Events
     }
     public class CompanyCreatedEvent : Fossa.API.Core.Messages.Events.CompanyEvent<System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Events.CompanyCreatedEvent>
     {
-        public CompanyCreatedEvent(System.Guid TenantID, Fossa.API.Core.Entities.CompanyId CompanyId, string Name, System.Globalization.RegionInfo Country) { }
-        public System.Globalization.RegionInfo Country { get; init; }
+        public CompanyCreatedEvent(System.Guid TenantID, Fossa.API.Core.Entities.CompanyId CompanyId, string Name, TIKSN.Globalization.CountryInfo Country) { }
+        public TIKSN.Globalization.CountryInfo Country { get; init; }
         public string Name { get; init; }
     }
     public class CompanyDeletedEvent : Fossa.API.Core.Messages.Events.CompanyEvent<System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Events.CompanyDeletedEvent>
@@ -646,8 +646,8 @@ namespace Fossa.API.Core.Messages.Events
     }
     public class CompanyUpdatedEvent : Fossa.API.Core.Messages.Events.CompanyEvent<System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Events.CompanyUpdatedEvent>
     {
-        public CompanyUpdatedEvent(System.Guid TenantID, Fossa.API.Core.Entities.CompanyId CompanyId, string Name, System.Globalization.RegionInfo Country) { }
-        public System.Globalization.RegionInfo Country { get; init; }
+        public CompanyUpdatedEvent(System.Guid TenantID, Fossa.API.Core.Entities.CompanyId CompanyId, string Name, TIKSN.Globalization.CountryInfo Country) { }
+        public TIKSN.Globalization.CountryInfo Country { get; init; }
         public string Name { get; init; }
     }
     public class DepartmentCreatedEvent : Fossa.API.Core.Messages.Events.CompanyEvent<System.Guid>, System.IEquatable<Fossa.API.Core.Messages.Events.DepartmentCreatedEvent>
@@ -1049,17 +1049,6 @@ namespace Fossa.API.Core.Services
         public CompanyLicenseRetriever(Fossa.API.Core.Repositories.ILicenseFileRepository licenseFileRepository, TIKSN.Licensing.ILicenseFactory<Fossa.Licensing.CompanyEntitlements, Fossa.Licensing.CompanyLicenseEntitlements> licenseFactory, Fossa.API.Core.Telemetry.ICompanyLicenseMetricsRecorder companyLicenseMetricsRecorder, Fossa.API.Core.Services.ICertificateProvider certificateProvider, Fossa.API.Core.Services.ISystemLicenseRetriever systemLicenseRetriever) { }
         public System.Threading.Tasks.Task<LanguageExt.Validation<LanguageExt.Common.Error, TIKSN.Licensing.License<Fossa.Licensing.CompanyEntitlements>>> GetAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken) { }
     }
-    public class CountryProvider : Fossa.API.Core.Services.ICountryProvider
-    {
-        public CountryProvider(TIKSN.Globalization.IRegionFactory regionFactory) { }
-        public System.Globalization.RegionInfo GetCountry(string countryCode) { }
-    }
-    public class DateTimeZoneLookup : Fossa.API.Core.Services.IDateTimeZoneLookup
-    {
-        public DateTimeZoneLookup(TIKSN.Globalization.IRegionFactory regionFactory) { }
-        public LanguageExt.Seq<NodaTime.DateTimeZone> ListRegionalTimeZones(System.Globalization.RegionInfo region) { }
-        public System.Globalization.RegionInfo ResolveTimeZoneRegion(NodaTime.DateTimeZone timeZone) { }
-    }
     public interface ICertificateProvider
     {
         System.Threading.Tasks.Task<System.Security.Cryptography.X509Certificates.X509Certificate2> GetCertificateAsync(System.Threading.CancellationToken cancellationToken);
@@ -1076,18 +1065,9 @@ namespace Fossa.API.Core.Services
     {
         System.Threading.Tasks.Task<LanguageExt.Validation<LanguageExt.Common.Error, TIKSN.Licensing.License<Fossa.Licensing.CompanyEntitlements>>> GetAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken);
     }
-    public interface ICountryProvider
-    {
-        System.Globalization.RegionInfo GetCountry(string countryCode);
-    }
-    public interface IDateTimeZoneLookup
-    {
-        LanguageExt.Seq<NodaTime.DateTimeZone> ListRegionalTimeZones(System.Globalization.RegionInfo region);
-        System.Globalization.RegionInfo ResolveTimeZoneRegion(NodaTime.DateTimeZone timeZone);
-    }
     public interface IPostalCodeParser
     {
-        LanguageExt.Parsec.ParserResult<string> ParsePostalCode(System.Globalization.RegionInfo country, string inputPostalCode);
+        LanguageExt.Parsec.ParserResult<string> ParsePostalCode(TIKSN.Globalization.CountryInfo country, string inputPostalCode);
     }
     public interface ISystemInitializer
     {
@@ -1113,7 +1093,7 @@ namespace Fossa.API.Core.Services
     public class PostalCodeParser : Fossa.API.Core.Services.IPostalCodeParser
     {
         public PostalCodeParser() { }
-        public LanguageExt.Parsec.ParserResult<string> ParsePostalCode(System.Globalization.RegionInfo country, string inputPostalCode) { }
+        public LanguageExt.Parsec.ParserResult<string> ParsePostalCode(TIKSN.Globalization.CountryInfo country, string inputPostalCode) { }
     }
     public class SystemInitializer : Fossa.API.Core.Services.ISystemInitializer
     {
@@ -1200,12 +1180,12 @@ namespace Fossa.API.Core.Validators
         public static string BranchAddressCountryMustBeCompanyCountryPropertyName { get; }
         public static System.Threading.Tasks.Task<bool> BranchAddressCountryMustBeCompanyCountryAsync(Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, System.Guid tenantId, LanguageExt.Option<Fossa.API.Core.Entities.Address> address, System.Threading.CancellationToken cancellationToken) { }
         public static string BranchAddressCountryMustBeCompanyCountryErrorMessage<T>(T command, LanguageExt.Option<Fossa.API.Core.Entities.Address> property) { }
-        public static System.Threading.Tasks.Task<bool> BranchTimeZoneCountryMustBeCompanyCountryAsync(Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, Fossa.API.Core.Services.IDateTimeZoneLookup dateTimeZoneLookup, System.Guid tenantId, NodaTime.DateTimeZone branchTimeZone, System.Threading.CancellationToken cancellationToken) { }
+        public static System.Threading.Tasks.Task<bool> BranchTimeZoneCountryMustBeCompanyCountryAsync(Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, TIKSN.Globalization.IDateTimeZoneLookup dateTimeZoneLookup, System.Guid tenantId, NodaTime.DateTimeZone branchTimeZone, System.Threading.CancellationToken cancellationToken) { }
         public static string BranchTimeZoneCountryMustBeCompanyCountryErrorMessage<T>(T command, NodaTime.DateTimeZone property) { }
     }
     public class BranchCreationCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.BranchCreationCommand>
     {
-        public BranchCreationCommandValidator(Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, FluentValidation.IValidator<Fossa.API.Core.Entities.Address> addressValidator, Fossa.API.Core.Services.IDateTimeZoneLookup dateTimeZoneLookup) { }
+        public BranchCreationCommandValidator(Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, FluentValidation.IValidator<Fossa.API.Core.Entities.Address> addressValidator, TIKSN.Globalization.IDateTimeZoneLookup dateTimeZoneLookup) { }
     }
     public class BranchDeletionCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.BranchDeletionCommand>
     {
@@ -1213,7 +1193,7 @@ namespace Fossa.API.Core.Validators
     }
     public class BranchModificationCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.BranchModificationCommand>
     {
-        public BranchModificationCommandValidator(Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, FluentValidation.IValidator<Fossa.API.Core.Entities.Address> addressValidator, Fossa.API.Core.Services.IDateTimeZoneLookup dateTimeZoneLookup) { }
+        public BranchModificationCommandValidator(Fossa.API.Core.Repositories.ICompanyQueryRepository companyQueryRepository, FluentValidation.IValidator<Fossa.API.Core.Entities.Address> addressValidator, TIKSN.Globalization.IDateTimeZoneLookup dateTimeZoneLookup) { }
     }
     public class BranchRetrievalQueryValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Queries.BranchRetrievalQuery>
     {
@@ -1221,8 +1201,8 @@ namespace Fossa.API.Core.Validators
     }
     public static class CompanyCommandValidatorHelper
     {
-        public static System.Threading.Tasks.Task<bool> CompanyCountryMustBeLicensedAsync(Fossa.API.Core.Services.ISystemLicenseRetriever systemLicenseRetriever, System.Globalization.RegionInfo companyCountry, System.Threading.CancellationToken cancellationToken) { }
-        public static string CompanyCountryMustBeLicensedErrorMessage<T>(T command, System.Globalization.RegionInfo property) { }
+        public static System.Threading.Tasks.Task<bool> CompanyCountryMustBeLicensedAsync(Fossa.API.Core.Services.ISystemLicenseRetriever systemLicenseRetriever, TIKSN.Globalization.CountryInfo companyCountry, System.Threading.CancellationToken cancellationToken) { }
+        public static string CompanyCountryMustBeLicensedErrorMessage<T>(T command, TIKSN.Globalization.CountryInfo property) { }
     }
     public class CompanyCreationCommandValidator : FluentValidation.AbstractValidator<Fossa.API.Core.Messages.Commands.CompanyCreationCommand>
     {

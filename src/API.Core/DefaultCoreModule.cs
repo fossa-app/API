@@ -78,17 +78,7 @@ public class DefaultCoreModule : Module
       .InstancePerLifetimeScope();
 
     builder
-      .RegisterType<DateTimeZoneLookup>()
-      .AsImplementedInterfaces()
-      .SingleInstance();
-
-    builder
       .RegisterType<DateTimeZoneProvider>()
-      .AsImplementedInterfaces()
-      .SingleInstance();
-
-    builder
-      .RegisterType<CountryProvider>()
       .AsImplementedInterfaces()
       .SingleInstance();
 

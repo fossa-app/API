@@ -1,12 +1,12 @@
-﻿using System.Globalization;
-using Fossa.API.Core.Entities;
+﻿using Fossa.API.Core.Entities;
+using TIKSN.Globalization;
 
 namespace Fossa.API.Core.Messages.Commands;
 
 public record CompanyModificationCommand(
     Guid TenantID,
     string Name,
-    RegionInfo Country)
+    CountryInfo Country)
   : TenantEntityCommand<CompanyEntity, CompanyId, Guid>(TenantID)
 {
   public override IEnumerable<CompanyId> TenantEntityIdentities
