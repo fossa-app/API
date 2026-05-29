@@ -12,6 +12,7 @@
     <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" />
     <PackageReference Include="AspNetCore.HealthChecks.OpenIdConnectServer" />
     <PackageReference Include="FluentValidation.AspNetCore" />
+    <PackageReference Include="Fossa.Bridge" />
     <PackageReference Include="Hellang.Middleware.ProblemDetails" />
     <PackageReference Include="IdGen.DependencyInjection" />
     <PackageReference Include="MediatR" />

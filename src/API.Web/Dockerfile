@@ -1,4 +1,4 @@
-FROM --platform=$TARGETARCH mcr.microsoft.com/dotnet/sdk:10.0.203 AS build
+FROM --platform=$TARGETARCH mcr.microsoft.com/dotnet/sdk:10.0.300 AS build
 ARG TARGETARCH
 WORKDIR /source
 COPY --link . /source
@@ -6,8 +6,8 @@ RUN dotnet restore --runtime linux-$TARGETARCH
 WORKDIR /source/src/API.Web
 RUN dotnet publish --no-restore --configuration Release --runtime linux-$TARGETARCH --no-self-contained --output /app
 
-FROM --platform=$TARGETARCH mcr.microsoft.com/dotnet/aspnet:10.0.5 AS runtime
-RUN apt-get update && apt-get upgrade -y && apt-get install -y curl=8.5.0-2ubuntu10.8 && apt-get clean
+FROM --platform=$TARGETARCH mcr.microsoft.com/dotnet/aspnet:10.0.8 AS runtime
+RUN apt-get update && apt-get upgrade -y && apt-get install -y curl=8.5.0-2ubuntu10.9 && apt-get clean
 WORKDIR /app
 COPY --link --from=build /app .
 USER app

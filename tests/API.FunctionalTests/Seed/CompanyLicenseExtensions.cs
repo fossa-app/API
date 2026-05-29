@@ -5,7 +5,7 @@ using Fossa.API.Core.Extensions;
 using Fossa.API.Core.Services;
 using Fossa.API.FunctionalTests.Repositories;
 using Fossa.API.FunctionalTests.Services;
-using Fossa.API.Web.ApiModels;
+using Fossa.Bridge.Models.ApiModels;
 using Fossa.Licensing;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,7 +38,7 @@ public static class CompanyLicenseExtensions
     var licenseFactory = factory.Services.GetRequiredService<ILicenseFactory<CompanyEntitlements, CompanyLicenseEntitlements>>();
     var systemPropertiesRepository = factory.Services.GetRequiredService<SystemPropertiesMongoEasyRepository>();
 
-    var systemPropertiesEntity = await systemPropertiesRepository.GetAsync(SystemProperties.MainSystemPropertiesId.AsPrimitive(), default).ConfigureAwait(false);
+    var systemPropertiesEntity = await systemPropertiesRepository.GetAsync(SystemProperties.MainSystemPropertiesId.AsPrimitive(), cancellationToken).ConfigureAwait(false);
 
     var client = factory.CreateClient();
     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);

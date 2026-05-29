@@ -1,7 +1,7 @@
-﻿using System.Net.Http.Json;
-using Fossa.API.FunctionalTests.Seed;
+﻿using Fossa.API.FunctionalTests.Seed;
 using Fossa.API.Web;
-using Fossa.API.Web.ApiModels;
+using Fossa.Bridge.Services;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
 
 namespace Fossa.API.FunctionalTests.ControllerApis;
@@ -9,21 +9,19 @@ namespace Fossa.API.FunctionalTests.ControllerApis;
 public class SystemLicenseControllerWithLicense : IClassFixture<CustomWebApplicationFactory<DefaultWebModule>>, IAsyncLifetime
 {
   private readonly CustomWebApplicationFactory<DefaultWebModule> _factory;
-  private readonly HttpClient _client;
 
   public SystemLicenseControllerWithLicense(CustomWebApplicationFactory<DefaultWebModule> factory)
   {
     _factory = factory ?? throw new ArgumentNullException(nameof(factory));
-    _client = factory.CreateClient();
   }
 
   [Fact]
   public async Task RetrieveSystemLicenseAsync()
   {
-    var response = await _client.GetAsync("/api/1.0/License/System");
-    response.EnsureSuccessStatusCode();
-    var licenseResponseModel =
-      await response.Content.ReadFromJsonAsync<LicenseResponseModel<SystemEntitlementsModel>>();
+    using var scope = _factory.Services.CreateScope();
+    var systemLicenseClient = scope.ServiceProvider.GetRequiredService<IClients>().SystemLicenseClient;
+
+    var licenseResponseModel = await systemLicenseClient.GetLicenseAsync(TestContext.Current.CancellationToken);
 
     licenseResponseModel.ShouldNotBeNull();
     licenseResponseModel.Terms.ShouldNotBeNull();
@@ -37,10 +35,10 @@ public class SystemLicenseControllerWithLicense : IClassFixture<CustomWebApplica
     licenseResponseModel.Entitlements.MaximumCompanyCount.ShouldBePositive();
   }
 
-  public async Task InitializeAsync()
+  public async ValueTask InitializeAsync()
   {
-    await _factory.SeedSystemLicenseAsync(default).ConfigureAwait(false);
+    await _factory.SeedSystemLicenseAsync(TestContext.Current.CancellationToken).ConfigureAwait(false);
   }
 
-  public Task DisposeAsync() => Task.CompletedTask;
+  public ValueTask DisposeAsync() => ValueTask.CompletedTask;
 }

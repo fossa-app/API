@@ -1,6 +1,6 @@
 ﻿using Fossa.API.Core.Entities;
 using Fossa.API.Core.Services;
-using Fossa.API.Web.ApiModels;
+using Fossa.Bridge.Models.ApiModels;
 using TIKSN.Mapping;
 
 namespace Fossa.API.Web.Mappers;

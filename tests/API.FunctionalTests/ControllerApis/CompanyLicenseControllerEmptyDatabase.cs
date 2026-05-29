@@ -1,8 +1,9 @@
 ﻿using System.Net;
 using System.Net.Http.Headers;
 using Fossa.API.Web;
+using Fossa.Bridge.Services;
+using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
-using Xunit.Abstractions;
 
 namespace Fossa.API.FunctionalTests.ControllerApis;
 
@@ -33,9 +34,9 @@ public class CompanyLicenseControllerEmptyDatabase : IClassFixture<CustomWebAppl
     fileContent.Headers.ContentType = new MediaTypeHeaderValue("multipart/form-data");
     content.Add(fileContent, "licenseFile", "CompanyLicense.lic");
 
-    var response = await client.PostAsync("/api/1.0/License/Company", content);
+    var response = await client.PostAsync("/api/1.0/License/Company", content, TestContext.Current.CancellationToken);
 
-    _testOutputHelper.WriteLine(await response.Content.ReadAsStringAsync());
+    _testOutputHelper.WriteLine(await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken));
     response.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
   }
 
@@ -51,26 +52,32 @@ public class CompanyLicenseControllerEmptyDatabase : IClassFixture<CustomWebAppl
     fileContent.Headers.ContentType = new MediaTypeHeaderValue("multipart/form-data");
     content.Add(fileContent, "licenseFile", "CompanyLicense.lic");
 
-    var response = await client.PostAsync("/api/1.0/License/Company", content);
+    var response = await client.PostAsync("/api/1.0/License/Company", content, TestContext.Current.CancellationToken);
     response.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
   }
 
   [Fact]
   public async Task RetrieveCompanyLicenseWithAccessTokenAsync()
   {
-    var client = _factory.CreateClient();
-    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", "01JA1R22PNGNDJNP12A506EFWZ.Tenant1.User1");
-    var response = await client.GetAsync("/api/1.0/License/Company");
+    using var scope = _factory.Services.CreateScope();
+    var companyLicenseClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanyLicenseClient;
+    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
 
-    response.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+    transport.SetAuthorizationToken("Bearer", "01JA1R22PNGNDJNP12A506EFWZ.Tenant1.User1");
+
+    var ex = await Should.ThrowAsync<HttpRequestException>(() => companyLicenseClient.GetLicenseAsync(TestContext.Current.CancellationToken));
+
+    ex.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
   }
 
   [Fact]
   public async Task RetrieveCompanyLicenseWithoutAccessTokenAsync()
   {
-    var client = _factory.CreateClient();
-    var response = await client.GetAsync("/api/1.0/License/Company");
+    using var scope = _factory.Services.CreateScope();
+    var companyLicenseClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanyLicenseClient;
 
-    response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+    var ex = await Should.ThrowAsync<HttpRequestException>(() => companyLicenseClient.GetLicenseAsync(TestContext.Current.CancellationToken));
+
+    ex.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
   }
 }

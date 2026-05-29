@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using Xunit.Abstractions;
+using Xunit;
 
 namespace Fossa.API.FunctionalTests.Extensions;
 

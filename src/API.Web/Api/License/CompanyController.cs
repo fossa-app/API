@@ -2,7 +2,7 @@
 using Fossa.API.Core.Messages.Commands;
 using Fossa.API.Core.Messages.Queries;
 using Fossa.API.Core.Tenant;
-using Fossa.API.Web.ApiModels;
+using Fossa.Bridge.Models.ApiModels;
 using Fossa.Licensing;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

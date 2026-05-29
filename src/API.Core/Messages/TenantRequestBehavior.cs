@@ -1,6 +1,4 @@
-﻿using Fossa.API.Core.Messages.Commands;
-using Fossa.API.Core.Messages.Queries;
-using Fossa.API.Core.Tenant;
+﻿using Fossa.API.Core.Tenant;
 using Microsoft.Extensions.DependencyInjection;
 using TIKSN.Data;
 using TIKSN.Data.BareEntityResolvers;
