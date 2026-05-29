@@ -1,5 +1,5 @@
-﻿using System.Globalization;
-using TIKSN.Data;
+﻿using TIKSN.Data;
+using TIKSN.Globalization;
 
 namespace Fossa.API.Core.Entities;
 
@@ -7,5 +7,5 @@ public record CompanyEntity(
     CompanyId ID,
     Guid TenantID,
     string Name,
-    RegionInfo Country)
+    CountryInfo Country)
   : ITenantEntity<CompanyId, Guid>;

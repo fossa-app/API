@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+﻿using TIKSN.Globalization;
 
 namespace Fossa.API.Core.Entities;
 
@@ -8,4 +8,4 @@ public record Address(
   string City,
   string Subdivision,
   string PostalCode,
-  RegionInfo Country);
+  CountryInfo Country);

@@ -9,12 +9,12 @@ public class AddressMongoMapper :
   IMapper<Address, AddressMongo>,
   IMapper<AddressMongo, Address>
 {
-  private readonly IRegionFactory _regionFactory;
+  private readonly ICountryFactory _countryFactory;
 
   public AddressMongoMapper(
-    IRegionFactory regionFactory)
+    ICountryFactory countryFactory)
   {
-    _regionFactory = regionFactory ?? throw new ArgumentNullException(nameof(regionFactory));
+    _countryFactory = countryFactory ?? throw new ArgumentNullException(nameof(countryFactory));
   }
 
   public AddressMongo Map(Address source)
@@ -38,6 +38,6 @@ public class AddressMongoMapper :
       source.City ?? string.Empty,
       source.Subdivision ?? string.Empty,
       source.PostalCode ?? string.Empty,
-      _regionFactory.Create(source.CountryCode ?? string.Empty));
+      _countryFactory.Create(source.CountryCode ?? string.Empty));
   }
 }

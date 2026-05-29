@@ -9,18 +9,18 @@ public class CompanyMongoMapper : IMapper<CompanyMongoEntity, CompanyEntity>, IM
 {
   private readonly IMapper<long, CompanyId> _dataIdentityToDomainIdentityMapper;
   private readonly IMapper<CompanyId, long> _domainIdentityToDataIdentityMapper;
-  private readonly IRegionFactory _regionFactory;
+  private readonly ICountryFactory _countryFactory;
 
   public CompanyMongoMapper(
     IMapper<CompanyId, long> domainIdentityToDataIdentityMapper,
     IMapper<long, CompanyId> dataIdentityToDomainIdentityMapper,
-    IRegionFactory regionFactory)
+    ICountryFactory countryFactory)
   {
     _domainIdentityToDataIdentityMapper = domainIdentityToDataIdentityMapper ??
                                           throw new ArgumentNullException(nameof(domainIdentityToDataIdentityMapper));
     _dataIdentityToDomainIdentityMapper = dataIdentityToDomainIdentityMapper ??
                                           throw new ArgumentNullException(nameof(dataIdentityToDomainIdentityMapper));
-    _regionFactory = regionFactory ?? throw new ArgumentNullException(nameof(regionFactory));
+    _countryFactory = countryFactory ?? throw new ArgumentNullException(nameof(countryFactory));
   }
 
   public CompanyEntity Map(CompanyMongoEntity source)
@@ -29,7 +29,7 @@ public class CompanyMongoMapper : IMapper<CompanyMongoEntity, CompanyEntity>, IM
       _dataIdentityToDomainIdentityMapper.Map(source.ID),
       source.TenantID,
       source.Name ?? string.Empty,
-      _regionFactory.Create(source.CountryCode ?? string.Empty));
+      _countryFactory.Create(source.CountryCode ?? string.Empty));
   }
 
   public CompanyMongoEntity Map(CompanyEntity source)

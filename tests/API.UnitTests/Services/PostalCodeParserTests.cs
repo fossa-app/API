@@ -1,5 +1,8 @@
 ﻿using System.Globalization;
 using Fossa.API.Core.Services;
+using Microsoft.Extensions.DependencyInjection;
+using TIKSN.DependencyInjection;
+using TIKSN.Globalization;
 using Xunit;
 
 namespace Fossa.API.UnitTests.Services;
@@ -7,11 +10,16 @@ namespace Fossa.API.UnitTests.Services;
 public class PostalCodeParserTests
 {
   private readonly ITestOutputHelper testOutputHelper;
+  private readonly ICountryFactory countryFactory;
 
   public PostalCodeParserTests(
     ITestOutputHelper testOutputHelper)
   {
     this.testOutputHelper = testOutputHelper ?? throw new ArgumentNullException(nameof(testOutputHelper));
+    countryFactory = new ServiceCollection()
+      .AddFrameworkCore()
+      .BuildServiceProvider()
+      .GetRequiredService<ICountryFactory>();
   }
 
   [Theory]
@@ -43,15 +51,15 @@ public class PostalCodeParserTests
   [InlineData("US", "12345-123", null)]
   [InlineData("PL", "02-392", "02-392")]
   [InlineData("UA", "04111", "04111")]
-  [InlineData("001", "ABC123", "ABC123")]
-  [InlineData("001", "abc123", "ABC123")]
-  [InlineData("001", "123ABC", "123ABC")]
-  [InlineData("001", "123abc", "123ABC")]
-  [InlineData("001", "abc 123", "ABC 123")]
-  [InlineData("001", "abc  123", "ABC 123")]
-  [InlineData("001", "abc   123", "ABC 123")]
-  [InlineData("001", "  ABC  123  DEF  456  ", "ABC 123 DEF 456")]
-  [InlineData("001", "  ABC - 123 DEF - 456  ", "ABC-123 DEF-456")]
+  [InlineData("PL", "ABC123", "ABC123")]
+  [InlineData("PL", "abc123", "ABC123")]
+  [InlineData("PL", "123ABC", "123ABC")]
+  [InlineData("PL", "123abc", "123ABC")]
+  [InlineData("PL", "abc 123", "ABC 123")]
+  [InlineData("PL", "abc  123", "ABC 123")]
+  [InlineData("PL", "abc   123", "ABC 123")]
+  [InlineData("PL", "  ABC  123  DEF  456  ", "ABC 123 DEF 456")]
+  [InlineData("PL", "  ABC - 123 DEF - 456  ", "ABC-123 DEF-456")]
   public void ParsePostalCode(string countryCode, string inputPostalCode, string? expectedOutputPostalCode)
   {
     // Arrange
@@ -60,7 +68,7 @@ public class PostalCodeParserTests
 
     // Act
 
-    var result = parser.ParsePostalCode(new RegionInfo(countryCode), inputPostalCode);
+    var result = parser.ParsePostalCode(countryFactory.Create(countryCode), inputPostalCode);
     var actualOutputPostalCode = result.IsFaulted ? null : result.Reply.Result;
 
     // Assert

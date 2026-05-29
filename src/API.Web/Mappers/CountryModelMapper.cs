@@ -1,13 +1,13 @@
-﻿using System.Globalization;
-using Fossa.Bridge.Models.ApiModels;
+﻿using Fossa.Bridge.Models.ApiModels;
+using TIKSN.Globalization;
 using TIKSN.Mapping;
 
 namespace Fossa.API.Web.Mappers;
 
-public class CountryModelMapper : IMapper<RegionInfo, CountryModel>
+public class CountryModelMapper : IMapper<CountryInfo, CountryModel>
 {
-  public CountryModel Map(RegionInfo source)
+  public CountryModel Map(CountryInfo source)
   {
-    return new CountryModel(source.EnglishName, source.TwoLetterISORegionName);
+    return new CountryModel(source.PrincipalRegion.EnglishName, source.TwoLetterISORegionName);
   }
 }

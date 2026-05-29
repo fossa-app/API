@@ -1,7 +1,7 @@
 ﻿using Fossa.API.Core.Entities;
 using Fossa.API.Core.Repositories;
-using Fossa.API.Core.Services;
 using NodaTime;
+using TIKSN.Globalization;
 
 namespace Fossa.API.Core.Validators;
 
@@ -21,10 +21,7 @@ public static class BranchCommandValidatorHelper
       async x =>
       {
         var companyEntity = await companyQueryRepository.GetByTenantIdAsync(tenantId, cancellationToken).ConfigureAwait(false);
-        return string.Equals(
-          companyEntity.Country.TwoLetterISORegionName,
-          x.Country.TwoLetterISORegionName,
-          StringComparison.OrdinalIgnoreCase);
+        return companyEntity.Country == x.Country;
       },
       () => true);
   }
@@ -35,7 +32,7 @@ public static class BranchCommandValidatorHelper
 
     static string GetAddressCountryCodeAndName(Address address)
     {
-      return $"{address.Country.TwoLetterISORegionName} - [{address.Country.EnglishName}]";
+      return $"{address.Country.TwoLetterISORegionName} - [{address.Country.PrincipalRegion.EnglishName}]";
     }
   }
 
@@ -51,10 +48,7 @@ public static class BranchCommandValidatorHelper
     ArgumentNullException.ThrowIfNull(branchTimeZone);
 
     var companyEntity = await companyQueryRepository.GetByTenantIdAsync(tenantId, cancellationToken).ConfigureAwait(false);
-    return string.Equals(
-      companyEntity.Country.TwoLetterISORegionName,
-      dateTimeZoneLookup.ResolveTimeZoneRegion(branchTimeZone).TwoLetterISORegionName,
-      StringComparison.OrdinalIgnoreCase);
+    return companyEntity.Country == dateTimeZoneLookup.ResolveTimeZoneCountry(branchTimeZone);
   }
 
   public static string BranchTimeZoneCountryMustBeCompanyCountryErrorMessage<T>(T command, DateTimeZone property)

@@ -1,5 +1,5 @@
-﻿using System.Globalization;
-using Fossa.API.Core.Services;
+﻿using Fossa.API.Core.Services;
+using TIKSN.Globalization;
 
 namespace Fossa.API.Core.Validators;
 
@@ -7,7 +7,7 @@ public static class CompanyCommandValidatorHelper
 {
   public static async Task<bool> CompanyCountryMustBeLicensedAsync(
     ISystemLicenseRetriever systemLicenseRetriever,
-    RegionInfo companyCountry,
+    CountryInfo companyCountry,
     CancellationToken cancellationToken)
   {
     var systemLicenseResult = await systemLicenseRetriever.GetAsync(cancellationToken).ConfigureAwait(false);
@@ -15,8 +15,8 @@ public static class CompanyCommandValidatorHelper
     return systemLicenseResult.Match(license => license.Entitlements.Countries.Contains(companyCountry), _ => false);
   }
 
-  public static string CompanyCountryMustBeLicensedErrorMessage<T>(T command, RegionInfo property)
+  public static string CompanyCountryMustBeLicensedErrorMessage<T>(T command, CountryInfo property)
   {
-    return $"Country '{property.TwoLetterISORegionName} - {property.EnglishName}' is not licensed.";
+    return $"Country '{property.TwoLetterISORegionName} - {property.PrincipalRegion.EnglishName}' is not licensed.";
   }
 }

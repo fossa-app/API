@@ -1,7 +1,7 @@
-﻿using System.Globalization;
-using FluentValidation;
+﻿using FluentValidation;
 using Fossa.API.Core.Entities;
 using Fossa.API.Core.Services;
+using TIKSN.Globalization;
 
 namespace Fossa.API.Core.Validators;
 
@@ -24,7 +24,7 @@ public class AddressValidator : AbstractValidator<Address>
 
   private static bool BranchAddressPostalCodeMustBeValidForCounpanyAddressCountry(
     IPostalCodeParser postalCodeParser,
-    RegionInfo country,
+    CountryInfo country,
     string postalCode)
   {
     ArgumentNullException.ThrowIfNull(postalCodeParser);
@@ -36,6 +36,6 @@ public class AddressValidator : AbstractValidator<Address>
   private static string BranchAddressPostalCodeMustBeValidForCounpanyAddressCountryErrorMessage(
     Address address, string postalCode)
   {
-    return $"Postal Code '{postalCode}' for Country '{address.Country.TwoLetterISORegionName} - [{address.Country.EnglishName}]' is invalid.";
+    return $"Postal Code '{postalCode}' for Country '{address.Country.TwoLetterISORegionName} - [{address.Country.PrincipalRegion.EnglishName}]' is invalid.";
   }
 }

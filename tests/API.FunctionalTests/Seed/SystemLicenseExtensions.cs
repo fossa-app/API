@@ -8,6 +8,7 @@ using Fossa.Licensing;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using TIKSN.Deployment;
+using TIKSN.Globalization;
 using TIKSN.Licensing;
 
 namespace Fossa.API.FunctionalTests.Seed;
@@ -21,6 +22,7 @@ public static class SystemLicenseExtensions
   {
     var testCertificateProvider = factory.Services.GetRequiredService<ITestCertificateProvider>();
     var licenseFactory = factory.Services.GetRequiredService<ILicenseFactory<SystemEntitlements, SystemLicenseEntitlements>>();
+    var countryFactory = factory.Services.GetRequiredService<ICountryFactory>();
     var licenseFileRepository = factory.Services.GetRequiredService<LicenseEasyFileRepository>();
     var systemPropertiesRepository = factory.Services.GetRequiredService<SystemPropertiesMongoEasyRepository>();
 
@@ -33,7 +35,7 @@ public static class SystemLicenseExtensions
       new Ulid(systemPropertiesEntity.SystemID),
       EnvironmentName.Parse("Development", asciiOnly: true, CultureInfo.InvariantCulture).Single(),
       10,
-      Seq(new RegionInfo("CA"), new RegionInfo("PL"), new RegionInfo("UA"), new RegionInfo("US")));
+      Seq(countryFactory.Create("CA"), countryFactory.Create("PL"), countryFactory.Create("UA"), countryFactory.Create("US")));
 
     var license = licenseFactory.Create(licenseTerms, systemEntitlements, testCertificateProvider.Certificate)
       .GetOrThrow();
