@@ -32,7 +32,7 @@ public static class BranchCommandValidatorHelper
 
     static string GetAddressCountryCodeAndName(Address address)
     {
-      return $"{address.Country.TwoLetterISORegionName} - [{address.Country.PrincipalRegion.EnglishName}]";
+      return $"{address.Country} - [{address.Country.PrincipalRegion.EnglishName}]";
     }
   }
 

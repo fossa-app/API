@@ -8,6 +8,6 @@ public class CountryModelMapper : IMapper<CountryInfo, CountryModel>
 {
   public CountryModel Map(CountryInfo source)
   {
-    return new CountryModel(source.PrincipalRegion.EnglishName, source.TwoLetterISORegionName);
+    return new CountryModel(source.PrincipalRegion.EnglishName, source.PrincipalRegion.TwoLetterISORegionName);
   }
 }

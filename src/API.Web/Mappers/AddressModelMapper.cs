@@ -26,7 +26,7 @@ public class AddressModelMapper :
       source.City.Trim(),
       source.Subdivision.Trim(),
       source.PostalCode.Trim(),
-      source.Country.TwoLetterISORegionName);
+      source.Country.PrincipalRegion.TwoLetterISORegionName);
   }
 
   public Address Map(AddressModel source)

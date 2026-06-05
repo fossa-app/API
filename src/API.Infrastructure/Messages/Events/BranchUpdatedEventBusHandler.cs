@@ -28,7 +28,7 @@ public class BranchUpdatedEventBusHandler : CompanyEventBusHandler<BranchUpdated
         City = s.City,
         Subdivision = s.Subdivision,
         PostalCode = s.PostalCode,
-        CountryCode = s.Country.TwoLetterISORegionName
+        CountryCode = s.Country.PrincipalRegion.TwoLetterISORegionName
       }, default(Address)),
       TimeZoneId = domainEvent.TimeZone.Id,
     };

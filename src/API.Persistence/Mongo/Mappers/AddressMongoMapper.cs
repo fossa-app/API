@@ -26,7 +26,7 @@ public class AddressMongoMapper :
       City = source.City.Trim(),
       Subdivision = source.Subdivision.Trim(),
       PostalCode = source.PostalCode.Trim(),
-      CountryCode = source.Country.TwoLetterISORegionName,
+      CountryCode = source.Country.PrincipalRegion.TwoLetterISORegionName,
     };
   }
 

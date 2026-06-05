@@ -95,7 +95,7 @@ public class PostalCodeParser : IPostalCodeParser
     CountryInfo country,
     string inputPostalCode)
   {
-    var key = country.TwoLetterISORegionName;
+    var key = country.PrincipalRegion.TwoLetterISORegionName;
 
     if (PostalCodeParsers.TryGetValue(key, out var parser))
     {

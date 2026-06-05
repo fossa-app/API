@@ -17,6 +17,6 @@ public static class CompanyCommandValidatorHelper
 
   public static string CompanyCountryMustBeLicensedErrorMessage<T>(T command, CountryInfo property)
   {
-    return $"Country '{property.TwoLetterISORegionName} - {property.PrincipalRegion.EnglishName}' is not licensed.";
+    return $"Country '{property} - {property.PrincipalRegion.EnglishName}' is not licensed.";
   }
 }
