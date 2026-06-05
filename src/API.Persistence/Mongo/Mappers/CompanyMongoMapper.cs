@@ -39,7 +39,7 @@ public class CompanyMongoMapper : IMapper<CompanyMongoEntity, CompanyEntity>, IM
       ID = _domainIdentityToDataIdentityMapper.Map(source.ID),
       TenantID = source.TenantID,
       Name = source.Name,
-      CountryCode = source.Country.TwoLetterISORegionName,
+      CountryCode = source.Country.PrincipalRegion.TwoLetterISORegionName,
     };
   }
 }

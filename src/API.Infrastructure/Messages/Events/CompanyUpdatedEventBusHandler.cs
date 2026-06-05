@@ -20,7 +20,7 @@ public class CompanyUpdatedEventBusHandler : CompanyEventBusHandler<CompanyUpdat
     {
       CompanyId = domainEvent.CompanyId.AsPrimitive(),
       Name = domainEvent.Name,
-      CountryCode = domainEvent.Country?.TwoLetterISORegionName
+      CountryCode = domainEvent.Country?.PrincipalRegion.TwoLetterISORegionName
     };
 
   protected override long ResolveEntityId(CompanyUpdatedEvent domainEvent)

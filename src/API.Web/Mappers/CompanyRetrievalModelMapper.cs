@@ -19,6 +19,6 @@ public class CompanyRetrievalModelMapper : IMapper<CompanyEntity, CompanyRetriev
     return new CompanyRetrievalModel(
       _domainIdentityToDataIdentityMapper.Map(source.ID),
       source.Name,
-      source.Country.TwoLetterISORegionName);
+      source.Country.PrincipalRegion.TwoLetterISORegionName);
   }
 }

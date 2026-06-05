@@ -24,7 +24,7 @@ public class TimeZoneModelMapper : IMapper<DateTimeZone, TimeZoneModel>
     return new TimeZoneModel(
       source.Id,
       TzdbDateTimeZoneSource.Default.TzdbToWindowsIds[source.Id],
-      _dateTimeZoneLookup.ResolveTimeZoneCountry(source).TwoLetterISORegionName,
+      _dateTimeZoneLookup.ResolveTimeZoneCountry(source).PrincipalRegion.TwoLetterISORegionName,
       source.GetUtcOffset(_clock.GetCurrentInstant()).ToTimeSpan());
   }
 }
