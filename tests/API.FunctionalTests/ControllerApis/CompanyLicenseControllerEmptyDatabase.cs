@@ -65,9 +65,7 @@ public class CompanyLicenseControllerEmptyDatabase : IClassFixture<CustomWebAppl
 
     transport.SetAuthorizationToken("Bearer", "01JA1R22PNGNDJNP12A506EFWZ.Tenant1.User1");
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => companyLicenseClient.GetLicenseAsync(TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+    (await companyLicenseClient.GetLicenseAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.UnprocessableEntity);
   }
 
   [Fact]
@@ -76,8 +74,6 @@ public class CompanyLicenseControllerEmptyDatabase : IClassFixture<CustomWebAppl
     using var scope = _factory.Services.CreateScope();
     var companyLicenseClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanyLicenseClient;
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => companyLicenseClient.GetLicenseAsync(TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+    (await companyLicenseClient.GetLicenseAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized);
   }
 }

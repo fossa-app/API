@@ -21,7 +21,7 @@ public class SystemLicenseControllerWithLicense : IClassFixture<CustomWebApplica
     using var scope = _factory.Services.CreateScope();
     var systemLicenseClient = scope.ServiceProvider.GetRequiredService<IClients>().SystemLicenseClient;
 
-    var licenseResponseModel = await systemLicenseClient.GetLicenseAsync(TestContext.Current.CancellationToken);
+    var licenseResponseModel = (await systemLicenseClient.GetLicenseAsync(TestContext.Current.CancellationToken)).Unwrap();
 
     licenseResponseModel.ShouldNotBeNull();
     licenseResponseModel.Terms.ShouldNotBeNull();

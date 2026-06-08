@@ -32,9 +32,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     const string timeZoneId = "USZone";
     var address = new AddressModel("1234 Main St", "Suite 100", "Los Angeles", "CA", "12345", "US");
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.CreateBranchAsync(new BranchModificationModel(branchName, timeZoneId, address), TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+    (await branchClient.CreateBranchAsync(new BranchModificationModel(branchName, timeZoneId, address), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.UnprocessableEntity);
   }
 
   [Fact]
@@ -50,7 +48,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     await branchClient.CreateBranchAsync(new BranchModificationModel(branchName, timeZoneId, address: null), TestContext.Current.CancellationToken);
 
-    var responseModel = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
+    var responseModel = (await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken)).Unwrap();
 
     responseModel.ShouldNotBeNull();
     responseModel.Items.Select(x => x.Name).ShouldContain(branchName);
@@ -68,9 +66,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     const string branchName = "Branch-392136901";
     const string timeZoneId = "Australia/Perth";
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.CreateBranchAsync(new BranchModificationModel(branchName, timeZoneId, address: null), TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+    (await branchClient.CreateBranchAsync(new BranchModificationModel(branchName, timeZoneId, address: null), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.UnprocessableEntity);
   }
 
   [Fact]
@@ -79,9 +75,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.CreateBranchAsync(new BranchModificationModel("Branch X", "America/New_York", address: null), TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+    (await branchClient.CreateBranchAsync(new BranchModificationModel("Branch X", "America/New_York", address: null), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized);
   }
 
   [Fact]
@@ -94,9 +88,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     transport.SetAuthorizationToken("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.User1");
     const string branchName = "Branch-826076795";
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.CreateBranchAsync(new BranchModificationModel(branchName, "USZone", address: null), TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+    (await branchClient.CreateBranchAsync(new BranchModificationModel(branchName, "USZone", address: null), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Forbidden);
   }
 
   [Fact]
@@ -109,9 +101,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     transport.SetAuthorizationToken("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.User1");
     const string branchName = "Branch-826076795";
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.CreateBranchAsync(new BranchModificationModel(branchName, "America/Detroit", address: null), TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+    (await branchClient.CreateBranchAsync(new BranchModificationModel(branchName, "America/Detroit", address: null), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Forbidden);
   }
 
   [Fact]
@@ -124,9 +114,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     transport.SetAuthorizationToken("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.User1");
     const string branchName = "Branch-826076795";
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.CreateBranchAsync(new BranchModificationModel(branchName, "Australia/Perth", address: null), TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+    (await branchClient.CreateBranchAsync(new BranchModificationModel(branchName, "Australia/Perth", address: null), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Forbidden);
   }
 
   [Fact]
@@ -143,7 +131,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     await branchClient.CreateBranchAsync(new BranchModificationModel(branchName, timeZoneId, address: null), TestContext.Current.CancellationToken);
 
-    var responseModel = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
+    var responseModel = (await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken)).Unwrap();
 
     responseModel.ShouldNotBeNull();
     var branchRetrievalModel = responseModel.Items.Single(x => string.Equals(x.Name, branchName, StringComparison.OrdinalIgnoreCase));
@@ -161,9 +149,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.DeleteBranchAsync(123456789, TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+    (await branchClient.DeleteBranchAsync(123456789, TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized);
   }
 
   [Fact]
@@ -187,7 +173,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     await employeeClient.CreateEmployeeAsync(new EmployeeModificationModel(firstName, lastName, fullName), TestContext.Current.CancellationToken);
 
-    var employeeResponseModel = await employeeClient.GetEmployeesAsync(new EmployeeQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
+    var employeeResponseModel = (await employeeClient.GetEmployeesAsync(new EmployeeQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken)).Unwrap();
     employeeResponseModel.ShouldNotBeNull();
     var createdEmployee = employeeResponseModel.Items.First();
 
@@ -195,21 +181,21 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     await branchClient.CreateBranchAsync(new BranchModificationModel(branchName, timeZoneId, address: null), TestContext.Current.CancellationToken);
 
-    var branchResponseModel = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
+    var branchResponseModel = (await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken)).Unwrap();
 
     branchResponseModel.ShouldNotBeNull();
 
     var createdBranchModel = branchResponseModel.Items.Single(x => string.Equals(x.Name, branchName, StringComparison.OrdinalIgnoreCase));
 
-    await transport.PutAsync<EmployeeManagementModel>($"/api/1.0/Employees/{createdEmployee.Id}", new EmployeeManagementModel(createdBranchModel.Id, null, null, "Staff"));
+    await transport.PutAsync<EmployeeManagementModel>(
+      $"/api/1.0/Employees/{createdEmployee.Id}",
+      EndpointSecurity.RequireToken,
+      new EmployeeManagementModel(createdBranchModel.Id, null, null, "Staff"),
+      TestContext.Current.CancellationToken);
 
     // Act
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.DeleteBranchAsync(createdBranchModel.Id, TestContext.Current.CancellationToken));
-
-    // Assert
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.FailedDependency);
+    (await branchClient.DeleteBranchAsync(createdBranchModel.Id, TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.FailedDependency);
   }
 
   [Fact]
@@ -241,9 +227,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     var existingBranch = branchEasyStore.Entities.Values.Single(x => string.Equals(x.Name, "Branch3-1513925028", StringComparison.Ordinal));
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.DeleteBranchAsync(existingBranch.ID, TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+    (await branchClient.DeleteBranchAsync(existingBranch.ID, TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Forbidden);
   }
 
   [Fact]
@@ -255,8 +239,8 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     transport.SetAuthorizationToken("Bearer", "01JA1J99K3NCGNA6X4Z194PJXF.Tenant1.ADMIN1");
 
-    await branchClient.DeleteBranchAsync(123456789, TestContext.Current.CancellationToken);
-    Assert.True(true); // Fossa.Bridge interface doesn't return response to check status, throws on failure, so succeeding without throwing means OK
+    await Should.NotThrowAsync(async () =>
+      await branchClient.DeleteBranchAsync(123456789, TestContext.Current.CancellationToken));
   }
 
   [Fact]
@@ -268,9 +252,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     transport.SetAuthorizationToken("Bearer", "01JA0JKPRJDN7RXSMGXZ946WRB.Tenant1000.User1");
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.DeleteBranchAsync(123456789, TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+    (await branchClient.DeleteBranchAsync(123456789, TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Forbidden);
   }
 
   public ValueTask DisposeAsync() => ValueTask.CompletedTask;
@@ -296,7 +278,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     await branchClient.CreateBranchAsync(new BranchModificationModel("NYC Uptown Branch", "America/New_York", null), TestContext.Current.CancellationToken);
 
     // Search for NYC branches
-    var result = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { Search = "NYC", PageNumber = 1, PageSize = 10 }, TestContext.Current.CancellationToken);
+    var result = (await branchClient.GetBranchesAsync(new BranchQueryRequestModel { Search = "NYC", PageNumber = 1, PageSize = 10 }, TestContext.Current.CancellationToken)).Unwrap();
 
     result.ShouldNotBeNull();
     result.Items.Count.ShouldBe(2);
@@ -318,14 +300,14 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     {
       await branchClient.CreateBranchAsync(new BranchModificationModel($"Test Branch {i}", "America/New_York", null), TestContext.Current.CancellationToken);
 
-      var branches = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
+      var branches = (await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken)).Unwrap();
       branches.ShouldNotBeNull();
       var branch = branches.Items.First(x => x.Name == $"Test Branch {i}");
       branchIds.Add(branch.Id);
     }
 
     // Request specific branches by ID
-    var result = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { Id = [branchIds[0], branchIds[1]] }, TestContext.Current.CancellationToken);
+    var result = (await branchClient.GetBranchesAsync(new BranchQueryRequestModel { Id = [branchIds[0], branchIds[1]] }, TestContext.Current.CancellationToken)).Unwrap();
 
     result.ShouldNotBeNull();
     result.Items.Count.ShouldBe(2);
@@ -353,7 +335,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     }
 
     // Get paginated results
-    var result = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = pageNumber, PageSize = pageSize }, TestContext.Current.CancellationToken);
+    var result = (await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = pageNumber, PageSize = pageSize }, TestContext.Current.CancellationToken)).Unwrap();
 
     result.ShouldNotBeNull();
     result.PageNumber.ShouldBe(pageNumber);
@@ -383,7 +365,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     transport.SetAuthorizationToken("Bearer", "01JMV0XC70JH9GC8P9M6SYYYAK.Tenant1.User1");
 
-    var retrievalResponseModel = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
+    var retrievalResponseModel = (await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken)).Unwrap();
 
     retrievalResponseModel.ShouldNotBeNull();
 
@@ -394,7 +376,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     // Act
 
-    var branchResponseModel = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { Id = [branch1Id, branch2Id, branch3Id, branch4Id] }, TestContext.Current.CancellationToken);
+    var branchResponseModel = (await branchClient.GetBranchesAsync(new BranchQueryRequestModel { Id = [branch1Id, branch2Id, branch3Id, branch4Id] }, TestContext.Current.CancellationToken)).Unwrap();
 
     // Assert
 
@@ -413,9 +395,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 5 }, TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+    (await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 5 }, TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized);
   }
 
   [Fact]
@@ -426,7 +406,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
 
     transport.SetAuthorizationToken("Bearer", "01J9SYCJ4MHZXGQKT0ARG7KNCC.Tenant1.User1");
-    var responseModel = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 5 }, TestContext.Current.CancellationToken);
+    var responseModel = (await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 5 }, TestContext.Current.CancellationToken)).Unwrap();
 
     responseModel.ShouldNotBeNull();
     responseModel.PageNumber.ShouldBe(1);
@@ -443,7 +423,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
 
     transport.SetAuthorizationToken("Bearer", "01J9SYCPN31B53QHRR7Y13D30F.Tenant1000.User1000");
-    var responseModel = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 5 }, TestContext.Current.CancellationToken);
+    var responseModel = (await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 5 }, TestContext.Current.CancellationToken)).Unwrap();
 
     responseModel.ShouldNotBeNull();
     responseModel.PageNumber.ShouldBe(1);
@@ -476,7 +456,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     await branchClient.CreateBranchAsync(new BranchModificationModel(creationBranchName, creationTimeZoneId, creationAddress), TestContext.Current.CancellationToken);
 
-    var response1Model = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
+    var response1Model = (await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken)).Unwrap();
     response1Model.ShouldNotBeNull();
     var creationBranch = response1Model.Items.Single(x => string.Equals(x.Name, creationBranchName, StringComparison.OrdinalIgnoreCase));
 
@@ -484,9 +464,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     const string modificationTimeZoneId = "America/New_York";
     var modificationAddress = new AddressModel(line1, line2, city, subdivision, postalCode, countryCode);
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.UpdateBranchAsync(creationBranch.Id, new BranchModificationModel(modificationBranchName, modificationTimeZoneId, modificationAddress), TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+    (await branchClient.UpdateBranchAsync(creationBranch.Id, new BranchModificationModel(modificationBranchName, modificationTimeZoneId, modificationAddress), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.UnprocessableEntity);
   }
 
   [Fact]
@@ -503,7 +481,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     await branchClient.CreateBranchAsync(new BranchModificationModel(creationBranchName, creationTimeZoneId, creationAddress), TestContext.Current.CancellationToken);
 
-    var response1Model = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
+    var response1Model = (await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken)).Unwrap();
     response1Model.ShouldNotBeNull();
     var creationBranch = response1Model.Items.Single(x => string.Equals(x.Name, creationBranchName, StringComparison.OrdinalIgnoreCase));
 
@@ -513,7 +491,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     await branchClient.UpdateBranchAsync(creationBranch.Id, new BranchModificationModel(modificationBranchName, modificationTimeZoneId, modificationAddress), TestContext.Current.CancellationToken);
 
-    var response2Model = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
+    var response2Model = (await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken)).Unwrap();
 
     response2Model.ShouldNotBeNull();
     response2Model.Items.Select(x => x.Name).ShouldContain(modificationBranchName);
@@ -557,7 +535,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     await branchClient.CreateBranchAsync(new BranchModificationModel(branchName, "America/New_York", null), TestContext.Current.CancellationToken);
 
     // Get the branch ID
-    var branches = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
+    var branches = (await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken)).Unwrap();
     branches.ShouldNotBeNull();
     var branch = branches.Items.First(x => x.Name == branchName);
 
@@ -565,7 +543,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     await branchClient.UpdateBranchAsync(branch.Id, new BranchModificationModel("Updated Branch", "America/Chicago", new AddressModel("123 Main St", null, "Chicago", "IL", "60601", "US")), TestContext.Current.CancellationToken);
 
     // Verify the update
-    var updatedBranch = await branchClient.GetBranchAsync(branch.Id, TestContext.Current.CancellationToken);
+    var updatedBranch = (await branchClient.GetBranchAsync(branch.Id, TestContext.Current.CancellationToken)).Unwrap();
 
     updatedBranch.ShouldNotBeNull();
     updatedBranch.Name.ShouldBe("Updated Branch");
@@ -587,14 +565,12 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     const string branchName = "Test Branch 984679490";
     await branchClient.CreateBranchAsync(new BranchModificationModel(branchName, "America/New_York", null), TestContext.Current.CancellationToken);
 
-    var branches = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
+    var branches = (await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken)).Unwrap();
     branches.ShouldNotBeNull();
     var branch = branches.Items.First(x => x.Name == branchName);
 
     // Try to update with invalid timezone
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.UpdateBranchAsync(branch.Id, new BranchModificationModel("Updated Branch", "Invalid/TimeZone", null), TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+    (await branchClient.UpdateBranchAsync(branch.Id, new BranchModificationModel("Updated Branch", "Invalid/TimeZone", null), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.UnprocessableEntity);
   }
 
   [Fact]
@@ -606,9 +582,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant101.ADMIN1");
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.UpdateBranchAsync(999999, new BranchModificationModel("Updated Branch", "America/Chicago", null), TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+    (await branchClient.UpdateBranchAsync(999999, new BranchModificationModel("Updated Branch", "America/Chicago", null), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.NotFound);
   }
 
   [Fact]
@@ -617,9 +591,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.UpdateBranchAsync(1, new BranchModificationModel("Updated Branch", "America/Chicago", null), TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+    (await branchClient.UpdateBranchAsync(1, new BranchModificationModel("Updated Branch", "America/Chicago", null), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized);
   }
 
   [Fact]
@@ -640,19 +612,16 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     await branchClient.CreateBranchAsync(new BranchModificationModel(branchName, timeZoneId, initialAddress), TestContext.Current.CancellationToken);
 
     // Get the created branch ID
-    var responseModel = await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
+    var responseModel = (await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken)).Unwrap();
     responseModel.ShouldNotBeNull();
     var createdBranch = responseModel.Items.Single(x => string.Equals(x.Name, branchName, StringComparison.OrdinalIgnoreCase));
 
     // Attempt to update with Canadian address
     var canadianAddress = new AddressModel("456 Maple St", null, "Toronto", "ON", "M5V 2H1", "CA");
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => branchClient.UpdateBranchAsync(createdBranch.Id, new BranchModificationModel(branchName, timeZoneId, canadianAddress), TestContext.Current.CancellationToken));
-
-    // Assert
-    ex.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+    (await branchClient.UpdateBranchAsync(createdBranch.Id, new BranchModificationModel(branchName, timeZoneId, canadianAddress), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.UnprocessableEntity);
 
     // Verify the branch still has US address
-    var verificationModel = await branchClient.GetBranchAsync(createdBranch.Id, TestContext.Current.CancellationToken);
+    var verificationModel = (await branchClient.GetBranchAsync(createdBranch.Id, TestContext.Current.CancellationToken)).Unwrap();
     verificationModel.ShouldNotBeNull();
     verificationModel.Address.ShouldNotBeNull();
     verificationModel.Address?.CountryCode.ShouldBe("US");

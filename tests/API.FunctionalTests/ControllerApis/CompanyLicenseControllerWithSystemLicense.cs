@@ -26,7 +26,7 @@ public class CompanyLicenseControllerWithSystemLicense : IClassFixture<CustomWeb
     var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
 
     transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.User1");
-    var licenseResponseModel = await companyLicenseClient.GetLicenseAsync(TestContext.Current.CancellationToken);
+    var licenseResponseModel = (await companyLicenseClient.GetLicenseAsync(TestContext.Current.CancellationToken)).Unwrap();
 
     licenseResponseModel.ShouldNotBeNull();
     licenseResponseModel.Terms.ShouldNotBeNull();
@@ -59,8 +59,6 @@ public class CompanyLicenseControllerWithSystemLicense : IClassFixture<CustomWeb
     using var scope = _factory.Services.CreateScope();
     var companyLicenseClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanyLicenseClient;
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => companyLicenseClient.GetLicenseAsync(TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+    (await companyLicenseClient.GetLicenseAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized);
   }
 }

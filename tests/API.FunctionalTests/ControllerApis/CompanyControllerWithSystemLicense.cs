@@ -30,9 +30,7 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
     transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant102.ADMIN1");
     const string companyName = "Company-1412593541";
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => companyClient.CreateCompanyAsync(new CompanyModificationModel(companyName, "KZ"), TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+    (await companyClient.CreateCompanyAsync(new CompanyModificationModel(companyName, "KZ"), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.UnprocessableEntity);
   }
 
   [Fact]
@@ -48,7 +46,7 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
 
     await companyClient.CreateCompanyAsync(new CompanyModificationModel(companyName, "us"), TestContext.Current.CancellationToken);
 
-    var responseModel = await companyClient.GetCompanyAsync(TestContext.Current.CancellationToken);
+    var responseModel = (await companyClient.GetCompanyAsync(TestContext.Current.CancellationToken)).Unwrap();
 
     responseModel.ShouldNotBeNull();
     responseModel.Id.ShouldBePositive();
@@ -64,9 +62,7 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
     using var scope = _factory.Services.CreateScope();
     var companyClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanyClient;
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => companyClient.CreateCompanyAsync(new CompanyModificationModel("Company X", "US"), TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+    (await companyClient.CreateCompanyAsync(new CompanyModificationModel("Company X", "US"), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized);
   }
 
   [Fact]
@@ -79,9 +75,7 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
     transport.SetAuthorizationToken("Bearer", "01JA1ZJFK2J690FS0Q3TCX4P3F.Tenant101.User1");
     const string companyName = "Company-144764445";
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => companyClient.CreateCompanyAsync(new CompanyModificationModel(companyName, "US"), TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+    (await companyClient.CreateCompanyAsync(new CompanyModificationModel(companyName, "US"), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Forbidden);
   }
 
   [Fact]
@@ -90,9 +84,7 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
     using var scope = _factory.Services.CreateScope();
     var companyClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanyClient;
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => companyClient.DeleteCompanyAsync(TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+    (await companyClient.DeleteCompanyAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized);
   }
 
   [Fact]
@@ -104,9 +96,7 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
 
     transport.SetAuthorizationToken("Bearer", "01J9SJ94KK62JSRNQD7H70NCF7.Tenant1.ADMIN1");
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => companyClient.DeleteCompanyAsync(TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.FailedDependency);
+    (await companyClient.DeleteCompanyAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.FailedDependency);
   }
 
   [Fact]
@@ -135,9 +125,7 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
 
     transport.SetAuthorizationToken("Bearer", "01J9SJ94KK62JSRNQD7H70NCF7.Tenant1.User1");
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => companyClient.DeleteCompanyAsync(TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.Forbidden);
+    (await companyClient.DeleteCompanyAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Forbidden);
   }
 
   [Fact]
@@ -149,8 +137,8 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
 
     transport.SetAuthorizationToken("Bearer", "01J9SJ94KK62JSRNQD7H70NCF7.Tenant1000.ADMIN1");
 
-    await companyClient.DeleteCompanyAsync(TestContext.Current.CancellationToken);
-    Assert.True(true);
+    await Should.NotThrowAsync(async () =>
+      await companyClient.DeleteCompanyAsync(TestContext.Current.CancellationToken));
   }
 
   public ValueTask DisposeAsync() => ValueTask.CompletedTask;
@@ -167,9 +155,7 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
     using var scope = _factory.Services.CreateScope();
     var companyClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanyClient;
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => companyClient.GetCompanyAsync(TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+    (await companyClient.GetCompanyAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized);
   }
 
   [Fact]
@@ -180,7 +166,7 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
     var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
 
     transport.SetAuthorizationToken("Bearer", "01J9SJ94KK62JSRNQD7H70NCF7.Tenant1.User1");
-    var responseModel = await companyClient.GetCompanyAsync(TestContext.Current.CancellationToken);
+    var responseModel = (await companyClient.GetCompanyAsync(TestContext.Current.CancellationToken)).Unwrap();
 
     responseModel.ShouldNotBeNull();
     responseModel.Id.ShouldBePositive();
@@ -197,8 +183,6 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
 
     transport.SetAuthorizationToken("Bearer", "01J9SXMEMR1GQ3EE3Q4A872GKD.Tenant1000.User1000");
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => companyClient.GetCompanyAsync(TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+    (await companyClient.GetCompanyAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.NotFound);
   }
 }

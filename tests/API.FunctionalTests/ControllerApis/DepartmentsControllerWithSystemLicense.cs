@@ -38,7 +38,7 @@ public class DepartmentsControllerWithSystemLicense : IClassFixture<CustomWebApp
 
     await employeeClient.CreateEmployeeAsync(new EmployeeModificationModel(firstName, lastName, fullName), TestContext.Current.CancellationToken);
 
-    var createdEmployee = await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken);
+    var createdEmployee = (await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken)).Unwrap();
     createdEmployee.ShouldNotBeNull();
 
     // Act - Create departments
@@ -47,7 +47,7 @@ public class DepartmentsControllerWithSystemLicense : IClassFixture<CustomWebApp
     await departmentClient.CreateDepartmentAsync(new DepartmentModificationModel(dept3Name, null, createdEmployee.Id), TestContext.Current.CancellationToken);
 
     // Get the created departments
-    var retrievalResponseModel = await departmentClient.GetDepartmentsAsync(new DepartmentQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
+    var retrievalResponseModel = (await departmentClient.GetDepartmentsAsync(new DepartmentQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken)).Unwrap();
 
     retrievalResponseModel.ShouldNotBeNull();
     var dept1Model = retrievalResponseModel.Items.Single(x => string.Equals(x.Name, dept1Name, StringComparison.OrdinalIgnoreCase));
@@ -60,7 +60,7 @@ public class DepartmentsControllerWithSystemLicense : IClassFixture<CustomWebApp
     const int dept4Id = 204298046; // Missing department
 
     // Query specific departments
-    var deptResponseModel = await departmentClient.GetDepartmentsAsync(new DepartmentQueryRequestModel { Id = [dept1Id, dept2Id, dept3Id, dept4Id] }, TestContext.Current.CancellationToken);
+    var deptResponseModel = (await departmentClient.GetDepartmentsAsync(new DepartmentQueryRequestModel { Id = [dept1Id, dept2Id, dept3Id, dept4Id] }, TestContext.Current.CancellationToken)).Unwrap();
 
     deptResponseModel.ShouldNotBeNull();
     deptResponseModel.Items.Count.ShouldBe(3);
@@ -87,22 +87,21 @@ public class DepartmentsControllerWithSystemLicense : IClassFixture<CustomWebApp
 
     await employeeClient.CreateEmployeeAsync(new EmployeeModificationModel(firstName, lastName, fullName), TestContext.Current.CancellationToken);
 
-    var createdEmployee = await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken);
+    var createdEmployee = (await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken)).Unwrap();
     createdEmployee.ShouldNotBeNull();
 
     var departmentName = $"Department-{Random.Shared.Next()}";
 
     await departmentClient.CreateDepartmentAsync(new DepartmentModificationModel(departmentName, null, createdEmployee.Id), TestContext.Current.CancellationToken);
 
-    var retrievalResponseModel = await departmentClient.GetDepartmentsAsync(new DepartmentQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
-    var department = retrievalResponseModel?.Items.Single(x => string.Equals(x.Name, departmentName, StringComparison.OrdinalIgnoreCase));
+    var retrievalResponseModel = (await departmentClient.GetDepartmentsAsync(new DepartmentQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken)).Unwrap();
+    var department = retrievalResponseModel.Items.Single(x => string.Equals(x.Name, departmentName, StringComparison.OrdinalIgnoreCase));
 
     // Act
     await departmentClient.DeleteDepartmentAsync(department!.Id, TestContext.Current.CancellationToken);
 
     // Assert
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => departmentClient.GetDepartmentAsync(department.Id, TestContext.Current.CancellationToken));
-    ex.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+    (await departmentClient.GetDepartmentAsync(department.Id, TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.NotFound);
   }
 
   public ValueTask DisposeAsync() => ValueTask.CompletedTask;
@@ -130,21 +129,21 @@ public class DepartmentsControllerWithSystemLicense : IClassFixture<CustomWebApp
 
     await employeeClient.CreateEmployeeAsync(new EmployeeModificationModel(firstName, lastName, fullName), TestContext.Current.CancellationToken);
 
-    var createdEmployee = await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken);
+    var createdEmployee = (await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken)).Unwrap();
     createdEmployee.ShouldNotBeNull();
 
     var departmentName = $"Department-{Random.Shared.Next()}";
     await departmentClient.CreateDepartmentAsync(new DepartmentModificationModel(departmentName, null, createdEmployee.Id), TestContext.Current.CancellationToken);
 
-    var retrievalResponseModel = await departmentClient.GetDepartmentsAsync(new DepartmentQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
-    var departmentId = retrievalResponseModel?.Items.Single(x => string.Equals(x.Name, departmentName, StringComparison.OrdinalIgnoreCase)).Id;
+    var retrievalResponseModel = (await departmentClient.GetDepartmentsAsync(new DepartmentQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken)).Unwrap();
+    var departmentId = retrievalResponseModel.Items.Single(x => string.Equals(x.Name, departmentName, StringComparison.OrdinalIgnoreCase)).Id;
 
     // Act
     var updatedName = $"Updated-{Random.Shared.Next()}";
-    await departmentClient.UpdateDepartmentAsync(departmentId!.Value, new DepartmentModificationModel(updatedName, null, createdEmployee.Id), TestContext.Current.CancellationToken);
+    await departmentClient.UpdateDepartmentAsync(departmentId, new DepartmentModificationModel(updatedName, null, createdEmployee.Id), TestContext.Current.CancellationToken);
 
     // Assert
-    var verificationModel = await departmentClient.GetDepartmentAsync(departmentId.Value, TestContext.Current.CancellationToken);
+    var verificationModel = (await departmentClient.GetDepartmentAsync(departmentId, TestContext.Current.CancellationToken)).Unwrap();
 
     verificationModel.ShouldNotBeNull();
     verificationModel.Name.ShouldBe(updatedName);

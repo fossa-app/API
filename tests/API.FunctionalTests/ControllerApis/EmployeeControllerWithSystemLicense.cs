@@ -31,9 +31,7 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     const string lastName = "Last576536102";
     const string fullName = "Full576536102";
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => employeeClient.CreateEmployeeAsync(new EmployeeModificationModel(firstName, lastName, fullName), TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+    (await employeeClient.CreateEmployeeAsync(new EmployeeModificationModel(firstName, lastName, fullName), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized);
   }
 
   [Fact]
@@ -49,11 +47,9 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     const string lastName = "Last812685875";
     const string fullName = "Full812685875";
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => employeeClient.CreateEmployeeAsync(new EmployeeModificationModel(firstName, lastName, fullName), TestContext.Current.CancellationToken));
+    (await employeeClient.CreateEmployeeAsync(new EmployeeModificationModel(firstName, lastName, fullName), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Conflict);
 
-    ex.StatusCode.ShouldBe(HttpStatusCode.Conflict);
-
-    var responseModel = await employeeClient.GetEmployeesAsync(new EmployeeQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken);
+    var responseModel = (await employeeClient.GetEmployeesAsync(new EmployeeQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken)).Unwrap();
 
     responseModel.ShouldNotBeNull();
     responseModel.Items.ShouldNotBeEmpty();
@@ -79,7 +75,7 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     await employeeClient.CreateEmployeeAsync(new EmployeeModificationModel(firstName, lastName, fullName), TestContext.Current.CancellationToken);
 
-    var responseModel = await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken);
+    var responseModel = (await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken)).Unwrap();
 
     responseModel.ShouldNotBeNull();
     responseModel.Id.ShouldBePositive();
@@ -94,9 +90,7 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     using var scope = _factory.Services.CreateScope();
     var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => employeeClient.DeleteCurrentEmployeeAsync(TestContext.Current.CancellationToken)); // Auth will fail first
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+    (await employeeClient.DeleteCurrentEmployeeAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized); // Auth will fail first
   }
 
   [Fact]
@@ -157,8 +151,8 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
       await employeeClient.CreateEmployeeAsync(new EmployeeModificationModel(firstName, lastName, fullName), TestContext.Current.CancellationToken);
 
-      var employeeResponseModel = await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken);
-      employeeIds.Add(employeeResponseModel?.Id ?? 0);
+      var employeeResponseModel = (await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken)).Unwrap();
+      employeeIds.Add(employeeResponseModel.Id);
     }
 
     var employee1Id = employeeIds[0];
@@ -167,7 +161,7 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     const int employee4Id = 204298046; // Missing employee
 
     // Act
-    var branchResponseModel = await employeeClient.GetEmployeesAsync(new EmployeeQueryRequestModel { Id = [employee1Id, employee2Id, employee3Id, employee4Id] }, TestContext.Current.CancellationToken);
+    var branchResponseModel = (await employeeClient.GetEmployeesAsync(new EmployeeQueryRequestModel { Id = [employee1Id, employee2Id, employee3Id, employee4Id] }, TestContext.Current.CancellationToken)).Unwrap();
 
     // Assert
 
@@ -189,9 +183,7 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     using var scope = _factory.Services.CreateScope();
     var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
+    (await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized);
   }
 
   [Fact]
@@ -202,7 +194,7 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
     transport.SetAuthorizationToken("Bearer", "01J9ZHGBMC1DVP4R33QRYZ04RX.Tenant1.User1");
 
-    var responseModel = await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken);
+    var responseModel = (await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken)).Unwrap();
 
     responseModel.ShouldNotBeNull();
 
@@ -222,9 +214,7 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     transport.SetAuthorizationToken("Bearer", "01J9ZHGFXBG4WKNJKBSG7T2Y76.Tenant1000.User1000");
 
     // The endpoint returns 404 if the authenticated user's employee cannot be found
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+    (await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.NotFound);
   }
 
   [Fact]
@@ -240,13 +230,13 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     await employeeClient.CreateEmployeeAsync(new EmployeeModificationModel("First", "Last", "Full Name"), TestContext.Current.CancellationToken);
 
-    var employee = await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken);
+    var employee = (await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken)).Unwrap();
     employee.ShouldNotBeNull();
 
     await departmentClient.CreateDepartmentAsync(new DepartmentModificationModel("Dept1", null, employee.Id), TestContext.Current.CancellationToken);
     await departmentClient.CreateDepartmentAsync(new DepartmentModificationModel("Dept2", null, employee.Id), TestContext.Current.CancellationToken);
 
-    var depts = await departmentClient.GetDepartmentsAsync(new DepartmentQueryRequestModel { PageNumber = 1, PageSize = 10 }, TestContext.Current.CancellationToken);
+    var depts = (await departmentClient.GetDepartmentsAsync(new DepartmentQueryRequestModel { PageNumber = 1, PageSize = 10 }, TestContext.Current.CancellationToken)).Unwrap();
     depts.ShouldNotBeNull();
     var dept1Id = depts.Items.First(d => d.Name == "Dept1").Id;
     var dept2Id = depts.Items.First(d => d.Name == "Dept2").Id;
@@ -257,7 +247,7 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     await employeeClient.ManageEmployeeAsync(employee.Id, new EmployeeManagementModel(null, dept2Id, null, "Staff"), TestContext.Current.CancellationToken);
 
     // Assert
-    var updatedEmployee = await employeeClient.GetEmployeeAsync(employee.Id, TestContext.Current.CancellationToken);
+    var updatedEmployee = (await employeeClient.GetEmployeeAsync(employee.Id, TestContext.Current.CancellationToken)).Unwrap();
     updatedEmployee.ShouldNotBeNull();
     updatedEmployee.AssignedDepartmentId.ShouldBe(dept2Id);
   }
@@ -277,7 +267,7 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     await employeeClient.ManageEmployeeAsync(employee.Id, new EmployeeManagementModel(null, null, manager.Id, "Staff"), TestContext.Current.CancellationToken);
 
     // Assert
-    var updatedEmployee = await employeeClient.GetEmployeeAsync(employee.Id, TestContext.Current.CancellationToken);
+    var updatedEmployee = (await employeeClient.GetEmployeeAsync(employee.Id, TestContext.Current.CancellationToken)).Unwrap();
     updatedEmployee.ShouldNotBeNull();
     updatedEmployee.ReportsToId.ShouldBe(manager.Id);
   }
@@ -297,8 +287,7 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     // Act & Assert
     transport.SetAuthorizationToken("Bearer", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425739");
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => employeeClient.DeleteCurrentEmployeeAsync(TestContext.Current.CancellationToken));
-    ex.StatusCode.ShouldBe(HttpStatusCode.FailedDependency);
+    (await employeeClient.DeleteCurrentEmployeeAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.FailedDependency);
   }
 
   [Fact]
@@ -312,10 +301,7 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var employee = await CreateEmployeeAsync(employeeClient, transport, "Employee", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425741");
 
     // Act
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => employeeClient.ManageEmployeeAsync(employee.Id, new EmployeeManagementModel(null, null, 999999L, "Staff"), TestContext.Current.CancellationToken));
-
-    // Assert
-    ex.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+    (await employeeClient.ManageEmployeeAsync(employee.Id, new EmployeeManagementModel(null, null, 999999L, "Staff"), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.UnprocessableEntity);
   }
 
   [Fact]
@@ -332,10 +318,7 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     await employeeClient.ManageEmployeeAsync(employee2.Id, new EmployeeManagementModel(null, null, employee1.Id, "Staff"), TestContext.Current.CancellationToken);
 
     // Act
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => employeeClient.ManageEmployeeAsync(employee1.Id, new EmployeeManagementModel(null, null, employee2.Id, "Staff"), TestContext.Current.CancellationToken));
-
-    // Assert
-    ex.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+    (await employeeClient.ManageEmployeeAsync(employee1.Id, new EmployeeManagementModel(null, null, employee2.Id, "Staff"), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.UnprocessableEntity);
   }
 
   [Fact]
@@ -354,10 +337,7 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     await employeeClient.ManageEmployeeAsync(employee3.Id, new EmployeeManagementModel(null, null, employee2.Id, "Staff"), TestContext.Current.CancellationToken);
 
     // Act
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => employeeClient.ManageEmployeeAsync(employee1.Id, new EmployeeManagementModel(null, null, employee3.Id, "Staff"), TestContext.Current.CancellationToken));
-
-    // Assert
-    ex.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+    (await employeeClient.ManageEmployeeAsync(employee1.Id, new EmployeeManagementModel(null, null, employee3.Id, "Staff"), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.UnprocessableEntity);
   }
 
   [Fact]
@@ -377,12 +357,12 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     await employeeClient.ManageEmployeeAsync(employee2.Id, new EmployeeManagementModel(null, null, manager.Id, "Staff"), TestContext.Current.CancellationToken);
 
     // Act
-    var result = await employeeClient.GetEmployeesAsync(new EmployeeQueryRequestModel
+    var result = (await employeeClient.GetEmployeesAsync(new EmployeeQueryRequestModel
     {
       ReportsToId = manager.Id,
       PageNumber = 1,
       PageSize = 10
-    }, TestContext.Current.CancellationToken);
+    }, TestContext.Current.CancellationToken)).Unwrap();
 
     // Assert
     result.ShouldNotBeNull();
@@ -403,12 +383,12 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     await employeeClient.ManageEmployeeAsync(employee.Id, new EmployeeManagementModel(null, null, manager.Id, "Staff"), TestContext.Current.CancellationToken);
 
     // Act
-    var result = await employeeClient.GetEmployeesAsync(new EmployeeQueryRequestModel
+    var result = (await employeeClient.GetEmployeesAsync(new EmployeeQueryRequestModel
     {
       TopLevelOnly = true,
       PageNumber = 1,
       PageSize = 10
-    }, TestContext.Current.CancellationToken);
+    }, TestContext.Current.CancellationToken)).Unwrap();
 
     // Assert
     result.ShouldNotBeNull();
@@ -426,7 +406,6 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     await client.CreateEmployeeAsync(new EmployeeModificationModel(firstName, lastName, $"{firstName} {lastName}"), TestContext.Current.CancellationToken);
 
-    var employee = await client.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken);
-    return employee;
+    return (await client.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken)).Unwrap();
   }
 }
