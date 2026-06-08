@@ -31,7 +31,7 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
 
     await settingsClient.CreateCompanySettingsAsync(new CompanySettingsModificationModel(colorSchemeId), TestContext.Current.CancellationToken);
 
-    var responseModel = await settingsClient.GetCompanySettingsAsync(TestContext.Current.CancellationToken);
+    var responseModel = (await settingsClient.GetCompanySettingsAsync(TestContext.Current.CancellationToken)).Unwrap();
 
     responseModel.ShouldNotBeNull();
     responseModel.Id.ShouldBePositive();
@@ -63,11 +63,8 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
 
     foreach (var invalidColorSchemeId in invalidColorSchemeIds)
     {
-      var ex = await Should.ThrowAsync<HttpRequestException>(() => settingsClient.CreateCompanySettingsAsync(
-        new CompanySettingsModificationModel(invalidColorSchemeId), TestContext.Current.CancellationToken));
-
-      ex.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity,
-        $"ColorSchemeId '{invalidColorSchemeId}' should be invalid");
+      (await settingsClient.CreateCompanySettingsAsync(
+        new CompanySettingsModificationModel(invalidColorSchemeId), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.UnprocessableEntity);
     }
   }
 
@@ -93,12 +90,16 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
 
       const string companyName = "Company-1412593541";
 
-      await transport.PostAsync<CompanyModificationModel>("/api/1.0/Company", new CompanyModificationModel(companyName, "US"));
+      await transport.PostAsync<CompanyModificationModel>(
+        "/api/1.0/Company",
+        EndpointSecurity.RequireToken,
+        new CompanyModificationModel(companyName, "US"),
+        TestContext.Current.CancellationToken);
 
       await settingsClient.CreateCompanySettingsAsync(
         new CompanySettingsModificationModel(testCase.ColorSchemeId), TestContext.Current.CancellationToken);
 
-      var responseModel = await settingsClient.GetCompanySettingsAsync(TestContext.Current.CancellationToken);
+      var responseModel = (await settingsClient.GetCompanySettingsAsync(TestContext.Current.CancellationToken)).Unwrap();
 
       responseModel.ShouldNotBeNull();
       responseModel.ColorSchemeId.ShouldBe(testCase.ColorSchemeId,
@@ -116,10 +117,8 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
     transport.SetAuthorizationToken("Bearer", "01JB0QS2K6SA4KYD8S920W7DMG.Tenant1.ADMIN1");
 
     // Try to create company settings for a company that already has settings
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => settingsClient.CreateCompanySettingsAsync(
-      new CompanySettingsModificationModel("duplicate-theme"), TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.Conflict);
+    (await settingsClient.CreateCompanySettingsAsync(
+      new CompanySettingsModificationModel("duplicate-theme"), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Conflict);
   }
 
   [Fact]
@@ -133,8 +132,7 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
 
     await settingsClient.DeleteCompanySettingsAsync(TestContext.Current.CancellationToken);
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => settingsClient.GetCompanySettingsAsync(TestContext.Current.CancellationToken));
-    ex.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+    (await settingsClient.GetCompanySettingsAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.NotFound);
   }
 
   [Fact]
@@ -146,9 +144,7 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
 
     transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1000.ADMIN1");
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => settingsClient.DeleteCompanySettingsAsync(TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+    (await settingsClient.DeleteCompanySettingsAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.NotFound);
   }
 
   public ValueTask DisposeAsync() => ValueTask.CompletedTask;
@@ -162,7 +158,7 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
 
     transport.SetAuthorizationToken("Bearer", "01JB0QS2K6SA4KYD8S920W7DMG.Tenant1.User1");
 
-    var responseModel = await settingsClient.GetCompanySettingsAsync(TestContext.Current.CancellationToken);
+    var responseModel = (await settingsClient.GetCompanySettingsAsync(TestContext.Current.CancellationToken)).Unwrap();
 
     responseModel.ShouldNotBeNull();
     responseModel.Id.ShouldBePositive();
@@ -178,8 +174,7 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
 
     transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1000.User1");
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => settingsClient.GetCompanySettingsAsync(TestContext.Current.CancellationToken));
-    ex.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+    (await settingsClient.GetCompanySettingsAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.NotFound);
   }
 
   public async ValueTask InitializeAsync()
@@ -202,7 +197,7 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
     await settingsClient.UpdateCompanySettingsAsync(new CompanySettingsModificationModel(newColorSchemeId), TestContext.Current.CancellationToken);
 
     // Verify the update
-    var responseModel = await settingsClient.GetCompanySettingsAsync(TestContext.Current.CancellationToken);
+    var responseModel = (await settingsClient.GetCompanySettingsAsync(TestContext.Current.CancellationToken)).Unwrap();
 
     responseModel.ShouldNotBeNull();
     responseModel.ColorSchemeId.ShouldBe(newColorSchemeId);
@@ -217,9 +212,7 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
 
     transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1000.ADMIN1");
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => settingsClient.UpdateCompanySettingsAsync(
-      new CompanySettingsModificationModel("new-theme"), TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.NotFound);
+    (await settingsClient.UpdateCompanySettingsAsync(
+      new CompanySettingsModificationModel("new-theme"), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.NotFound);
   }
 }

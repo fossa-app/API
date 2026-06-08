@@ -21,8 +21,6 @@ public class SystemLicenseControllerEmptyDatabase : IClassFixture<CustomWebAppli
     using var scope = _factory.Services.CreateScope();
     var systemLicenseClient = scope.ServiceProvider.GetRequiredService<IClients>().SystemLicenseClient;
 
-    var ex = await Should.ThrowAsync<HttpRequestException>(() => systemLicenseClient.GetLicenseAsync(TestContext.Current.CancellationToken));
-
-    ex.StatusCode.ShouldBe(HttpStatusCode.UnprocessableEntity);
+    (await systemLicenseClient.GetLicenseAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.UnprocessableEntity);
   }
 }
