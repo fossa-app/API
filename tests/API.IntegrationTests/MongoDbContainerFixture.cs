@@ -1,4 +1,4 @@
-using Testcontainers.MongoDb;
+﻿using Testcontainers.MongoDb;
 
 namespace Fossa.API.IntegrationTests;
 

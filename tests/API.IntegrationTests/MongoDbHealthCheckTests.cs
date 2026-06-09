@@ -1,4 +1,4 @@
-using Fossa.API.Web.HealthChecks;
+﻿using Fossa.API.Web.HealthChecks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Shouldly;
 
