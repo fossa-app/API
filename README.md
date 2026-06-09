@@ -56,6 +56,7 @@ The application provides a health check endpoint to monitor its status.
 ### Prerequisites
 
 *   .NET 10 SDK
+*   Docker, for Testcontainers-backed integration tests
 *   An identity provider like FusionAuth running.
 
 ### Instructions
@@ -77,3 +78,11 @@ The application provides a health check endpoint to monitor its status.
     ```
 
 3.  The API will be available at `http://localhost:5000` (or as configured in `launchSettings.json`).
+
+### Testing
+
+Integration tests use Testcontainers and require a running Docker daemon. Run the integration suite with:
+
+```sh
+dotnet test tests/API.IntegrationTests/API.IntegrationTests.csproj
+```
