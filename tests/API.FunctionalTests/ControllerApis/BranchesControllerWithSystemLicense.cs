@@ -25,9 +25,9 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
+    accessTokenContext.SetAccessToken("01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
     const string branchName = "Branch-392136901";
     const string timeZoneId = "USZone";
     var address = new AddressModel("1234 Main St", "Suite 100", "Los Angeles", "CA", "12345", "US");
@@ -40,9 +40,9 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
+    accessTokenContext.SetAccessToken("01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
     const string branchName = "Branch-392136901";
     const string timeZoneId = "America/New_York";
 
@@ -60,9 +60,9 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
+    accessTokenContext.SetAccessToken("01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
     const string branchName = "Branch-392136901";
     const string timeZoneId = "Australia/Perth";
 
@@ -83,9 +83,9 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.User1");
+    accessTokenContext.SetAccessToken("01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.User1");
     const string branchName = "Branch-826076795";
 
     (await branchClient.CreateBranchAsync(new BranchModificationModel(branchName, "USZone", address: null), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Forbidden);
@@ -96,9 +96,9 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.User1");
+    accessTokenContext.SetAccessToken("01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.User1");
     const string branchName = "Branch-826076795";
 
     (await branchClient.CreateBranchAsync(new BranchModificationModel(branchName, "America/Detroit", address: null), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Forbidden);
@@ -109,9 +109,9 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.User1");
+    accessTokenContext.SetAccessToken("01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.User1");
     const string branchName = "Branch-826076795";
 
     (await branchClient.CreateBranchAsync(new BranchModificationModel(branchName, "Australia/Perth", address: null), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Forbidden);
@@ -122,10 +122,10 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
     var branchEasyStore = _factory.Services.GetRequiredService<IEasyStores>().Resolve<BranchMongoEntity, long>();
 
-    transport.SetAuthorizationToken("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
+    accessTokenContext.SetAccessToken("01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
     const string branchName = "Branch-832159009";
     const string timeZoneId = "America/New_York";
 
@@ -167,9 +167,9 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
     var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JKXJVFFPWRP9E7YNBQE8KMRB.Tenant1.User35292075");
+    accessTokenContext.SetAccessToken("01JKXJVFFPWRP9E7YNBQE8KMRB.Tenant1.User35292075");
 
     await employeeClient.CreateEmployeeAsync(new EmployeeModificationModel(firstName, lastName, fullName), TestContext.Current.CancellationToken);
 
@@ -177,7 +177,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     employeeResponseModel.ShouldNotBeNull();
     var createdEmployee = employeeResponseModel.Items.First();
 
-    transport.SetAuthorizationToken("Bearer", "01JKXHHECNDQ6BYNA6CQQ2S59P.Tenant1.ADMIN1");
+    accessTokenContext.SetAccessToken("01JKXHHECNDQ6BYNA6CQQ2S59P.Tenant1.ADMIN1");
 
     await branchClient.CreateBranchAsync(new BranchModificationModel(branchName, timeZoneId, address: null), TestContext.Current.CancellationToken);
 
@@ -187,6 +187,7 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     var createdBranchModel = branchResponseModel.Items.Single(x => string.Equals(x.Name, branchName, StringComparison.OrdinalIgnoreCase));
 
+    var transport = scope.ServiceProvider.GetRequiredService<IHttpTransport>();
     await transport.PutAsync<EmployeeManagementModel>(
       $"/api/1.0/Employees/{createdEmployee.Id}",
       EndpointSecurity.RequireToken,
@@ -203,10 +204,10 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
     var branchEasyStore = _factory.Services.GetRequiredService<IEasyStores>().Resolve<BranchMongoEntity, long>();
 
-    transport.SetAuthorizationToken("Bearer", "01JA0JKF0VRC9JPZ9JSAMHGAFS.Tenant1.ADMIN1");
+    accessTokenContext.SetAccessToken("01JA0JKF0VRC9JPZ9JSAMHGAFS.Tenant1.ADMIN1");
 
     var existingBranch = branchEasyStore.Entities.Values.Single(x => string.Equals(x.Name, "Branch2-1972002548", StringComparison.Ordinal));
 
@@ -220,10 +221,10 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
     var branchEasyStore = _factory.Services.GetRequiredService<IEasyStores>().Resolve<BranchMongoEntity, long>();
 
-    transport.SetAuthorizationToken("Bearer", "01JA0JKF0VRC9JPZ9JSAMHGAFS.Tenant1.User2");
+    accessTokenContext.SetAccessToken("01JA0JKF0VRC9JPZ9JSAMHGAFS.Tenant1.User2");
 
     var existingBranch = branchEasyStore.Entities.Values.Single(x => string.Equals(x.Name, "Branch3-1513925028", StringComparison.Ordinal));
 
@@ -235,9 +236,9 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JA1J99K3NCGNA6X4Z194PJXF.Tenant1.ADMIN1");
+    accessTokenContext.SetAccessToken("01JA1J99K3NCGNA6X4Z194PJXF.Tenant1.ADMIN1");
 
     await Should.NotThrowAsync(async () =>
       await branchClient.DeleteBranchAsync(123456789, TestContext.Current.CancellationToken));
@@ -248,9 +249,9 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JA0JKPRJDN7RXSMGXZ946WRB.Tenant1000.User1");
+    accessTokenContext.SetAccessToken("01JA0JKPRJDN7RXSMGXZ946WRB.Tenant1000.User1");
 
     (await branchClient.DeleteBranchAsync(123456789, TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Forbidden);
   }
@@ -268,9 +269,9 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+    accessTokenContext.SetAccessToken("01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
 
     // Create branches with distinct names
     await branchClient.CreateBranchAsync(new BranchModificationModel("NYC Downtown Branch", "America/New_York", null), TestContext.Current.CancellationToken);
@@ -290,9 +291,9 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+    accessTokenContext.SetAccessToken("01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
 
     // Create branches and collect their IDs
     var branchIds = new List<long>();
@@ -325,9 +326,9 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     // Create multiple branches
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+    accessTokenContext.SetAccessToken("01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
 
     for (int i = 1; i <= 12; i++)
     {
@@ -355,15 +356,15 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JMV0X5W7N908QW69WVVDPFAW.Tenant1.ADMIN1");
+    accessTokenContext.SetAccessToken("01JMV0X5W7N908QW69WVVDPFAW.Tenant1.ADMIN1");
 
     await branchClient.CreateBranchAsync(new BranchModificationModel(branch1Name, timeZoneId, address: null), TestContext.Current.CancellationToken);
     await branchClient.CreateBranchAsync(new BranchModificationModel(branch2Name, timeZoneId, address: null), TestContext.Current.CancellationToken);
     await branchClient.CreateBranchAsync(new BranchModificationModel(branch3Name, timeZoneId, address: null), TestContext.Current.CancellationToken);
 
-    transport.SetAuthorizationToken("Bearer", "01JMV0XC70JH9GC8P9M6SYYYAK.Tenant1.User1");
+    accessTokenContext.SetAccessToken("01JMV0XC70JH9GC8P9M6SYYYAK.Tenant1.User1");
 
     var retrievalResponseModel = (await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken)).Unwrap();
 
@@ -403,9 +404,9 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01J9SYCJ4MHZXGQKT0ARG7KNCC.Tenant1.User1");
+    accessTokenContext.SetAccessToken("01J9SYCJ4MHZXGQKT0ARG7KNCC.Tenant1.User1");
     var responseModel = (await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 5 }, TestContext.Current.CancellationToken)).Unwrap();
 
     responseModel.ShouldNotBeNull();
@@ -420,9 +421,9 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01J9SYCPN31B53QHRR7Y13D30F.Tenant1000.User1000");
+    accessTokenContext.SetAccessToken("01J9SYCPN31B53QHRR7Y13D30F.Tenant1000.User1000");
     var responseModel = (await branchClient.GetBranchesAsync(new BranchQueryRequestModel { PageNumber = 1, PageSize = 5 }, TestContext.Current.CancellationToken)).Unwrap();
 
     responseModel.ShouldNotBeNull();
@@ -447,9 +448,9 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
+    accessTokenContext.SetAccessToken("01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
     var creationBranchName = $"Branch-{Random.Shared.Next()}";
     const string creationTimeZoneId = "America/Los_Angeles";
     var creationAddress = new AddressModel("1234 Main St", "Suite 100", "Los Angeles", "CA", "12345", "US");
@@ -472,9 +473,9 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
+    accessTokenContext.SetAccessToken("01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
     const string creationBranchName = "Branch-753988509";
     const string creationTimeZoneId = "America/Los_Angeles";
     var creationAddress = new AddressModel("1234 Main St", "Suite 100", "Los Angeles", "CA", "12345", "US");
@@ -527,9 +528,9 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     // Create a branch first
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+    accessTokenContext.SetAccessToken("01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
 
     const string branchName = "Test Branch 647834591";
     await branchClient.CreateBranchAsync(new BranchModificationModel(branchName, "America/New_York", null), TestContext.Current.CancellationToken);
@@ -558,9 +559,9 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     // Create a branch first
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
+    accessTokenContext.SetAccessToken("01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.ADMIN1");
 
     const string branchName = "Test Branch 984679490";
     await branchClient.CreateBranchAsync(new BranchModificationModel(branchName, "America/New_York", null), TestContext.Current.CancellationToken);
@@ -578,9 +579,9 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant101.ADMIN1");
+    accessTokenContext.SetAccessToken("01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant101.ADMIN1");
 
     (await branchClient.UpdateBranchAsync(999999, new BranchModificationModel("Updated Branch", "America/Chicago", null), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.NotFound);
   }
@@ -600,9 +601,9 @@ public class BranchesControllerWithSystemLicense : IClassFixture<CustomWebApplic
     // Arrange
     using var scope = _factory.Services.CreateScope();
     var branchClient = scope.ServiceProvider.GetRequiredService<IClients>().BranchClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
+    accessTokenContext.SetAccessToken("01J9WMVQRX3J3K00JCDGZN4V59.Tenant1.ADMIN1");
 
     // Create initial branch with US address
     const string branchName = "Branch-CountryValidation";
