@@ -25,9 +25,9 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
   {
     using var scope = _factory.Services.CreateScope();
     var companyClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanyClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant102.ADMIN1");
+    accessTokenContext.SetAccessToken("01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant102.ADMIN1");
     const string companyName = "Company-1412593541";
 
     (await companyClient.CreateCompanyAsync(new CompanyModificationModel(companyName, "KZ"), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.UnprocessableEntity);
@@ -38,10 +38,10 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
   {
     using var scope = _factory.Services.CreateScope();
     var companyClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanyClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
     var licenseEasyStoreBucket = _factory.Services.GetRequiredService<IEasyStores>().ResolveBucket<long, object>("License");
 
-    transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant101.ADMIN1");
+    accessTokenContext.SetAccessToken("01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant101.ADMIN1");
     const string companyName = "Company-1993954667";
 
     await companyClient.CreateCompanyAsync(new CompanyModificationModel(companyName, "us"), TestContext.Current.CancellationToken);
@@ -70,9 +70,9 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
   {
     using var scope = _factory.Services.CreateScope();
     var companyClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanyClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JA1ZJFK2J690FS0Q3TCX4P3F.Tenant101.User1");
+    accessTokenContext.SetAccessToken("01JA1ZJFK2J690FS0Q3TCX4P3F.Tenant101.User1");
     const string companyName = "Company-144764445";
 
     (await companyClient.CreateCompanyAsync(new CompanyModificationModel(companyName, "US"), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Forbidden);
@@ -92,9 +92,9 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
   {
     using var scope = _factory.Services.CreateScope();
     var companyClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanyClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01J9SJ94KK62JSRNQD7H70NCF7.Tenant1.ADMIN1");
+    accessTokenContext.SetAccessToken("01J9SJ94KK62JSRNQD7H70NCF7.Tenant1.ADMIN1");
 
     (await companyClient.DeleteCompanyAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.FailedDependency);
   }
@@ -104,10 +104,10 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
   {
     using var scope = _factory.Services.CreateScope();
     var companyClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanyClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
     var companyEasyStore = _factory.Services.GetRequiredService<IEasyStores>().Resolve<CompanyMongoEntity, long>();
 
-    transport.SetAuthorizationToken("Bearer", "01J9SJ94KK62JSRNQD7H70NCF7.Tenant3.ADMIN1");
+    accessTokenContext.SetAccessToken("01J9SJ94KK62JSRNQD7H70NCF7.Tenant3.ADMIN1");
 
     companyEasyStore.Entities.Values.FirstOrDefault(x => string.Equals(x.Name, "Company3-1868946743", StringComparison.Ordinal)).ShouldNotBeNull();
 
@@ -121,9 +121,9 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
   {
     using var scope = _factory.Services.CreateScope();
     var companyClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanyClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01J9SJ94KK62JSRNQD7H70NCF7.Tenant1.User1");
+    accessTokenContext.SetAccessToken("01J9SJ94KK62JSRNQD7H70NCF7.Tenant1.User1");
 
     (await companyClient.DeleteCompanyAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Forbidden);
   }
@@ -133,9 +133,9 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
   {
     using var scope = _factory.Services.CreateScope();
     var companyClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanyClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01J9SJ94KK62JSRNQD7H70NCF7.Tenant1000.ADMIN1");
+    accessTokenContext.SetAccessToken("01J9SJ94KK62JSRNQD7H70NCF7.Tenant1000.ADMIN1");
 
     await Should.NotThrowAsync(async () =>
       await companyClient.DeleteCompanyAsync(TestContext.Current.CancellationToken));
@@ -163,9 +163,9 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
   {
     using var scope = _factory.Services.CreateScope();
     var companyClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanyClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01J9SJ94KK62JSRNQD7H70NCF7.Tenant1.User1");
+    accessTokenContext.SetAccessToken("01J9SJ94KK62JSRNQD7H70NCF7.Tenant1.User1");
     var responseModel = (await companyClient.GetCompanyAsync(TestContext.Current.CancellationToken)).Unwrap();
 
     responseModel.ShouldNotBeNull();
@@ -179,9 +179,9 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
   {
     using var scope = _factory.Services.CreateScope();
     var companyClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanyClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01J9SXMEMR1GQ3EE3Q4A872GKD.Tenant1000.User1000");
+    accessTokenContext.SetAccessToken("01J9SXMEMR1GQ3EE3Q4A872GKD.Tenant1000.User1000");
 
     (await companyClient.GetCompanyAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.NotFound);
   }

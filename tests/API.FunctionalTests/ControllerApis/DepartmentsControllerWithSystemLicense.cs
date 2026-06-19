@@ -24,9 +24,9 @@ public class DepartmentsControllerWithSystemLicense : IClassFixture<CustomWebApp
     using var scope = _factory.Services.CreateScope();
     var departmentClient = scope.ServiceProvider.GetRequiredService<IClients>().DepartmentClient;
     var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JMV0XC70JH9GC8P9M6SYYYAK.Tenant1.ADMIN420425736");
+    accessTokenContext.SetAccessToken("01JMV0XC70JH9GC8P9M6SYYYAK.Tenant1.ADMIN420425736");
 
     const string firstName = "First35292075";
     const string lastName = "Last35292075";
@@ -81,9 +81,9 @@ public class DepartmentsControllerWithSystemLicense : IClassFixture<CustomWebApp
     using var scope = _factory.Services.CreateScope();
     var departmentClient = scope.ServiceProvider.GetRequiredService<IClients>().DepartmentClient;
     var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JMV0XC70JH9GC8P9M6SYYYAK.Tenant1.ADMIN430851539");
+    accessTokenContext.SetAccessToken("01JMV0XC70JH9GC8P9M6SYYYAK.Tenant1.ADMIN430851539");
 
     await employeeClient.CreateEmployeeAsync(new EmployeeModificationModel(firstName, lastName, fullName), TestContext.Current.CancellationToken);
 
@@ -123,9 +123,9 @@ public class DepartmentsControllerWithSystemLicense : IClassFixture<CustomWebApp
     using var scope = _factory.Services.CreateScope();
     var departmentClient = scope.ServiceProvider.GetRequiredService<IClients>().DepartmentClient;
     var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JMV0XC70JH9GC8P9M6SYYYAK.Tenant1.ADMIN604735919");
+    accessTokenContext.SetAccessToken("01JMV0XC70JH9GC8P9M6SYYYAK.Tenant1.ADMIN604735919");
 
     await employeeClient.CreateEmployeeAsync(new EmployeeModificationModel(firstName, lastName, fullName), TestContext.Current.CancellationToken);
 

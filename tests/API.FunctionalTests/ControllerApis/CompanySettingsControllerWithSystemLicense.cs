@@ -23,9 +23,9 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
   {
     using var scope = _factory.Services.CreateScope();
     var settingsClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanySettingsClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant3.ADMIN1");
+    accessTokenContext.SetAccessToken("01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant3.ADMIN1");
 
     const string colorSchemeId = "new-theme";
 
@@ -44,9 +44,9 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
   {
     using var scope = _factory.Services.CreateScope();
     var settingsClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanySettingsClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant4.ADMIN1");
+    accessTokenContext.SetAccessToken("01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant4.ADMIN1");
 
     // Test various invalid colorSchemeId formats
     var invalidColorSchemeIds = new[]
@@ -73,7 +73,7 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
   {
     using var scope = _factory.Services.CreateScope();
     var settingsClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanySettingsClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
     // Test various valid colorSchemeId formats
     var validTestCases = new[]
@@ -86,10 +86,11 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
 
     foreach (var testCase in validTestCases)
     {
-      transport.SetAuthorizationToken("Bearer", $"01JA1ZJAWF27S0J8Z2VJE7673Y.{testCase.Tenant}.ADMIN1");
+      accessTokenContext.SetAccessToken($"01JA1ZJAWF27S0J8Z2VJE7673Y.{testCase.Tenant}.ADMIN1");
 
       const string companyName = "Company-1412593541";
 
+      var transport = scope.ServiceProvider.GetRequiredService<IHttpTransport>();
       await transport.PostAsync<CompanyModificationModel>(
         "/api/1.0/Company",
         EndpointSecurity.RequireToken,
@@ -112,9 +113,9 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
   {
     using var scope = _factory.Services.CreateScope();
     var settingsClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanySettingsClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JB0QS2K6SA4KYD8S920W7DMG.Tenant1.ADMIN1");
+    accessTokenContext.SetAccessToken("01JB0QS2K6SA4KYD8S920W7DMG.Tenant1.ADMIN1");
 
     // Try to create company settings for a company that already has settings
     (await settingsClient.CreateCompanySettingsAsync(
@@ -126,9 +127,9 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
   {
     using var scope = _factory.Services.CreateScope();
     var settingsClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanySettingsClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JB0RAH24ZJBA53AJF5F5MMZX.Tenant2.ADMIN1");
+    accessTokenContext.SetAccessToken("01JB0RAH24ZJBA53AJF5F5MMZX.Tenant2.ADMIN1");
 
     await settingsClient.DeleteCompanySettingsAsync(TestContext.Current.CancellationToken);
 
@@ -140,9 +141,9 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
   {
     using var scope = _factory.Services.CreateScope();
     var settingsClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanySettingsClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1000.ADMIN1");
+    accessTokenContext.SetAccessToken("01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1000.ADMIN1");
 
     (await settingsClient.DeleteCompanySettingsAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.NotFound);
   }
@@ -154,9 +155,9 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
   {
     using var scope = _factory.Services.CreateScope();
     var settingsClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanySettingsClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JB0QS2K6SA4KYD8S920W7DMG.Tenant1.User1");
+    accessTokenContext.SetAccessToken("01JB0QS2K6SA4KYD8S920W7DMG.Tenant1.User1");
 
     var responseModel = (await settingsClient.GetCompanySettingsAsync(TestContext.Current.CancellationToken)).Unwrap();
 
@@ -170,9 +171,9 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
   {
     using var scope = _factory.Services.CreateScope();
     var settingsClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanySettingsClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1000.User1");
+    accessTokenContext.SetAccessToken("01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1000.User1");
 
     (await settingsClient.GetCompanySettingsAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.NotFound);
   }
@@ -188,9 +189,9 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
   {
     using var scope = _factory.Services.CreateScope();
     var settingsClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanySettingsClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JB0QS2K6SA4KYD8S920W7DMG.Tenant1.ADMIN1");
+    accessTokenContext.SetAccessToken("01JB0QS2K6SA4KYD8S920W7DMG.Tenant1.ADMIN1");
 
     const string newColorSchemeId = "updated-theme";
 
@@ -208,9 +209,9 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
   {
     using var scope = _factory.Services.CreateScope();
     var settingsClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanySettingsClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1000.ADMIN1");
+    accessTokenContext.SetAccessToken("01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1000.ADMIN1");
 
     (await settingsClient.UpdateCompanySettingsAsync(
       new CompanySettingsModificationModel("new-theme"), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.NotFound);

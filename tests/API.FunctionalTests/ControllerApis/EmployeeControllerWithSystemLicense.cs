@@ -39,9 +39,9 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     using var scope = _factory.Services.CreateScope();
     var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.User1");
+    accessTokenContext.SetAccessToken("01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.User1");
 
     const string firstName = "First812685875";
     const string lastName = "Last812685875";
@@ -65,9 +65,9 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     using var scope = _factory.Services.CreateScope();
     var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.User100");
+    accessTokenContext.SetAccessToken("01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.User100");
 
     const string firstName = "First576536102";
     const string lastName = "Last576536102";
@@ -98,10 +98,10 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     using var scope = _factory.Services.CreateScope();
     var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
     var employeeEasyStore = _factory.Services.GetRequiredService<IEasyStores>().Resolve<EmployeeMongoEntity, long>();
 
-    transport.SetAuthorizationToken("Bearer", "01J9ZHFMA4ZXFE4EVMZARRTK7M.Tenant2.User1");
+    accessTokenContext.SetAccessToken("01J9ZHFMA4ZXFE4EVMZARRTK7M.Tenant2.User1");
 
     var existingEmployee = employeeEasyStore.Entities.Values.Single(x => string.Equals(x.FullName, "Meaghan Riley", StringComparison.OrdinalIgnoreCase));
 
@@ -115,9 +115,9 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     using var scope = _factory.Services.CreateScope();
     var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01J9ZHG6056FSRFJ7GC9E21JFD.Tenant1000.User1");
+    accessTokenContext.SetAccessToken("01J9ZHG6056FSRFJ7GC9E21JFD.Tenant1000.User1");
 
     // Attempting to delete the authenticated user's employee explicitly is idempotent and succeeds
     await Should.NotThrowAsync(async () => await employeeClient.DeleteCurrentEmployeeAsync(TestContext.Current.CancellationToken));
@@ -138,12 +138,12 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     using var scope = _factory.Services.CreateScope();
     var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
     var employeeIds = new List<long>();
 
     foreach (var x in Seq(36883136, 36883144, 36883148))
     {
-      transport.SetAuthorizationToken("Bearer", $"01JND081MJRM7Q0CHWEY1038EF.Tenant1.User{x}");
+      accessTokenContext.SetAccessToken($"01JND081MJRM7Q0CHWEY1038EF.Tenant1.User{x}");
 
       var firstName = $"First{x}";
       var lastName = $"Last{x}";
@@ -191,8 +191,8 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     using var scope = _factory.Services.CreateScope();
     var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
-    transport.SetAuthorizationToken("Bearer", "01J9ZHGBMC1DVP4R33QRYZ04RX.Tenant1.User1");
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
+    accessTokenContext.SetAccessToken("01J9ZHGBMC1DVP4R33QRYZ04RX.Tenant1.User1");
 
     var responseModel = (await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken)).Unwrap();
 
@@ -210,8 +210,8 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     using var scope = _factory.Services.CreateScope();
     var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
-    transport.SetAuthorizationToken("Bearer", "01J9ZHGFXBG4WKNJKBSG7T2Y76.Tenant1000.User1000");
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
+    accessTokenContext.SetAccessToken("01J9ZHGFXBG4WKNJKBSG7T2Y76.Tenant1000.User1000");
 
     // The endpoint returns 404 if the authenticated user's employee cannot be found
     (await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.NotFound);
@@ -224,9 +224,9 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     using var scope = _factory.Services.CreateScope();
     var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
     var departmentClient = scope.ServiceProvider.GetRequiredService<IClients>().DepartmentClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425736");
+    accessTokenContext.SetAccessToken("01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425736");
 
     await employeeClient.CreateEmployeeAsync(new EmployeeModificationModel("First", "Last", "Full Name"), TestContext.Current.CancellationToken);
 
@@ -258,10 +258,10 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     // Arrange
     using var scope = _factory.Services.CreateScope();
     var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    var manager = await CreateEmployeeAsync(employeeClient, transport, "Manager", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425737");
-    var employee = await CreateEmployeeAsync(employeeClient, transport, "Employee", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425738");
+    var manager = await CreateEmployeeAsync(employeeClient, accessTokenContext, "Manager", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425737");
+    var employee = await CreateEmployeeAsync(employeeClient, accessTokenContext, "Employee", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425738");
 
     // Act
     await employeeClient.ManageEmployeeAsync(employee.Id, new EmployeeManagementModel(null, null, manager.Id, "Staff"), TestContext.Current.CancellationToken);
@@ -278,14 +278,14 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     // Arrange
     using var scope = _factory.Services.CreateScope();
     var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    var manager = await CreateEmployeeAsync(employeeClient, transport, "Manager", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425739");
-    var employee = await CreateEmployeeAsync(employeeClient, transport, "Employee", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425740");
+    var manager = await CreateEmployeeAsync(employeeClient, accessTokenContext, "Manager", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425739");
+    var employee = await CreateEmployeeAsync(employeeClient, accessTokenContext, "Employee", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425740");
     await employeeClient.ManageEmployeeAsync(employee.Id, new EmployeeManagementModel(null, null, manager.Id, "Staff"), TestContext.Current.CancellationToken);
 
     // Act & Assert
-    transport.SetAuthorizationToken("Bearer", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425739");
+    accessTokenContext.SetAccessToken("01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425739");
 
     (await employeeClient.DeleteCurrentEmployeeAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.FailedDependency);
   }
@@ -296,9 +296,9 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     // Arrange
     using var scope = _factory.Services.CreateScope();
     var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    var employee = await CreateEmployeeAsync(employeeClient, transport, "Employee", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425741");
+    var employee = await CreateEmployeeAsync(employeeClient, accessTokenContext, "Employee", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425741");
 
     // Act
     (await employeeClient.ManageEmployeeAsync(employee.Id, new EmployeeManagementModel(null, null, 999999L, "Staff"), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.UnprocessableEntity);
@@ -310,10 +310,10 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     // Arrange
     using var scope = _factory.Services.CreateScope();
     var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    var employee1 = await CreateEmployeeAsync(employeeClient, transport, "Employee", "One", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425742");
-    var employee2 = await CreateEmployeeAsync(employeeClient, transport, "Employee", "Two", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425743");
+    var employee1 = await CreateEmployeeAsync(employeeClient, accessTokenContext, "Employee", "One", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425742");
+    var employee2 = await CreateEmployeeAsync(employeeClient, accessTokenContext, "Employee", "Two", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425743");
 
     await employeeClient.ManageEmployeeAsync(employee2.Id, new EmployeeManagementModel(null, null, employee1.Id, "Staff"), TestContext.Current.CancellationToken);
 
@@ -327,11 +327,11 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     // Arrange
     using var scope = _factory.Services.CreateScope();
     var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    var employee1 = await CreateEmployeeAsync(employeeClient, transport, "Employee", "One", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425744");
-    var employee2 = await CreateEmployeeAsync(employeeClient, transport, "Employee", "Two", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425745");
-    var employee3 = await CreateEmployeeAsync(employeeClient, transport, "Employee", "Three", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425746");
+    var employee1 = await CreateEmployeeAsync(employeeClient, accessTokenContext, "Employee", "One", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425744");
+    var employee2 = await CreateEmployeeAsync(employeeClient, accessTokenContext, "Employee", "Two", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425745");
+    var employee3 = await CreateEmployeeAsync(employeeClient, accessTokenContext, "Employee", "Three", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425746");
 
     await employeeClient.ManageEmployeeAsync(employee2.Id, new EmployeeManagementModel(null, null, employee1.Id, "Staff"), TestContext.Current.CancellationToken);
     await employeeClient.ManageEmployeeAsync(employee3.Id, new EmployeeManagementModel(null, null, employee2.Id, "Staff"), TestContext.Current.CancellationToken);
@@ -346,12 +346,12 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     // Arrange
     using var scope = _factory.Services.CreateScope();
     var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    var manager = await CreateEmployeeAsync(employeeClient, transport, "Manager", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425747");
-    var employee1 = await CreateEmployeeAsync(employeeClient, transport, "Employee", "One", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425748");
-    var employee2 = await CreateEmployeeAsync(employeeClient, transport, "Employee", "Two", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425749");
-    await CreateEmployeeAsync(employeeClient, transport, "Employee", "Three", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425750");
+    var manager = await CreateEmployeeAsync(employeeClient, accessTokenContext, "Manager", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425747");
+    var employee1 = await CreateEmployeeAsync(employeeClient, accessTokenContext, "Employee", "One", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425748");
+    var employee2 = await CreateEmployeeAsync(employeeClient, accessTokenContext, "Employee", "Two", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425749");
+    await CreateEmployeeAsync(employeeClient, accessTokenContext, "Employee", "Three", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425750");
 
     await employeeClient.ManageEmployeeAsync(employee1.Id, new EmployeeManagementModel(null, null, manager.Id, "Staff"), TestContext.Current.CancellationToken);
     await employeeClient.ManageEmployeeAsync(employee2.Id, new EmployeeManagementModel(null, null, manager.Id, "Staff"), TestContext.Current.CancellationToken);
@@ -376,10 +376,10 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     // Arrange
     using var scope = _factory.Services.CreateScope();
     var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    var manager = await CreateEmployeeAsync(employeeClient, transport, "Manager", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425751");
-    var employee = await CreateEmployeeAsync(employeeClient, transport, "Employee", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425752");
+    var manager = await CreateEmployeeAsync(employeeClient, accessTokenContext, "Manager", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425751");
+    var employee = await CreateEmployeeAsync(employeeClient, accessTokenContext, "Employee", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425752");
     await employeeClient.ManageEmployeeAsync(employee.Id, new EmployeeManagementModel(null, null, manager.Id, "Staff"), TestContext.Current.CancellationToken);
 
     // Act
@@ -397,11 +397,11 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     result.Items.Any(x => x.Id == manager.Id).ShouldBeTrue();
   }
 
-  private static async Task<EmployeeRetrievalModel> CreateEmployeeAsync(IEmployeeClient client, TestHttpTransport transport, string firstName, string lastName, string? token = null)
+  private static async Task<EmployeeRetrievalModel> CreateEmployeeAsync(IEmployeeClient client, IAccessTokenContext accessTokenContext, string firstName, string lastName, string? token = null)
   {
     if (token != null)
     {
-      transport.SetAuthorizationToken("Bearer", token);
+      accessTokenContext.SetAccessToken(token);
     }
 
     await client.CreateEmployeeAsync(new EmployeeModificationModel(firstName, lastName, $"{firstName} {lastName}"), TestContext.Current.CancellationToken);

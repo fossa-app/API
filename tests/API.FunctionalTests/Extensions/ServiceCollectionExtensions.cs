@@ -8,7 +8,10 @@ public static class ServiceCollectionExtensions
 {
   public static IServiceCollection AddBridge(this IServiceCollection services)
   {
-    _ = services.AddScoped<IHttpTransport, TestHttpTransport>();
+    _ = services.AddScoped<TestHttpTransportWithAccessToken>();
+    _ = services.AddScoped<IHttpTransport>(sp => sp.GetRequiredService<TestHttpTransportWithAccessToken>());
+    _ = services.AddScoped<IAccessTokenProvider>(sp => sp.GetRequiredService<TestHttpTransportWithAccessToken>());
+    _ = services.AddScoped<IAccessTokenContext>(sp => sp.GetRequiredService<TestHttpTransportWithAccessToken>());
     _ = services.AddScoped<IClients, Clients>();
 
     return services;

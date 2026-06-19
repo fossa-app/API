@@ -61,9 +61,9 @@ public class CompanyLicenseControllerEmptyDatabase : IClassFixture<CustomWebAppl
   {
     using var scope = _factory.Services.CreateScope();
     var companyLicenseClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanyLicenseClient;
-    var transport = (TestHttpTransport)scope.ServiceProvider.GetRequiredService<IHttpTransport>();
+    var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
-    transport.SetAuthorizationToken("Bearer", "01JA1R22PNGNDJNP12A506EFWZ.Tenant1.User1");
+    accessTokenContext.SetAccessToken("01JA1R22PNGNDJNP12A506EFWZ.Tenant1.User1");
 
     (await companyLicenseClient.GetLicenseAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.UnprocessableEntity);
   }
