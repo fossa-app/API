@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http;
+using Fossa.Bridge.Models;
 using Fossa.Bridge.Models.ApiModels;
 using Microsoft.FSharp.Core;
 using Shouldly;
@@ -14,9 +15,9 @@ internal static class ClientResultExtensions
       FuncConvert.FromFunc<T, T>(value => value),
       FuncConvert.FromFunc<ProblemDetailsModel, T>(problemDetails =>
         throw new HttpRequestException(
-          $"Client request failed with status code {problemDetails.Status}. {result}",
+          $"Client request failed with status code {problemDetails.status}. {result}",
           inner: null,
-          statusCode: (System.Net.HttpStatusCode)problemDetails.Status)));
+          statusCode: (System.Net.HttpStatusCode)problemDetails.status)));
 
   public static ProblemDetailsModel ShouldFailWith<T>(this ClientResult<T> result, HttpStatusCode statusCode)
     where T : class
@@ -28,7 +29,7 @@ internal static class ClientResultExtensions
       }),
       FuncConvert.FromFunc<ProblemDetailsModel, ProblemDetailsModel>(problemDetails =>
       {
-        problemDetails.Status.ShouldBe((int)statusCode);
+        problemDetails.status.ShouldBe((int)statusCode);
         return problemDetails;
       }));
 
@@ -41,7 +42,7 @@ internal static class ClientResultExtensions
       }),
       FuncConvert.FromFunc<ProblemDetailsModel, ProblemDetailsModel>(problemDetails =>
       {
-        problemDetails.Status.ShouldBe((int)statusCode);
+        problemDetails.status.ShouldBe((int)statusCode);
         return problemDetails;
       }));
 }

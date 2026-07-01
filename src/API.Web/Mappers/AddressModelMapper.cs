@@ -32,12 +32,12 @@ public class AddressModelMapper :
   public Address Map(AddressModel source)
   {
     return new Address(
-      source.Line1 ?? string.Empty,
-      Optional(source.Line2),
-      source.City ?? string.Empty,
-      source.Subdivision ?? string.Empty,
-      source.PostalCode ?? string.Empty,
-      CreateCountry(source.CountryCode ?? string.Empty));
+      source.line1 ?? string.Empty,
+      Optional(source.line2),
+      source.city ?? string.Empty,
+      source.subdivision ?? string.Empty,
+      source.postalCode ?? string.Empty,
+      CreateCountry(source.countryCode ?? string.Empty));
   }
 
   private CountryInfo CreateCountry(string countryCode)

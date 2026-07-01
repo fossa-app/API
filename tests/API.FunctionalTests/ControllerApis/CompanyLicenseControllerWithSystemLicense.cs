@@ -26,15 +26,15 @@ public class CompanyLicenseControllerWithSystemLicense : IClassFixture<CustomWeb
     var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
     accessTokenContext.SetAccessToken("01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1.User1");
-    var licenseResponseModel = (await companyLicenseClient.GetLicenseAsync(TestContext.Current.CancellationToken)).Unwrap();
+    var licenseResponseModel = (await companyLicenseClient.getLicenseAsync(TestContext.Current.CancellationToken)).Unwrap();
 
     licenseResponseModel.ShouldNotBeNull();
-    licenseResponseModel.Terms.ShouldNotBeNull();
-    licenseResponseModel.Terms.Licensor.ShouldNotBeNull();
-    licenseResponseModel.Terms.Licensee.ShouldNotBeNull();
-    licenseResponseModel.Entitlements.ShouldNotBeNull();
-    licenseResponseModel.Entitlements.MaximumBranchCount.ShouldBe(4);
-    licenseResponseModel.Entitlements.MaximumEmployeeCount.ShouldBe(10);
+    licenseResponseModel.terms.ShouldNotBeNull();
+    licenseResponseModel.terms.licensor.ShouldNotBeNull();
+    licenseResponseModel.terms.licensee.ShouldNotBeNull();
+    licenseResponseModel.entitlements.ShouldNotBeNull();
+    licenseResponseModel.entitlements.maximumBranchCount.ShouldBe(4);
+    licenseResponseModel.entitlements.maximumEmployeeCount.ShouldBe(10);
   }
 
   [Fact]
@@ -59,6 +59,6 @@ public class CompanyLicenseControllerWithSystemLicense : IClassFixture<CustomWeb
     using var scope = _factory.Services.CreateScope();
     var companyLicenseClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanyLicenseClient;
 
-    (await companyLicenseClient.GetLicenseAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized);
+    (await companyLicenseClient.getLicenseAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized);
   }
 }

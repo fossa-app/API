@@ -1,6 +1,7 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using Fossa.API.Web;
+using Fossa.Bridge.Models;
 using Fossa.Bridge.Models.ApiModels;
 using Fossa.Bridge.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

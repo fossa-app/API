@@ -30,7 +30,7 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
     accessTokenContext.SetAccessToken("01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant102.ADMIN1");
     const string companyName = "Company-1412593541";
 
-    (await companyClient.CreateCompanyAsync(new CompanyModificationModel(companyName, "KZ"), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.UnprocessableEntity);
+    (await companyClient.createCompanyAsync(new CompanyModificationModel(companyName, "KZ"), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.UnprocessableEntity);
   }
 
   [Fact]
@@ -44,16 +44,16 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
     accessTokenContext.SetAccessToken("01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant101.ADMIN1");
     const string companyName = "Company-1993954667";
 
-    await companyClient.CreateCompanyAsync(new CompanyModificationModel(companyName, "us"), TestContext.Current.CancellationToken);
+    await companyClient.createCompanyAsync(new CompanyModificationModel(companyName, "us"), TestContext.Current.CancellationToken);
 
-    var responseModel = (await companyClient.GetCompanyAsync(TestContext.Current.CancellationToken)).Unwrap();
+    var responseModel = (await companyClient.getCompanyAsync(TestContext.Current.CancellationToken)).Unwrap();
 
     responseModel.ShouldNotBeNull();
-    responseModel.Id.ShouldBePositive();
-    responseModel.Name.ShouldBe(companyName);
-    responseModel.CountryCode.ShouldBe("US");
+    responseModel.id.ShouldBePositive();
+    responseModel.name.ShouldBe(companyName);
+    responseModel.countryCode.ShouldBe("US");
 
-    licenseEasyStoreBucket.BucketContent.Values.Where(x => string.Equals(x.Path, $"Company{responseModel.Id}", StringComparison.Ordinal)).ShouldNotBeEmpty();
+    licenseEasyStoreBucket.BucketContent.Values.Where(x => string.Equals(x.Path, $"Company{responseModel.id}", StringComparison.Ordinal)).ShouldNotBeEmpty();
   }
 
   [Fact]
@@ -62,7 +62,7 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
     using var scope = _factory.Services.CreateScope();
     var companyClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanyClient;
 
-    (await companyClient.CreateCompanyAsync(new CompanyModificationModel("Company X", "US"), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized);
+    (await companyClient.createCompanyAsync(new CompanyModificationModel("Company X", "US"), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized);
   }
 
   [Fact]
@@ -75,7 +75,7 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
     accessTokenContext.SetAccessToken("01JA1ZJFK2J690FS0Q3TCX4P3F.Tenant101.User1");
     const string companyName = "Company-144764445";
 
-    (await companyClient.CreateCompanyAsync(new CompanyModificationModel(companyName, "US"), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Forbidden);
+    (await companyClient.createCompanyAsync(new CompanyModificationModel(companyName, "US"), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Forbidden);
   }
 
   [Fact]
@@ -84,7 +84,7 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
     using var scope = _factory.Services.CreateScope();
     var companyClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanyClient;
 
-    (await companyClient.DeleteCompanyAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized);
+    (await companyClient.deleteCompanyAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized);
   }
 
   [Fact]
@@ -96,7 +96,7 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
 
     accessTokenContext.SetAccessToken("01J9SJ94KK62JSRNQD7H70NCF7.Tenant1.ADMIN1");
 
-    (await companyClient.DeleteCompanyAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.FailedDependency);
+    (await companyClient.deleteCompanyAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.FailedDependency);
   }
 
   [Fact]
@@ -111,7 +111,7 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
 
     companyEasyStore.Entities.Values.FirstOrDefault(x => string.Equals(x.Name, "Company3-1868946743", StringComparison.Ordinal)).ShouldNotBeNull();
 
-    await companyClient.DeleteCompanyAsync(TestContext.Current.CancellationToken);
+    await companyClient.deleteCompanyAsync(TestContext.Current.CancellationToken);
 
     companyEasyStore.Entities.Values.FirstOrDefault(x => string.Equals(x.Name, "Company3-1868946743", StringComparison.Ordinal)).ShouldBeNull();
   }
@@ -125,7 +125,7 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
 
     accessTokenContext.SetAccessToken("01J9SJ94KK62JSRNQD7H70NCF7.Tenant1.User1");
 
-    (await companyClient.DeleteCompanyAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Forbidden);
+    (await companyClient.deleteCompanyAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Forbidden);
   }
 
   [Fact]
@@ -138,7 +138,7 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
     accessTokenContext.SetAccessToken("01J9SJ94KK62JSRNQD7H70NCF7.Tenant1000.ADMIN1");
 
     await Should.NotThrowAsync(async () =>
-      await companyClient.DeleteCompanyAsync(TestContext.Current.CancellationToken));
+      await companyClient.deleteCompanyAsync(TestContext.Current.CancellationToken));
   }
 
   public ValueTask DisposeAsync() => ValueTask.CompletedTask;
@@ -155,7 +155,7 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
     using var scope = _factory.Services.CreateScope();
     var companyClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanyClient;
 
-    (await companyClient.GetCompanyAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized);
+    (await companyClient.getCompanyAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized);
   }
 
   [Fact]
@@ -166,12 +166,12 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
     var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
 
     accessTokenContext.SetAccessToken("01J9SJ94KK62JSRNQD7H70NCF7.Tenant1.User1");
-    var responseModel = (await companyClient.GetCompanyAsync(TestContext.Current.CancellationToken)).Unwrap();
+    var responseModel = (await companyClient.getCompanyAsync(TestContext.Current.CancellationToken)).Unwrap();
 
     responseModel.ShouldNotBeNull();
-    responseModel.Id.ShouldBePositive();
-    responseModel.Name.ShouldNotBeNullOrEmpty();
-    responseModel.CountryCode.ShouldBe("US");
+    responseModel.id.ShouldBePositive();
+    responseModel.name.ShouldNotBeNullOrEmpty();
+    responseModel.countryCode.ShouldBe("US");
   }
 
   [Fact]
@@ -183,6 +183,6 @@ public class CompanyControllerWithSystemLicense : IClassFixture<CustomWebApplica
 
     accessTokenContext.SetAccessToken("01J9SXMEMR1GQ3EE3Q4A872GKD.Tenant1000.User1000");
 
-    (await companyClient.GetCompanyAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.NotFound);
+    (await companyClient.getCompanyAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.NotFound);
   }
 }

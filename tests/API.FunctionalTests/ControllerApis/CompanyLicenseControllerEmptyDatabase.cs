@@ -65,7 +65,7 @@ public class CompanyLicenseControllerEmptyDatabase : IClassFixture<CustomWebAppl
 
     accessTokenContext.SetAccessToken("01JA1R22PNGNDJNP12A506EFWZ.Tenant1.User1");
 
-    (await companyLicenseClient.GetLicenseAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.UnprocessableEntity);
+    (await companyLicenseClient.getLicenseAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.UnprocessableEntity);
   }
 
   [Fact]
@@ -74,6 +74,6 @@ public class CompanyLicenseControllerEmptyDatabase : IClassFixture<CustomWebAppl
     using var scope = _factory.Services.CreateScope();
     var companyLicenseClient = scope.ServiceProvider.GetRequiredService<IClients>().CompanyLicenseClient;
 
-    (await companyLicenseClient.GetLicenseAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized);
+    (await companyLicenseClient.getLicenseAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized);
   }
 }

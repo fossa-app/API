@@ -49,9 +49,9 @@ public class BranchesController : BaseApiController
   {
     return _sender.Send(
       new BranchCreationApiCommand(
-        model.Name,
-        model.TimeZoneId,
-        model.Address),
+        model.name,
+        model.timeZoneId,
+        model.address),
       cancellationToken);
   }
 
@@ -65,9 +65,9 @@ public class BranchesController : BaseApiController
     return _sender.Send(
       new BranchModificationApiCommand(
         id,
-        model.Name,
-        model.TimeZoneId,
-        model.Address),
+        model.name,
+        model.timeZoneId,
+        model.address),
       cancellationToken);
   }
 
@@ -78,10 +78,10 @@ public class BranchesController : BaseApiController
   {
     return _sender.Send(
       new BranchPagingApiQuery(
-        requestModel.Id,
-        requestModel.Search,
-        requestModel.PageNumber,
-        requestModel.PageSize),
+        requestModel.id,
+        requestModel.search,
+        requestModel.pageNumber,
+        requestModel.pageSize),
       cancellationToken);
   }
 }
