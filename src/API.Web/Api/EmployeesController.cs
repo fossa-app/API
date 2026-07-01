@@ -40,10 +40,10 @@ public class EmployeesController : BaseApiController
     await _sender.Send(
       new EmployeeManagementApiCommand(
         id,
-        model.AssignedBranchId,
-        model.AssignedDepartmentId,
-        model.ReportsToId,
-        model.JobTitle ?? string.Empty),
+        model.assignedBranchId,
+        model.assignedDepartmentId,
+        model.reportsToId,
+        model.jobTitle ?? string.Empty),
       cancellationToken);
   }
 
@@ -54,12 +54,12 @@ public class EmployeesController : BaseApiController
   {
     return await _sender.Send(
       new EmployeePagingApiQuery(
-        requestModel.Id,
-        requestModel.Search,
-        requestModel.ReportsToId,
-        requestModel.TopLevelOnly,
-        requestModel.PageNumber,
-        requestModel.PageSize),
+        requestModel.id,
+        requestModel.search,
+        requestModel.reportsToId,
+        requestModel.topLevelOnly,
+        requestModel.pageNumber,
+        requestModel.pageSize),
       cancellationToken);
   }
 }

@@ -21,18 +21,18 @@ public class SystemLicenseControllerWithLicense : IClassFixture<CustomWebApplica
     using var scope = _factory.Services.CreateScope();
     var systemLicenseClient = scope.ServiceProvider.GetRequiredService<IClients>().SystemLicenseClient;
 
-    var licenseResponseModel = (await systemLicenseClient.GetLicenseAsync(TestContext.Current.CancellationToken)).Unwrap();
+    var licenseResponseModel = (await systemLicenseClient.getLicenseAsync(TestContext.Current.CancellationToken)).Unwrap();
 
     licenseResponseModel.ShouldNotBeNull();
-    licenseResponseModel.Terms.ShouldNotBeNull();
-    licenseResponseModel.Terms.Licensor.ShouldNotBeNull();
-    licenseResponseModel.Terms.Licensee.ShouldNotBeNull();
-    licenseResponseModel.Entitlements.ShouldNotBeNull();
-    licenseResponseModel.Entitlements.EnvironmentName.ShouldNotBeNull();
-    licenseResponseModel.Entitlements.EnvironmentKind.ShouldNotBeNull();
-    licenseResponseModel.Entitlements.Countries.ShouldNotBeEmpty();
-    licenseResponseModel.Entitlements.TimeZones.ShouldNotBeEmpty();
-    licenseResponseModel.Entitlements.MaximumCompanyCount.ShouldBePositive();
+    licenseResponseModel.terms.ShouldNotBeNull();
+    licenseResponseModel.terms.licensor.ShouldNotBeNull();
+    licenseResponseModel.terms.licensee.ShouldNotBeNull();
+    licenseResponseModel.entitlements.ShouldNotBeNull();
+    licenseResponseModel.entitlements.environmentName.ShouldNotBeNull();
+    licenseResponseModel.entitlements.environmentKind.ShouldNotBeNull();
+    licenseResponseModel.entitlements.countries.ShouldNotBeEmpty();
+    licenseResponseModel.entitlements.timeZones.ShouldNotBeEmpty();
+    licenseResponseModel.entitlements.maximumCompanyCount.ShouldBePositive();
   }
 
   public async ValueTask InitializeAsync()

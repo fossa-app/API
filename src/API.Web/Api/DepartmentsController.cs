@@ -49,9 +49,9 @@ public class DepartmentsController : BaseApiController
   {
     return _sender.Send(
         new DepartmentCreationApiCommand(
-            model.Name,
-            model.ParentDepartmentId,
-            model.ManagerId),
+            model.name,
+            model.parentDepartmentId,
+            model.managerId),
         cancellationToken);
   }
 
@@ -65,9 +65,9 @@ public class DepartmentsController : BaseApiController
     return _sender.Send(
         new DepartmentModificationApiCommand(
             id,
-            model.Name,
-            model.ParentDepartmentId,
-            model.ManagerId),
+            model.name,
+            model.parentDepartmentId,
+            model.managerId),
         cancellationToken);
   }
 
@@ -78,10 +78,10 @@ public class DepartmentsController : BaseApiController
   {
     return _sender.Send(
         new DepartmentPagingApiQuery(
-            requestModel.Id,
-            requestModel.Search,
-            requestModel.PageNumber,
-            requestModel.PageSize),
+            requestModel.id,
+            requestModel.search,
+            requestModel.pageNumber,
+            requestModel.pageSize),
         cancellationToken);
   }
 }

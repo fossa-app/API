@@ -52,13 +52,13 @@ public static class CompanyLicenseExtensions
     {
       var licensor = new OrganizationParty("Microsoft Corporation", "Microsoft", new MailAddress("info@microsoft.com"),
         new Uri("https://microsoft.com/"));
-      var licensee = new OrganizationParty($"Alphabet {companyRetrievalModel.Id} Inc.",
-        $"Google {companyRetrievalModel.Id}", new MailAddress("info@google.com"), new Uri("https://www.google.com"));
+      var licensee = new OrganizationParty($"Alphabet {companyRetrievalModel.id} Inc.",
+        $"Google {companyRetrievalModel.id}", new MailAddress("info@google.com"), new Uri("https://www.google.com"));
       var licenseTerms = new LicenseTerms(Ulid.NewUlid(), licensor, licensee, DateTimeOffset.Now.AddYears(-1),
         DateTimeOffset.Now.AddYears(1));
       var companyEntitlements = new CompanyEntitlements(
         new Ulid(systemPropertiesEntity.SystemID),
-        companyRetrievalModel.Id,
+        companyRetrievalModel.id,
         maximumBranchCount,
         maximumEmployeeCount,
         maximumDepartmentCount);

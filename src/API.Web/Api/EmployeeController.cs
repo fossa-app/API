@@ -45,9 +45,9 @@ public class EmployeeController : BaseApiController
   {
     await _sender.Send(
       new EmployeeCreationApiCommand(
-        model.FirstName,
-        model.LastName,
-        model.FullName),
+        model.firstName,
+        model.lastName,
+        model.fullName),
       cancellationToken);
   }
 
@@ -58,9 +58,9 @@ public class EmployeeController : BaseApiController
   {
     await _sender.Send(
       new EmployeeModificationApiCommand(
-        model.FirstName,
-        model.LastName,
-        model.FullName),
+        model.firstName,
+        model.lastName,
+        model.fullName),
       cancellationToken);
   }
 }

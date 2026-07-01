@@ -46,7 +46,7 @@ public class CompanyController : BaseApiController
     CancellationToken cancellationToken)
   {
     await _sender.Send(
-      new CompanyCreationApiCommand(model.Name, model.CountryCode),
+      new CompanyCreationApiCommand(model.name, model.countryCode),
       cancellationToken);
   }
 
@@ -58,8 +58,8 @@ public class CompanyController : BaseApiController
   {
     await _sender.Send(
       new CompanyModificationApiCommand(
-        model.Name,
-        model.CountryCode),
+        model.name,
+        model.countryCode),
       cancellationToken);
   }
 }

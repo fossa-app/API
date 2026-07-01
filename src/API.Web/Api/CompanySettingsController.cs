@@ -46,7 +46,7 @@ public class CompanySettingsController : BaseApiController
     CancellationToken cancellationToken)
   {
     await _sender.Send(
-      new CompanySettingsCreationApiCommand(model.ColorSchemeId),
+      new CompanySettingsCreationApiCommand(model.colorSchemeId),
       cancellationToken);
   }
 
@@ -57,7 +57,7 @@ public class CompanySettingsController : BaseApiController
     CancellationToken cancellationToken)
   {
     await _sender.Send(
-      new CompanySettingsModificationApiCommand(model.ColorSchemeId),
+      new CompanySettingsModificationApiCommand(model.colorSchemeId),
       cancellationToken);
   }
 }

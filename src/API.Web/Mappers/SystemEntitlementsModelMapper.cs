@@ -35,7 +35,7 @@ public class SystemEntitlementsModelMapper : IMapper<SystemEntitlements, SystemE
       _hostEnvironment.EnvironmentName,
       source.EnvironmentName.ToString() ?? string.Empty,
       [.. source.Countries.Map(_countryModelMapper.Map)],
-      [.. timeZones.Map(_timeZoneModelMapper.Map).OrderBy(x => x.CurrentOffset)],
+      [.. timeZones.Map(_timeZoneModelMapper.Map).OrderBy(x => x.currentOffset)],
       source.MaximumCompanyCount);
   }
 }

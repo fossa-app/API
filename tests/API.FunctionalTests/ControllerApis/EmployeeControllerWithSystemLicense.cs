@@ -31,7 +31,7 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     const string lastName = "Last576536102";
     const string fullName = "Full576536102";
 
-    (await employeeClient.CreateEmployeeAsync(new EmployeeModificationModel(firstName, lastName, fullName), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized);
+    (await employeeClient.createEmployeeAsync(new EmployeeModificationModel(firstName, lastName, fullName), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized);
   }
 
   [Fact]
@@ -47,17 +47,17 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     const string lastName = "Last812685875";
     const string fullName = "Full812685875";
 
-    (await employeeClient.CreateEmployeeAsync(new EmployeeModificationModel(firstName, lastName, fullName), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Conflict);
+    (await employeeClient.createEmployeeAsync(new EmployeeModificationModel(firstName, lastName, fullName), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Conflict);
 
-    var responseModel = (await employeeClient.GetEmployeesAsync(new EmployeeQueryRequestModel { PageNumber = 1, PageSize = 100 }, TestContext.Current.CancellationToken)).Unwrap();
+    var responseModel = (await employeeClient.getEmployeesAsync(new EmployeeQueryRequestModel { pageNumber = 1, pageSize = 100 }, TestContext.Current.CancellationToken)).Unwrap();
 
     responseModel.ShouldNotBeNull();
-    responseModel.Items.ShouldNotBeEmpty();
-    var employee = responseModel.Items.First();
-    employee.Id.ShouldBePositive();
-    employee.FirstName.ShouldNotBe(firstName);
-    employee.LastName.ShouldNotBe(lastName);
-    employee.FullName.ShouldNotBe(fullName);
+    responseModel.items.ShouldNotBeEmpty();
+    var employee = responseModel.items.First();
+    employee.id.ShouldBePositive();
+    employee.firstName.ShouldNotBe(firstName);
+    employee.lastName.ShouldNotBe(lastName);
+    employee.fullName.ShouldNotBe(fullName);
   }
 
   [Fact]
@@ -73,15 +73,15 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     const string lastName = "Last576536102";
     const string fullName = "Full576536102";
 
-    await employeeClient.CreateEmployeeAsync(new EmployeeModificationModel(firstName, lastName, fullName), TestContext.Current.CancellationToken);
+    await employeeClient.createEmployeeAsync(new EmployeeModificationModel(firstName, lastName, fullName), TestContext.Current.CancellationToken);
 
-    var responseModel = (await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken)).Unwrap();
+    var responseModel = (await employeeClient.getCurrentEmployeeAsync(TestContext.Current.CancellationToken)).Unwrap();
 
     responseModel.ShouldNotBeNull();
-    responseModel.Id.ShouldBePositive();
-    responseModel.FirstName.ShouldBe(firstName);
-    responseModel.LastName.ShouldBe(lastName);
-    responseModel.FullName.ShouldBe(fullName);
+    responseModel.id.ShouldBePositive();
+    responseModel.firstName.ShouldBe(firstName);
+    responseModel.lastName.ShouldBe(lastName);
+    responseModel.fullName.ShouldBe(fullName);
   }
 
   [Fact]
@@ -90,7 +90,7 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     using var scope = _factory.Services.CreateScope();
     var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
 
-    (await employeeClient.DeleteCurrentEmployeeAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized); // Auth will fail first
+    (await employeeClient.deleteCurrentEmployeeAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized); // Auth will fail first
   }
 
   [Fact]
@@ -105,7 +105,7 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     var existingEmployee = employeeEasyStore.Entities.Values.Single(x => string.Equals(x.FullName, "Meaghan Riley", StringComparison.OrdinalIgnoreCase));
 
-    await employeeClient.DeleteCurrentEmployeeAsync(TestContext.Current.CancellationToken);
+    await employeeClient.deleteCurrentEmployeeAsync(TestContext.Current.CancellationToken);
 
     employeeEasyStore.Entities.ContainsKey(existingEmployee.ID).ShouldBeFalse();
   }
@@ -120,7 +120,7 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     accessTokenContext.SetAccessToken("01J9ZHG6056FSRFJ7GC9E21JFD.Tenant1000.User1");
 
     // Attempting to delete the authenticated user's employee explicitly is idempotent and succeeds
-    await Should.NotThrowAsync(async () => await employeeClient.DeleteCurrentEmployeeAsync(TestContext.Current.CancellationToken));
+    await Should.NotThrowAsync(async () => await employeeClient.deleteCurrentEmployeeAsync(TestContext.Current.CancellationToken));
   }
 
   public ValueTask DisposeAsync() => ValueTask.CompletedTask;
@@ -149,10 +149,10 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
       var lastName = $"Last{x}";
       var fullName = $"Full{x}";
 
-      await employeeClient.CreateEmployeeAsync(new EmployeeModificationModel(firstName, lastName, fullName), TestContext.Current.CancellationToken);
+      await employeeClient.createEmployeeAsync(new EmployeeModificationModel(firstName, lastName, fullName), TestContext.Current.CancellationToken);
 
-      var employeeResponseModel = (await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken)).Unwrap();
-      employeeIds.Add(employeeResponseModel.Id);
+      var employeeResponseModel = (await employeeClient.getCurrentEmployeeAsync(TestContext.Current.CancellationToken)).Unwrap();
+      employeeIds.Add(employeeResponseModel.id);
     }
 
     var employee1Id = employeeIds[0];
@@ -161,21 +161,21 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     const int employee4Id = 204298046; // Missing employee
 
     // Act
-    var branchResponseModel = (await employeeClient.GetEmployeesAsync(new EmployeeQueryRequestModel { Id = [employee1Id, employee2Id, employee3Id, employee4Id] }, TestContext.Current.CancellationToken)).Unwrap();
+    var branchResponseModel = (await employeeClient.getEmployeesAsync(new EmployeeQueryRequestModel { id = [employee1Id, employee2Id, employee3Id, employee4Id] }, TestContext.Current.CancellationToken)).Unwrap();
 
     // Assert
 
     branchResponseModel.ShouldNotBeNull();
 
-    branchResponseModel.PageNumber.ShouldBeNull();
-    branchResponseModel.PageSize.ShouldBeNull();
-    branchResponseModel.TotalItems.ShouldBeNull();
-    branchResponseModel.TotalPages.ShouldBeNull();
-    branchResponseModel.Items.Count.ShouldBe(3);
-    branchResponseModel.Items.ShouldContain(x => x.Id == employee1Id);
-    branchResponseModel.Items.ShouldContain(x => x.Id == employee2Id);
-    branchResponseModel.Items.ShouldContain(x => x.Id == employee3Id);
-    branchResponseModel.Items.ShouldNotContain(x => x.Id == employee4Id);
+    branchResponseModel.pageNumber.ShouldBeNull();
+    branchResponseModel.pageSize.ShouldBeNull();
+    branchResponseModel.totalItems.ShouldBeNull();
+    branchResponseModel.totalPages.ShouldBeNull();
+    branchResponseModel.items.Count.ShouldBe(3);
+    branchResponseModel.items.ShouldContain(x => x.id == employee1Id);
+    branchResponseModel.items.ShouldContain(x => x.id == employee2Id);
+    branchResponseModel.items.ShouldContain(x => x.id == employee3Id);
+    branchResponseModel.items.ShouldNotContain(x => x.id == employee4Id);
   }
 
   [Fact]
@@ -183,7 +183,7 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
   {
     using var scope = _factory.Services.CreateScope();
     var employeeClient = scope.ServiceProvider.GetRequiredService<IClients>().EmployeeClient;
-    (await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized);
+    (await employeeClient.getCurrentEmployeeAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Unauthorized);
   }
 
   [Fact]
@@ -194,15 +194,15 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var accessTokenContext = scope.ServiceProvider.GetRequiredService<IAccessTokenContext>();
     accessTokenContext.SetAccessToken("01J9ZHGBMC1DVP4R33QRYZ04RX.Tenant1.User1");
 
-    var responseModel = (await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken)).Unwrap();
+    var responseModel = (await employeeClient.getCurrentEmployeeAsync(TestContext.Current.CancellationToken)).Unwrap();
 
     responseModel.ShouldNotBeNull();
 
-    responseModel.Id.ShouldBePositive();
-    responseModel.CompanyId.ShouldBePositive();
-    responseModel.FirstName.ShouldNotBeNullOrEmpty();
-    responseModel.LastName.ShouldNotBeNullOrEmpty();
-    responseModel.FullName.ShouldNotBeNullOrEmpty();
+    responseModel.id.ShouldBePositive();
+    responseModel.companyId.ShouldBePositive();
+    responseModel.firstName.ShouldNotBeNullOrEmpty();
+    responseModel.lastName.ShouldNotBeNullOrEmpty();
+    responseModel.fullName.ShouldNotBeNullOrEmpty();
   }
 
   [Fact]
@@ -214,7 +214,7 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     accessTokenContext.SetAccessToken("01J9ZHGFXBG4WKNJKBSG7T2Y76.Tenant1000.User1000");
 
     // The endpoint returns 404 if the authenticated user's employee cannot be found
-    (await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.NotFound);
+    (await employeeClient.getCurrentEmployeeAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.NotFound);
   }
 
   [Fact]
@@ -228,28 +228,28 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     accessTokenContext.SetAccessToken("01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425736");
 
-    await employeeClient.CreateEmployeeAsync(new EmployeeModificationModel("First", "Last", "Full Name"), TestContext.Current.CancellationToken);
+    await employeeClient.createEmployeeAsync(new EmployeeModificationModel("First", "Last", "Full Name"), TestContext.Current.CancellationToken);
 
-    var employee = (await employeeClient.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken)).Unwrap();
+    var employee = (await employeeClient.getCurrentEmployeeAsync(TestContext.Current.CancellationToken)).Unwrap();
     employee.ShouldNotBeNull();
 
-    await departmentClient.CreateDepartmentAsync(new DepartmentModificationModel("Dept1", null, employee.Id), TestContext.Current.CancellationToken);
-    await departmentClient.CreateDepartmentAsync(new DepartmentModificationModel("Dept2", null, employee.Id), TestContext.Current.CancellationToken);
+    await departmentClient.createDepartmentAsync(new DepartmentModificationModel("Dept1", null, employee.id), TestContext.Current.CancellationToken);
+    await departmentClient.createDepartmentAsync(new DepartmentModificationModel("Dept2", null, employee.id), TestContext.Current.CancellationToken);
 
-    var depts = (await departmentClient.GetDepartmentsAsync(new DepartmentQueryRequestModel { PageNumber = 1, PageSize = 10 }, TestContext.Current.CancellationToken)).Unwrap();
+    var depts = (await departmentClient.getDepartmentsAsync(new DepartmentQueryRequestModel { pageNumber = 1, pageSize = 10 }, TestContext.Current.CancellationToken)).Unwrap();
     depts.ShouldNotBeNull();
-    var dept1Id = depts.Items.First(d => d.Name == "Dept1").Id;
-    var dept2Id = depts.Items.First(d => d.Name == "Dept2").Id;
+    var dept1Id = depts.items.First(d => d.name == "Dept1").id;
+    var dept2Id = depts.items.First(d => d.name == "Dept2").id;
 
-    await employeeClient.ManageEmployeeAsync(employee.Id, new EmployeeManagementModel(null, dept1Id, null, "Staff"), TestContext.Current.CancellationToken);
+    await employeeClient.manageEmployeeAsync(employee.id, new EmployeeManagementModel(null, dept1Id, null, "Staff"), TestContext.Current.CancellationToken);
 
     // Act
-    await employeeClient.ManageEmployeeAsync(employee.Id, new EmployeeManagementModel(null, dept2Id, null, "Staff"), TestContext.Current.CancellationToken);
+    await employeeClient.manageEmployeeAsync(employee.id, new EmployeeManagementModel(null, dept2Id, null, "Staff"), TestContext.Current.CancellationToken);
 
     // Assert
-    var updatedEmployee = (await employeeClient.GetEmployeeAsync(employee.Id, TestContext.Current.CancellationToken)).Unwrap();
+    var updatedEmployee = (await employeeClient.getEmployeeAsync(employee.id, TestContext.Current.CancellationToken)).Unwrap();
     updatedEmployee.ShouldNotBeNull();
-    updatedEmployee.AssignedDepartmentId.ShouldBe(dept2Id);
+    updatedEmployee.assignedDepartmentId.ShouldBe(dept2Id);
   }
 
   [Fact]
@@ -264,12 +264,12 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var employee = await CreateEmployeeAsync(employeeClient, accessTokenContext, "Employee", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425738");
 
     // Act
-    await employeeClient.ManageEmployeeAsync(employee.Id, new EmployeeManagementModel(null, null, manager.Id, "Staff"), TestContext.Current.CancellationToken);
+    await employeeClient.manageEmployeeAsync(employee.id, new EmployeeManagementModel(null, null, manager.id, "Staff"), TestContext.Current.CancellationToken);
 
     // Assert
-    var updatedEmployee = (await employeeClient.GetEmployeeAsync(employee.Id, TestContext.Current.CancellationToken)).Unwrap();
+    var updatedEmployee = (await employeeClient.getEmployeeAsync(employee.id, TestContext.Current.CancellationToken)).Unwrap();
     updatedEmployee.ShouldNotBeNull();
-    updatedEmployee.ReportsToId.ShouldBe(manager.Id);
+    updatedEmployee.reportsToId.ShouldBe(manager.id);
   }
 
   [Fact]
@@ -282,12 +282,12 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     var manager = await CreateEmployeeAsync(employeeClient, accessTokenContext, "Manager", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425739");
     var employee = await CreateEmployeeAsync(employeeClient, accessTokenContext, "Employee", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425740");
-    await employeeClient.ManageEmployeeAsync(employee.Id, new EmployeeManagementModel(null, null, manager.Id, "Staff"), TestContext.Current.CancellationToken);
+    await employeeClient.manageEmployeeAsync(employee.id, new EmployeeManagementModel(null, null, manager.id, "Staff"), TestContext.Current.CancellationToken);
 
     // Act & Assert
     accessTokenContext.SetAccessToken("01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425739");
 
-    (await employeeClient.DeleteCurrentEmployeeAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.FailedDependency);
+    (await employeeClient.deleteCurrentEmployeeAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.FailedDependency);
   }
 
   [Fact]
@@ -301,7 +301,7 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var employee = await CreateEmployeeAsync(employeeClient, accessTokenContext, "Employee", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425741");
 
     // Act
-    (await employeeClient.ManageEmployeeAsync(employee.Id, new EmployeeManagementModel(null, null, 999999L, "Staff"), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.UnprocessableEntity);
+    (await employeeClient.manageEmployeeAsync(employee.id, new EmployeeManagementModel(null, null, 999999L, "Staff"), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.UnprocessableEntity);
   }
 
   [Fact]
@@ -315,10 +315,10 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var employee1 = await CreateEmployeeAsync(employeeClient, accessTokenContext, "Employee", "One", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425742");
     var employee2 = await CreateEmployeeAsync(employeeClient, accessTokenContext, "Employee", "Two", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425743");
 
-    await employeeClient.ManageEmployeeAsync(employee2.Id, new EmployeeManagementModel(null, null, employee1.Id, "Staff"), TestContext.Current.CancellationToken);
+    await employeeClient.manageEmployeeAsync(employee2.id, new EmployeeManagementModel(null, null, employee1.id, "Staff"), TestContext.Current.CancellationToken);
 
     // Act
-    (await employeeClient.ManageEmployeeAsync(employee1.Id, new EmployeeManagementModel(null, null, employee2.Id, "Staff"), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.UnprocessableEntity);
+    (await employeeClient.manageEmployeeAsync(employee1.id, new EmployeeManagementModel(null, null, employee2.id, "Staff"), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.UnprocessableEntity);
   }
 
   [Fact]
@@ -333,11 +333,11 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var employee2 = await CreateEmployeeAsync(employeeClient, accessTokenContext, "Employee", "Two", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425745");
     var employee3 = await CreateEmployeeAsync(employeeClient, accessTokenContext, "Employee", "Three", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425746");
 
-    await employeeClient.ManageEmployeeAsync(employee2.Id, new EmployeeManagementModel(null, null, employee1.Id, "Staff"), TestContext.Current.CancellationToken);
-    await employeeClient.ManageEmployeeAsync(employee3.Id, new EmployeeManagementModel(null, null, employee2.Id, "Staff"), TestContext.Current.CancellationToken);
+    await employeeClient.manageEmployeeAsync(employee2.id, new EmployeeManagementModel(null, null, employee1.id, "Staff"), TestContext.Current.CancellationToken);
+    await employeeClient.manageEmployeeAsync(employee3.id, new EmployeeManagementModel(null, null, employee2.id, "Staff"), TestContext.Current.CancellationToken);
 
     // Act
-    (await employeeClient.ManageEmployeeAsync(employee1.Id, new EmployeeManagementModel(null, null, employee3.Id, "Staff"), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.UnprocessableEntity);
+    (await employeeClient.manageEmployeeAsync(employee1.id, new EmployeeManagementModel(null, null, employee3.id, "Staff"), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.UnprocessableEntity);
   }
 
   [Fact]
@@ -353,21 +353,21 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
     var employee2 = await CreateEmployeeAsync(employeeClient, accessTokenContext, "Employee", "Two", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425749");
     await CreateEmployeeAsync(employeeClient, accessTokenContext, "Employee", "Three", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425750");
 
-    await employeeClient.ManageEmployeeAsync(employee1.Id, new EmployeeManagementModel(null, null, manager.Id, "Staff"), TestContext.Current.CancellationToken);
-    await employeeClient.ManageEmployeeAsync(employee2.Id, new EmployeeManagementModel(null, null, manager.Id, "Staff"), TestContext.Current.CancellationToken);
+    await employeeClient.manageEmployeeAsync(employee1.id, new EmployeeManagementModel(null, null, manager.id, "Staff"), TestContext.Current.CancellationToken);
+    await employeeClient.manageEmployeeAsync(employee2.id, new EmployeeManagementModel(null, null, manager.id, "Staff"), TestContext.Current.CancellationToken);
 
     // Act
-    var result = (await employeeClient.GetEmployeesAsync(new EmployeeQueryRequestModel
+    var result = (await employeeClient.getEmployeesAsync(new EmployeeQueryRequestModel
     {
-      ReportsToId = manager.Id,
-      PageNumber = 1,
-      PageSize = 10
+      reportsToId = manager.id,
+      pageNumber = 1,
+      pageSize = 10
     }, TestContext.Current.CancellationToken)).Unwrap();
 
     // Assert
     result.ShouldNotBeNull();
-    result.Items.Count.ShouldBe(2);
-    result.Items.All(x => x.ReportsToId == manager.Id).ShouldBeTrue();
+    result.items.Count.ShouldBe(2);
+    result.items.All(x => x.reportsToId == manager.id).ShouldBeTrue();
   }
 
   [Fact]
@@ -380,21 +380,21 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
 
     var manager = await CreateEmployeeAsync(employeeClient, accessTokenContext, "Manager", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425751");
     var employee = await CreateEmployeeAsync(employeeClient, accessTokenContext, "Employee", "User", "01K4H70V6A2K39JB4NCYPQ07KY.Tenant1.ADMIN420425752");
-    await employeeClient.ManageEmployeeAsync(employee.Id, new EmployeeManagementModel(null, null, manager.Id, "Staff"), TestContext.Current.CancellationToken);
+    await employeeClient.manageEmployeeAsync(employee.id, new EmployeeManagementModel(null, null, manager.id, "Staff"), TestContext.Current.CancellationToken);
 
     // Act
-    var result = (await employeeClient.GetEmployeesAsync(new EmployeeQueryRequestModel
+    var result = (await employeeClient.getEmployeesAsync(new EmployeeQueryRequestModel
     {
-      TopLevelOnly = true,
-      PageNumber = 1,
-      PageSize = 10
+      topLevelOnly = true,
+      pageNumber = 1,
+      pageSize = 10
     }, TestContext.Current.CancellationToken)).Unwrap();
 
     // Assert
     result.ShouldNotBeNull();
-    result.Items.All(x => x.ReportsToId == null).ShouldBeTrue();
-    result.Items.Any(x => x.Id == employee.Id).ShouldBeFalse();
-    result.Items.Any(x => x.Id == manager.Id).ShouldBeTrue();
+    result.items.All(x => x.reportsToId == null).ShouldBeTrue();
+    result.items.Any(x => x.id == employee.id).ShouldBeFalse();
+    result.items.Any(x => x.id == manager.id).ShouldBeTrue();
   }
 
   private static async Task<EmployeeRetrievalModel> CreateEmployeeAsync(IEmployeeClient client, IAccessTokenContext accessTokenContext, string firstName, string lastName, string? token = null)
@@ -404,8 +404,8 @@ public class EmployeeControllerWithSystemLicense : IClassFixture<CustomWebApplic
       accessTokenContext.SetAccessToken(token);
     }
 
-    await client.CreateEmployeeAsync(new EmployeeModificationModel(firstName, lastName, $"{firstName} {lastName}"), TestContext.Current.CancellationToken);
+    await client.createEmployeeAsync(new EmployeeModificationModel(firstName, lastName, $"{firstName} {lastName}"), TestContext.Current.CancellationToken);
 
-    return (await client.GetCurrentEmployeeAsync(TestContext.Current.CancellationToken)).Unwrap();
+    return (await client.getCurrentEmployeeAsync(TestContext.Current.CancellationToken)).Unwrap();
   }
 }

@@ -29,14 +29,14 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
 
     const string colorSchemeId = "new-theme";
 
-    await settingsClient.CreateCompanySettingsAsync(new CompanySettingsModificationModel(colorSchemeId), TestContext.Current.CancellationToken);
+    await settingsClient.createCompanySettingsAsync(new CompanySettingsModificationModel(colorSchemeId), TestContext.Current.CancellationToken);
 
-    var responseModel = (await settingsClient.GetCompanySettingsAsync(TestContext.Current.CancellationToken)).Unwrap();
+    var responseModel = (await settingsClient.getCompanySettingsAsync(TestContext.Current.CancellationToken)).Unwrap();
 
     responseModel.ShouldNotBeNull();
-    responseModel.Id.ShouldBePositive();
-    responseModel.CompanyId.ShouldBePositive();
-    responseModel.ColorSchemeId.ShouldBe(colorSchemeId);
+    responseModel.id.ShouldBePositive();
+    responseModel.companyId.ShouldBePositive();
+    responseModel.colorSchemeId.ShouldBe(colorSchemeId);
   }
 
   [Fact]
@@ -63,7 +63,7 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
 
     foreach (var invalidColorSchemeId in invalidColorSchemeIds)
     {
-      (await settingsClient.CreateCompanySettingsAsync(
+      (await settingsClient.createCompanySettingsAsync(
         new CompanySettingsModificationModel(invalidColorSchemeId), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.UnprocessableEntity);
     }
   }
@@ -78,10 +78,10 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
     // Test various valid colorSchemeId formats
     var validTestCases = new[]
     {
-      new { Tenant = "Tenant45442385", ColorSchemeId = "abc" }, // Minimum length
-      new { Tenant = "Tenant45442386", ColorSchemeId = "theme" }, // Simple lowercase
-      new { Tenant = "Tenant45442387", ColorSchemeId = "dark-theme" }, // With hyphen in middle
-      new { Tenant = "Tenant45442388", ColorSchemeId = "verylongthemename" }, // Long name
+      new { Tenant = "Tenant45442385", colorSchemeId = "abc" }, // Minimum length
+      new { Tenant = "Tenant45442386", colorSchemeId = "theme" }, // Simple lowercase
+      new { Tenant = "Tenant45442387", colorSchemeId = "dark-theme" }, // With hyphen in middle
+      new { Tenant = "Tenant45442388", colorSchemeId = "verylongthemename" }, // Long name
     };
 
     foreach (var testCase in validTestCases)
@@ -97,14 +97,14 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
         new CompanyModificationModel(companyName, "US"),
         TestContext.Current.CancellationToken);
 
-      await settingsClient.CreateCompanySettingsAsync(
-        new CompanySettingsModificationModel(testCase.ColorSchemeId), TestContext.Current.CancellationToken);
+      await settingsClient.createCompanySettingsAsync(
+        new CompanySettingsModificationModel(testCase.colorSchemeId), TestContext.Current.CancellationToken);
 
-      var responseModel = (await settingsClient.GetCompanySettingsAsync(TestContext.Current.CancellationToken)).Unwrap();
+      var responseModel = (await settingsClient.getCompanySettingsAsync(TestContext.Current.CancellationToken)).Unwrap();
 
       responseModel.ShouldNotBeNull();
-      responseModel.ColorSchemeId.ShouldBe(testCase.ColorSchemeId,
-        $"ColorSchemeId '{testCase.ColorSchemeId}' should be valid");
+      responseModel.colorSchemeId.ShouldBe(testCase.colorSchemeId,
+        $"ColorSchemeId '{testCase.colorSchemeId}' should be valid");
     }
   }
 
@@ -118,7 +118,7 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
     accessTokenContext.SetAccessToken("01JB0QS2K6SA4KYD8S920W7DMG.Tenant1.ADMIN1");
 
     // Try to create company settings for a company that already has settings
-    (await settingsClient.CreateCompanySettingsAsync(
+    (await settingsClient.createCompanySettingsAsync(
       new CompanySettingsModificationModel("duplicate-theme"), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.Conflict);
   }
 
@@ -131,9 +131,9 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
 
     accessTokenContext.SetAccessToken("01JB0RAH24ZJBA53AJF5F5MMZX.Tenant2.ADMIN1");
 
-    await settingsClient.DeleteCompanySettingsAsync(TestContext.Current.CancellationToken);
+    await settingsClient.deleteCompanySettingsAsync(TestContext.Current.CancellationToken);
 
-    (await settingsClient.GetCompanySettingsAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.NotFound);
+    (await settingsClient.getCompanySettingsAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.NotFound);
   }
 
   [Fact]
@@ -145,7 +145,7 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
 
     accessTokenContext.SetAccessToken("01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1000.ADMIN1");
 
-    (await settingsClient.DeleteCompanySettingsAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.NotFound);
+    (await settingsClient.deleteCompanySettingsAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.NotFound);
   }
 
   public ValueTask DisposeAsync() => ValueTask.CompletedTask;
@@ -159,11 +159,11 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
 
     accessTokenContext.SetAccessToken("01JB0QS2K6SA4KYD8S920W7DMG.Tenant1.User1");
 
-    var responseModel = (await settingsClient.GetCompanySettingsAsync(TestContext.Current.CancellationToken)).Unwrap();
+    var responseModel = (await settingsClient.getCompanySettingsAsync(TestContext.Current.CancellationToken)).Unwrap();
 
     responseModel.ShouldNotBeNull();
-    responseModel.Id.ShouldBePositive();
-    responseModel.CompanyId.ShouldBePositive();
+    responseModel.id.ShouldBePositive();
+    responseModel.companyId.ShouldBePositive();
   }
 
   [Fact]
@@ -175,7 +175,7 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
 
     accessTokenContext.SetAccessToken("01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1000.User1");
 
-    (await settingsClient.GetCompanySettingsAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.NotFound);
+    (await settingsClient.getCompanySettingsAsync(TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.NotFound);
   }
 
   public async ValueTask InitializeAsync()
@@ -195,13 +195,13 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
 
     const string newColorSchemeId = "updated-theme";
 
-    await settingsClient.UpdateCompanySettingsAsync(new CompanySettingsModificationModel(newColorSchemeId), TestContext.Current.CancellationToken);
+    await settingsClient.updateCompanySettingsAsync(new CompanySettingsModificationModel(newColorSchemeId), TestContext.Current.CancellationToken);
 
     // Verify the update
-    var responseModel = (await settingsClient.GetCompanySettingsAsync(TestContext.Current.CancellationToken)).Unwrap();
+    var responseModel = (await settingsClient.getCompanySettingsAsync(TestContext.Current.CancellationToken)).Unwrap();
 
     responseModel.ShouldNotBeNull();
-    responseModel.ColorSchemeId.ShouldBe(newColorSchemeId);
+    responseModel.colorSchemeId.ShouldBe(newColorSchemeId);
   }
 
   [Fact]
@@ -213,7 +213,7 @@ public class CompanySettingsControllerWithSystemLicense : IClassFixture<CustomWe
 
     accessTokenContext.SetAccessToken("01JA1ZJAWF27S0J8Z2VJE7673Y.Tenant1000.ADMIN1");
 
-    (await settingsClient.UpdateCompanySettingsAsync(
+    (await settingsClient.updateCompanySettingsAsync(
       new CompanySettingsModificationModel("new-theme"), TestContext.Current.CancellationToken)).ShouldFailWith(HttpStatusCode.NotFound);
   }
 }
