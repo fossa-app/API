@@ -70,7 +70,6 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddProblemDetails(ProblemDetailsHelper.ConfigureProblemDetails);
 builder.Services.AddControllers()
                 .AddProblemDetailsConventions();
-builder.Services.AddOpenApi();
 builder.Services.AddApiVersioning(
                     options =>
                     {
@@ -84,7 +83,8 @@ builder.Services.AddApiVersioning(
                       options.AssumeDefaultVersionWhenUnspecified = false;
                       options.SubstituteApiVersionInUrl = true;
                       options.GroupNameFormat = "'v'VVV";
-                    });
+                    })
+                .AddOpenApi();
 builder.Services.AddSwaggerGen(c =>
 {
   c.SwaggerDoc("v1", new OpenApiInfo { Title = "FossaApp API", Version = "v1" });
@@ -195,7 +195,7 @@ app.UseHealthChecks("/healthchecks");
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapOpenApi();
+app.MapOpenApi().WithDocumentPerVersion();
 app.MapScalarApiReference();
 
 // Enable middleware to serve generated Swagger as a JSON endpoint.
