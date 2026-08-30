@@ -39,6 +39,6 @@
     <PackageVersion Include="UUIDNext" Version="4.2.4" />
     <PackageVersion Include="Verify.XunitV3" Version="32.0.0" />
     <PackageVersion Include="xunit.v3" Version="4.0.0" />
-    <PackageVersion Include="TIKSN-Framework" Version="5.7.2" />
+    <PackageVersion Include="TIKSN-Framework" Version="5.8.0" />
   </ItemGroup>
 </Project>
