@@ -1,0 +1,152 @@
+#nullable enable
+abstract Fossa.API.Infrastructure.Messages.Events.CompanyEventBusHandler<TEvent, TProtoEvent>.Map(TEvent domainEvent) -> TProtoEvent
+abstract Fossa.API.Infrastructure.Messages.Events.CompanyEventBusHandler<TEvent, TProtoEvent>.ResolveEntityId(TEvent domainEvent) -> long
+abstract Fossa.API.Infrastructure.Messages.Events.CompanyEventBusHandler<TEvent, TProtoEvent>.ResolveEntityName(TEvent domainEvent) -> string!
+Fossa.API.Infrastructure.DefaultInfrastructureModule
+Fossa.API.Infrastructure.DefaultInfrastructureModule.DefaultInfrastructureModule() -> void
+Fossa.API.Infrastructure.Messages.Events.BranchCreatedEventBusHandler
+Fossa.API.Infrastructure.Messages.Events.BranchCreatedEventBusHandler.BranchCreatedEventBusHandler(Fossa.Messaging.IMessagePublisher! messagePublisher, System.Diagnostics.Metrics.IMeterFactory! meterFactory, Microsoft.Extensions.Logging.ILogger<Fossa.API.Infrastructure.Messages.Events.BranchCreatedEventBusHandler!>! logger) -> void
+Fossa.API.Infrastructure.Messages.Events.BranchUpdatedEventBusHandler
+Fossa.API.Infrastructure.Messages.Events.BranchUpdatedEventBusHandler.BranchUpdatedEventBusHandler(Fossa.Messaging.IMessagePublisher! messagePublisher, System.Diagnostics.Metrics.IMeterFactory! meterFactory, Microsoft.Extensions.Logging.ILogger<Fossa.API.Infrastructure.Messages.Events.BranchUpdatedEventBusHandler!>! logger) -> void
+Fossa.API.Infrastructure.Messages.Events.CompanyCreatedEventBusHandler
+Fossa.API.Infrastructure.Messages.Events.CompanyCreatedEventBusHandler.CompanyCreatedEventBusHandler(Fossa.Messaging.IMessagePublisher! messagePublisher, System.Diagnostics.Metrics.IMeterFactory! meterFactory, Microsoft.Extensions.Logging.ILogger<Fossa.API.Infrastructure.Messages.Events.CompanyCreatedEventBusHandler!>! logger) -> void
+Fossa.API.Infrastructure.Messages.Events.CompanyEventBusHandler<TEvent, TProtoEvent>
+Fossa.API.Infrastructure.Messages.Events.CompanyEventBusHandler<TEvent, TProtoEvent>.CompanyEventBusHandler(Fossa.Messaging.IMessagePublisher! messagePublisher, System.Diagnostics.Metrics.IMeterFactory! meterFactory, Microsoft.Extensions.Logging.ILogger<Fossa.API.Infrastructure.Messages.Events.CompanyEventBusHandler<TEvent, TProtoEvent>!>! logger) -> void
+Fossa.API.Infrastructure.Messages.Events.CompanyEventBusHandler<TEvent, TProtoEvent>.Handle(TEvent notification, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
+Fossa.API.Infrastructure.Messages.Events.CompanyUpdatedEventBusHandler
+Fossa.API.Infrastructure.Messages.Events.CompanyUpdatedEventBusHandler.CompanyUpdatedEventBusHandler(Fossa.Messaging.IMessagePublisher! messagePublisher, System.Diagnostics.Metrics.IMeterFactory! meterFactory, Microsoft.Extensions.Logging.ILogger<Fossa.API.Infrastructure.Messages.Events.CompanyUpdatedEventBusHandler!>! logger) -> void
+Fossa.API.Infrastructure.Messages.Events.DepartmentCreatedEventBusHandler
+Fossa.API.Infrastructure.Messages.Events.DepartmentCreatedEventBusHandler.DepartmentCreatedEventBusHandler(Fossa.Messaging.IMessagePublisher! messagePublisher, System.Diagnostics.Metrics.IMeterFactory! meterFactory, Microsoft.Extensions.Logging.ILogger<Fossa.API.Infrastructure.Messages.Events.DepartmentCreatedEventBusHandler!>! logger) -> void
+Fossa.API.Infrastructure.Messages.Events.DepartmentUpdatedEventBusHandler
+Fossa.API.Infrastructure.Messages.Events.DepartmentUpdatedEventBusHandler.DepartmentUpdatedEventBusHandler(Fossa.Messaging.IMessagePublisher! messagePublisher, System.Diagnostics.Metrics.IMeterFactory! meterFactory, Microsoft.Extensions.Logging.ILogger<Fossa.API.Infrastructure.Messages.Events.DepartmentUpdatedEventBusHandler!>! logger) -> void
+Fossa.API.Infrastructure.Messages.Events.EmployeeCreatedEventBusHandler
+Fossa.API.Infrastructure.Messages.Events.EmployeeCreatedEventBusHandler.EmployeeCreatedEventBusHandler(Fossa.Messaging.IMessagePublisher! messagePublisher, System.Diagnostics.Metrics.IMeterFactory! meterFactory, Microsoft.Extensions.Logging.ILogger<Fossa.API.Infrastructure.Messages.Events.EmployeeCreatedEventBusHandler!>! logger) -> void
+Fossa.API.Infrastructure.Messages.Events.EmployeeUpdatedEventBusHandler
+Fossa.API.Infrastructure.Messages.Events.EmployeeUpdatedEventBusHandler.EmployeeUpdatedEventBusHandler(Fossa.Messaging.IMessagePublisher! messagePublisher, System.Diagnostics.Metrics.IMeterFactory! meterFactory, Microsoft.Extensions.Logging.ILogger<Fossa.API.Infrastructure.Messages.Events.EmployeeUpdatedEventBusHandler!>! logger) -> void
+Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters.ActiveFusionAuthApplicationFilter
+Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters.ActiveFusionAuthApplicationFilter.ActiveFusionAuthApplicationFilter() -> void
+Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters.ActiveFusionAuthApplicationFilter.FilterAsync(LanguageExt.Seq<Fossa.API.Infrastructure.Models.FusionAuthApplication!> fusionAuthApplications, Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery! query, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<LanguageExt.Seq<Fossa.API.Infrastructure.Models.FusionAuthApplication!>>!
+Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters.IFusionAuthApplicationFilter
+Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters.IFusionAuthApplicationFilter.FilterAsync(LanguageExt.Seq<Fossa.API.Infrastructure.Models.FusionAuthApplication!> fusionAuthApplications, Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery! query, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<LanguageExt.Seq<Fossa.API.Infrastructure.Models.FusionAuthApplication!>>!
+Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters.OriginFusionAuthApplicationFilter
+Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters.OriginFusionAuthApplicationFilter.FilterAsync(LanguageExt.Seq<Fossa.API.Infrastructure.Models.FusionAuthApplication!> fusionAuthApplications, Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery! query, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<LanguageExt.Seq<Fossa.API.Infrastructure.Models.FusionAuthApplication!>>!
+Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters.OriginFusionAuthApplicationFilter.OriginFusionAuthApplicationFilter() -> void
+Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery
+Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery.Deconstruct(out LanguageExt.Option<System.Uri!> Origin) -> void
+Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery.IdentityClientRetrievalQuery(Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery! original) -> void
+Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery.IdentityClientRetrievalQuery(LanguageExt.Option<System.Uri!> Origin) -> void
+Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery.Origin.get -> LanguageExt.Option<System.Uri!>
+Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery.Origin.init -> void
+Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQueryHandler
+Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQueryHandler.Handle(Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery! request, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<Fossa.Bridge.Models.ApiModels.IdentityClientRetrievalModel!>!
+Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQueryHandler.IdentityClientRetrievalQueryHandler(Fossa.API.Infrastructure.RestClients.IFusionAuthRestClient! fusionAuthRestClient, Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters.ActiveFusionAuthApplicationFilter! activeFusionAuthApplicationFilter, Fossa.API.Infrastructure.Messages.Queries.FusionAuthApplicationFilters.OriginFusionAuthApplicationFilter! originFusionAuthApplicationFilter) -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplication
+Fossa.API.Infrastructure.Models.FusionAuthApplication.Active.get -> bool
+Fossa.API.Infrastructure.Models.FusionAuthApplication.Active.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplication.FusionAuthApplication() -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplication.Id.get -> System.Guid
+Fossa.API.Infrastructure.Models.FusionAuthApplication.Id.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplication.InsertInstant.get -> long
+Fossa.API.Infrastructure.Models.FusionAuthApplication.InsertInstant.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplication.LastUpdateInstant.get -> long
+Fossa.API.Infrastructure.Models.FusionAuthApplication.LastUpdateInstant.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplication.Name.get -> string?
+Fossa.API.Infrastructure.Models.FusionAuthApplication.Name.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplication.OauthConfiguration.get -> Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration?
+Fossa.API.Infrastructure.Models.FusionAuthApplication.OauthConfiguration.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplication.Scopes.get -> string![]?
+Fossa.API.Infrastructure.Models.FusionAuthApplication.Scopes.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplication.State.get -> string?
+Fossa.API.Infrastructure.Models.FusionAuthApplication.State.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplication.TenantId.get -> System.Guid
+Fossa.API.Infrastructure.Models.FusionAuthApplication.TenantId.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplication.VerificationStrategy.get -> string?
+Fossa.API.Infrastructure.Models.FusionAuthApplication.VerificationStrategy.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplication.VerifyRegistration.get -> bool
+Fossa.API.Infrastructure.Models.FusionAuthApplication.VerifyRegistration.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.AuthorizedOriginUrLs.get -> string![]?
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.AuthorizedOriginUrLs.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.AuthorizedRedirectUrLs.get -> string![]?
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.AuthorizedRedirectUrLs.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.AuthorizedUrlValidationPolicy.get -> string?
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.AuthorizedUrlValidationPolicy.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.ClientAuthenticationPolicy.get -> string?
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.ClientAuthenticationPolicy.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.ClientId.get -> System.Guid
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.ClientId.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.ClientSecret.get -> string?
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.ClientSecret.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.ConsentMode.get -> string?
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.ConsentMode.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.Debug.get -> bool
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.Debug.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.EnabledGrants.get -> string![]?
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.EnabledGrants.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.FusionAuthApplicationOauthConfiguration() -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.GenerateRefreshTokens.get -> bool
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.GenerateRefreshTokens.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.LogoutBehavior.get -> string?
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.LogoutBehavior.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.LogoutUrl.get -> string?
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.LogoutUrl.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.ProofKeyForCodeExchangePolicy.get -> string?
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.ProofKeyForCodeExchangePolicy.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.Relationship.get -> string?
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.Relationship.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.RequireClientAuthentication.get -> bool
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.RequireClientAuthentication.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.RequireRegistration.get -> bool
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.RequireRegistration.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.ScopeHandlingPolicy.get -> string?
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.ScopeHandlingPolicy.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.UnknownScopePolicy.get -> string?
+Fossa.API.Infrastructure.Models.FusionAuthApplicationOauthConfiguration.UnknownScopePolicy.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplicationsListingResponse
+Fossa.API.Infrastructure.Models.FusionAuthApplicationsListingResponse.Applications.get -> Fossa.API.Infrastructure.Models.FusionAuthApplication![]?
+Fossa.API.Infrastructure.Models.FusionAuthApplicationsListingResponse.Applications.set -> void
+Fossa.API.Infrastructure.Models.FusionAuthApplicationsListingResponse.FusionAuthApplicationsListingResponse() -> void
+Fossa.API.Infrastructure.RestClients.FusionAuthRestClient
+Fossa.API.Infrastructure.RestClients.FusionAuthRestClient.FusionAuthRestClient(System.Net.Http.HttpClient! httpClient, Microsoft.Extensions.Logging.ILogger<Fossa.API.Infrastructure.RestClients.FusionAuthRestClient!>! logger) -> void
+Fossa.API.Infrastructure.RestClients.FusionAuthRestClient.GetApplicationsAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<Fossa.API.Infrastructure.Models.FusionAuthApplicationsListingResponse?>!
+Fossa.API.Infrastructure.RestClients.IFusionAuthRestClient
+Fossa.API.Infrastructure.RestClients.IFusionAuthRestClient.GetApplicationsAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<Fossa.API.Infrastructure.Models.FusionAuthApplicationsListingResponse?>!
+override Fossa.API.Infrastructure.DefaultInfrastructureModule.Load(Autofac.ContainerBuilder! builder) -> void
+override Fossa.API.Infrastructure.Messages.Events.BranchCreatedEventBusHandler.Map(Fossa.API.Core.Messages.Events.BranchCreatedEvent! domainEvent) -> Fossa.Messaging.Messages.Events.BranchChangedProtoEvent!
+override Fossa.API.Infrastructure.Messages.Events.BranchCreatedEventBusHandler.ResolveEntityId(Fossa.API.Core.Messages.Events.BranchCreatedEvent! domainEvent) -> long
+override Fossa.API.Infrastructure.Messages.Events.BranchCreatedEventBusHandler.ResolveEntityName(Fossa.API.Core.Messages.Events.BranchCreatedEvent! domainEvent) -> string!
+override Fossa.API.Infrastructure.Messages.Events.BranchUpdatedEventBusHandler.Map(Fossa.API.Core.Messages.Events.BranchUpdatedEvent! domainEvent) -> Fossa.Messaging.Messages.Events.BranchChangedProtoEvent!
+override Fossa.API.Infrastructure.Messages.Events.BranchUpdatedEventBusHandler.ResolveEntityId(Fossa.API.Core.Messages.Events.BranchUpdatedEvent! domainEvent) -> long
+override Fossa.API.Infrastructure.Messages.Events.BranchUpdatedEventBusHandler.ResolveEntityName(Fossa.API.Core.Messages.Events.BranchUpdatedEvent! domainEvent) -> string!
+override Fossa.API.Infrastructure.Messages.Events.CompanyCreatedEventBusHandler.Map(Fossa.API.Core.Messages.Events.CompanyCreatedEvent! domainEvent) -> Fossa.Messaging.Messages.Events.CompanyChangedProtoEvent!
+override Fossa.API.Infrastructure.Messages.Events.CompanyCreatedEventBusHandler.ResolveEntityId(Fossa.API.Core.Messages.Events.CompanyCreatedEvent! domainEvent) -> long
+override Fossa.API.Infrastructure.Messages.Events.CompanyCreatedEventBusHandler.ResolveEntityName(Fossa.API.Core.Messages.Events.CompanyCreatedEvent! domainEvent) -> string!
+override Fossa.API.Infrastructure.Messages.Events.CompanyUpdatedEventBusHandler.Map(Fossa.API.Core.Messages.Events.CompanyUpdatedEvent! domainEvent) -> Fossa.Messaging.Messages.Events.CompanyChangedProtoEvent!
+override Fossa.API.Infrastructure.Messages.Events.CompanyUpdatedEventBusHandler.ResolveEntityId(Fossa.API.Core.Messages.Events.CompanyUpdatedEvent! domainEvent) -> long
+override Fossa.API.Infrastructure.Messages.Events.CompanyUpdatedEventBusHandler.ResolveEntityName(Fossa.API.Core.Messages.Events.CompanyUpdatedEvent! domainEvent) -> string!
+override Fossa.API.Infrastructure.Messages.Events.DepartmentCreatedEventBusHandler.Map(Fossa.API.Core.Messages.Events.DepartmentCreatedEvent! domainEvent) -> Fossa.Messaging.Messages.Events.DepartmentChangedProtoEvent!
+override Fossa.API.Infrastructure.Messages.Events.DepartmentCreatedEventBusHandler.ResolveEntityId(Fossa.API.Core.Messages.Events.DepartmentCreatedEvent! domainEvent) -> long
+override Fossa.API.Infrastructure.Messages.Events.DepartmentCreatedEventBusHandler.ResolveEntityName(Fossa.API.Core.Messages.Events.DepartmentCreatedEvent! domainEvent) -> string!
+override Fossa.API.Infrastructure.Messages.Events.DepartmentUpdatedEventBusHandler.Map(Fossa.API.Core.Messages.Events.DepartmentUpdatedEvent! domainEvent) -> Fossa.Messaging.Messages.Events.DepartmentChangedProtoEvent!
+override Fossa.API.Infrastructure.Messages.Events.DepartmentUpdatedEventBusHandler.ResolveEntityId(Fossa.API.Core.Messages.Events.DepartmentUpdatedEvent! domainEvent) -> long
+override Fossa.API.Infrastructure.Messages.Events.DepartmentUpdatedEventBusHandler.ResolveEntityName(Fossa.API.Core.Messages.Events.DepartmentUpdatedEvent! domainEvent) -> string!
+override Fossa.API.Infrastructure.Messages.Events.EmployeeCreatedEventBusHandler.Map(Fossa.API.Core.Messages.Events.EmployeeCreatedEvent! domainEvent) -> Fossa.Messaging.Messages.Events.EmployeeChangedProtoEvent!
+override Fossa.API.Infrastructure.Messages.Events.EmployeeCreatedEventBusHandler.ResolveEntityId(Fossa.API.Core.Messages.Events.EmployeeCreatedEvent! domainEvent) -> long
+override Fossa.API.Infrastructure.Messages.Events.EmployeeCreatedEventBusHandler.ResolveEntityName(Fossa.API.Core.Messages.Events.EmployeeCreatedEvent! domainEvent) -> string!
+override Fossa.API.Infrastructure.Messages.Events.EmployeeUpdatedEventBusHandler.Map(Fossa.API.Core.Messages.Events.EmployeeUpdatedEvent! domainEvent) -> Fossa.Messaging.Messages.Events.EmployeeChangedProtoEvent!
+override Fossa.API.Infrastructure.Messages.Events.EmployeeUpdatedEventBusHandler.ResolveEntityId(Fossa.API.Core.Messages.Events.EmployeeUpdatedEvent! domainEvent) -> long
+override Fossa.API.Infrastructure.Messages.Events.EmployeeUpdatedEventBusHandler.ResolveEntityName(Fossa.API.Core.Messages.Events.EmployeeUpdatedEvent! domainEvent) -> string!
+override Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery.Equals(object? obj) -> bool
+override Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery.GetHashCode() -> int
+override Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery.ToString() -> string!
+static Fossa.API.Infrastructure.Messages.Events.CompanyEventBusHandler<TEvent, TProtoEvent>.BranchEntityName.get -> string!
+static Fossa.API.Infrastructure.Messages.Events.CompanyEventBusHandler<TEvent, TProtoEvent>.CompanyEntityName.get -> string!
+static Fossa.API.Infrastructure.Messages.Events.CompanyEventBusHandler<TEvent, TProtoEvent>.DepartmentEntityName.get -> string!
+static Fossa.API.Infrastructure.Messages.Events.CompanyEventBusHandler<TEvent, TProtoEvent>.EmployeeEntityName.get -> string!
+static Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery.operator !=(Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery? left, Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery? right) -> bool
+static Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery.operator ==(Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery? left, Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery? right) -> bool
+static Fossa.API.Infrastructure.RestClients.FusionAuthRestClient.LogRetrievedApplications(Microsoft.Extensions.Logging.ILogger! logger, int applicationCount, int tenantCount) -> void
+virtual Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery.<Clone>$() -> Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery!
+virtual Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery.EqualityContract.get -> System.Type!
+virtual Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery.Equals(Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery? other) -> bool
+virtual Fossa.API.Infrastructure.Messages.Queries.IdentityClientRetrievalQuery.PrintMembers(System.Text.StringBuilder! builder) -> bool

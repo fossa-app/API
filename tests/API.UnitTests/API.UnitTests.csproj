@@ -10,11 +10,9 @@
   <ItemGroup>
     <PackageReference Include="EasyDoubles" />
     <PackageReference Include="IdGen.DependencyInjection" />
-    <PackageReference Include="PublicApiGenerator" />
     <PackageReference Include="Scrutor" />
     <PackageReference Include="Shouldly" />
     <PackageReference Include="TIKSN-Framework" />
-    <PackageReference Include="Verify.XunitV3" />
     <PackageReference Include="ReportGenerator" />
     <PackageReference Include="xunit.v3" />
   </ItemGroup>
@@ -44,5 +42,8 @@
     <!--<Using Include="LanguageExt.Traits.Domain" />-->
     <Using Include="MediatR" />
     <Using Include="MediatR.Unit" Alias="Unit" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="Xunit" />
   </ItemGroup>
 </Project>

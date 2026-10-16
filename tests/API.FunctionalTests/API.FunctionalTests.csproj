@@ -18,7 +18,6 @@
     <ProjectReference Include="..\..\src\API.Web\API.Web.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="PublicApiGenerator" />
     <PackageReference Include="ReportGenerator" />
     <Using Include="Xunit" />
     <Using Include="LanguageExt" />

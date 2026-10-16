@@ -1,0 +1,245 @@
+#nullable enable
+Fossa.API.Persistence.DefaultPersistenceModule
+Fossa.API.Persistence.DefaultPersistenceModule.DefaultPersistenceModule() -> void
+Fossa.API.Persistence.Mongo.Entities.AddressMongo
+Fossa.API.Persistence.Mongo.Entities.AddressMongo.AddressMongo() -> void
+Fossa.API.Persistence.Mongo.Entities.AddressMongo.City.get -> string?
+Fossa.API.Persistence.Mongo.Entities.AddressMongo.City.set -> void
+Fossa.API.Persistence.Mongo.Entities.AddressMongo.CountryCode.get -> string?
+Fossa.API.Persistence.Mongo.Entities.AddressMongo.CountryCode.set -> void
+Fossa.API.Persistence.Mongo.Entities.AddressMongo.Line1.get -> string?
+Fossa.API.Persistence.Mongo.Entities.AddressMongo.Line1.set -> void
+Fossa.API.Persistence.Mongo.Entities.AddressMongo.Line2.get -> string?
+Fossa.API.Persistence.Mongo.Entities.AddressMongo.Line2.set -> void
+Fossa.API.Persistence.Mongo.Entities.AddressMongo.PostalCode.get -> string?
+Fossa.API.Persistence.Mongo.Entities.AddressMongo.PostalCode.set -> void
+Fossa.API.Persistence.Mongo.Entities.AddressMongo.Subdivision.get -> string?
+Fossa.API.Persistence.Mongo.Entities.AddressMongo.Subdivision.set -> void
+Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity
+Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity.Address.get -> Fossa.API.Persistence.Mongo.Entities.AddressMongo?
+Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity.Address.set -> void
+Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity.BranchMongoEntity() -> void
+Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity.CompanyId.get -> long
+Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity.CompanyId.set -> void
+Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity.ID.get -> long
+Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity.ID.set -> void
+Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity.Name.get -> string?
+Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity.Name.set -> void
+Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity.TenantID.get -> System.Guid
+Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity.TenantID.set -> void
+Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity.TimeZoneId.get -> string?
+Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity.TimeZoneId.set -> void
+Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity
+Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity.CompanyMongoEntity() -> void
+Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity.CountryCode.get -> string?
+Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity.CountryCode.set -> void
+Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity.ID.get -> long
+Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity.ID.set -> void
+Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity.Name.get -> string?
+Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity.Name.set -> void
+Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity.TenantID.get -> System.Guid
+Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity.TenantID.set -> void
+Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity
+Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity.ColorSchemeId.get -> string?
+Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity.ColorSchemeId.set -> void
+Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity.CompanyId.get -> long
+Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity.CompanyId.set -> void
+Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity.CompanySettingsMongoEntity() -> void
+Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity.ID.get -> long
+Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity.ID.set -> void
+Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity
+Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity.CompanyId.get -> long
+Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity.CompanyId.set -> void
+Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity.DepartmentMongoEntity() -> void
+Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity.ID.get -> long
+Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity.ID.set -> void
+Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity.ManagerId.get -> long
+Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity.ManagerId.set -> void
+Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity.Name.get -> string?
+Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity.Name.set -> void
+Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity.ParentDepartmentId.get -> long?
+Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity.ParentDepartmentId.set -> void
+Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity.TenantID.get -> System.Guid
+Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity.TenantID.set -> void
+Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity
+Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity.AssignedBranchId.get -> long?
+Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity.AssignedBranchId.set -> void
+Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity.AssignedDepartmentId.get -> long?
+Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity.AssignedDepartmentId.set -> void
+Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity.CompanyId.get -> long
+Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity.CompanyId.set -> void
+Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity.EmployeeMongoEntity() -> void
+Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity.FirstName.get -> string?
+Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity.FirstName.set -> void
+Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity.FullName.get -> string?
+Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity.FullName.set -> void
+Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity.ID.get -> long
+Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity.ID.set -> void
+Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity.JobTitle.get -> string?
+Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity.JobTitle.set -> void
+Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity.LastName.get -> string?
+Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity.LastName.set -> void
+Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity.ReportsToId.get -> long?
+Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity.ReportsToId.set -> void
+Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity.TenantID.get -> System.Guid
+Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity.TenantID.set -> void
+Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity.UserID.get -> System.Guid
+Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity.UserID.set -> void
+Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity
+Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity.ID.get -> long
+Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity.ID.set -> void
+Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity.SystemID.get -> byte[]?
+Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity.SystemID.set -> void
+Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity.SystemPropertiesMongoEntity() -> void
+Fossa.API.Persistence.Mongo.Mappers.AddressMongoMapper
+Fossa.API.Persistence.Mongo.Mappers.AddressMongoMapper.AddressMongoMapper(TIKSN.Globalization.ICountryFactory! countryFactory) -> void
+Fossa.API.Persistence.Mongo.Mappers.AddressMongoMapper.Map(Fossa.API.Core.Entities.Address! source) -> Fossa.API.Persistence.Mongo.Entities.AddressMongo!
+Fossa.API.Persistence.Mongo.Mappers.AddressMongoMapper.Map(Fossa.API.Persistence.Mongo.Entities.AddressMongo! source) -> Fossa.API.Core.Entities.Address!
+Fossa.API.Persistence.Mongo.Mappers.BranchMongoMapper
+Fossa.API.Persistence.Mongo.Mappers.BranchMongoMapper.BranchMongoMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.BranchId>! dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long>! companyDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId>! companyDataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.Address!, Fossa.API.Persistence.Mongo.Entities.AddressMongo!>! addressDomainToDataMapper, TIKSN.Mapping.IMapper<Fossa.API.Persistence.Mongo.Entities.AddressMongo!, Fossa.API.Core.Entities.Address!>! addressDataToDomainMapper, Fossa.API.Core.TimeZone.IDateTimeZoneProvider! dateTimeZoneProvider) -> void
+Fossa.API.Persistence.Mongo.Mappers.BranchMongoMapper.Map(Fossa.API.Core.Entities.BranchEntity! source) -> Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity!
+Fossa.API.Persistence.Mongo.Mappers.BranchMongoMapper.Map(Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity! source) -> Fossa.API.Core.Entities.BranchEntity!
+Fossa.API.Persistence.Mongo.Mappers.CompanyMongoMapper
+Fossa.API.Persistence.Mongo.Mappers.CompanyMongoMapper.CompanyMongoMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId>! dataIdentityToDomainIdentityMapper, TIKSN.Globalization.ICountryFactory! countryFactory) -> void
+Fossa.API.Persistence.Mongo.Mappers.CompanyMongoMapper.Map(Fossa.API.Core.Entities.CompanyEntity! source) -> Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity!
+Fossa.API.Persistence.Mongo.Mappers.CompanyMongoMapper.Map(Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity! source) -> Fossa.API.Core.Entities.CompanyEntity!
+Fossa.API.Persistence.Mongo.Mappers.CompanySettingsMongoMapper
+Fossa.API.Persistence.Mongo.Mappers.CompanySettingsMongoMapper.CompanySettingsMongoMapper(TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanySettingsId>! dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanySettingsId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId>! companyDataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long>! companyDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<string!, Fossa.API.Core.Entities.ColorSchemeId>! colorSchemeDataToDomainMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.ColorSchemeId, string!>! colorSchemeDomainToDataMapper) -> void
+Fossa.API.Persistence.Mongo.Mappers.CompanySettingsMongoMapper.Map(Fossa.API.Core.Entities.CompanySettingsEntity! source) -> Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity!
+Fossa.API.Persistence.Mongo.Mappers.CompanySettingsMongoMapper.Map(Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity! source) -> Fossa.API.Core.Entities.CompanySettingsEntity!
+Fossa.API.Persistence.Mongo.Mappers.DepartmentMongoMapper
+Fossa.API.Persistence.Mongo.Mappers.DepartmentMongoMapper.DepartmentMongoMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.DepartmentId>! dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long>! companyDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId>! companyDataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long>! employeeDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId>! employeeDataIdentityToDomainIdentityMapper) -> void
+Fossa.API.Persistence.Mongo.Mappers.DepartmentMongoMapper.Map(Fossa.API.Core.Entities.DepartmentEntity! source) -> Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity!
+Fossa.API.Persistence.Mongo.Mappers.DepartmentMongoMapper.Map(Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity! source) -> Fossa.API.Core.Entities.DepartmentEntity!
+Fossa.API.Persistence.Mongo.Mappers.EmployeeMongoMapper
+Fossa.API.Persistence.Mongo.Mappers.EmployeeMongoMapper.EmployeeMongoMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId>! dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long>! companyDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId>! companyDataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentId, long>! departmentDomainToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.DepartmentId>! departmentDataToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchId, long>! branchDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.BranchId>! branchDataIdentityToDomainIdentityMapper) -> void
+Fossa.API.Persistence.Mongo.Mappers.EmployeeMongoMapper.Map(Fossa.API.Core.Entities.EmployeeEntity! source) -> Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity!
+Fossa.API.Persistence.Mongo.Mappers.EmployeeMongoMapper.Map(Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity! source) -> Fossa.API.Core.Entities.EmployeeEntity!
+Fossa.API.Persistence.Mongo.Mappers.SystemPropertiesMongoMapper
+Fossa.API.Persistence.Mongo.Mappers.SystemPropertiesMongoMapper.Map(Fossa.API.Core.Entities.SystemPropertiesEntity! source) -> Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity!
+Fossa.API.Persistence.Mongo.Mappers.SystemPropertiesMongoMapper.Map(Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity! source) -> Fossa.API.Core.Entities.SystemPropertiesEntity!
+Fossa.API.Persistence.Mongo.Mappers.SystemPropertiesMongoMapper.SystemPropertiesMongoMapper(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.SystemPropertiesId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.SystemPropertiesId>! dataIdentityToDomainIdentityMapper) -> void
+Fossa.API.Persistence.Mongo.Repositories.BranchMongoRepository
+Fossa.API.Persistence.Mongo.Repositories.BranchMongoRepository.BranchMongoRepository(TIKSN.Data.Mongo.IMongoClientSessionProvider! mongoClientSessionProvider, TIKSN.Data.Mongo.IMongoDatabaseProvider! mongoDatabaseProvider) -> void
+Fossa.API.Persistence.Mongo.Repositories.BranchMongoRepository.CountAllAsync(long companyId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<int>!
+Fossa.API.Persistence.Mongo.Repositories.BranchMongoRepository.EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
+Fossa.API.Persistence.Mongo.Repositories.BranchMongoRepository.HasDependencyOnCompanyAsync(long companyId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.BranchMongoRepository.PageAsync(Fossa.API.Core.Repositories.TenantBranchPageQuery! pageQuery, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity!>!>!
+Fossa.API.Persistence.Mongo.Repositories.BranchRepositoryAdapter
+Fossa.API.Persistence.Mongo.Repositories.BranchRepositoryAdapter.BranchRepositoryAdapter(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchEntity!, Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity!>! domainEntityToDataEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity!, Fossa.API.Core.Entities.BranchEntity!>! dataEntityToDomainEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.BranchId>! dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long>! companyDomainIdentityToDataIdentityMapper, Fossa.API.Persistence.Mongo.Repositories.IBranchMongoRepository! dataRepository) -> void
+Fossa.API.Persistence.Mongo.Repositories.BranchRepositoryAdapter.CountAllAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<int>!
+Fossa.API.Persistence.Mongo.Repositories.BranchRepositoryAdapter.EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
+Fossa.API.Persistence.Mongo.Repositories.BranchRepositoryAdapter.HasDependencyAsync(Fossa.API.Core.Entities.CompanyId id, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.BranchRepositoryAdapter.PageAsync(Fossa.API.Core.Repositories.TenantBranchPageQuery! pageQuery, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Core.Entities.BranchEntity!>!>!
+Fossa.API.Persistence.Mongo.Repositories.CompanyMongoRepository
+Fossa.API.Persistence.Mongo.Repositories.CompanyMongoRepository.CompanyMongoRepository(TIKSN.Data.Mongo.IMongoClientSessionProvider! mongoClientSessionProvider, TIKSN.Data.Mongo.IMongoDatabaseProvider! mongoDatabaseProvider) -> void
+Fossa.API.Persistence.Mongo.Repositories.CompanyMongoRepository.CountAllAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<int>!
+Fossa.API.Persistence.Mongo.Repositories.CompanyMongoRepository.FindByTenantIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity!>>!
+Fossa.API.Persistence.Mongo.Repositories.CompanyMongoRepository.GetByTenantIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity!>!
+Fossa.API.Persistence.Mongo.Repositories.CompanyRepositoryAdapter
+Fossa.API.Persistence.Mongo.Repositories.CompanyRepositoryAdapter.CompanyRepositoryAdapter(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyEntity!, Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity!>! domainEntityToDataEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity!, Fossa.API.Core.Entities.CompanyEntity!>! dataEntityToDomainEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId>! dataIdentityToDomainIdentityMapper, Fossa.API.Persistence.Mongo.Repositories.ICompanyMongoRepository! dataRepository) -> void
+Fossa.API.Persistence.Mongo.Repositories.CompanyRepositoryAdapter.CountAllAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<int>!
+Fossa.API.Persistence.Mongo.Repositories.CompanyRepositoryAdapter.FindByTenantIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Core.Entities.CompanyEntity!>>!
+Fossa.API.Persistence.Mongo.Repositories.CompanyRepositoryAdapter.GetByTenantIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<Fossa.API.Core.Entities.CompanyEntity!>!
+Fossa.API.Persistence.Mongo.Repositories.CompanySettingsMongoRepository
+Fossa.API.Persistence.Mongo.Repositories.CompanySettingsMongoRepository.CompanySettingsMongoRepository(TIKSN.Data.Mongo.IMongoClientSessionProvider! mongoClientSessionProvider, TIKSN.Data.Mongo.IMongoDatabaseProvider! mongoDatabaseProvider) -> void
+Fossa.API.Persistence.Mongo.Repositories.CompanySettingsMongoRepository.EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
+Fossa.API.Persistence.Mongo.Repositories.CompanySettingsMongoRepository.FindByCompanyIdAsync(long companyId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity!>>!
+Fossa.API.Persistence.Mongo.Repositories.CompanySettingsMongoRepository.GetByCompanyIdAsync(long companyId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity!>!
+Fossa.API.Persistence.Mongo.Repositories.CompanySettingsMongoRepository.HasDependencyOnCompanyAsync(long companyId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.CompanySettingsRepositoryAdapter
+Fossa.API.Persistence.Mongo.Repositories.CompanySettingsRepositoryAdapter.CompanySettingsRepositoryAdapter(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanySettingsEntity!, Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity!>! domainEntityToDataEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity!, Fossa.API.Core.Entities.CompanySettingsEntity!>! dataEntityToDomainEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanySettingsId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanySettingsId>! dataIdentityToDomainIdentityMapper, Fossa.API.Persistence.Mongo.Repositories.ICompanySettingsMongoRepository! dataRepository, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long>! companyDomainIdentityToDataIdentityMapper) -> void
+Fossa.API.Persistence.Mongo.Repositories.CompanySettingsRepositoryAdapter.EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
+Fossa.API.Persistence.Mongo.Repositories.CompanySettingsRepositoryAdapter.FindByCompanyIdAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Core.Entities.CompanySettingsEntity!>>!
+Fossa.API.Persistence.Mongo.Repositories.CompanySettingsRepositoryAdapter.GetByCompanyIdAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<Fossa.API.Core.Entities.CompanySettingsEntity!>!
+Fossa.API.Persistence.Mongo.Repositories.CompanySettingsRepositoryAdapter.HasDependencyAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoRepository
+Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoRepository.CountAllAsync(long companyId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<int>!
+Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoRepository.DepartmentMongoRepository(TIKSN.Data.Mongo.IMongoClientSessionProvider! mongoClientSessionProvider, TIKSN.Data.Mongo.IMongoDatabaseProvider! mongoDatabaseProvider) -> void
+Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoRepository.EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
+Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoRepository.HasDependencyOnCompanyAsync(long companyId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoRepository.HasDependencyOnManagerAsync(long managerId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoRepository.HasDependencyOnParentAsync(long parentId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoRepository.PageAsync(Fossa.API.Core.Repositories.TenantDepartmentPageQuery! pageQuery, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity!>!>!
+Fossa.API.Persistence.Mongo.Repositories.DepartmentRepositoryAdapter
+Fossa.API.Persistence.Mongo.Repositories.DepartmentRepositoryAdapter.CountAllAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<int>!
+Fossa.API.Persistence.Mongo.Repositories.DepartmentRepositoryAdapter.DepartmentRepositoryAdapter(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentEntity!, Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity!>! domainEntityToDataEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity!, Fossa.API.Core.Entities.DepartmentEntity!>! dataEntityToDomainEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.DepartmentId>! dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long>! companyDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long>! employeeDomainIdentityToDataIdentityMapper, Fossa.API.Persistence.Mongo.Repositories.IDepartmentMongoRepository! dataRepository) -> void
+Fossa.API.Persistence.Mongo.Repositories.DepartmentRepositoryAdapter.EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
+Fossa.API.Persistence.Mongo.Repositories.DepartmentRepositoryAdapter.HasDependencyAsync(Fossa.API.Core.Entities.CompanyId id, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.DepartmentRepositoryAdapter.HasDependencyAsync(Fossa.API.Core.Entities.DepartmentId id, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.DepartmentRepositoryAdapter.HasDependencyAsync(Fossa.API.Core.Entities.EmployeeId id, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.DepartmentRepositoryAdapter.PageAsync(Fossa.API.Core.Repositories.TenantDepartmentPageQuery! pageQuery, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Core.Entities.DepartmentEntity!>!>!
+Fossa.API.Persistence.Mongo.Repositories.EmployeeMongoRepository
+Fossa.API.Persistence.Mongo.Repositories.EmployeeMongoRepository.CountAllAsync(long companyId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<int>!
+Fossa.API.Persistence.Mongo.Repositories.EmployeeMongoRepository.EmployeeMongoRepository(TIKSN.Data.Mongo.IMongoClientSessionProvider! mongoClientSessionProvider, TIKSN.Data.Mongo.IMongoDatabaseProvider! mongoDatabaseProvider) -> void
+Fossa.API.Persistence.Mongo.Repositories.EmployeeMongoRepository.EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
+Fossa.API.Persistence.Mongo.Repositories.EmployeeMongoRepository.FindByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity!>>!
+Fossa.API.Persistence.Mongo.Repositories.EmployeeMongoRepository.GetByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity!>!
+Fossa.API.Persistence.Mongo.Repositories.EmployeeMongoRepository.HasDependencyOnBranchAsync(long branchId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.EmployeeMongoRepository.HasDependencyOnCompanyAsync(long companyId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.EmployeeMongoRepository.HasDependencyOnDepartmentAsync(long departmentId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.EmployeeMongoRepository.HasDependencyOnEmployeeAsync(long employeeId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.EmployeeMongoRepository.PageAsync(Fossa.API.Core.Repositories.TenantEmployeePageQuery! pageQuery, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity!>!>!
+Fossa.API.Persistence.Mongo.Repositories.EmployeeRepositoryAdapter
+Fossa.API.Persistence.Mongo.Repositories.EmployeeRepositoryAdapter.CountAllAsync(Fossa.API.Core.Entities.CompanyId companyId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<int>!
+Fossa.API.Persistence.Mongo.Repositories.EmployeeRepositoryAdapter.EmployeeRepositoryAdapter(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeEntity!, Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity!>! domainEntityToDataEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity!, Fossa.API.Core.Entities.EmployeeEntity!>! dataEntityToDomainEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId>! dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long>! companyDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchId, long>! branchDomainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentId, long>! departmentDomainIdentityToDataIdentityMapper, Fossa.API.Persistence.Mongo.Repositories.IEmployeeMongoRepository! dataRepository) -> void
+Fossa.API.Persistence.Mongo.Repositories.EmployeeRepositoryAdapter.EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
+Fossa.API.Persistence.Mongo.Repositories.EmployeeRepositoryAdapter.FindByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Core.Entities.EmployeeEntity!>>!
+Fossa.API.Persistence.Mongo.Repositories.EmployeeRepositoryAdapter.GetByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<Fossa.API.Core.Entities.EmployeeEntity!>!
+Fossa.API.Persistence.Mongo.Repositories.EmployeeRepositoryAdapter.HasDependencyAsync(Fossa.API.Core.Entities.BranchId id, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.EmployeeRepositoryAdapter.HasDependencyAsync(Fossa.API.Core.Entities.CompanyId id, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.EmployeeRepositoryAdapter.HasDependencyAsync(Fossa.API.Core.Entities.DepartmentId id, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.EmployeeRepositoryAdapter.HasDependencyAsync(Fossa.API.Core.Entities.EmployeeId id, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.EmployeeRepositoryAdapter.PageAsync(Fossa.API.Core.Repositories.TenantEmployeePageQuery! pageQuery, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Core.Entities.EmployeeEntity!>!>!
+Fossa.API.Persistence.Mongo.Repositories.IBranchMongoRepository
+Fossa.API.Persistence.Mongo.Repositories.IBranchMongoRepository.CountAllAsync(long companyId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<int>!
+Fossa.API.Persistence.Mongo.Repositories.IBranchMongoRepository.EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
+Fossa.API.Persistence.Mongo.Repositories.IBranchMongoRepository.HasDependencyOnCompanyAsync(long companyId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.IBranchMongoRepository.PageAsync(Fossa.API.Core.Repositories.TenantBranchPageQuery! pageQuery, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity!>!>!
+Fossa.API.Persistence.Mongo.Repositories.ICompanyMongoRepository
+Fossa.API.Persistence.Mongo.Repositories.ICompanyMongoRepository.CountAllAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<int>!
+Fossa.API.Persistence.Mongo.Repositories.ICompanyMongoRepository.FindByTenantIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity!>>!
+Fossa.API.Persistence.Mongo.Repositories.ICompanyMongoRepository.GetByTenantIdAsync(System.Guid tenantId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity!>!
+Fossa.API.Persistence.Mongo.Repositories.ICompanySettingsMongoRepository
+Fossa.API.Persistence.Mongo.Repositories.ICompanySettingsMongoRepository.EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
+Fossa.API.Persistence.Mongo.Repositories.ICompanySettingsMongoRepository.FindByCompanyIdAsync(long companyId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity!>>!
+Fossa.API.Persistence.Mongo.Repositories.ICompanySettingsMongoRepository.GetByCompanyIdAsync(long companyId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity!>!
+Fossa.API.Persistence.Mongo.Repositories.ICompanySettingsMongoRepository.HasDependencyOnCompanyAsync(long companyId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.IDepartmentMongoRepository
+Fossa.API.Persistence.Mongo.Repositories.IDepartmentMongoRepository.CountAllAsync(long companyId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<int>!
+Fossa.API.Persistence.Mongo.Repositories.IDepartmentMongoRepository.EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
+Fossa.API.Persistence.Mongo.Repositories.IDepartmentMongoRepository.HasDependencyOnCompanyAsync(long companyId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.IDepartmentMongoRepository.HasDependencyOnManagerAsync(long managerId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.IDepartmentMongoRepository.HasDependencyOnParentAsync(long parentId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.IDepartmentMongoRepository.PageAsync(Fossa.API.Core.Repositories.TenantDepartmentPageQuery! pageQuery, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity!>!>!
+Fossa.API.Persistence.Mongo.Repositories.IEmployeeMongoRepository
+Fossa.API.Persistence.Mongo.Repositories.IEmployeeMongoRepository.CountAllAsync(long companyId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<int>!
+Fossa.API.Persistence.Mongo.Repositories.IEmployeeMongoRepository.EnsureIndexesCreatedAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
+Fossa.API.Persistence.Mongo.Repositories.IEmployeeMongoRepository.FindByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<LanguageExt.Option<Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity!>>!
+Fossa.API.Persistence.Mongo.Repositories.IEmployeeMongoRepository.GetByUserIdAsync(System.Guid userId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity!>!
+Fossa.API.Persistence.Mongo.Repositories.IEmployeeMongoRepository.HasDependencyOnBranchAsync(long branchId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.IEmployeeMongoRepository.HasDependencyOnCompanyAsync(long companyId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.IEmployeeMongoRepository.HasDependencyOnDepartmentAsync(long departmentId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.IEmployeeMongoRepository.HasDependencyOnEmployeeAsync(long employeeId, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
+Fossa.API.Persistence.Mongo.Repositories.IEmployeeMongoRepository.PageAsync(Fossa.API.Core.Repositories.TenantEmployeePageQuery! pageQuery, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<TIKSN.Data.PageResult<Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity!>!>!
+Fossa.API.Persistence.Mongo.Repositories.ISystemPropertiesMongoRepository
+Fossa.API.Persistence.Mongo.Repositories.LicenseMongoFileRepository
+Fossa.API.Persistence.Mongo.Repositories.LicenseMongoFileRepository.LicenseMongoFileRepository(TIKSN.Data.Mongo.IMongoDatabaseProvider! mongoDatabaseProvider) -> void
+Fossa.API.Persistence.Mongo.Repositories.MongoClientProvider
+Fossa.API.Persistence.Mongo.Repositories.MongoClientProvider.MongoClientProvider(Microsoft.Extensions.Configuration.IConfiguration! configuration) -> void
+Fossa.API.Persistence.Mongo.Repositories.MongoDatabaseProvider
+Fossa.API.Persistence.Mongo.Repositories.MongoDatabaseProvider.MongoDatabaseProvider(TIKSN.Data.Mongo.IMongoClientProvider! mongoClientProvider, Microsoft.Extensions.Configuration.IConfiguration! configuration) -> void
+Fossa.API.Persistence.Mongo.Repositories.MongoRepositoryHelper
+Fossa.API.Persistence.Mongo.Repositories.SystemPropertiesMongoRepository
+Fossa.API.Persistence.Mongo.Repositories.SystemPropertiesMongoRepository.SystemPropertiesMongoRepository(TIKSN.Data.Mongo.IMongoClientSessionProvider! mongoClientSessionProvider, TIKSN.Data.Mongo.IMongoDatabaseProvider! mongoDatabaseProvider) -> void
+Fossa.API.Persistence.Mongo.Repositories.SystemPropertiesRepositoryAdapter
+Fossa.API.Persistence.Mongo.Repositories.SystemPropertiesRepositoryAdapter.SystemPropertiesRepositoryAdapter(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.SystemPropertiesEntity!, Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity!>! domainEntityToDataEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity!, Fossa.API.Core.Entities.SystemPropertiesEntity!>! dataEntityToDomainEntityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.SystemPropertiesId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.SystemPropertiesId>! dataIdentityToDomainIdentityMapper, Fossa.API.Persistence.Mongo.Repositories.ISystemPropertiesMongoRepository! dataRepository) -> void
+override Fossa.API.Persistence.DefaultPersistenceModule.Load(Autofac.ContainerBuilder! builder) -> void
+override Fossa.API.Persistence.Mongo.Repositories.BranchMongoRepository.PageSortDefinition.get -> MongoDB.Driver.SortDefinition<Fossa.API.Persistence.Mongo.Entities.BranchMongoEntity!>!
+override Fossa.API.Persistence.Mongo.Repositories.CompanyMongoRepository.PageSortDefinition.get -> MongoDB.Driver.SortDefinition<Fossa.API.Persistence.Mongo.Entities.CompanyMongoEntity!>!
+override Fossa.API.Persistence.Mongo.Repositories.CompanySettingsMongoRepository.PageSortDefinition.get -> MongoDB.Driver.SortDefinition<Fossa.API.Persistence.Mongo.Entities.CompanySettingsMongoEntity!>!
+override Fossa.API.Persistence.Mongo.Repositories.DepartmentMongoRepository.PageSortDefinition.get -> MongoDB.Driver.SortDefinition<Fossa.API.Persistence.Mongo.Entities.DepartmentMongoEntity!>!
+override Fossa.API.Persistence.Mongo.Repositories.EmployeeMongoRepository.PageSortDefinition.get -> MongoDB.Driver.SortDefinition<Fossa.API.Persistence.Mongo.Entities.EmployeeMongoEntity!>!
+override Fossa.API.Persistence.Mongo.Repositories.MongoClientProvider.ConfigureClientSettings(MongoDB.Driver.MongoClientSettings! mongoClientSettings) -> void
+override Fossa.API.Persistence.Mongo.Repositories.SystemPropertiesMongoRepository.PageSortDefinition.get -> MongoDB.Driver.SortDefinition<Fossa.API.Persistence.Mongo.Entities.SystemPropertiesMongoEntity!>!
+static Fossa.API.Persistence.Mongo.Repositories.MongoRepositoryHelper.CreateDefaultCollation() -> MongoDB.Driver.Collation!

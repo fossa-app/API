@@ -77,12 +77,12 @@ public class TestKafkaProducer : IProducer<string?, byte[]>
 
   public Task<DeliveryResult<string?, byte[]>> ProduceAsync(string topic, Message<string?, byte[]> message, CancellationToken cancellationToken = default)
   {
-    throw new NotImplementedException();
+    return Task.FromResult<DeliveryResult<string?, byte[]>>(null!);
   }
 
   public Task<DeliveryResult<string?, byte[]>> ProduceAsync(TopicPartition topicPartition, Message<string?, byte[]> message, CancellationToken cancellationToken = default)
   {
-    throw new NotImplementedException();
+    return Task.FromResult<DeliveryResult<string?, byte[]>>(null!);
   }
 
   public void SendOffsetsToTransaction(IEnumerable<TopicPartitionOffset> offsets, IConsumerGroupMetadata groupMetadata, TimeSpan timeout)
@@ -90,3 +90,6 @@ public class TestKafkaProducer : IProducer<string?, byte[]>
     throw new NotImplementedException();
   }
 }
+
+
+
