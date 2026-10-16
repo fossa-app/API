@@ -64,7 +64,7 @@ Task Publish Pack, {
 }
 
 # Synopsis: Pack Docker image artifact
-Task Pack Build, Test, Ward, {
+Task Pack Build, Test, {
     $state = Import-Clixml -Path ".\.trash\$Instance\state.clixml"
     $dockerImageName = $state.DockerImageName
     $nextVersion = $state.NextVersion
@@ -265,25 +265,6 @@ Task RestorePackages Clean, EnsureCentralPackageVersions, {
     Exec { dotnet restore $solution }
 }
 
-# Synopsis: Store away public API contracts
-Task Ward Init, {
-    $state = Import-Clixml -Path ".\.trash\$Instance\state.clixml"
-    $contractsArtifactsFolder = $state.ContractsArtifactsFolder
-
-    $inputFiles = Get-ChildItem -Path *AssemblyHasNoPublicAPIChangesAsync.verified.txt -Recurse
-    $outoutFiles = $inputFiles
-    | ForEach-Object {
-        $outputFileName = $PSItem.Name -replace '.txt', '.cs'
-
-        $outputFilePath = Join-Path -Path $contractsArtifactsFolder -ChildPath $outputFileName
-
-        Copy-Item -Path $PSItem -Destination $outputFilePath -Force
-        Resolve-Path -Path $outputFilePath
-    }
-
-    $outoutFiles | Out-Host
-}
-
 # Synopsis: Ensure Central Package Versions compliance
 Task EnsureCentralPackageVersions Clean, {
 
@@ -340,9 +321,6 @@ Task Init {
     $buildArtifactsFolder = Join-Path -Path $trashFolder -ChildPath 'artifacts'
     New-Item -Path $buildArtifactsFolder -ItemType Directory | Out-Null
 
-    $contractsArtifactsFolder = Join-Path -Path $buildArtifactsFolder -ChildPath 'contracts'
-    New-Item -Path $contractsArtifactsFolder -ItemType Directory | Out-Null
-
     $linuxX64BuildArtifactsFolder = Join-Path -Path $buildArtifactsFolder -ChildPath 'linux-x64'
     New-Item -Path $linuxX64BuildArtifactsFolder -ItemType Directory | Out-Null
 
@@ -356,7 +334,6 @@ Task Init {
         NextVersion                     = $null
         TrashFolder                     = $trashFolder
         BuildArtifactsFolder            = $buildArtifactsFolder
-        ContractsArtifactsFolder        = $contractsArtifactsFolder
         LinuxX64BuildArtifactsFolder    = $linuxX64BuildArtifactsFolder
         LinuxArm64BuildArtifactsFolder  = $linuxArm64BuildArtifactsFolder
         WinX64BuildArtifactsFolder      = $winX64BuildArtifactsFolder
