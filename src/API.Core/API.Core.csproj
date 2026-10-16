@@ -30,6 +30,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" />
+    <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <Using Include="LanguageExt" />
     <Using Include="LanguageExt.Common" />
     <Using Include="LanguageExt.Effects" />
@@ -49,5 +53,9 @@
     <!--<Using Include="LanguageExt.Traits.Domain" />-->
     <Using Include="MediatR" />
     <Using Include="MediatR.Unit" Alias="Unit" />
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="PublicAPI.Shipped.txt" />
+    <AdditionalFiles Include="PublicAPI.Unshipped.txt" />
   </ItemGroup>
 </Project>

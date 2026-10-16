@@ -20,9 +20,7 @@
     <ProjectReference Include="..\API.UnitTests\API.UnitTests.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="PublicApiGenerator" />
     <PackageReference Include="ReportGenerator" />
-    <PackageReference Include="Verify.XunitV3" />
     <Using Include="Xunit" />
     <Using Include="LanguageExt" />
     <Using Include="LanguageExt.Common" />

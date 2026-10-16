@@ -8,6 +8,13 @@ namespace Fossa.API.Web.HealthChecks.DependencyInjection;
 /// </summary>
 public static class MongoDbHealthCheckBuilderExtensions
 {
+  public static IHealthChecksBuilder AddMongoDb(
+      this IHealthChecksBuilder builder,
+      string mongodbConnectionString)
+  {
+    return builder.AddMongoDb(mongodbConnectionString, default, default, default, default);
+  }
+
   private const string NAME = "mongodb";
 
   /// <summary>
@@ -26,10 +33,10 @@ public static class MongoDbHealthCheckBuilderExtensions
   public static IHealthChecksBuilder AddMongoDb(
       this IHealthChecksBuilder builder,
       string mongodbConnectionString,
-      string? name = default,
-      HealthStatus? failureStatus = default,
-      IEnumerable<string>? tags = default,
-      TimeSpan? timeout = default)
+      string? name,
+      HealthStatus? failureStatus,
+      IEnumerable<string>? tags,
+      TimeSpan? timeout)
   {
     return builder.Add(new HealthCheckRegistration(
         name ?? NAME,
@@ -57,10 +64,10 @@ public static class MongoDbHealthCheckBuilderExtensions
       this IHealthChecksBuilder builder,
       string mongodbConnectionString,
       string mongoDatabaseName,
-      string? name = default,
-      HealthStatus? failureStatus = default,
-      IEnumerable<string>? tags = default,
-      TimeSpan? timeout = default)
+      string? name,
+      HealthStatus? failureStatus,
+      IEnumerable<string>? tags,
+      TimeSpan? timeout)
   {
     return builder.Add(new HealthCheckRegistration(
         name ?? NAME,
@@ -86,10 +93,10 @@ public static class MongoDbHealthCheckBuilderExtensions
   public static IHealthChecksBuilder AddMongoDb(
       this IHealthChecksBuilder builder,
       Func<IServiceProvider, string> mongodbConnectionStringFactory,
-      string? name = default,
-      HealthStatus? failureStatus = default,
-      IEnumerable<string>? tags = default,
-      TimeSpan? timeout = default)
+      string? name,
+      HealthStatus? failureStatus,
+      IEnumerable<string>? tags,
+      TimeSpan? timeout)
   {
     return builder.Add(new HealthCheckRegistration(
         name ?? NAME,
@@ -117,10 +124,10 @@ public static class MongoDbHealthCheckBuilderExtensions
       this IHealthChecksBuilder builder,
       Func<IServiceProvider, string> mongodbConnectionStringFactory,
       string mongoDatabaseName,
-      string? name = default,
-      HealthStatus? failureStatus = default,
-      IEnumerable<string>? tags = default,
-      TimeSpan? timeout = default)
+      string? name,
+      HealthStatus? failureStatus,
+      IEnumerable<string>? tags,
+      TimeSpan? timeout)
   {
     return builder.Add(new HealthCheckRegistration(
         name ?? NAME,
@@ -146,10 +153,10 @@ public static class MongoDbHealthCheckBuilderExtensions
   public static IHealthChecksBuilder AddMongoDb(
       this IHealthChecksBuilder builder,
       MongoClientSettings mongoClientSettings,
-      string? name = default,
-      HealthStatus? failureStatus = default,
-      IEnumerable<string>? tags = default,
-      TimeSpan? timeout = default)
+      string? name,
+      HealthStatus? failureStatus,
+      IEnumerable<string>? tags,
+      TimeSpan? timeout)
   {
     return builder.Add(new HealthCheckRegistration(
         name ?? NAME,
@@ -177,10 +184,10 @@ public static class MongoDbHealthCheckBuilderExtensions
       this IHealthChecksBuilder builder,
       MongoClientSettings mongoClientSettings,
       string mongoDatabaseName,
-      string? name = default,
-      HealthStatus? failureStatus = default,
-      IEnumerable<string>? tags = default,
-      TimeSpan? timeout = default)
+      string? name,
+      HealthStatus? failureStatus,
+      IEnumerable<string>? tags,
+      TimeSpan? timeout)
   {
     return builder.Add(new HealthCheckRegistration(
         name ?? NAME,
@@ -206,10 +213,10 @@ public static class MongoDbHealthCheckBuilderExtensions
   public static IHealthChecksBuilder AddMongoDb(
       this IHealthChecksBuilder builder,
       Func<IServiceProvider, IMongoClient> mongoClientFactory,
-      string? name = default,
-      HealthStatus? failureStatus = default,
-      IEnumerable<string>? tags = default,
-      TimeSpan? timeout = default)
+      string? name,
+      HealthStatus? failureStatus,
+      IEnumerable<string>? tags,
+      TimeSpan? timeout)
   {
     return builder.Add(new HealthCheckRegistration(
         name ?? NAME,
@@ -237,10 +244,10 @@ public static class MongoDbHealthCheckBuilderExtensions
       this IHealthChecksBuilder builder,
       Func<IServiceProvider, IMongoClient> mongoClientFactory,
       string mongoDatabaseName,
-      string? name = default,
-      HealthStatus? failureStatus = default,
-      IEnumerable<string>? tags = default,
-      TimeSpan? timeout = default)
+      string? name,
+      HealthStatus? failureStatus,
+      IEnumerable<string>? tags,
+      TimeSpan? timeout)
   {
     return builder.Add(new HealthCheckRegistration(
         name ?? NAME,
