@@ -9,6 +9,10 @@
     <PackageReference Include="Autofac.Extensions.DependencyInjection" />
     <PackageReference Include="Fossa.Bridge" />
     <PackageReference Include="Fossa.Messaging" />
+    <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="TIKSN-Framework" />
   </ItemGroup>
   <ItemGroup>
@@ -34,5 +38,9 @@
     <!--<Using Include="LanguageExt.Traits.Domain" />-->
     <Using Include="MediatR" />
     <Using Include="MediatR.Unit" Alias="Unit" />
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="PublicAPI.Shipped.txt" />
+    <AdditionalFiles Include="PublicAPI.Unshipped.txt" />
   </ItemGroup>
 </Project>

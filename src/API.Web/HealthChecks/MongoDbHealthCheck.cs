@@ -12,7 +12,12 @@ public class MongoDbHealthCheck : IHealthCheck
   private readonly MongoClientSettings _mongoClientSettings;
   private readonly string? _specifiedDatabase;
 
-  public MongoDbHealthCheck(string connectionString, string? databaseName = default)
+  public MongoDbHealthCheck(string connectionString)
+      : this(connectionString, default)
+  {
+  }
+
+  public MongoDbHealthCheck(string connectionString, string? databaseName)
       : this(MongoClientSettings.FromUrl(MongoUrl.Create(connectionString)), databaseName)
   {
     if (databaseName == default)
@@ -21,13 +26,23 @@ public class MongoDbHealthCheck : IHealthCheck
     }
   }
 
-  public MongoDbHealthCheck(IMongoClient client, string? databaseName = default)
+  public MongoDbHealthCheck(IMongoClient client)
+      : this(client, default)
+  {
+  }
+
+  public MongoDbHealthCheck(IMongoClient client, string? databaseName)
       : this(client.Settings, databaseName)
   {
     _mongoClient[_mongoClientSettings.ToString()] = client;
   }
 
-  public MongoDbHealthCheck(MongoClientSettings clientSettings, string? databaseName = default)
+  public MongoDbHealthCheck(MongoClientSettings clientSettings)
+      : this(clientSettings, default)
+  {
+  }
+
+  public MongoDbHealthCheck(MongoClientSettings clientSettings, string? databaseName)
   {
     _specifiedDatabase = databaseName;
     _mongoClientSettings = clientSettings;
