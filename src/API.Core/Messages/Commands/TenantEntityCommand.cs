@@ -1,4 +1,5 @@
 ﻿using TIKSN.Data;
+using TIKSN.Integration.Messages;
 using TIKSN.Integration.Messages.Commands;
 
 namespace Fossa.API.Core.Messages.Commands;

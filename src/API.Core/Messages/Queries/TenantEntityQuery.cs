@@ -1,8 +1,8 @@
 ﻿using TIKSN.Data;
+using TIKSN.Integration.Messages;
 using TIKSN.Integration.Messages.Queries;
 
 namespace Fossa.API.Core.Messages.Queries;
-
 
 public abstract record TenantEntityQuery<TEntity, TEntityIdentity, TTenantIdentity, TResult>(
   TTenantIdentity TenantID)
@@ -16,4 +16,3 @@ public abstract record TenantEntityQuery<TEntity, TEntityIdentity, TTenantIdenti
   public IEnumerable<EntityReference<TEntityIdentity>> TenantEntityReferences
     => TenantEntityIdentities.Select(x => new EntityReference<TEntityIdentity>(typeof(TEntity), x));
 }
-

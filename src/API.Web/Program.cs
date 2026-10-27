@@ -3,14 +3,12 @@ using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using FluentValidation;
 using Fossa.API.Core;
-using Fossa.API.Core.Messages;
 using Fossa.API.Core.Services;
 using Fossa.API.Infrastructure;
 using Fossa.API.Infrastructure.RestClients;
 using Fossa.API.Persistence;
 using Fossa.API.Web;
 using Fossa.API.Web.DependencyInjection;
-using Fossa.API.Web.Filters;
 using Fossa.API.Web.HealthChecks.DependencyInjection;
 using Fossa.Licensing;
 using Fossa.Messaging;
@@ -27,6 +25,8 @@ using OpenTelemetry.Trace;
 using Scalar.AspNetCore;
 using TIKSN.DependencyInjection;
 using TIKSN.Deployment;
+using TIKSN.Diagnostics.Logging;
+using TIKSN.Integration.Messages;
 using TIKSN.Mapping;
 
 const string ApplicationName = "Fossa";
@@ -121,9 +121,9 @@ builder.Services.AddMediatR(cfg =>
 {
   cfg.Lifetime = ServiceLifetime.Scoped;
   cfg.RegisterServicesFromAssemblies(assemblies);
-  cfg.AddOpenBehavior(typeof(TenantRequestBehavior<,,,>));
-  cfg.AddOpenBehavior(typeof(PagingQueryBehavior<,>));
-  cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+  cfg.AddTenantPipelineBehaviors();
+  cfg.AddPagingQueryPipelineBehavior();
+  cfg.AddValidationPipelineBehavior();
 });
 
 builder.Services.AddValidatorsFromAssemblies(assemblies);
@@ -161,7 +161,7 @@ builder.Services.AddOpenTelemetry()
     .AddAspNetCoreInstrumentation()
     .AddHttpClientInstrumentation()
   )
-  .WithLogging(logging => logging.AddProcessor(new EnrichLogRecordWithEventIdProcessor()), options =>
+  .WithLogging(logging => logging.AddEventIdEnrichment(), options =>
   {
     options.IncludeFormattedMessage = true;
     options.IncludeScopes = true;

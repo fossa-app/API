@@ -1,7 +1,6 @@
 ﻿using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Net.Mail;
-using Fossa.API.Core.Extensions;
 using Fossa.API.Core.Services;
 using Fossa.API.FunctionalTests.Repositories;
 using Fossa.API.FunctionalTests.Services;
@@ -10,6 +9,7 @@ using Fossa.Licensing;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using TIKSN.Licensing;
+using TIKSN.Validation;
 
 namespace Fossa.API.FunctionalTests.Seed;
 

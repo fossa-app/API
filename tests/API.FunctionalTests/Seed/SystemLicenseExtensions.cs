@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using System.Net.Mail;
-using Fossa.API.Core.Extensions;
 using Fossa.API.Core.Services;
 using Fossa.API.FunctionalTests.Repositories;
 using Fossa.API.FunctionalTests.Services;
@@ -10,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using TIKSN.Deployment;
 using TIKSN.Globalization;
 using TIKSN.Licensing;
+using TIKSN.Validation;
 
 namespace Fossa.API.FunctionalTests.Seed;
 

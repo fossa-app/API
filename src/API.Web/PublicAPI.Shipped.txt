@@ -49,23 +49,16 @@ Fossa.API.Web.Api.Identity.ClientController
 Fossa.API.Web.Api.Identity.ClientController.ClientController(MediatR.ISender! sender, MediatR.IPublisher! publisher) -> void
 Fossa.API.Web.Api.Identity.ClientController.GetAsync(string? origin, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<Fossa.Bridge.Models.ApiModels.IdentityClientRetrievalModel!>!
 Fossa.API.Web.Api.License.CompanyController
-Fossa.API.Web.Api.License.CompanyController.CompanyController(MediatR.ISender! sender, MediatR.IPublisher! publisher, TIKSN.Mapping.IMapper<TIKSN.Licensing.License<Fossa.Licensing.CompanyEntitlements!>!, Fossa.Bridge.Models.ApiModels.LicenseResponseModel<Fossa.Bridge.Models.ApiModels.CompanyEntitlementsModel!>!>! licenseMapper, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider) -> void
 Fossa.API.Web.Api.License.CompanyController.CreateAsync(Microsoft.AspNetCore.Http.IFormFile! licenseFile, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
 Fossa.API.Web.Api.License.CompanyController.GetAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<Fossa.Bridge.Models.ApiModels.LicenseResponseModel<Fossa.Bridge.Models.ApiModels.CompanyEntitlementsModel!>!>!
 Fossa.API.Web.Api.License.SystemController
 Fossa.API.Web.Api.License.SystemController.GetAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<Fossa.Bridge.Models.ApiModels.LicenseResponseModel<Fossa.Bridge.Models.ApiModels.SystemEntitlementsModel!>!>!
 Fossa.API.Web.Api.License.SystemController.SystemController(MediatR.ISender! sender, MediatR.IPublisher! publisher, TIKSN.Mapping.IMapper<TIKSN.Licensing.License<Fossa.Licensing.SystemEntitlements!>!, Fossa.Bridge.Models.ApiModels.LicenseResponseModel<Fossa.Bridge.Models.ApiModels.SystemEntitlementsModel!>!>! licenseMapper) -> void
-Fossa.API.Web.Claims.ClaimNotFoundException
-Fossa.API.Web.Claims.ClaimNotFoundException.ClaimNotFoundException() -> void
-Fossa.API.Web.Claims.ClaimNotFoundException.ClaimNotFoundException(string! message) -> void
-Fossa.API.Web.Claims.ClaimNotFoundException.ClaimNotFoundException(string! message, System.Exception! inner) -> void
 Fossa.API.Web.Claims.ClaimsProvider
 Fossa.API.Web.Claims.ClaimsProvider.ClaimsProvider(Microsoft.AspNetCore.Http.IHttpContextAccessor! httpContextAccessor) -> void
 Fossa.API.Web.DefaultWebModule
 Fossa.API.Web.DefaultWebModule.DefaultWebModule() -> void
 Fossa.API.Web.DependencyInjection.ServiceCollectionExtensions
-Fossa.API.Web.Filters.EnrichLogRecordWithEventIdProcessor
-Fossa.API.Web.Filters.EnrichLogRecordWithEventIdProcessor.EnrichLogRecordWithEventIdProcessor() -> void
 Fossa.API.Web.HealthChecks.DependencyInjection.MongoDbHealthCheckBuilderExtensions
 Fossa.API.Web.HealthChecks.DependencyInjection.SystemLicenseHealthCheckBuilderExtensions
 Fossa.API.Web.HealthChecks.MongoDbHealthCheck
@@ -127,11 +120,8 @@ Fossa.API.Web.Mappers.TimeZoneModelMapper
 Fossa.API.Web.Mappers.TimeZoneModelMapper.Map(NodaTime.DateTimeZone! source) -> Fossa.Bridge.Models.ApiModels.TimeZoneModel!
 Fossa.API.Web.Mappers.TimeZoneModelMapper.TimeZoneModelMapper(TIKSN.Globalization.IDateTimeZoneLookup! dateTimeZoneLookup, NodaTime.IClock! clock) -> void
 Fossa.API.Web.Messages.ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse, TDomainRequest, TDomainResponse>
-Fossa.API.Web.Messages.ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse, TDomainRequest, TDomainResponse>.ApiMessageHandler(MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<TEntityIdentity, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, TEntityIdentity>! dataIdentityToDomainIdentityMapper) -> void
 Fossa.API.Web.Messages.ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse, TDomainRequest1, TDomainResponse1, TDomainRequest2, TDomainResponse2>
-Fossa.API.Web.Messages.ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse, TDomainRequest1, TDomainResponse1, TDomainRequest2, TDomainResponse2>.ApiMessageHandler(MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<TEntityIdentity, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, TEntityIdentity>! dataIdentityToDomainIdentityMapper) -> void
 Fossa.API.Web.Messages.ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse>
-Fossa.API.Web.Messages.ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse>.ApiMessageHandler(MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<TEntityIdentity, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, TEntityIdentity>! dataIdentityToDomainIdentityMapper) -> void
 Fossa.API.Web.Messages.ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse>.ApiTypeMap
 Fossa.API.Web.Messages.ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse>.ApiTypeMap.ApiTypeMap() -> void
 Fossa.API.Web.Messages.ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse>.DomainTypeMap
@@ -150,7 +140,6 @@ Fossa.API.Web.Messages.Commands.BranchCreationApiCommand.Name.init -> void
 Fossa.API.Web.Messages.Commands.BranchCreationApiCommand.TimeZoneId.get -> string?
 Fossa.API.Web.Messages.Commands.BranchCreationApiCommand.TimeZoneId.init -> void
 Fossa.API.Web.Messages.Commands.BranchCreationApiCommandHandler
-Fossa.API.Web.Messages.Commands.BranchCreationApiCommandHandler.BranchCreationApiCommandHandler(Fossa.API.Core.TimeZone.IDateTimeZoneProvider! dateTimeZoneProvider, TIKSN.Mapping.IMapper<Fossa.Bridge.Models.ApiModels.AddressModel!, Fossa.API.Core.Entities.Address!>! addressModelToDomainMapper, MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.BranchId>! dataIdentityToDomainIdentityMapper) -> void
 Fossa.API.Web.Messages.Commands.BranchDeletionApiCommand
 Fossa.API.Web.Messages.Commands.BranchDeletionApiCommand.BranchDeletionApiCommand(Fossa.API.Web.Messages.Commands.BranchDeletionApiCommand! original) -> void
 Fossa.API.Web.Messages.Commands.BranchDeletionApiCommand.BranchDeletionApiCommand(long Id) -> void
@@ -158,7 +147,6 @@ Fossa.API.Web.Messages.Commands.BranchDeletionApiCommand.Deconstruct(out long Id
 Fossa.API.Web.Messages.Commands.BranchDeletionApiCommand.Id.get -> long
 Fossa.API.Web.Messages.Commands.BranchDeletionApiCommand.Id.init -> void
 Fossa.API.Web.Messages.Commands.BranchDeletionApiCommandHandler
-Fossa.API.Web.Messages.Commands.BranchDeletionApiCommandHandler.BranchDeletionApiCommandHandler(MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.BranchId>! dataIdentityToDomainIdentityMapper) -> void
 Fossa.API.Web.Messages.Commands.BranchModificationApiCommand
 Fossa.API.Web.Messages.Commands.BranchModificationApiCommand.Address.get -> Fossa.Bridge.Models.ApiModels.AddressModel?
 Fossa.API.Web.Messages.Commands.BranchModificationApiCommand.Address.init -> void
@@ -172,7 +160,6 @@ Fossa.API.Web.Messages.Commands.BranchModificationApiCommand.Name.init -> void
 Fossa.API.Web.Messages.Commands.BranchModificationApiCommand.TimeZoneId.get -> string?
 Fossa.API.Web.Messages.Commands.BranchModificationApiCommand.TimeZoneId.init -> void
 Fossa.API.Web.Messages.Commands.BranchModificationApiCommandHandler
-Fossa.API.Web.Messages.Commands.BranchModificationApiCommandHandler.BranchModificationApiCommandHandler(Fossa.API.Core.TimeZone.IDateTimeZoneProvider! dateTimeZoneProvider, TIKSN.Mapping.IMapper<Fossa.Bridge.Models.ApiModels.AddressModel!, Fossa.API.Core.Entities.Address!>! addressModelToDomainMapper, MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.BranchId>! dataIdentityToDomainIdentityMapper) -> void
 Fossa.API.Web.Messages.Commands.CompanyCreationApiCommand
 Fossa.API.Web.Messages.Commands.CompanyCreationApiCommand.CompanyCreationApiCommand(Fossa.API.Web.Messages.Commands.CompanyCreationApiCommand! original) -> void
 Fossa.API.Web.Messages.Commands.CompanyCreationApiCommand.CompanyCreationApiCommand(string? Name, string? CountryCode) -> void
@@ -182,12 +169,10 @@ Fossa.API.Web.Messages.Commands.CompanyCreationApiCommand.Deconstruct(out string
 Fossa.API.Web.Messages.Commands.CompanyCreationApiCommand.Name.get -> string?
 Fossa.API.Web.Messages.Commands.CompanyCreationApiCommand.Name.init -> void
 Fossa.API.Web.Messages.Commands.CompanyCreationApiCommandHandler
-Fossa.API.Web.Messages.Commands.CompanyCreationApiCommandHandler.CompanyCreationApiCommandHandler(TIKSN.Globalization.ICountryFactory! countryFactory, MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId>! dataIdentityToDomainIdentityMapper) -> void
 Fossa.API.Web.Messages.Commands.CompanyDeletionApiCommand
 Fossa.API.Web.Messages.Commands.CompanyDeletionApiCommand.CompanyDeletionApiCommand() -> void
 Fossa.API.Web.Messages.Commands.CompanyDeletionApiCommand.CompanyDeletionApiCommand(Fossa.API.Web.Messages.Commands.CompanyDeletionApiCommand! original) -> void
 Fossa.API.Web.Messages.Commands.CompanyDeletionApiCommandHandler
-Fossa.API.Web.Messages.Commands.CompanyDeletionApiCommandHandler.CompanyDeletionApiCommandHandler(MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId>! dataIdentityToDomainIdentityMapper) -> void
 Fossa.API.Web.Messages.Commands.CompanyModificationApiCommand
 Fossa.API.Web.Messages.Commands.CompanyModificationApiCommand.CompanyModificationApiCommand(Fossa.API.Web.Messages.Commands.CompanyModificationApiCommand! original) -> void
 Fossa.API.Web.Messages.Commands.CompanyModificationApiCommand.CompanyModificationApiCommand(string? Name, string? CountryCode) -> void
@@ -197,7 +182,6 @@ Fossa.API.Web.Messages.Commands.CompanyModificationApiCommand.Deconstruct(out st
 Fossa.API.Web.Messages.Commands.CompanyModificationApiCommand.Name.get -> string?
 Fossa.API.Web.Messages.Commands.CompanyModificationApiCommand.Name.init -> void
 Fossa.API.Web.Messages.Commands.CompanyModificationApiCommandHandler
-Fossa.API.Web.Messages.Commands.CompanyModificationApiCommandHandler.CompanyModificationApiCommandHandler(TIKSN.Globalization.ICountryFactory! countryFactory, MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId>! dataIdentityToDomainIdentityMapper) -> void
 Fossa.API.Web.Messages.Commands.CompanySettingsCreationApiCommand
 Fossa.API.Web.Messages.Commands.CompanySettingsCreationApiCommand.ColorSchemeId.get -> string?
 Fossa.API.Web.Messages.Commands.CompanySettingsCreationApiCommand.ColorSchemeId.init -> void
@@ -205,12 +189,10 @@ Fossa.API.Web.Messages.Commands.CompanySettingsCreationApiCommand.CompanySetting
 Fossa.API.Web.Messages.Commands.CompanySettingsCreationApiCommand.CompanySettingsCreationApiCommand(string? ColorSchemeId) -> void
 Fossa.API.Web.Messages.Commands.CompanySettingsCreationApiCommand.Deconstruct(out string? ColorSchemeId) -> void
 Fossa.API.Web.Messages.Commands.CompanySettingsCreationApiCommandHandler
-Fossa.API.Web.Messages.Commands.CompanySettingsCreationApiCommandHandler.CompanySettingsCreationApiCommandHandler(MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanySettingsId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanySettingsId>! dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<string!, Fossa.API.Core.Entities.ColorSchemeId>! colorSchemeDataToDomainMapper) -> void
 Fossa.API.Web.Messages.Commands.CompanySettingsDeletionApiCommand
 Fossa.API.Web.Messages.Commands.CompanySettingsDeletionApiCommand.CompanySettingsDeletionApiCommand() -> void
 Fossa.API.Web.Messages.Commands.CompanySettingsDeletionApiCommand.CompanySettingsDeletionApiCommand(Fossa.API.Web.Messages.Commands.CompanySettingsDeletionApiCommand! original) -> void
 Fossa.API.Web.Messages.Commands.CompanySettingsDeletionApiCommandHandler
-Fossa.API.Web.Messages.Commands.CompanySettingsDeletionApiCommandHandler.CompanySettingsDeletionApiCommandHandler(MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanySettingsId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanySettingsId>! dataIdentityToDomainIdentityMapper) -> void
 Fossa.API.Web.Messages.Commands.CompanySettingsModificationApiCommand
 Fossa.API.Web.Messages.Commands.CompanySettingsModificationApiCommand.ColorSchemeId.get -> string?
 Fossa.API.Web.Messages.Commands.CompanySettingsModificationApiCommand.ColorSchemeId.init -> void
@@ -218,7 +200,6 @@ Fossa.API.Web.Messages.Commands.CompanySettingsModificationApiCommand.CompanySet
 Fossa.API.Web.Messages.Commands.CompanySettingsModificationApiCommand.CompanySettingsModificationApiCommand(string? ColorSchemeId) -> void
 Fossa.API.Web.Messages.Commands.CompanySettingsModificationApiCommand.Deconstruct(out string? ColorSchemeId) -> void
 Fossa.API.Web.Messages.Commands.CompanySettingsModificationApiCommandHandler
-Fossa.API.Web.Messages.Commands.CompanySettingsModificationApiCommandHandler.CompanySettingsModificationApiCommandHandler(MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanySettingsId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanySettingsId>! dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<string!, Fossa.API.Core.Entities.ColorSchemeId>! colorSchemeDataToDomainMapper) -> void
 Fossa.API.Web.Messages.Commands.DepartmentCreationApiCommand
 Fossa.API.Web.Messages.Commands.DepartmentCreationApiCommand.Deconstruct(out string? Name, out long? ParentDepartmentId, out long? ManagerId) -> void
 Fossa.API.Web.Messages.Commands.DepartmentCreationApiCommand.DepartmentCreationApiCommand(Fossa.API.Web.Messages.Commands.DepartmentCreationApiCommand! original) -> void
@@ -230,7 +211,6 @@ Fossa.API.Web.Messages.Commands.DepartmentCreationApiCommand.Name.init -> void
 Fossa.API.Web.Messages.Commands.DepartmentCreationApiCommand.ParentDepartmentId.get -> long?
 Fossa.API.Web.Messages.Commands.DepartmentCreationApiCommand.ParentDepartmentId.init -> void
 Fossa.API.Web.Messages.Commands.DepartmentCreationApiCommandHandler
-Fossa.API.Web.Messages.Commands.DepartmentCreationApiCommandHandler.DepartmentCreationApiCommandHandler(MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.DepartmentId>! departmentDataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId>! employeeDataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentId, long>! domainIdentityToDataIdentityMapper) -> void
 Fossa.API.Web.Messages.Commands.DepartmentDeletionApiCommand
 Fossa.API.Web.Messages.Commands.DepartmentDeletionApiCommand.Deconstruct(out long Id) -> void
 Fossa.API.Web.Messages.Commands.DepartmentDeletionApiCommand.DepartmentDeletionApiCommand(Fossa.API.Web.Messages.Commands.DepartmentDeletionApiCommand! original) -> void
@@ -238,7 +218,6 @@ Fossa.API.Web.Messages.Commands.DepartmentDeletionApiCommand.DepartmentDeletionA
 Fossa.API.Web.Messages.Commands.DepartmentDeletionApiCommand.Id.get -> long
 Fossa.API.Web.Messages.Commands.DepartmentDeletionApiCommand.Id.init -> void
 Fossa.API.Web.Messages.Commands.DepartmentDeletionApiCommandHandler
-Fossa.API.Web.Messages.Commands.DepartmentDeletionApiCommandHandler.DepartmentDeletionApiCommandHandler(MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.DepartmentId>! dataIdentityToDomainIdentityMapper) -> void
 Fossa.API.Web.Messages.Commands.DepartmentModificationApiCommand
 Fossa.API.Web.Messages.Commands.DepartmentModificationApiCommand.Deconstruct(out long Id, out string? Name, out long? ParentDepartmentId, out long? ManagerId) -> void
 Fossa.API.Web.Messages.Commands.DepartmentModificationApiCommand.DepartmentModificationApiCommand(Fossa.API.Web.Messages.Commands.DepartmentModificationApiCommand! original) -> void
@@ -252,7 +231,6 @@ Fossa.API.Web.Messages.Commands.DepartmentModificationApiCommand.Name.init -> vo
 Fossa.API.Web.Messages.Commands.DepartmentModificationApiCommand.ParentDepartmentId.get -> long?
 Fossa.API.Web.Messages.Commands.DepartmentModificationApiCommand.ParentDepartmentId.init -> void
 Fossa.API.Web.Messages.Commands.DepartmentModificationApiCommandHandler
-Fossa.API.Web.Messages.Commands.DepartmentModificationApiCommandHandler.DepartmentModificationApiCommandHandler(MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.DepartmentId>! departmentDataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId>! employeeDataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentId, long>! domainIdentityToDataIdentityMapper) -> void
 Fossa.API.Web.Messages.Commands.EmployeeCreationApiCommand
 Fossa.API.Web.Messages.Commands.EmployeeCreationApiCommand.Deconstruct(out string? FirstName, out string? LastName, out string? FullName) -> void
 Fossa.API.Web.Messages.Commands.EmployeeCreationApiCommand.EmployeeCreationApiCommand(Fossa.API.Web.Messages.Commands.EmployeeCreationApiCommand! original) -> void
@@ -264,12 +242,10 @@ Fossa.API.Web.Messages.Commands.EmployeeCreationApiCommand.FullName.init -> void
 Fossa.API.Web.Messages.Commands.EmployeeCreationApiCommand.LastName.get -> string?
 Fossa.API.Web.Messages.Commands.EmployeeCreationApiCommand.LastName.init -> void
 Fossa.API.Web.Messages.Commands.EmployeeCreationApiCommandHandler
-Fossa.API.Web.Messages.Commands.EmployeeCreationApiCommandHandler.EmployeeCreationApiCommandHandler(MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId>! dataIdentityToDomainIdentityMapper) -> void
 Fossa.API.Web.Messages.Commands.EmployeeDeletionApiCommand
 Fossa.API.Web.Messages.Commands.EmployeeDeletionApiCommand.EmployeeDeletionApiCommand() -> void
 Fossa.API.Web.Messages.Commands.EmployeeDeletionApiCommand.EmployeeDeletionApiCommand(Fossa.API.Web.Messages.Commands.EmployeeDeletionApiCommand! original) -> void
 Fossa.API.Web.Messages.Commands.EmployeeDeletionApiCommandHandler
-Fossa.API.Web.Messages.Commands.EmployeeDeletionApiCommandHandler.EmployeeDeletionApiCommandHandler(MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId>! dataIdentityToDomainIdentityMapper) -> void
 Fossa.API.Web.Messages.Commands.EmployeeManagementApiCommand
 Fossa.API.Web.Messages.Commands.EmployeeManagementApiCommand.AssignedBranchId.get -> long?
 Fossa.API.Web.Messages.Commands.EmployeeManagementApiCommand.AssignedBranchId.init -> void
@@ -285,7 +261,6 @@ Fossa.API.Web.Messages.Commands.EmployeeManagementApiCommand.JobTitle.init -> vo
 Fossa.API.Web.Messages.Commands.EmployeeManagementApiCommand.ReportsToId.get -> long?
 Fossa.API.Web.Messages.Commands.EmployeeManagementApiCommand.ReportsToId.init -> void
 Fossa.API.Web.Messages.Commands.EmployeeManagementApiCommandHandler
-Fossa.API.Web.Messages.Commands.EmployeeManagementApiCommandHandler.EmployeeManagementApiCommandHandler(MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId>! dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.BranchId>! branchDataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.DepartmentId>! departmentDataIdentityToDomainIdentityMapper) -> void
 Fossa.API.Web.Messages.Commands.EmployeeModificationApiCommand
 Fossa.API.Web.Messages.Commands.EmployeeModificationApiCommand.Deconstruct(out string? FirstName, out string? LastName, out string? FullName) -> void
 Fossa.API.Web.Messages.Commands.EmployeeModificationApiCommand.EmployeeModificationApiCommand(Fossa.API.Web.Messages.Commands.EmployeeModificationApiCommand! original) -> void
@@ -297,7 +272,6 @@ Fossa.API.Web.Messages.Commands.EmployeeModificationApiCommand.FullName.init -> 
 Fossa.API.Web.Messages.Commands.EmployeeModificationApiCommand.LastName.get -> string?
 Fossa.API.Web.Messages.Commands.EmployeeModificationApiCommand.LastName.init -> void
 Fossa.API.Web.Messages.Commands.EmployeeModificationApiCommandHandler
-Fossa.API.Web.Messages.Commands.EmployeeModificationApiCommandHandler.EmployeeModificationApiCommandHandler(MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId>! dataIdentityToDomainIdentityMapper) -> void
 Fossa.API.Web.Messages.Queries.BranchPagingApiQuery
 Fossa.API.Web.Messages.Queries.BranchPagingApiQuery.BranchPagingApiQuery(Fossa.API.Web.Messages.Queries.BranchPagingApiQuery! original) -> void
 Fossa.API.Web.Messages.Queries.BranchPagingApiQuery.BranchPagingApiQuery(System.Collections.Generic.IReadOnlyList<long>? Id, string? Search, int? PageNumber, int? PageSize) -> void
@@ -311,7 +285,6 @@ Fossa.API.Web.Messages.Queries.BranchPagingApiQuery.PageSize.init -> void
 Fossa.API.Web.Messages.Queries.BranchPagingApiQuery.Search.get -> string?
 Fossa.API.Web.Messages.Queries.BranchPagingApiQuery.Search.init -> void
 Fossa.API.Web.Messages.Queries.BranchPagingApiQueryHandler
-Fossa.API.Web.Messages.Queries.BranchPagingApiQueryHandler.BranchPagingApiQueryHandler(TIKSN.Mapping.IMapper<TIKSN.Data.PageResult<Fossa.API.Core.Entities.BranchEntity!>!, Fossa.Bridge.Models.ApiModels.PagingResponseModel<Fossa.Bridge.Models.ApiModels.BranchRetrievalModel!>!>! pagingMapper, TIKSN.Mapping.IMapper<LanguageExt.Seq<Fossa.API.Core.Entities.BranchEntity!>, Fossa.Bridge.Models.ApiModels.PagingResponseModel<Fossa.Bridge.Models.ApiModels.BranchRetrievalModel!>!>! listingMapper, MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.BranchId>! dataIdentityToDomainIdentityMapper) -> void
 Fossa.API.Web.Messages.Queries.BranchRetrievalApiQuery
 Fossa.API.Web.Messages.Queries.BranchRetrievalApiQuery.BranchRetrievalApiQuery(Fossa.API.Web.Messages.Queries.BranchRetrievalApiQuery! original) -> void
 Fossa.API.Web.Messages.Queries.BranchRetrievalApiQuery.BranchRetrievalApiQuery(long Id) -> void
@@ -319,22 +292,18 @@ Fossa.API.Web.Messages.Queries.BranchRetrievalApiQuery.Deconstruct(out long Id) 
 Fossa.API.Web.Messages.Queries.BranchRetrievalApiQuery.Id.get -> long
 Fossa.API.Web.Messages.Queries.BranchRetrievalApiQuery.Id.init -> void
 Fossa.API.Web.Messages.Queries.BranchRetrievalApiQueryHandler
-Fossa.API.Web.Messages.Queries.BranchRetrievalApiQueryHandler.BranchRetrievalApiQueryHandler(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchEntity!, Fossa.Bridge.Models.ApiModels.BranchRetrievalModel!>! domainResponseToApiResponseMapper, MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.BranchId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.BranchId>! dataIdentityToDomainIdentityMapper) -> void
 Fossa.API.Web.Messages.Queries.CompanyRetrievalApiQuery
 Fossa.API.Web.Messages.Queries.CompanyRetrievalApiQuery.CompanyRetrievalApiQuery() -> void
 Fossa.API.Web.Messages.Queries.CompanyRetrievalApiQuery.CompanyRetrievalApiQuery(Fossa.API.Web.Messages.Queries.CompanyRetrievalApiQuery! original) -> void
 Fossa.API.Web.Messages.Queries.CompanyRetrievalApiQueryHandler
-Fossa.API.Web.Messages.Queries.CompanyRetrievalApiQueryHandler.CompanyRetrievalApiQueryHandler(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyEntity!, Fossa.Bridge.Models.ApiModels.CompanyRetrievalModel!>! domainResponseToApiResponseMapper, MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanyId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanyId>! dataIdentityToDomainIdentityMapper) -> void
 Fossa.API.Web.Messages.Queries.CompanySettingsRetrievalApiQuery
 Fossa.API.Web.Messages.Queries.CompanySettingsRetrievalApiQuery.CompanySettingsRetrievalApiQuery() -> void
 Fossa.API.Web.Messages.Queries.CompanySettingsRetrievalApiQuery.CompanySettingsRetrievalApiQuery(Fossa.API.Web.Messages.Queries.CompanySettingsRetrievalApiQuery! original) -> void
 Fossa.API.Web.Messages.Queries.CompanySettingsRetrievalApiQueryHandler
-Fossa.API.Web.Messages.Queries.CompanySettingsRetrievalApiQueryHandler.CompanySettingsRetrievalApiQueryHandler(MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanySettingsId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.CompanySettingsId>! dataIdentityToDomainIdentityMapper, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.CompanySettingsEntity!, Fossa.Bridge.Models.ApiModels.CompanySettingsRetrievalModel!>! domainResponseToApiResponseMapper) -> void
 Fossa.API.Web.Messages.Queries.CurrentEmployeeRetrievalApiQuery
 Fossa.API.Web.Messages.Queries.CurrentEmployeeRetrievalApiQuery.CurrentEmployeeRetrievalApiQuery() -> void
 Fossa.API.Web.Messages.Queries.CurrentEmployeeRetrievalApiQuery.CurrentEmployeeRetrievalApiQuery(Fossa.API.Web.Messages.Queries.CurrentEmployeeRetrievalApiQuery! original) -> void
 Fossa.API.Web.Messages.Queries.CurrentEmployeeRetrievalApiQueryHandler
-Fossa.API.Web.Messages.Queries.CurrentEmployeeRetrievalApiQueryHandler.CurrentEmployeeRetrievalApiQueryHandler(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeEntity!, Fossa.Bridge.Models.ApiModels.EmployeeRetrievalModel!>! domainResponseToApiResponseMapper, MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId>! dataIdentityToDomainIdentityMapper) -> void
 Fossa.API.Web.Messages.Queries.DepartmentPagingApiQuery
 Fossa.API.Web.Messages.Queries.DepartmentPagingApiQuery.Deconstruct(out System.Collections.Generic.IReadOnlyList<long>? Id, out string? Search, out int? PageNumber, out int? PageSize) -> void
 Fossa.API.Web.Messages.Queries.DepartmentPagingApiQuery.DepartmentPagingApiQuery(Fossa.API.Web.Messages.Queries.DepartmentPagingApiQuery! original) -> void
@@ -348,7 +317,6 @@ Fossa.API.Web.Messages.Queries.DepartmentPagingApiQuery.PageSize.init -> void
 Fossa.API.Web.Messages.Queries.DepartmentPagingApiQuery.Search.get -> string?
 Fossa.API.Web.Messages.Queries.DepartmentPagingApiQuery.Search.init -> void
 Fossa.API.Web.Messages.Queries.DepartmentPagingApiQueryHandler
-Fossa.API.Web.Messages.Queries.DepartmentPagingApiQueryHandler.DepartmentPagingApiQueryHandler(TIKSN.Mapping.IMapper<TIKSN.Data.PageResult<Fossa.API.Core.Entities.DepartmentEntity!>!, Fossa.Bridge.Models.ApiModels.PagingResponseModel<Fossa.Bridge.Models.ApiModels.DepartmentRetrievalModel!>!>! pagingMapper, TIKSN.Mapping.IMapper<LanguageExt.Seq<Fossa.API.Core.Entities.DepartmentEntity!>, Fossa.Bridge.Models.ApiModels.PagingResponseModel<Fossa.Bridge.Models.ApiModels.DepartmentRetrievalModel!>!>! listingMapper, MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.DepartmentId>! dataIdentityToDomainIdentityMapper) -> void
 Fossa.API.Web.Messages.Queries.DepartmentRetrievalApiQuery
 Fossa.API.Web.Messages.Queries.DepartmentRetrievalApiQuery.Deconstruct(out long Id) -> void
 Fossa.API.Web.Messages.Queries.DepartmentRetrievalApiQuery.DepartmentRetrievalApiQuery(Fossa.API.Web.Messages.Queries.DepartmentRetrievalApiQuery! original) -> void
@@ -356,7 +324,6 @@ Fossa.API.Web.Messages.Queries.DepartmentRetrievalApiQuery.DepartmentRetrievalAp
 Fossa.API.Web.Messages.Queries.DepartmentRetrievalApiQuery.Id.get -> long
 Fossa.API.Web.Messages.Queries.DepartmentRetrievalApiQuery.Id.init -> void
 Fossa.API.Web.Messages.Queries.DepartmentRetrievalApiQueryHandler
-Fossa.API.Web.Messages.Queries.DepartmentRetrievalApiQueryHandler.DepartmentRetrievalApiQueryHandler(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentEntity!, Fossa.Bridge.Models.ApiModels.DepartmentRetrievalModel!>! domainResponseToApiResponseMapper, MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.DepartmentId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.DepartmentId>! dataIdentityToDomainIdentityMapper) -> void
 Fossa.API.Web.Messages.Queries.EmployeePagingApiQuery
 Fossa.API.Web.Messages.Queries.EmployeePagingApiQuery.Deconstruct(out System.Collections.Generic.IReadOnlyList<long>? Id, out string? Search, out long? ReportsToId, out bool? TopLevelOnly, out int? PageNumber, out int? PageSize) -> void
 Fossa.API.Web.Messages.Queries.EmployeePagingApiQuery.EmployeePagingApiQuery(Fossa.API.Web.Messages.Queries.EmployeePagingApiQuery! original) -> void
@@ -374,7 +341,6 @@ Fossa.API.Web.Messages.Queries.EmployeePagingApiQuery.Search.init -> void
 Fossa.API.Web.Messages.Queries.EmployeePagingApiQuery.TopLevelOnly.get -> bool?
 Fossa.API.Web.Messages.Queries.EmployeePagingApiQuery.TopLevelOnly.init -> void
 Fossa.API.Web.Messages.Queries.EmployeePagingApiQueryHandler
-Fossa.API.Web.Messages.Queries.EmployeePagingApiQueryHandler.EmployeePagingApiQueryHandler(TIKSN.Mapping.IMapper<TIKSN.Data.PageResult<Fossa.API.Core.Entities.EmployeeEntity!>!, Fossa.Bridge.Models.ApiModels.PagingResponseModel<Fossa.Bridge.Models.ApiModels.EmployeeRetrievalModel!>!>! pagingMapper, TIKSN.Mapping.IMapper<LanguageExt.Seq<Fossa.API.Core.Entities.EmployeeEntity!>, Fossa.Bridge.Models.ApiModels.PagingResponseModel<Fossa.Bridge.Models.ApiModels.EmployeeRetrievalModel!>!>! listingMapper, MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId>! dataIdentityToDomainIdentityMapper) -> void
 Fossa.API.Web.Messages.Queries.EmployeeRetrievalApiQuery
 Fossa.API.Web.Messages.Queries.EmployeeRetrievalApiQuery.Deconstruct(out long Id) -> void
 Fossa.API.Web.Messages.Queries.EmployeeRetrievalApiQuery.EmployeeRetrievalApiQuery(Fossa.API.Web.Messages.Queries.EmployeeRetrievalApiQuery! original) -> void
@@ -382,7 +348,6 @@ Fossa.API.Web.Messages.Queries.EmployeeRetrievalApiQuery.EmployeeRetrievalApiQue
 Fossa.API.Web.Messages.Queries.EmployeeRetrievalApiQuery.Id.get -> long
 Fossa.API.Web.Messages.Queries.EmployeeRetrievalApiQuery.Id.init -> void
 Fossa.API.Web.Messages.Queries.EmployeeRetrievalApiQueryHandler
-Fossa.API.Web.Messages.Queries.EmployeeRetrievalApiQueryHandler.EmployeeRetrievalApiQueryHandler(TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeEntity!, Fossa.Bridge.Models.ApiModels.EmployeeRetrievalModel!>! domainResponseToApiResponseMapper, MediatR.ISender! sender, Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>! tenantIdProvider, Fossa.API.Core.User.IUserIdProvider<System.Guid>! userIdProvider, TIKSN.Mapping.IMapper<Fossa.API.Core.Entities.EmployeeId, long>! domainIdentityToDataIdentityMapper, TIKSN.Mapping.IMapper<long, Fossa.API.Core.Entities.EmployeeId>! dataIdentityToDomainIdentityMapper) -> void
 Fossa.API.Web.Messages.Queries.IPagingApiQuery
 Fossa.API.Web.Messages.Queries.IPagingApiQuery.PageNumber.get -> int?
 Fossa.API.Web.Messages.Queries.IPagingApiQuery.PageSize.get -> int?
@@ -391,7 +356,6 @@ Fossa.API.Web.Roles
 Fossa.API.Web.Validators.PagingApiQueryValidator
 Fossa.API.Web.Validators.PagingApiQueryValidator.PagingApiQueryValidator() -> void
 override Fossa.API.Web.DefaultWebModule.Load(Autofac.ContainerBuilder! builder) -> void
-override Fossa.API.Web.Filters.EnrichLogRecordWithEventIdProcessor.OnEnd(OpenTelemetry.Logs.LogRecord! data) -> void
 override Fossa.API.Web.Messages.ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse, TDomainRequest, TDomainResponse>.Handle(TApiRequest request, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<TApiResponse>!
 override Fossa.API.Web.Messages.ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse, TDomainRequest1, TDomainResponse1, TDomainRequest2, TDomainResponse2>.Handle(TApiRequest request, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<TApiResponse>!
 override Fossa.API.Web.Messages.Commands.BranchCreationApiCommand.Equals(object? obj) -> bool
@@ -529,8 +493,6 @@ readonly Fossa.API.Web.Api.BaseApiController._sender -> MediatR.ISender!
 readonly Fossa.API.Web.Messages.ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse>._dataIdentityToDomainIdentityMapper -> TIKSN.Mapping.IMapper<long, TEntityIdentity>!
 readonly Fossa.API.Web.Messages.ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse>._domainIdentityToDataIdentityMapper -> TIKSN.Mapping.IMapper<TEntityIdentity, long>!
 readonly Fossa.API.Web.Messages.ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse>._sender -> MediatR.ISender!
-readonly Fossa.API.Web.Messages.ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse>._tenantIdProvider -> Fossa.API.Core.Tenant.ITenantIdProvider<System.Guid>!
-readonly Fossa.API.Web.Messages.ApiMessageHandler<TEntityIdentity, TApiRequest, TApiResponse>._userIdProvider -> Fossa.API.Core.User.IUserIdProvider<System.Guid>!
 static Fossa.API.Web.DependencyInjection.ServiceCollectionExtensions.AddIdGen(this Microsoft.Extensions.DependencyInjection.IServiceCollection! services, Microsoft.Extensions.Configuration.IConfiguration! configuration, System.DateOnly initialReleaseDate) -> Microsoft.Extensions.DependencyInjection.IServiceCollection!
 static Fossa.API.Web.HealthChecks.DependencyInjection.MongoDbHealthCheckBuilderExtensions.AddMongoDb(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder! builder, MongoDB.Driver.MongoClientSettings! mongoClientSettings, string! mongoDatabaseName, string? name, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus, System.Collections.Generic.IEnumerable<string!>? tags, System.TimeSpan? timeout) -> Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder!
 static Fossa.API.Web.HealthChecks.DependencyInjection.MongoDbHealthCheckBuilderExtensions.AddMongoDb(this Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder! builder, MongoDB.Driver.MongoClientSettings! mongoClientSettings, string? name, Microsoft.Extensions.Diagnostics.HealthChecks.HealthStatus? failureStatus, System.Collections.Generic.IEnumerable<string!>? tags, System.TimeSpan? timeout) -> Microsoft.Extensions.DependencyInjection.IHealthChecksBuilder!
