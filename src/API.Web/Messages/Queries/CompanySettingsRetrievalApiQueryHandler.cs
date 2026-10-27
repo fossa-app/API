@@ -1,8 +1,7 @@
 ﻿using Fossa.API.Core.Entities;
 using Fossa.API.Core.Messages.Queries;
-using Fossa.API.Core.Tenant;
-using Fossa.API.Core.User;
 using Fossa.Bridge.Models.ApiModels;
+using TIKSN.Identity;
 using TIKSN.Mapping;
 
 namespace Fossa.API.Web.Messages.Queries;

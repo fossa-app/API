@@ -2,8 +2,7 @@
 using System.Reflection;
 using FluentValidation;
 using FluentValidation.Results;
-using Fossa.API.Core.Tenant;
-using Fossa.API.Core.User;
+using TIKSN.Identity;
 using TIKSN.Mapping;
 
 namespace Fossa.API.Web.Messages;

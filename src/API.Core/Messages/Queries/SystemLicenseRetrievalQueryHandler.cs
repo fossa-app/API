@@ -2,6 +2,7 @@
 using Fossa.API.Core.Services;
 using Fossa.Licensing;
 using TIKSN.Licensing;
+using TIKSN.Validation;
 
 namespace Fossa.API.Core.Messages.Queries;
 

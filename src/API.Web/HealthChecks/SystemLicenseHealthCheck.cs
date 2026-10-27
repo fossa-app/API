@@ -1,6 +1,6 @@
-﻿using Fossa.API.Core.Extensions;
-using Fossa.API.Core.Services;
+﻿using Fossa.API.Core.Services;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
+using TIKSN.Validation;
 
 namespace Fossa.API.Web.HealthChecks;
 

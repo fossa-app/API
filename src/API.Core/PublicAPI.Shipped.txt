@@ -128,8 +128,6 @@ Fossa.API.Core.Entities.SystemPropertiesEntity.SystemPropertiesEntity(Fossa.API.
 Fossa.API.Core.Entities.SystemPropertiesId
 Fossa.API.Core.Entities.SystemPropertiesId.SystemPropertiesId() -> void
 Fossa.API.Core.Extensions.RelationshipGraphExtensions
-Fossa.API.Core.Extensions.ValidationExtensions
-Fossa.API.Core.Extensions.ValidatorExtensions
 Fossa.API.Core.Mappers.BranchIdMapper
 Fossa.API.Core.Mappers.BranchIdMapper.BranchIdMapper() -> void
 Fossa.API.Core.Mappers.BranchIdMapper.Map(Fossa.API.Core.Entities.BranchId source) -> long
@@ -367,38 +365,16 @@ Fossa.API.Core.Messages.Commands.TenantEntityCommand<TEntity, TEntityIdentity, T
 Fossa.API.Core.Messages.Commands.TenantEntityCommand<TEntity, TEntityIdentity, TTenantIdentity>.Deconstruct(out TTenantIdentity TenantID) -> void
 Fossa.API.Core.Messages.Commands.TenantEntityCommand<TEntity, TEntityIdentity, TTenantIdentity>.TenantEntityCommand(Fossa.API.Core.Messages.Commands.TenantEntityCommand<TEntity, TEntityIdentity, TTenantIdentity>! original) -> void
 Fossa.API.Core.Messages.Commands.TenantEntityCommand<TEntity, TEntityIdentity, TTenantIdentity>.TenantEntityCommand(TTenantIdentity TenantID) -> void
-Fossa.API.Core.Messages.Commands.TenantEntityCommand<TEntity, TEntityIdentity, TTenantIdentity>.TenantEntityReferences.get -> System.Collections.Generic.IEnumerable<Fossa.API.Core.Messages.EntityReference<TEntityIdentity>!>!
 Fossa.API.Core.Messages.Commands.TenantEntityCommand<TEntity, TEntityIdentity, TTenantIdentity>.TenantID.get -> TTenantIdentity
 Fossa.API.Core.Messages.Commands.TenantEntityCommand<TEntity, TEntityIdentity, TTenantIdentity>.TenantID.init -> void
 Fossa.API.Core.Messages.Commands.TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>
 Fossa.API.Core.Messages.Commands.TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>.Deconstruct(out TTenantIdentity TenantID, out TUserIdentity UserID) -> void
-Fossa.API.Core.Messages.Commands.TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>.TenantEntityReferences.get -> System.Collections.Generic.IEnumerable<Fossa.API.Core.Messages.EntityReference<TEntityIdentity>!>!
 Fossa.API.Core.Messages.Commands.TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>.TenantID.get -> TTenantIdentity
 Fossa.API.Core.Messages.Commands.TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>.TenantID.init -> void
 Fossa.API.Core.Messages.Commands.TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>.TenantUserEntityCommand(Fossa.API.Core.Messages.Commands.TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>! original) -> void
 Fossa.API.Core.Messages.Commands.TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>.TenantUserEntityCommand(TTenantIdentity TenantID, TUserIdentity UserID) -> void
 Fossa.API.Core.Messages.Commands.TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>.UserID.get -> TUserIdentity
 Fossa.API.Core.Messages.Commands.TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>.UserID.init -> void
-Fossa.API.Core.Messages.CrossTenantInboundUnauthorizedAccessException
-Fossa.API.Core.Messages.CrossTenantInboundUnauthorizedAccessException.CrossTenantInboundUnauthorizedAccessException() -> void
-Fossa.API.Core.Messages.CrossTenantInboundUnauthorizedAccessException.CrossTenantInboundUnauthorizedAccessException(string! message) -> void
-Fossa.API.Core.Messages.CrossTenantInboundUnauthorizedAccessException.CrossTenantInboundUnauthorizedAccessException(string! message, System.Exception! inner) -> void
-Fossa.API.Core.Messages.CrossTenantOutboundUnauthorizedAccessException
-Fossa.API.Core.Messages.CrossTenantOutboundUnauthorizedAccessException.CrossTenantOutboundUnauthorizedAccessException() -> void
-Fossa.API.Core.Messages.CrossTenantOutboundUnauthorizedAccessException.CrossTenantOutboundUnauthorizedAccessException(string! message) -> void
-Fossa.API.Core.Messages.CrossTenantOutboundUnauthorizedAccessException.CrossTenantOutboundUnauthorizedAccessException(string! message, System.Exception! inner) -> void
-Fossa.API.Core.Messages.CrossTenantUnauthorizedAccessException
-Fossa.API.Core.Messages.CrossTenantUnauthorizedAccessException.CrossTenantUnauthorizedAccessException() -> void
-Fossa.API.Core.Messages.CrossTenantUnauthorizedAccessException.CrossTenantUnauthorizedAccessException(string! message) -> void
-Fossa.API.Core.Messages.CrossTenantUnauthorizedAccessException.CrossTenantUnauthorizedAccessException(string! message, System.Exception! inner) -> void
-Fossa.API.Core.Messages.EntityReference<TEntityIdentity>
-Fossa.API.Core.Messages.EntityReference<TEntityIdentity>.Deconstruct(out System.Type! EntityType, out TEntityIdentity EntityID) -> void
-Fossa.API.Core.Messages.EntityReference<TEntityIdentity>.EntityID.get -> TEntityIdentity
-Fossa.API.Core.Messages.EntityReference<TEntityIdentity>.EntityID.init -> void
-Fossa.API.Core.Messages.EntityReference<TEntityIdentity>.EntityReference(Fossa.API.Core.Messages.EntityReference<TEntityIdentity>! original) -> void
-Fossa.API.Core.Messages.EntityReference<TEntityIdentity>.EntityReference(System.Type! EntityType, TEntityIdentity EntityID) -> void
-Fossa.API.Core.Messages.EntityReference<TEntityIdentity>.EntityType.get -> System.Type!
-Fossa.API.Core.Messages.EntityReference<TEntityIdentity>.EntityType.init -> void
 Fossa.API.Core.Messages.Events.BranchAddressChangedEvent
 Fossa.API.Core.Messages.Events.BranchAddressChangedEvent.BranchAddressChangedEvent(Fossa.API.Core.Messages.Events.BranchAddressChangedEvent! original) -> void
 Fossa.API.Core.Messages.Events.BranchAddressChangedEvent.BranchAddressChangedEvent(System.Guid TenantID, Fossa.API.Core.Entities.BranchId BranchId, Fossa.API.Core.Entities.CompanyId CompanyId, LanguageExt.Option<Fossa.API.Core.Entities.Address!> PreviousAddress, LanguageExt.Option<Fossa.API.Core.Entities.Address!> NewAddress) -> void
@@ -634,15 +610,6 @@ Fossa.API.Core.Messages.FailedDependencyException
 Fossa.API.Core.Messages.FailedDependencyException.FailedDependencyException() -> void
 Fossa.API.Core.Messages.FailedDependencyException.FailedDependencyException(string! message) -> void
 Fossa.API.Core.Messages.FailedDependencyException.FailedDependencyException(string! message, System.Exception! inner) -> void
-Fossa.API.Core.Messages.ITenantEntityReferences<TEntityIdentity>
-Fossa.API.Core.Messages.ITenantEntityReferences<TEntityIdentity>.TenantEntityReferences.get -> System.Collections.Generic.IEnumerable<Fossa.API.Core.Messages.EntityReference<TEntityIdentity>!>!
-Fossa.API.Core.Messages.PagingQueryBehavior<TRequest, TResponse>
-Fossa.API.Core.Messages.PagingQueryBehavior<TRequest, TResponse>.Handle(TRequest request, MediatR.RequestHandlerDelegate<TResponse>! next, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<TResponse>!
-Fossa.API.Core.Messages.PagingQueryBehavior<TRequest, TResponse>.PagingQueryBehavior(Microsoft.Extensions.Options.IOptions<Fossa.API.Core.Messages.PagingQueryOptions!>! options) -> void
-Fossa.API.Core.Messages.PagingQueryOptions
-Fossa.API.Core.Messages.PagingQueryOptions.MaximumPageSize.get -> int?
-Fossa.API.Core.Messages.PagingQueryOptions.MaximumPageSize.set -> void
-Fossa.API.Core.Messages.PagingQueryOptions.PagingQueryOptions() -> void
 Fossa.API.Core.Messages.Queries.BranchListingQuery
 Fossa.API.Core.Messages.Queries.BranchListingQuery.BranchListingQuery(Fossa.API.Core.Messages.Queries.BranchListingQuery! original) -> void
 Fossa.API.Core.Messages.Queries.BranchListingQuery.BranchListingQuery(LanguageExt.Seq<Fossa.API.Core.Entities.BranchId> Ids, System.Guid TenantID, System.Guid UserID) -> void
@@ -794,15 +761,8 @@ Fossa.API.Core.Messages.Queries.TenantEntityQuery<TEntity, TEntityIdentity, TTen
 Fossa.API.Core.Messages.Queries.TenantEntityQuery<TEntity, TEntityIdentity, TTenantIdentity, TResult>.Deconstruct(out TTenantIdentity TenantID) -> void
 Fossa.API.Core.Messages.Queries.TenantEntityQuery<TEntity, TEntityIdentity, TTenantIdentity, TResult>.TenantEntityQuery(Fossa.API.Core.Messages.Queries.TenantEntityQuery<TEntity, TEntityIdentity, TTenantIdentity, TResult>! original) -> void
 Fossa.API.Core.Messages.Queries.TenantEntityQuery<TEntity, TEntityIdentity, TTenantIdentity, TResult>.TenantEntityQuery(TTenantIdentity TenantID) -> void
-Fossa.API.Core.Messages.Queries.TenantEntityQuery<TEntity, TEntityIdentity, TTenantIdentity, TResult>.TenantEntityReferences.get -> System.Collections.Generic.IEnumerable<Fossa.API.Core.Messages.EntityReference<TEntityIdentity>!>!
 Fossa.API.Core.Messages.Queries.TenantEntityQuery<TEntity, TEntityIdentity, TTenantIdentity, TResult>.TenantID.get -> TTenantIdentity
 Fossa.API.Core.Messages.Queries.TenantEntityQuery<TEntity, TEntityIdentity, TTenantIdentity, TResult>.TenantID.init -> void
-Fossa.API.Core.Messages.TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, TResponse>
-Fossa.API.Core.Messages.TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, TResponse>.Handle(TRequest request, MediatR.RequestHandlerDelegate<TResponse>! next, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<TResponse>!
-Fossa.API.Core.Messages.TenantRequestBehavior<TEntityIdentity, TTenantIdentity, TRequest, TResponse>.TenantRequestBehavior(Fossa.API.Core.Tenant.ITenantIdProvider<TTenantIdentity>! tenantIdProvider, System.IServiceProvider! serviceProvider) -> void
-Fossa.API.Core.Messages.ValidationBehavior<TRequest, TResponse>
-Fossa.API.Core.Messages.ValidationBehavior<TRequest, TResponse>.Handle(TRequest request, MediatR.RequestHandlerDelegate<TResponse>! next, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<TResponse>!
-Fossa.API.Core.Messages.ValidationBehavior<TRequest, TResponse>.ValidationBehavior(System.IServiceProvider! serviceProvider) -> void
 Fossa.API.Core.Relationship.IRelationshipGraph
 Fossa.API.Core.Relationship.IRelationshipGraph.HasDependentEntitiesAsync<T>(T id, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<bool>!
 Fossa.API.Core.Relationship.RelationshipGraph
@@ -917,17 +877,11 @@ Fossa.API.Core.Telemetry.ISystemLicenseMetricsRecorder.Record(LanguageExt.Valida
 Fossa.API.Core.Telemetry.SystemLicenseMetricsRecorder
 Fossa.API.Core.Telemetry.SystemLicenseMetricsRecorder.Record(LanguageExt.Validation<LanguageExt.Common.Error!, TIKSN.Licensing.License<Fossa.Licensing.SystemEntitlements!>!> license) -> void
 Fossa.API.Core.Telemetry.SystemLicenseMetricsRecorder.SystemLicenseMetricsRecorder(System.TimeProvider! timeProvider, System.Diagnostics.Metrics.IMeterFactory! meterFactory) -> void
-Fossa.API.Core.Tenant.ITenantIdProvider<T>
-Fossa.API.Core.Tenant.ITenantIdProvider<T>.FindTenantId() -> LanguageExt.Option<T>
-Fossa.API.Core.Tenant.ITenantIdProvider<T>.GetTenantId() -> T
 Fossa.API.Core.TimeZone.DateTimeZoneProvider
 Fossa.API.Core.TimeZone.DateTimeZoneProvider.DateTimeZoneProvider() -> void
 Fossa.API.Core.TimeZone.DateTimeZoneProvider.GetDateTimeZoneById(string! timeZoneId) -> NodaTime.DateTimeZone!
 Fossa.API.Core.TimeZone.IDateTimeZoneProvider
 Fossa.API.Core.TimeZone.IDateTimeZoneProvider.GetDateTimeZoneById(string! timeZoneId) -> NodaTime.DateTimeZone!
-Fossa.API.Core.User.IUserIdProvider<T>
-Fossa.API.Core.User.IUserIdProvider<T>.FindUserId() -> LanguageExt.Option<T>
-Fossa.API.Core.User.IUserIdProvider<T>.GetUserId() -> T
 Fossa.API.Core.Validators.AddressValidator
 Fossa.API.Core.Validators.AddressValidator.AddressValidator(Fossa.API.Core.Services.IPostalCodeParser! postalCodeParser) -> void
 Fossa.API.Core.Validators.BranchCommandValidatorHelper
@@ -968,8 +922,6 @@ Fossa.API.Core.Validators.EmployeeManagementCommandValidator
 Fossa.API.Core.Validators.EmployeeManagementCommandValidator.EmployeeManagementCommandValidator(Fossa.API.Core.Repositories.IBranchQueryRepository! branchQueryRepository, Fossa.API.Core.Repositories.IDepartmentQueryRepository! departmentQueryRepository, Fossa.API.Core.Repositories.IEmployeeQueryRepository! employeeQueryRepository) -> void
 Fossa.API.Core.Validators.EmployeeModificationCommandValidator
 Fossa.API.Core.Validators.EmployeeModificationCommandValidator.EmployeeModificationCommandValidator() -> void
-Fossa.API.Core.Validators.OptionValidator<T, TProperty>
-Fossa.API.Core.Validators.OptionValidator<T, TProperty>.OptionValidator(FluentValidation.IValidator<TProperty>! validator) -> void
 override abstract Fossa.API.Core.Messages.Events.CompanyEmployeeEvent<TTenantIdentity, TUserIdentity>.<Clone>$() -> Fossa.API.Core.Messages.Events.CompanyEmployeeEvent<TTenantIdentity, TUserIdentity>!
 override abstract Fossa.API.Core.Messages.Events.CompanyEvent<TTenantIdentity>.<Clone>$() -> Fossa.API.Core.Messages.Events.CompanyEvent<TTenantIdentity>!
 override abstract Fossa.API.Core.Messages.Events.TenantUserEvent<TTenantIdentity, TUserIdentity>.<Clone>$() -> Fossa.API.Core.Messages.Events.TenantUserEvent<TTenantIdentity, TUserIdentity>!
@@ -1116,9 +1068,6 @@ override Fossa.API.Core.Messages.Commands.TenantEntityCommand<TEntity, TEntityId
 override Fossa.API.Core.Messages.Commands.TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>.Equals(object? obj) -> bool
 override Fossa.API.Core.Messages.Commands.TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>.GetHashCode() -> int
 override Fossa.API.Core.Messages.Commands.TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>.ToString() -> string!
-override Fossa.API.Core.Messages.EntityReference<TEntityIdentity>.Equals(object? obj) -> bool
-override Fossa.API.Core.Messages.EntityReference<TEntityIdentity>.GetHashCode() -> int
-override Fossa.API.Core.Messages.EntityReference<TEntityIdentity>.ToString() -> string!
 override Fossa.API.Core.Messages.Events.BranchAddressChangedEvent.<Clone>$() -> Fossa.API.Core.Messages.Events.BranchAddressChangedEvent!
 override Fossa.API.Core.Messages.Events.BranchAddressChangedEvent.EqualityContract.get -> System.Type!
 override Fossa.API.Core.Messages.Events.BranchAddressChangedEvent.Equals(object? obj) -> bool
@@ -1374,9 +1323,6 @@ override Fossa.API.Core.Messages.Queries.SystemLicenseRetrievalQuery.ToString() 
 override Fossa.API.Core.Messages.Queries.TenantEntityQuery<TEntity, TEntityIdentity, TTenantIdentity, TResult>.Equals(object? obj) -> bool
 override Fossa.API.Core.Messages.Queries.TenantEntityQuery<TEntity, TEntityIdentity, TTenantIdentity, TResult>.GetHashCode() -> int
 override Fossa.API.Core.Messages.Queries.TenantEntityQuery<TEntity, TEntityIdentity, TTenantIdentity, TResult>.ToString() -> string!
-override Fossa.API.Core.Validators.OptionValidator<T, TProperty>.GetDefaultMessageTemplate(string! errorCode) -> string!
-override Fossa.API.Core.Validators.OptionValidator<T, TProperty>.IsValid(FluentValidation.ValidationContext<T>! context, LanguageExt.Option<TProperty> value) -> bool
-override Fossa.API.Core.Validators.OptionValidator<T, TProperty>.Name.get -> string!
 override sealed Fossa.API.Core.Messages.Commands.BranchCreationCommand.Equals(Fossa.API.Core.Messages.Commands.TenantEntityCommand<Fossa.API.Core.Entities.BranchEntity!, Fossa.API.Core.Entities.BranchId, System.Guid>? other) -> bool
 override sealed Fossa.API.Core.Messages.Commands.BranchDeletionCommand.Equals(Fossa.API.Core.Messages.Commands.TenantEntityCommand<Fossa.API.Core.Entities.BranchEntity!, Fossa.API.Core.Entities.BranchId, System.Guid>? other) -> bool
 override sealed Fossa.API.Core.Messages.Commands.BranchModificationCommand.Equals(Fossa.API.Core.Messages.Commands.TenantEntityCommand<Fossa.API.Core.Entities.BranchEntity!, Fossa.API.Core.Entities.BranchId, System.Guid>? other) -> bool
@@ -1449,8 +1395,6 @@ static Fossa.API.Core.Entities.EmployeeEntity.operator ==(Fossa.API.Core.Entitie
 static Fossa.API.Core.Entities.SystemPropertiesEntity.operator !=(Fossa.API.Core.Entities.SystemPropertiesEntity? left, Fossa.API.Core.Entities.SystemPropertiesEntity? right) -> bool
 static Fossa.API.Core.Entities.SystemPropertiesEntity.operator ==(Fossa.API.Core.Entities.SystemPropertiesEntity? left, Fossa.API.Core.Entities.SystemPropertiesEntity? right) -> bool
 static Fossa.API.Core.Extensions.RelationshipGraphExtensions.ThrowIfHasDependentEntitiesAsync<T>(this Fossa.API.Core.Relationship.IRelationshipGraph! relationshipGraph, T id, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task!
-static Fossa.API.Core.Extensions.ValidationExtensions.GetOrThrow<T>(this LanguageExt.Validation<LanguageExt.Common.Error!, T> validation) -> T
-static Fossa.API.Core.Extensions.ValidatorExtensions.IfSome<T, TProperty>(this FluentValidation.IRuleBuilder<T, LanguageExt.Option<TProperty>>! ruleBuilder, FluentValidation.IValidator<TProperty>! validator) -> FluentValidation.IRuleBuilderOptions<T, LanguageExt.Option<TProperty>>!
 static Fossa.API.Core.Messages.Commands.BranchCreationCommand.operator !=(Fossa.API.Core.Messages.Commands.BranchCreationCommand? left, Fossa.API.Core.Messages.Commands.BranchCreationCommand? right) -> bool
 static Fossa.API.Core.Messages.Commands.BranchCreationCommand.operator ==(Fossa.API.Core.Messages.Commands.BranchCreationCommand? left, Fossa.API.Core.Messages.Commands.BranchCreationCommand? right) -> bool
 static Fossa.API.Core.Messages.Commands.BranchDeletionCommand.operator !=(Fossa.API.Core.Messages.Commands.BranchDeletionCommand? left, Fossa.API.Core.Messages.Commands.BranchDeletionCommand? right) -> bool
@@ -1489,8 +1433,6 @@ static Fossa.API.Core.Messages.Commands.TenantEntityCommand<TEntity, TEntityIden
 static Fossa.API.Core.Messages.Commands.TenantEntityCommand<TEntity, TEntityIdentity, TTenantIdentity>.operator ==(Fossa.API.Core.Messages.Commands.TenantEntityCommand<TEntity, TEntityIdentity, TTenantIdentity>? left, Fossa.API.Core.Messages.Commands.TenantEntityCommand<TEntity, TEntityIdentity, TTenantIdentity>? right) -> bool
 static Fossa.API.Core.Messages.Commands.TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>.operator !=(Fossa.API.Core.Messages.Commands.TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>? left, Fossa.API.Core.Messages.Commands.TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>? right) -> bool
 static Fossa.API.Core.Messages.Commands.TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>.operator ==(Fossa.API.Core.Messages.Commands.TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>? left, Fossa.API.Core.Messages.Commands.TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>? right) -> bool
-static Fossa.API.Core.Messages.EntityReference<TEntityIdentity>.operator !=(Fossa.API.Core.Messages.EntityReference<TEntityIdentity>? left, Fossa.API.Core.Messages.EntityReference<TEntityIdentity>? right) -> bool
-static Fossa.API.Core.Messages.EntityReference<TEntityIdentity>.operator ==(Fossa.API.Core.Messages.EntityReference<TEntityIdentity>? left, Fossa.API.Core.Messages.EntityReference<TEntityIdentity>? right) -> bool
 static Fossa.API.Core.Messages.Events.BranchAddressChangedEvent.operator !=(Fossa.API.Core.Messages.Events.BranchAddressChangedEvent? left, Fossa.API.Core.Messages.Events.BranchAddressChangedEvent? right) -> bool
 static Fossa.API.Core.Messages.Events.BranchAddressChangedEvent.operator ==(Fossa.API.Core.Messages.Events.BranchAddressChangedEvent? left, Fossa.API.Core.Messages.Events.BranchAddressChangedEvent? right) -> bool
 static Fossa.API.Core.Messages.Events.BranchCreatedEvent.operator !=(Fossa.API.Core.Messages.Events.BranchCreatedEvent? left, Fossa.API.Core.Messages.Events.BranchCreatedEvent? right) -> bool
@@ -1641,10 +1583,6 @@ virtual Fossa.API.Core.Messages.Commands.TenantEntityCommand<TEntity, TEntityIde
 virtual Fossa.API.Core.Messages.Commands.TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>.EqualityContract.get -> System.Type!
 virtual Fossa.API.Core.Messages.Commands.TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>.Equals(Fossa.API.Core.Messages.Commands.TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>? other) -> bool
 virtual Fossa.API.Core.Messages.Commands.TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>.PrintMembers(System.Text.StringBuilder! builder) -> bool
-virtual Fossa.API.Core.Messages.EntityReference<TEntityIdentity>.<Clone>$() -> Fossa.API.Core.Messages.EntityReference<TEntityIdentity>!
-virtual Fossa.API.Core.Messages.EntityReference<TEntityIdentity>.EqualityContract.get -> System.Type!
-virtual Fossa.API.Core.Messages.EntityReference<TEntityIdentity>.Equals(Fossa.API.Core.Messages.EntityReference<TEntityIdentity>? other) -> bool
-virtual Fossa.API.Core.Messages.EntityReference<TEntityIdentity>.PrintMembers(System.Text.StringBuilder! builder) -> bool
 virtual Fossa.API.Core.Messages.Events.BranchAddressChangedEvent.Equals(Fossa.API.Core.Messages.Events.BranchAddressChangedEvent? other) -> bool
 virtual Fossa.API.Core.Messages.Events.BranchCreatedEvent.Equals(Fossa.API.Core.Messages.Events.BranchCreatedEvent? other) -> bool
 virtual Fossa.API.Core.Messages.Events.BranchDeletedEvent.Equals(Fossa.API.Core.Messages.Events.BranchDeletedEvent? other) -> bool

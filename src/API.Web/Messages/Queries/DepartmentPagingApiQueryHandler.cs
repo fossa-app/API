@@ -1,9 +1,8 @@
 ﻿using Fossa.API.Core.Entities;
 using Fossa.API.Core.Messages.Queries;
-using Fossa.API.Core.Tenant;
-using Fossa.API.Core.User;
 using Fossa.Bridge.Models.ApiModels;
 using TIKSN.Data;
+using TIKSN.Identity;
 using TIKSN.Mapping;
 
 namespace Fossa.API.Web.Messages.Queries;
@@ -18,7 +17,7 @@ public class DepartmentPagingApiQueryHandler :
       IMapper<PageResult<DepartmentEntity>, PagingResponseModel<DepartmentRetrievalModel>> pagingMapper,
       IMapper<Seq<DepartmentEntity>, PagingResponseModel<DepartmentRetrievalModel>> listingMapper,
       ISender sender,
-      ITenantIdProvider<Guid> tenantIdProvider,
+      TIKSN.Identity.ITenantIdProvider<Guid> tenantIdProvider,
       IUserIdProvider<Guid> userIdProvider,
       IMapper<DepartmentId, long> domainIdentityToDataIdentityMapper,
       IMapper<long, DepartmentId> dataIdentityToDomainIdentityMapper) : base(

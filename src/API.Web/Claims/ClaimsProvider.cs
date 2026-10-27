@@ -1,11 +1,11 @@
 ﻿using System.Security.Claims;
-using Fossa.API.Core.Tenant;
-using Fossa.API.Core.User;
 using Microsoft.Identity.Web;
+using TIKSN.Identity;
 
 namespace Fossa.API.Web.Claims;
 
 public class ClaimsProvider :
+  ClaimsProviderBase,
   IUserIdProvider<Guid>,
   IUserIdProvider<int>,
   ITenantIdProvider<Guid>,
@@ -16,6 +16,11 @@ public class ClaimsProvider :
   public ClaimsProvider(IHttpContextAccessor httpContextAccessor)
   {
     _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
+  }
+
+  protected override Option<ClaimsPrincipal> GetClaimsPrincipal()
+  {
+    return Optional(_httpContextAccessor.HttpContext?.User);
   }
 
   Option<Guid> ITenantIdProvider<Guid>.FindTenantId()
@@ -41,47 +46,24 @@ public class ClaimsProvider :
   Guid ITenantIdProvider<Guid>.GetTenantId()
   {
     ITenantIdProvider<Guid> tenantIdProvider = this;
-    return GetFound(tenantIdProvider.FindTenantId());
+    return GetFound(tenantIdProvider.FindTenantId(), ClaimConstants.TenantId);
   }
 
   int ITenantIdProvider<int>.GetTenantId()
   {
     ITenantIdProvider<int> tenantIdProvider = this;
-    return GetFound(tenantIdProvider.FindTenantId());
+    return GetFound(tenantIdProvider.FindTenantId(), ClaimConstants.TenantId);
   }
 
   Guid IUserIdProvider<Guid>.GetUserId()
   {
     IUserIdProvider<Guid> userIdProvider = this;
-    return GetFound(userIdProvider.FindUserId());
+    return GetFound(userIdProvider.FindUserId(), ClaimTypes.NameIdentifier);
   }
 
   int IUserIdProvider<int>.GetUserId()
   {
     IUserIdProvider<int> userIdProvider = this;
-    return GetFound(userIdProvider.FindUserId());
-  }
-
-  private static T GetFound<T>(Option<T> found)
-  {
-    return found.IfNone(() => throw new ClaimNotFoundException());
-  }
-
-  private Option<T> FindFirstClaimValue<T>(
-    string type,
-    Func<string, T> parser)
-  {
-    ArgumentNullException.ThrowIfNull(parser);
-
-    var rawValue = FindFirstClaimValue(type);
-
-    return rawValue.Map(parser);
-  }
-
-  private Option<string> FindFirstClaimValue(string type)
-  {
-    var claim = _httpContextAccessor.HttpContext?.User?.FindFirst(type);
-
-    return Optional(claim).Map(x => x.Value);
+    return GetFound(userIdProvider.FindUserId(), ClaimTypes.NameIdentifier);
   }
 }

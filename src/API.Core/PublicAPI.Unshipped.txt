@@ -1,0 +1,3 @@
+Fossa.API.Core.Messages.Commands.TenantEntityCommand<TEntity, TEntityIdentity, TTenantIdentity>.TenantEntityReferences.get -> System.Collections.Generic.IEnumerable<TIKSN.Integration.Messages.EntityReference<TEntityIdentity>!>!
+Fossa.API.Core.Messages.Commands.TenantUserEntityCommand<TEntity, TEntityIdentity, TTenantIdentity, TUserIdentity>.TenantEntityReferences.get -> System.Collections.Generic.IEnumerable<TIKSN.Integration.Messages.EntityReference<TEntityIdentity>!>!
+Fossa.API.Core.Messages.Queries.TenantEntityQuery<TEntity, TEntityIdentity, TTenantIdentity, TResult>.TenantEntityReferences.get -> System.Collections.Generic.IEnumerable<TIKSN.Integration.Messages.EntityReference<TEntityIdentity>!>!
