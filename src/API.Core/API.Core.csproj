@@ -34,6 +34,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="OpenTelemetry" VersionOverride="1.21.0" />
     <Using Include="LanguageExt" />
     <Using Include="LanguageExt.Common" />
     <Using Include="LanguageExt.Effects" />
